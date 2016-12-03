@@ -28,36 +28,65 @@
 
 class Util {
 	
-	public static function toCurrency($value)
+	static public function toCurrency($value, $places = 2)
 	{
-		return number_format($value, 2, '.', '');
+		return number_format($value, $places, '.', '');
 	}
 
-	public static function toFloat($value)
+	static public function toFloat($value, $places = 4)
 	{
-		return number_format($value, 4, '.', '');
+		return number_format($value, $places, '.', '');
 	}
 
-	public static function toDateTime($time)
+	static public function toDateTime($time)
 	{
 		return date('Y-m-d\TH:i:sP', $time);
 	}
 
-	public static function isEqual($value, $compare, $delta = 0.005) {
+	static public function isEqual($value, $compare, $delta = 0.005)
+	{
 		return $compare < ($value + $delta) && ($value - $delta) < $compare;
 	}
 
-	public static function isGreater($value, $compare, $delta = 0.005) {
+	static public function isGreater($value, $compare, $delta = 0.005)
+	{
 		return $value > ($compare + $delta);
 	}
 
-	public static function isLess($value, $compare, $delta = 0.005) {
+	static public function isLess($value, $compare, $delta = 0.005)
+	{
 		return ($value + $delta) < $compare;
 	}
 	
-	public static function toMoney($value)
+	static public function toMoney($value)
 	{
 		return 'R$ '.number_format($value, 2, ',', '.');
+	}
+
+	static public function binarySearch($elem, $array, $cmp_fn) {
+		$bot = 0;
+		$top = count($array) -1;
+		while($top >= $bot) 
+		{
+			$p = floor(($top + $bot) / 2);
+			$o = $array[$p];
+			$r = $cmp_fn($o, $elem);
+			if ($r < 0)
+				$bot = $p + 1;
+			else if ($r > 0)
+				$top = $p - 1;
+			else
+				return $o;
+		}
+		return false;
+	}
+
+	static public function removeAccent($str)
+	{
+		return strtr(
+			utf8_decode($str), 
+			utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 
+			'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
 	}
 
 	/**

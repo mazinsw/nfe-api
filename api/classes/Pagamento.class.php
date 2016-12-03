@@ -26,28 +26,33 @@
  *
  */
 
-class PagamentoForma {
-	const DINHEIRO = 'dinheiro';
-	const CHEQUE = 'cheque';
-	const CREDITO = 'credito';
-	const DEBITO = 'debito';
-	const CREDIARIO = 'crediario';
-	const ALIMENTACAO = 'alimentacao';
-	const REFEICAO = 'refeicao';
-	const PRESENTE = 'presente';
-	const COMBUSTIVEL = 'combustivel';
-	const OUTROS = 'outros';
-}
-
-class PagamentoBandeira {
-	const VISA = 'visa';
-	const MASTERCARD = 'mastercard';
-	const AMEX = 'amex';
-	const SOROCRED = 'sorocred';
-	const OUTROS = 'outros';
-}
-
 class Pagamento implements NodeInterface {
+
+	/**
+	 * Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão
+	 * de Débito;05-Crédito Loja;10-Vale Alimentação;11-Vale Refeição;12-Vale
+	 * Presente;13-Vale Combustível;99 - Outros
+	 */
+	const FORMA_DINHEIRO = 'dinheiro';
+	const FORMA_CHEQUE = 'cheque';
+	const FORMA_CREDITO = 'credito';
+	const FORMA_DEBITO = 'debito';
+	const FORMA_CREDIARIO = 'crediario';
+	const FORMA_ALIMENTACAO = 'alimentacao';
+	const FORMA_REFEICAO = 'refeicao';
+	const FORMA_PRESENTE = 'presente';
+	const FORMA_COMBUSTIVEL = 'combustivel';
+	const FORMA_OUTROS = 'outros';
+
+	/**
+	 * Bandeira da operadora de cartão de crédito/débito:01–Visa;
+	 * 02–Mastercard; 03–American Express; 04–Sorocred; 99–Outros
+	 */
+	const BANDEIRA_VISA = 'visa';
+	const BANDEIRA_MASTERCARD = 'mastercard';
+	const BANDEIRA_AMEX = 'amex';
+	const BANDEIRA_SOROCRED = 'sorocred';
+	const BANDEIRA_OUTROS = 'outros';
 
 	private $forma;
 	private $valor;
@@ -68,25 +73,25 @@ class Pagamento implements NodeInterface {
 		if(!$normalize)
 			return $this->forma;
 		switch ($this->forma) {
-			case PagamentoForma::DINHEIRO:
+			case self::FORMA_DINHEIRO:
 				return '01';
-			case PagamentoForma::CHEQUE:
+			case self::FORMA_CHEQUE:
 				return '02';
-			case PagamentoForma::CREDITO:
+			case self::FORMA_CREDITO:
 				return '03';
-			case PagamentoForma::DEBITO:
+			case self::FORMA_DEBITO:
 				return '04';
-			case PagamentoForma::CREDIARIO:
+			case self::FORMA_CREDIARIO:
 				return '05';
-			case PagamentoForma::ALIMENTACAO:
+			case self::FORMA_ALIMENTACAO:
 				return '10';
-			case PagamentoForma::REFEICAO:
+			case self::FORMA_REFEICAO:
 				return '11';
-			case PagamentoForma::PRESENTE:
+			case self::FORMA_PRESENTE:
 				return '12';
-			case PagamentoForma::COMBUSTIVEL:
+			case self::FORMA_COMBUSTIVEL:
 				return '13';
-			case PagamentoForma::OUTROS:
+			case self::FORMA_OUTROS:
 				return '99';
 		}
 		return $this->forma;
@@ -147,15 +152,15 @@ class Pagamento implements NodeInterface {
 		if(!$normalize)
 			return $this->bandeira;
 		switch ($this->bandeira) {
-			case PagamentoBandeira::VISA:
+			case self::BANDEIRA_VISA:
 				return '01';
-			case PagamentoBandeira::MASTERCARD:
+			case self::BANDEIRA_MASTERCARD:
 				return '02';
-			case PagamentoBandeira::AMEX:
+			case self::BANDEIRA_AMEX:
 				return '03';
-			case PagamentoBandeira::SOROCRED:
+			case self::BANDEIRA_SOROCRED:
 				return '04';
-			case PagamentoBandeira::OUTROS:
+			case self::BANDEIRA_OUTROS:
 				return '99';
 		}
 		return $this->bandeira;
@@ -194,7 +199,7 @@ class Pagamento implements NodeInterface {
 		$element = $dom->createElement(is_null($name)?'pag':$name);
 		$element->appendChild($dom->createElement('tPag', $this->getForma(true)));
 		$element->appendChild($dom->createElement('vPag', $this->getValor(true)));
-		if($this->getForma() != PagamentoForma::CREDITO && $this->getForma() != PagamentoForma::DEBITO)
+		if($this->getForma() != self::FORMA_CREDITO && $this->getForma() != self::FORMA_DEBITO)
 			return $element;
 		$cartao = $dom->createElement('card');
 		$cartao->appendChild($dom->createElement('CNPJ', $this->getCredenciadora(true)));

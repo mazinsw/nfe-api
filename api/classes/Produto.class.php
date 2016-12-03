@@ -26,32 +26,37 @@
  *
  */
 
-class ProdutoUnidade {
-	const UNIDADE = 'unidade';
-	const PECA = 'peca';
-	const METRO = 'metro';
-	const GRAMA = 'grama';
-	const LITRO = 'litro';
-}
-
 /**
  * Produto ou serviço que está sendo vendido ou prestado e será adicionado
  * na nota fiscal
  */
 class Produto implements NodeInterface {
 
+	/**
+	 * Unidade do produto, Não informar a grandeza
+	 */
+	const UNIDADE_UNIDADE = 'unidade';
+	const UNIDADE_PECA = 'peca';
+	const UNIDADE_METRO = 'metro';
+	const UNIDADE_GRAMA = 'grama';
+	const UNIDADE_LITRO = 'litro';
+
 	private $item;
+	private $pedido;
 	private $codigo;
 	private $codigo_tributario;
 	private $codigo_barras;
 	private $descricao;
 	private $unidade;
 	private $multiplicador;
-	private $peso_liquido;
-	private $peso_bruto;
 	private $preco;
 	private $quantidade;
+	private $tributada;
+	private $peso;
 	private $desconto;
+	private $seguro;
+	private $frete;
+	private $despesas;
 	private $cfop;
 	private $ncm;
 	private $cest;
@@ -73,6 +78,20 @@ class Produto implements NodeInterface {
 
 	public function setItem($item) {
 		$this->item = $item;
+		return $this;
+	}
+
+	/**
+	 * informar o número do pedido de compra, o campo é de livre uso do emissor
+	 */
+	public function getPedido($normalize = false) {
+		if(!$normalize)
+			return $this->pedido;
+		return $this->pedido;
+	}
+
+	public function setPedido($pedido) {
+		$this->pedido = $pedido;
 		return $this;
 	}
 
@@ -146,15 +165,15 @@ class Produto implements NodeInterface {
 		if(!$normalize)
 			return $this->unidade;
 		switch ($this->unidade) {
-			case ProdutoUnidade::UNIDADE:
+			case self::UNIDADE_UNIDADE:
 				return 'UN';
-			case ProdutoUnidade::PECA:
+			case self::UNIDADE_PECA:
 				return 'PC';
-			case ProdutoUnidade::METRO:
+			case self::UNIDADE_METRO:
 				return 'm';
-			case ProdutoUnidade::GRAMA:
+			case self::UNIDADE_GRAMA:
 				return 'g';
-			case ProdutoUnidade::LITRO:
+			case self::UNIDADE_LITRO:
 				return 'L';
 		}
 		return $this->unidade;
@@ -173,28 +192,6 @@ class Produto implements NodeInterface {
 
 	public function setMultiplicador($multiplicador) {
 		$this->multiplicador = $multiplicador;
-		return $this;
-	}
-
-	public function getPesoLiquido($normalize = false) {
-		if(!$normalize)
-			return $this->peso_liquido;
-		return Util::toFloat($this->peso_liquido);
-	}
-
-	public function setPesoLiquido($peso_liquido) {
-		$this->peso_liquido = $peso_liquido;
-		return $this;
-	}
-
-	public function getPesoBruto($normalize = false) {
-		if(!$normalize)
-			return $this->peso_bruto;
-		return Util::toFloat($this->peso_bruto);
-	}
-
-	public function setPesoBruto($peso_bruto) {
-		$this->peso_bruto = $peso_bruto;
 		return $this;
 	}
 
@@ -229,6 +226,29 @@ class Produto implements NodeInterface {
 	}
 
 	/**
+	 * Informa a quantidade tributada
+	 */
+	public function getTributada($normalize = false) {
+		if(!$normalize)
+			return is_null($this->tributada)?$this->getQuantidade():$this->tributada;
+		return Util::toFloat($this->getTributada());
+	}
+
+	public function setTributada($tributada) {
+		$this->tributada = $tributada;
+		return $this;
+	}
+
+	public function getPeso() {
+		return $this->peso;
+	}
+
+	public function setPeso($peso) {
+		$this->peso = $peso;
+		return $this;
+	}
+
+	/**
 	 * Valor do Desconto
 	 */
 	public function getDesconto($normalize = false) {
@@ -239,6 +259,51 @@ class Produto implements NodeInterface {
 
 	public function setDesconto($desconto) {
 		$this->desconto = $desconto;
+		return $this;
+	}
+
+	/**
+	 * informar o valor do Seguro, o Seguro deve ser rateado entre os itens de
+	 * produto
+	 */
+	public function getSeguro($normalize = false) {
+		if(!$normalize)
+			return $this->seguro;
+		return Util::toCurrency($this->seguro);
+	}
+
+	public function setSeguro($seguro) {
+		$this->seguro = $seguro;
+		return $this;
+	}
+
+	/**
+	 * informar o valor do Frete, o Frete deve ser rateado entre os itens de
+	 * produto.
+	 */
+	public function getFrete($normalize = false) {
+		if(!$normalize)
+			return $this->frete;
+		return Util::toCurrency($this->frete);
+	}
+
+	public function setFrete($frete) {
+		$this->frete = $frete;
+		return $this;
+	}
+
+	/**
+	 * informar o valor de outras despesas acessórias do item de produto ou
+	 * serviço
+	 */
+	public function getDespesas($normalize = false) {
+		if(!$normalize)
+			return $this->despesas;
+		return Util::toCurrency($this->despesas);
+	}
+
+	public function setDespesas($despesas) {
+		$this->despesas = $despesas;
 		return $this;
 	}
 
@@ -297,20 +362,54 @@ class Produto implements NodeInterface {
 		return $this;
 	}
 
+	/**
+	 * Valor unitário
+	 */
+	public function getPrecoUnitario($normalize = false) {
+		if(!$normalize)
+			return $this->getPreco() / $this->getQuantidade();
+		return Util::toCurrency($this->getPrecoUnitario());
+	}
+
+	/**
+	 * Valor tributável
+	 */
+	public function getPrecoTributavel($normalize = false) {
+		if(!$normalize)
+			return $this->getPreco() / $this->getTributada();
+		return Util::toCurrency($this->getPrecoTributavel());
+	}
+
+	public function getBase($normalize = false) {
+		if(!$normalize)
+			return $this->getPreco() - $this->getDesconto();
+		return Util::toCurrency($this->getBase());
+	}
+
+	public function getContabilizado($normalize = false) {
+		if(!$normalize)
+			return $this->getBase() * $this->getMultiplicador();
+		return Util::toCurrency($this->getContabilizado());
+	}
+
 	public function toArray() {
 		$produto = array();
 		$produto['item'] = $this->getItem();
+		$produto['pedido'] = $this->getPedido();
 		$produto['codigo'] = $this->getCodigo();
 		$produto['codigo_tributario'] = $this->getCodigoTributario();
 		$produto['codigo_barras'] = $this->getCodigoBarras();
 		$produto['descricao'] = $this->getDescricao();
 		$produto['unidade'] = $this->getUnidade();
 		$produto['multiplicador'] = $this->getMultiplicador();
-		$produto['peso_liquido'] = $this->getPesoLiquido();
-		$produto['peso_bruto'] = $this->getPesoBruto();
 		$produto['preco'] = $this->getPreco();
 		$produto['quantidade'] = $this->getQuantidade();
+		$produto['tributada'] = $this->getTributada();
+		$produto['peso'] = $this->getPeso();
 		$produto['desconto'] = $this->getDesconto();
+		$produto['seguro'] = $this->getSeguro();
+		$produto['frete'] = $this->getFrete();
+		$produto['despesas'] = $this->getDespesas();
 		$produto['cfop'] = $this->getCFOP();
 		$produto['ncm'] = $this->getNCM();
 		$produto['cest'] = $this->getCEST();
@@ -324,19 +423,27 @@ class Produto implements NodeInterface {
 		else if(!is_array($produto))
 			return $this;
 		$this->setItem($produto['item']);
+		$this->setPedido($produto['pedido']);
 		$this->setCodigo($produto['codigo']);
 		$this->setCodigoTributario($produto['codigo_tributario']);
 		$this->setCodigoBarras($produto['codigo_barras']);
 		$this->setDescricao($produto['descricao']);
 		$this->setUnidade($produto['unidade']);
+		if(is_null($this->getUnidade()))
+			$this->setUnidade(self::UNIDADE_UNIDADE);
 		$this->setMultiplicador($produto['multiplicador']);
 		if(is_null($this->getMultiplicador()))
 			$this->setMultiplicador(1);
-		$this->setPesoLiquido($produto['peso_liquido']);
-		$this->setPesoBruto($produto['peso_bruto']);
 		$this->setPreco($produto['preco']);
 		$this->setQuantidade($produto['quantidade']);
+		$this->setTributada($produto['tributada']);
+		$this->setPeso($produto['peso']);
+		if(is_null($this->getPeso()))
+			$this->setPeso(new Peso());
 		$this->setDesconto($produto['desconto']);
+		$this->setSeguro($produto['seguro']);
+		$this->setFrete($produto['frete']);
+		$this->setDespesas($produto['despesas']);
 		$this->setCFOP($produto['cfop']);
 		$this->setNCM($produto['ncm']);
 		$this->setCEST($produto['cest']);
@@ -365,51 +472,62 @@ class Produto implements NodeInterface {
 		$produto->appendChild($dom->createElement('CFOP', $this->getCFOP(true)));
 		$produto->appendChild($dom->createElement('uCom', $this->getUnidade(true)));
 		$produto->appendChild($dom->createElement('qCom', $this->getQuantidade(true)));
-		$produto->appendChild($dom->createElement('vUnCom', $this->getPreco(true)));
+		$produto->appendChild($dom->createElement('vUnCom', $this->getPrecoUnitario(true)));
 		$produto->appendChild($dom->createElement('vProd', $this->getPreco(true)));
 		$produto->appendChild($dom->createElement('cEANTrib', $this->getCodigoTributario(true)));
 		$produto->appendChild($dom->createElement('uTrib', $this->getUnidade(true)));
-		$produto->appendChild($dom->createElement('qTrib', $this->getQuantidade(true)));
-		$produto->appendChild($dom->createElement('vUnTrib', $this->getPreco(true)));
-//		$produto->appendChild($dom->createElement('vFrete', $this->getFrete(true)));
-//		$produto->appendChild($dom->createElement('vSeg', $this->getSeguro(true)));
-		$produto->appendChild($dom->createElement('vDesc', $this->getDesconto(true)));
-//		$produto->appendChild($dom->createElement('vOutro', $this->getDespesas(true)));
+		$produto->appendChild($dom->createElement('qTrib', $this->getTributada(true)));
+		$produto->appendChild($dom->createElement('vUnTrib', $this->getPrecoTributavel(true)));
+		if(!is_null($this->getFrete()))
+			$produto->appendChild($dom->createElement('vFrete', $this->getFrete(true)));
+		if(!is_null($this->getSeguro()))
+			$produto->appendChild($dom->createElement('vSeg', $this->getSeguro(true)));
+		if(!is_null($this->getDesconto()))
+			$produto->appendChild($dom->createElement('vDesc', $this->getDesconto(true)));
+		if(!is_null($this->getDespesas()))
+			$produto->appendChild($dom->createElement('vOutro', $this->getDespesas(true)));
 		$produto->appendChild($dom->createElement('indTot', $this->getMultiplicador(true)));
 //		$produto->appendChild($dom->createElement('DI', $this->getImportacoes(true)));
 //		$produto->appendChild($dom->createElement('detExport', $this->getDetalhes(true)));
-//		$produto->appendChild($dom->createElement('xPed', $this->getPedido(true)));
+		$produto->appendChild($dom->createElement('xPed', $this->getPedido(true)));
 //		$produto->appendChild($dom->createElement('nFCI', $this->getControle(true)));
 		$element->appendChild($produto);
 
 		$imposto = $dom->createElement('imposto');
-		$_impostos = $this->getImpostos();
-		$imposto_total = 0.00;
-		$imposto_fed = 0.00;
-		$imposto_est = 0.00;
-		$imposto_mun = 0.00;
+		$db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
+		$endereco = SEFAZ::getInstance()->getConfiguracao()->getEmitente()->getEndereco();
+
+		// TODO: informar total de tributos apenas para NFC-e
+		$imposto_info = array();
+		$imposto_tipos = array(
+			Imposto::TIPO_IMPORTADO,
+			Imposto::TIPO_NACIONAL,
+			Imposto::TIPO_ESTADUAL,
+			Imposto::TIPO_MUNICIPAL
+		);
+		$_imposto = new \Imposto\Total();
+		$_imposto->setBase($this->getBase());
+		$aliquota = $db->getImpostoAliquota($this->getNCM(), $endereco->getMunicipio()->getEstado()->getUF());
+		foreach ($imposto_tipos as $tipo) {
+			$_imposto->setAliquota($aliquota[$tipo]);
+			$imposto_info[$tipo] = $_imposto->getValor();
+			$imposto_info['total'] += $_imposto->getValor();
+		}
+		$imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_info['total']));
+		$imposto->appendChild($imp_total);
+
 		$grupos = array();
+		$_impostos = $this->getImpostos();
 		foreach ($_impostos as $_imposto) {
-			$_imposto->setBase($this->getPreco());
-			$tipo = $_imposto->getTipo();
-			$_imposto->setTipo(ImpostoTipo::TODOS);
-			$imposto_total += $_imposto->getValor();
-			$_imposto->setTipo(ImpostoTipo::FEDERAL);
-			$imposto_fed += $_imposto->getValor();
-			$_imposto->setTipo(ImpostoTipo::ESTADUAL);
-			$imposto_est += $_imposto->getValor();
-			$_imposto->setTipo(ImpostoTipo::MUNICIPAL);
-			$imposto_mun += $_imposto->getValor();
-			$_imposto->setTipo($tipo);
+			if(is_null($_imposto->getBase()))
+				$_imposto->setBase($this->getBase());
 			$grupos[$_imposto->getGrupo(true)][] = $_imposto;
 		}
-		// TODO: verificar se é obrigatório informar o total dos tributos
-		$imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_total));
-		$imposto->appendChild($imp_total);
 		foreach ($grupos as $tag => $_grupo) {
 			$grupo = $dom->createElement($tag);
 			foreach ($_grupo as $_imposto) {
 				$node = $_imposto->getNode();
+				$node = $dom->importNode($node, true);
 				$grupo->appendChild($node);
 			}
 			$imposto->appendChild($grupo);
@@ -417,14 +535,19 @@ class Produto implements NodeInterface {
 		$element->appendChild($imposto);
 		// TODO: verificar se é obrigatório a informação adicional abaixo
 		$_info = array();
-		if(Util::isGreater($imposto_fed, 0.00))
-			$_info[] = Util::toMoney($imposto_fed).' Federal';
-		if(Util::isGreater($imposto_est, 0.00))
-			$_info[] = Util::toMoney($imposto_est).' Estadual';
-		if(Util::isGreater($imposto_mun, 0.00))
-			$_info[] = Util::toMoney($imposto_mun).' Municipal';
+		$_info_fmt = array(
+			Imposto::TIPO_IMPORTADO => '%s Importado',
+			Imposto::TIPO_NACIONAL => '%s Federal',
+			Imposto::TIPO_ESTADUAL => '%s Estadual',
+			Imposto::TIPO_MUNICIPAL => '%s Municipal'
+		);
+		foreach ($imposto_tipos as $tipo) {
+			if(!Util::isGreater($imposto_info[$tipo], 0.00))
+				continue;
+			$_info[] = sprintf($_info_fmt[$tipo], Util::toMoney($imposto_info[$tipo]));
+		}
 		if(count($_info) > 0) {
-			$info_str = 'Trib. aprox.: '.implode(', ', $_info);
+			$info_str = 'Trib. aprox.: '.implode(', ', $_info).'. Fonte: IBPT';
 			$info = $dom->createElement('infAdProd', $info_str);
 			$element->appendChild($info);
 		}

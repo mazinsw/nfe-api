@@ -1,0 +1,149 @@
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+	<infNFe versao="3.00" Id="NFe13141007106443000100650010000000241000000245">
+		<ide>
+			<cUF>13</cUF>
+			<cNF>00000024</cNF>
+			<natOp>VENDA DE MERCADORIAS</natOp>
+			<indPag>0</indPag>
+			<mod>65</mod>
+			<serie>1</serie>
+			<nNF>24</nNF>
+			<dhEmi>2014-10-10T21:19:16-04:00</dhEmi>
+			<tpNF>1</tpNF>
+			<idDest>1</idDest>
+			<cMunFG>1301902</cMunFG>
+			<tpImp>4</tpImp>
+			<tpEmis>1</tpEmis>
+			<cDV>5</cDV>
+			<tpAmb>2</tpAmb>
+			<finNFe>1</finNFe>
+			<indFinal>1</indFinal>
+			<indPres>1</indPres>
+			<procEmi>0</procEmi>
+			<verProc>1.0</verProc>
+		</ide>
+		<emit>
+			<CNPJ>07106443000100</CNPJ>
+			<xNome>PONTO.SYS SISTEMAS E AUTOMACAO LTDA - ME</xNome>
+			<xFant>PONTO.SYS SISTEMAS E AUTOMACAO LTDA - ME</xFant>
+			<enderEmit>
+				<xLgr>AV RAUL FURQUIM</xLgr>
+				<nro>741</nro>
+				<xBairro>JD MARAJA</xBairro>
+				<cMun>1301902</cMun>
+				<xMun>AMATARI</xMun>
+				<UF>AM</UF>
+				<CEP>17706100</CEP>
+				<cPais>1058</cPais>
+				<xPais>BRASIL</xPais>
+				<fone>1733428490</fone>
+			</enderEmit>
+			<IE>123456</IE>
+			<CRT>3</CRT>
+		</emit>
+		<dest>
+			<CPF>35068724866</CPF>
+			<xNome>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
+			<enderDest>
+				<xLgr>AV RAUL FURQUIM</xLgr>
+				<nro>2.117</nro>
+				<xBairro>JARDIM MARAJA</xBairro>
+				<cMun>1301902</cMun>
+				<xMun>AMATARI</xMun>
+				<UF>AM</UF>
+				<CEP>14706100</CEP>
+				<cPais>1058</cPais>
+				<xPais>BRASIL</xPais>
+				<fone>1733428490</fone>
+			</enderDest>
+		</dest>
+		<det nItem="1">
+			<prod>
+				<cProd>1</cProd>
+				<cEAN/>
+				<xProd>PRODUTO TESTE 1</xProd>
+				<NCM>01012100</NCM>
+				<CFOP>5102</CFOP>
+				<uCom>UN</uCom>
+				<qCom>2.0000</qCom>
+				<vUnCom>10.0000000000</vUnCom>
+				<vProd>20.00</vProd>
+				<cEANTrib/>
+				<uTrib>UN</uTrib>
+				<qTrib>2.0000</qTrib>
+				<vUnTrib>10.0000000000</vUnTrib>
+				<indTot>1</indTot>
+			</prod>
+			<imposto>
+				<ICMS>
+					<ICMS00>
+						<orig>0</orig>
+						<CST>00</CST>
+						<modBC>3</modBC>
+						<vBC>0.00</vBC>
+						<pICMS>0.00</pICMS>
+						<vICMS>0.00</vICMS>
+					</ICMS00>
+				</ICMS>
+				<PIS>
+					<PISNT>
+						<CST>07</CST>
+					</PISNT>
+				</PIS>
+				<COFINS>
+					<COFINSNT>
+						<CST>07</CST>
+					</COFINSNT>
+				</COFINS>
+			</imposto>
+		</det>
+		<total>
+			<ICMSTot>
+				<vBC>0.00</vBC>
+				<vICMS>0.00</vICMS>
+				<vBCST>0.00</vBCST>
+				<vST>0.00</vST>
+				<vProd>20.00</vProd>
+				<vFrete>0.00</vFrete>
+				<vSeg>0.00</vSeg>
+				<vDesc>0.00</vDesc>
+				<vII>0.00</vII>
+				<vIPI>0.00</vIPI>
+				<vPIS>0.00</vPIS>
+				<vCOFINS>0.00</vCOFINS>
+				<vOutro>0.00</vOutro>
+				<vNF>20.00</vNF>
+			</ICMSTot>
+		</total>
+		<transp>
+			<modFrete>9</modFrete>
+			<vol>
+				<qVol>0</qVol>
+			</vol>
+		</transp>
+		<pag>
+			<tPag>99</tPag>
+			<vPag>20.00</vPag>
+		</pag>
+	</infNFe>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+			<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+			<Reference URI="#NFe13141007106443000100650010000000241000000245">
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+					<Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+				<DigestValue>bxFypgNq/1V1Da4TO12nDon6zNw=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>THYpjyCNWNbkZ8H1qhEt7ljc0sRujx2JEZ0Fdfm9Birlik7uJv3p1mAK3z8M7CzEDdh/3wcWwz540KdIr7Vg29pe2pwe4IJseGKRLbiCmgC5bdAYxsuqcd0kmvwBdDMtwN32NP8ZXAJk1mmG2MqFZbu0c7ZAFkM1yneJ16r+BLU=</SignatureValue>
+		<KeyInfo>
+			<X509Data>
+				<X509Certificate>MIIGnDCCBYSgAwIBAgIQDiPp8kdKAXdNvhoS3WX8DTANBgkqhkiG9w0BAQUFADB4MQswCQYDVQQGEwJCUjETMBEGA1UEChMKSUNQLUJyYXNpbDE2MDQGA1UECxMtU2VjcmV0YXJpYSBkYSBSZWNlaXRhIEZlZGVyYWwgZG8gQnJhc2lsIC0gUkZCMRwwGgYDVQQDExNBQyBDZXJ0aXNpZ24gUkZCIEczMB4XDTExMTIyODAwMDAwMFoXDTE0MTIyNjIzNTk1OVowgfgxCzAJBgNVBAYTAkJSMQswCQYDVQQIEwJTUDESMBAGA1UEBxQJQkVCRURPVVJPMRMwEQYDVQQKFApJQ1AtQnJhc2lsMTYwNAYDVQQLFC1TZWNyZXRhcmlhIGRhIFJlY2VpdGEgRmVkZXJhbCBkbyBCcmFzaWwgLSBSRkIxFjAUBgNVBAsUDVJGQiBlLUNOUEogQTMxIzAhBgNVBAsUGkF1dGVudGljYWRvIHBvciBBUiBWRU5EU0VHMT4wPAYDVQQDEzVQT05UTyBTWVMgU0lTVEVNQVMgRSBBVVRPTUFDQU8gTFREQSBNRTowNzEwNjQ0MzAwMDEwMDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAs3PKOjmMV1cUr2H5wYeYr2XT/Oj9189SilRws3HSUZR3G+cY5BWM9xrhkJ7myzcG1jLEOcl7frjalPdE1E7TVjk1iBPXTaF9TOKVpUEaLgODmD3LKTtBAi0LJ9kZEg1MV+0ZsNxJlSj0hDjTWKeYy5DqDJycm3+stD8bLBu4NYUCAwEAAaOCAyMwggMfMIG4BgNVHREEgbAwga2gOAYFYEwBAwSgLwQtMDgwMTE5ODYzNDU3ODQ2MTg5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwoB4GBWBMAQMCoBUEE1JBRkFFTCBMT1BFUyBGQVZBUk+gGQYFYEwBAwOgEAQOMDcxMDY0NDMwMDAxMDCgFwYFYEwBAwegDgQMMDAwMDAwMDAwMDAwgR1yZWluYWxkb2VyaXRhQG1kYnJhc2lsLmNvbS5icjAJBgNVHRMEAjAAMB8GA1UdIwQYMBaAFPyAa9VN0fx42GxkL2FLOKeC8NydMA4GA1UdDwEB/wQEAwIF4DCCARAGA1UdHwSCAQcwggEDMFegVaBThlFodHRwOi8vaWNwLWJyYXNpbC5jZXJ0aXNpZ24uY29tLmJyL3JlcG9zaXRvcmlvL2xjci9BQ0NlcnRpc2lnblJGQkczL0xhdGVzdENSTC5jcmwwVqBUoFKGUGh0dHA6Ly9pY3AtYnJhc2lsLm91dHJhbGNyLmNvbS5ici9yZXBvc2l0b3Jpby9sY3IvQUNDZXJ0aXNpZ25SRkJHMy9MYXRlc3RDUkwuY3JsMFCgTqBMhkpodHRwOi8vcmVwb3NpdG9yaW8uaWNwYnJhc2lsLmdvdi5ici9sY3IvUkZCL0FDQ2VydGlzaWduUkZCRzMvTGF0ZXN0Q1JMLmNybDBVBgNVHSAETjBMMEoGBmBMAQIDBjBAMD4GCCsGAQUFBwIBFjJodHRwOi8vaWNwLWJyYXNpbC5jZXJ0aXNpZ24uY29tLmJyL3JlcG9zaXRvcmlvL2RwYzAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwgZsGCCsGAQUFBwEBBIGOMIGLMF8GCCsGAQUFBzAChlNodHRwOi8vaWNwLWJyYXNpbC5jZXJ0aXNpZ24uY29tLmJyL3JlcG9zaXRvcmlvL2NlcnRpZmljYWRvcy9BQ19DZXJ0aXNpZ25fUkZCX0czLnA3YzAoBggrBgEFBQcwAYYcaHR0cDovL29jc3AuY2VydGlzaWduLmNvbS5icjANBgkqhkiG9w0BAQUFAAOCAQEABJZwytBNlD4I2vnCLbvwGUKQG8Aw176ewNY5auowjB+VDtyFKx9J86K593NXsKHLHbLKWFyg+FgVVEqh16mprZ4PWW9FxUH6m+ifUWVKH26qjPreVa4QVa3O6iDwPnpScyn/pRUU/hW9GvLrzrZJ8Nt1ZiZgUe1J/QW4dlJ5A2y8YOkSVe58wXZq3mRP97Gq5gqQuCOvQt0qG6mXmg3C6pwPzg31XvWyaMqomsXjcgDQOd1J1RMJFNQ4mx0Gn9H8PBadptXEgeoh2phliGh9rb/paOj8ismO86STnaUuZJVPKXcPSu3KLBxsDGBTKFs9Do3rncMCxTg9mB0ynaoUTg==</X509Certificate>
+			</X509Data>
+		</KeyInfo>
+	</Signature>
+</NFe>

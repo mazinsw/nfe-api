@@ -2,13 +2,14 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 require_once(__DIR__ . '/../api/autoload.php');
+$sefaz = SEFAZ::init();
 
 $endereco = new Endereco();
 $endereco->setCEP('01122500');
-$endereco->setUF('PR');
 $endereco->getMunicipio()
 		 ->setNome('Paranavaí')
-		 ->setCodigo(123456);
+		 ->getEstado()
+		 ->setUF('PR');
 $endereco->setBairro('Centro');
 $endereco->setLogradouro('Rua Paranavaí');
 $endereco->setNumero('123');

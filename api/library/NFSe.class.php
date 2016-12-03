@@ -26,56 +26,27 @@
  *
  */
 
-class NFSe extends NFBase {
-	private $id;
+/**
+ * Nota fiscal eletrônica de serviços
+ */
+class NFSe extends NFe {
 
 	public function __construct($nfse = array()) {
-		if(is_array($nfse)) {
-			$this->setID($nfse['id']);
-		}
-	}
-
-	public function getID() {
-		return $this->id;
-	}
-
-	public function setID($id) {
-		$this->id = $id;
+		parent::__construct($nfse);
 	}
 
 	public function toArray() {
-		$nfse = array();
-		$nfse['id'] = $this->getID();
+		$nfse = parent::toArray();
 		return $nfse;
 	}
 
-	private static function validarCampos(&$nfse) {
-		$erros = array();
-		if(!is_numeric($nfse['id']))
-			$erros['id'] = 'O ID não foi informado';
-		if(!empty($erros))
-			throw new ValidationException($erros);
-	}
-
-	private static function initSearch() {
-		return   DB::$pdo->from('NFSe');
-	}
-
-	public static function getTodos($inicio = null, $quantidade = null) {
-		$query = self::initSearch();
-		if(!is_null($inicio) && !is_null($quantidade)) {
-			$query = $query->limit($quantidade)->offset($inicio);
-		}
-		$_nfses = $query->fetchAll();
-		$nfses = array();
-		foreach($_nfses as $nfse)
-			$nfses[] = new NFSe($nfse);
-		return $nfses;
-	}
-
-	public static function getCount() {
-		$query = self::initSearch();
-		return $query->count();
+	public function fromArray($nfse = array()) {
+		if($nfse instanceof NFSe)
+			$nfse = $nfse->toArray();
+		else if(!is_array($nfse))
+			return $this;
+		parent::fromArray($nfse);
+		return $this;
 	}
 
 }

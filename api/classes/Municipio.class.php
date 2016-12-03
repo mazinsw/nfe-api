@@ -28,11 +28,21 @@
 
 class Municipio {
 
+	private $estado;
 	private $codigo;
 	private $nome;
 
 	public function __construct($municipio = array()) {
 		$this->fromArray($municipio);
+	}
+
+	public function getEstado() {
+		return $this->estado;
+	}
+
+	public function setEstado($estado) {
+		$this->estado = $estado;
+		return $this;
 	}
 
 	/**
@@ -64,8 +74,17 @@ class Municipio {
 		return $this;
 	}
 
+	public function checkCodigos() {
+		if(is_numeric($this->getCodigo()))
+			return;
+		$db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
+		$this->setCodigo($db->getCodigoMunicipio(
+			$this->getNome(), $this->getEstado()->getUF()));
+	}
+
 	public function toArray() {
 		$municipio = array();
+		$municipio['estado'] = $this->getEstado();
 		$municipio['codigo'] = $this->getCodigo();
 		$municipio['nome'] = $this->getNome();
 		return $municipio;
@@ -76,6 +95,9 @@ class Municipio {
 			$municipio = $municipio->toArray();
 		else if(!is_array($municipio))
 			return $this;
+		$this->setEstado($municipio['estado']);
+		if(is_null($this->getEstado()))
+			$this->setEstado(new Estado());
 		$this->setCodigo($municipio['codigo']);
 		$this->setNome($municipio['nome']);
 		return $this;

@@ -26,22 +26,25 @@
  *
  */
 
-class EmitenteRegime {
-	const SIMPLES = 'simples';
-	const EXCESSO = 'excesso';
-	const NORMAL = 'normal';
-}
-
 /**
  * Empresa que irá emitir as notas fiscais
  */
 class Emitente extends Pessoa {
 
+	/**
+	 * Código de Regime Tributário. Este campo será obrigatoriamente preenchido
+	 * com: 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite
+	 * de receita bruta; 3 – Regime Normal.
+	 */
+	const REGIME_SIMPLES = 'simples';
+	const REGIME_EXCESSO = 'excesso';
+	const REGIME_NORMAL = 'normal';
+
 	private $fantasia;
 	private $regime;
 
 	public function __construct($emitente = array()) {
-		$this->fromArray($emitente);
+		parent::__construct($emitente);
 	}
 
 	/**
@@ -67,11 +70,11 @@ class Emitente extends Pessoa {
 		if(!$normalize)
 			return $this->regime;
 		switch ($this->regime) {
-			case EmitenteRegime::SIMPLES:
+			case self::REGIME_SIMPLES:
 				return '1';
-			case EmitenteRegime::EXCESSO:
+			case self::REGIME_EXCESSO:
 				return '2';
-			case EmitenteRegime::NORMAL:
+			case self::REGIME_NORMAL:
 				return '3';
 		}
 		return $this->regime;
@@ -100,7 +103,7 @@ class Emitente extends Pessoa {
 		$this->setFantasia($emitente['fantasia']);
 		$this->setRegime($emitente['regime']);
 		if(is_null($this->getRegime()))
-			$this->setRegime(EmitenteRegime::SIMPLES);
+			$this->setRegime(self::REGIME_SIMPLES);
 		return $this;
 	}
 

@@ -37,7 +37,7 @@ class Cliente extends Pessoa {
 	private $email;
 
 	public function __construct($cliente = array()) {
-		$this->fromArray($cliente);
+		parent::__construct($cliente);
 	}
 
 	/**

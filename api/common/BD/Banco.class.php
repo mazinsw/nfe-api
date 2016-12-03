@@ -25,46 +25,45 @@
  * SOFTWARE.
  *
  */
+namespace BD;
 
-class PIS implements NodeInterface {
+abstract class Banco {
 
-	private $id;
-
-	public function __construct($pis = array()) {
-		$this->fromArray($pis);
+	public function __construct($banco = array()) {
+		$this->fromArray($banco);
 	}
 
-	public function getID($normalize = false) {
-		if(!$normalize)
-			return $this->id;
-		return $this->id;
-	}
+	/**
+	 * Obtém o código IBGE do estado
+	 */
+	abstract public function getCodigoEstado($uf);
 
-	public function setID($id) {
-		$this->id = $id;
-		return $this;
-	}
+	/**
+	 * Obtém a aliquota do imposto de acordo com o tipo
+	 */
+	abstract public function getImpostoAliquota($ncm, $uf, $ex = null);
+
+	/**
+	 * Obtém o código IBGE do município
+	 */
+	abstract public function getCodigoMunicipio($municipio, $uf);
+
+	/**
+	 * Obtém as notas pendentes de envio
+	 */
+	abstract public function getNotasPendentes($inicio = null, $quantidade = null);
+
 
 	public function toArray() {
-		$pis = array();
-		$pis['id'] = $this->getID();
-		return $pis;
+		$banco = array();
+		return $banco;
 	}
 
-	public function fromArray($pis = array()) {
-		if($pis instanceof PIS)
-			$pis = $pis->toArray();
-		else if(!is_array($pis))
+	public function fromArray($banco = array()) {
+		if($banco instanceof Banco)
+			$banco = $banco->toArray();
+		else if(!is_array($banco))
 			return $this;
-		$this->setID($pis['id']);
 		return $this;
 	}
-
-	public function getNode($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'':$name);
-		$element->appendChild($dom->createElement('', $this->getID(true)));
-		return $element;
-	}
-
 }

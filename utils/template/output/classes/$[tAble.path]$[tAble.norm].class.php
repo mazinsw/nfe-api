@@ -25,16 +25,9 @@
  * SOFTWARE.
  *
  */
-$[field.each(all)]
-$[field.if(enum)]
-
-class $[Table.norm]$[Field.norm] {
-$[field.each(option)]
-	const $[FIELD.option.norm] = '$[field.option]';
-$[field.end]
-}
-$[field.end]
-$[field.end]
+$[table.if(package)]
+namespace $[table.package];
+$[table.end]
 
 $[table.if(comment)]
 /**
@@ -43,14 +36,33 @@ $[table.each(comment)]
 $[table.end]
  */
 $[table.end]
-class $[Table.norm] implements NodeInterface {
+class $[tAble.norm] $[table.if(inherited)]extends $[table.inherited] $[table.else]implements NodeInterface $[table.end]{
+$[field.each(all)]
+$[field.if(enum)]
+
+$[field.if(comment)]
+	/**
+$[field.each(comment)]
+	 * $[Field.comment]
+$[field.end]
+	 */
+$[field.end]
+$[field.each(option)]
+	const $[FIELD.unix]_$[FIELD.option.norm] = '$[field.option]';
+$[field.end]
+$[field.end]
+$[field.end]
 
 $[field.each(all)]
 	private $$[field.unix];
 $[field.end]
 
 	public function __construct($$[table.unix] = array()) {
+$[table.if(inherited)]
+		parent::__construct($$[table.unix]);
+$[table.else]
 		$this->fromArray($$[table.unix]);
+$[table.end]
 	}
 $[field.each(all)]
 
@@ -61,7 +73,7 @@ $[field.each(comment)]
 $[field.end]
 	 */
 $[field.end]
-	public function get$[Field.norm]($[field.if(searchable)]$[field.else]$normalize = false$[field.end]) {
+	public function get$[fIeld.norm]($[field.if(searchable)]$[field.else]$normalize = false$[field.end]) {
 $[field.if(searchable)]
 		return $this->$[field.unix];
 $[field.else]
@@ -76,7 +88,7 @@ $[field.else.if(datetime)]
 $[field.else.if(enum)]
 		switch ($this->$[field.unix]) {
 $[field.each(option)]
-			case $[Table.norm]$[Field.norm]::$[FIELD.option.norm]:
+			case self::$[FIELD.unix]_$[FIELD.option.norm]:
 				return '$[fIeld.option.name]';
 $[field.end]
 		}
@@ -95,12 +107,12 @@ $[field.each(comment)]
 $[field.end]
 	 */
 $[field.end]
-	public function is$[Field.norm]() {
+	public function is$[fIeld.norm]() {
 		return $this->$[field.unix] == 'Y';
 	}
 $[field.end]
 
-	public function set$[Field.norm]($$[field.unix]) {
+	public function set$[fIeld.norm]($$[field.unix]) {
 		$this->$[field.unix] = $$[field.unix];
 		return $this;
 	}
@@ -115,41 +127,69 @@ $[field.end]
 $[field.end]
 
 	public function toArray() {
+$[table.if(inherited)]
+		$$[table.unix] = parent::toArray();
+$[table.else]
 		$$[table.unix] = array();
+$[table.end]
 $[field.each(all)]
-		$$[table.unix]['$[field]'] = $this->get$[Field.norm]();
+		$$[table.unix]['$[field]'] = $this->get$[fIeld.norm]();
 $[field.end]
 		return $$[table.unix];
 	}
 
 	public function fromArray($$[table.unix] = array()) {
-		if($$[table.unix] instanceof $[Table.norm])
+		if($$[table.unix] instanceof $[tAble.norm])
 			$$[table.unix] = $$[table.unix]->toArray();
 		else if(!is_array($$[table.unix]))
 			return $this;
+$[table.if(inherited)]
+		parent::fromArray($$[table.unix]);
+$[table.end]
 $[field.each(all)]
-		$this->set$[Field.norm]($$[table.unix]['$[field]']);
+		$this->set$[fIeld.norm]($$[table.unix]['$[field]']);
 $[field.if(default)]
-		if(is_null($this->get$[Field.norm]()))
-			$this->set$[Field.norm]($[fIeld.info]);
+		if(is_null($this->get$[fIeld.norm]()))
+			$this->set$[fIeld.norm]($[fIeld.info]);
 $[field.end]
 $[field.end]
 		return $this;
 	}
 
 	public function getNode($name = null) {
+$[table.if(inherited)]
+		$element = parent::getNode(is_null($name)?'$[tAble.style]':$name);
+		$dom = $element->ownerDocument;
+$[table.else]
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$element = $dom->createElement(is_null($name)?'$[tAble.style]':$name);
+$[table.end]
 $[field.each(all)]
 $[field.if(null)]
-		if(!is_null($this->get$[Field.norm]()))
-			$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[Field.norm](true)));
+		if(!is_null($this->get$[fIeld.norm]())) {
+$[field.if(descriptor)]
+			$$[field.unix] = $this->get$[fIeld.norm]()->getNode();
+			$$[field.unix] = $dom->importNode($$[field.unix], true);
+			$element->appendChild($$[field.unix]);
+$[field.else.if(searchable)]
+			$_$[field.unix] = $this->get$[fIeld.norm]();
+			$$[field.unix] = $dom->createElement('$[fIeld.style]');
+			foreach ($_$[field.unix] as $_$[field.unix.plural]) {
+				$$[field.unix.plural] = $_$[field.unix.plural]->getNode();
+				$$[field.unix.plural] = $dom->importNode($$[field.unix.plural], true);
+				$$[field.unix]->appendChild($$[field.unix.plural]);
+			}
+			$element->appendChild($$[field.unix]);
+$[field.else]
+			$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
+$[field.end]
+		}
 $[field.else.if(descriptor)]
-		$$[field.unix] = $this->get$[Field.norm]()->getNode();
+		$$[field.unix] = $this->get$[fIeld.norm]()->getNode();
 		$$[field.unix] = $dom->importNode($$[field.unix], true);
 		$element->appendChild($$[field.unix]);
 $[field.else.if(searchable)]
-		$_$[field.unix] = $this->get$[Field.norm]();
+		$_$[field.unix] = $this->get$[fIeld.norm]();
 		$$[field.unix] = $dom->createElement('$[fIeld.style]');
 		foreach ($_$[field.unix] as $_$[field.unix.plural]) {
 			$$[field.unix.plural] = $_$[field.unix.plural]->getNode();
@@ -158,7 +198,7 @@ $[field.else.if(searchable)]
 		}
 		$element->appendChild($$[field.unix]);
 $[field.else]
-		$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[Field.norm](true)));
+		$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
 $[field.end]
 $[field.end]
 		return $element;

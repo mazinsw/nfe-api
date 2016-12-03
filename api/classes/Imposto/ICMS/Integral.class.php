@@ -25,51 +25,35 @@
  * SOFTWARE.
  *
  */
+namespace Imposto\ICMS;
 
 /**
- * Imposto sobre compra de mercadoria e prestação de serviços
+ * Tributação pelo ICMS
+ * 00 - Tributada integralmente, estende de Normal
  */
-class ICMS implements NodeInterface {
+class Integral extends Normal {
 
-	private $id;
-
-	public function __construct($icms = array()) {
-		$this->fromArray($icms);
-	}
-
-	/**
-	 * Identificador do ICMS, Ex.: ICMS00
-	 */
-	public function getID($normalize = false) {
-		if(!$normalize)
-			return $this->id;
-		return $this->id;
-	}
-
-	public function setID($id) {
-		$this->id = $id;
-		return $this;
+	public function __construct($integral = array()) {
+		parent::__construct($integral);
+		$this->setTributacao('00');
 	}
 
 	public function toArray() {
-		$icms = array();
-		$icms['id'] = $this->getID();
-		return $icms;
+		$integral = parent::toArray();
+		return $integral;
 	}
 
-	public function fromArray($icms = array()) {
-		if($icms instanceof ICMS)
-			$icms = $icms->toArray();
-		else if(!is_array($icms))
+	public function fromArray($integral = array()) {
+		if($integral instanceof Integral)
+			$integral = $integral->toArray();
+		else if(!is_array($integral))
 			return $this;
-		$this->setID($icms['id']);
+		parent::fromArray($integral);
 		return $this;
 	}
 
 	public function getNode($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'ICMS':$name);
-		$element->appendChild($dom->createElement('ICMS', $this->getID(true)));
+		$element = parent::getNode(is_null($name)?'ICMS00':$name);
 		return $element;
 	}
 

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+	<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+		<infNFe versao="2.00" Id="NFe351111XXXXXXXXXXXXXX550010000005841000005840">
+			<ide>
+				<cUF>35</cUF>
+				<cNF>00000584</cNF>
+				<natOp>COMPLEMENTO DE ICMS</natOp>
+				<indPag>2</indPag>
+				<mod>55</mod>
+				<serie>1</serie>
+				<nNF>584</nNF>
+				<dEmi>2011-11-08</dEmi>
+				<tpNF>1</tpNF>
+				<cMunFG>3554003</cMunFG>
+				<NFref>
+					<refNFe>351104XXXXXXXXXXXXXX550010000005765000005769</refNFe>
+				</NFref>
+				<tpImp>1</tpImp>
+				<tpEmis>1</tpEmis>
+				<cDV>0</cDV>
+				<tpAmb>2</tpAmb>
+				<finNFe>2</finNFe>
+				<procEmi>0</procEmi>
+				<verProc>1.0.0.0</verProc>
+			</ide>
+			<emit>
+				<CNPJ>XXXXXXXXXXXXXX</CNPJ>
+				<xNome>ANDRE FERREIRA DE MORAES</xNome>
+				<xFant>ANDRE FERREIRA DE MORAES</xFant>
+				<enderEmit>
+					<xLgr>PRACA ANITA COSTA</xLgr>
+					<nro>034</nro>
+					<xBairro>CENTRO</xBairro>
+					<cMun>3554003</cMun>
+					<xMun>TATUI</xMun>
+					<UF>SP</UF>
+					<CEP>18276748</CEP>
+					<cPais>1058</cPais>
+					<xPais>BRASIL</xPais>
+					<fone>1532599600</fone>
+				</enderEmit>
+				<IE>XXXXXXXXXXXX</IE>
+				<CRT>3</CRT>
+			</emit>
+			<dest>
+				<CNPJ>99999999000191</CNPJ>
+				<xNome>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
+				<enderDest>
+					<xLgr>RUA CORONEL AURELIANO DE CAMARGO</xLgr>
+					<nro>973</nro>
+					<xBairro>CENTRO</xBairro>
+					<cMun>3554003</cMun>
+					<xMun>TATUI</xMun>
+					<UF>SP</UF>
+					<CEP>18270170</CEP>
+					<cPais>1058</cPais>
+					<xPais>BRASIL</xPais>
+					<fone>1533243333</fone>
+				</enderDest>
+				<IE/>
+			</dest>
+			<det nItem="1">
+				<prod>
+					<cProd>00045</cProd>
+					<cEAN/>
+					<xProd>COMPLEMENTO DE ICMS</xProd>
+					<NCM>99</NCM>
+					<CFOP>5102</CFOP>
+					<uCom>UN</uCom>
+					<qCom>0.0000</qCom>
+					<vUnCom>0.0000000000</vUnCom>
+					<vProd>0.00</vProd>
+					<cEANTrib/>
+					<uTrib>UN</uTrib>
+					<qTrib>0.0000</qTrib>
+					<vUnTrib>0.0000000000</vUnTrib>
+					<indTot>1</indTot>
+				</prod>
+				<imposto>
+					<ICMS>
+						<ICMS00>
+							<orig>0</orig>
+							<CST>00</CST>
+							<modBC>3</modBC>
+							<vBC>200.00</vBC>
+							<pICMS>12.00</pICMS>
+							<vICMS>24.00</vICMS>
+						</ICMS00>
+					</ICMS>
+					<PIS>
+						<PISAliq>
+							<CST>01</CST>
+							<vBC>0.00</vBC>
+							<pPIS>0.00</pPIS>
+							<vPIS>0.00</vPIS>
+						</PISAliq>
+					</PIS>
+					<COFINS>
+						<COFINSAliq>
+							<CST>01</CST>
+							<vBC>0.00</vBC>
+							<pCOFINS>0.00</pCOFINS>
+							<vCOFINS>0.00</vCOFINS>
+						</COFINSAliq>
+					</COFINS>
+				</imposto>
+			</det>
+			<total>
+				<ICMSTot>
+					<vBC>200.00</vBC>
+					<vICMS>24.00</vICMS>
+					<vBCST>0.00</vBCST>
+					<vST>0.00</vST>
+					<vProd>0.00</vProd>
+					<vFrete>0.00</vFrete>
+					<vSeg>0.00</vSeg>
+					<vDesc>0.00</vDesc>
+					<vII>0.00</vII>
+					<vIPI>0.00</vIPI>
+					<vPIS>0.00</vPIS>
+					<vCOFINS>0.00</vCOFINS>
+					<vOutro>0.00</vOutro>
+					<vNF>0.00</vNF>
+				</ICMSTot>
+			</total>
+			<transp>
+				<modFrete>0</modFrete>
+			</transp>
+			<infAdic>
+				<infCpl>351104XXXXXXXXXXXXXX550010000005765000005769 ;NF-e complementar referente a NF-e 351104XXXXXXXXXXXXXX550010000005765000005769 emitida em 18/04/11;</infCpl>
+			</infAdic>
+		</infNFe>
+		<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+			<SignedInfo>
+				<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+				<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+				<Reference URI="#NFe351111XXXXXXXXXXXXXX550010000005841000005840">
+					<Transforms>
+						<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+						<Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+					</Transforms>
+					<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+					<DigestValue>nUBRan5kuafhyLuknU/MHTXOKs8=</DigestValue>
+				</Reference>
+			</SignedInfo>
+			<SignatureValue>Dfp4B4NA4He65ZxWzRLS4t5vTm8W5Uhs0d3Yk+g/xMOWglere1Ri2G3MU6s3XwGHUVcCwouxesk8DbO+1IC363PuSsi1ozrU1QPn1Kyz5i28IiaA1z4Ui3KVxZnavB52KSPIbdUWcRmtPO/y8QphdUUWSXY6XHEgZlTBFsaaC58=</SignatureValue>
+			<KeyInfo>
+				<X509Data>
+					<X509Certificate>MIIGszCCBZugAwIBAgIQL8/9iaBF6p6hSWI5zvFl+DANBgkqhkiG9w0BAQUFADB0MQswCQYDVQQGEwJCUjETMBEGA1UEChMKSUNQLUJyYXNpbDEtMCsGA1UECxMkQ2VydGlzaWduIENlcnRpZmljYWRvcmEgRGlnaXRhbCBTLkEuMSEwHwYDVQQDExhBQyBDZXJ0aXNpZ24gTXVsdGlwbGEgRzMwHhcNMTEwMzExMDAwMDAwWhcNMTIwMzA5MjM1OTU5WjCB+DELMAkGA1UEBhMCQlIxEzARBgNVBAoUCklDUC1CcmFzaWwxFTATBgNVBAsUDElEIC0gMTQ2MzA1MDEnMCUGA1UECxQeQXV0ZW50aWNhZG8gcG9yIEFSIERpZ2l0YWxDZXJ0MRswGQYDVQQLFBJBc3NpbmF0dXJhIFRpcG8gQTExFDASBgNVBAsUCyhlbSBicmFuY28pMRQwEgYDVQQLFAsoZW0gYnJhbmNvKTEjMCEGA1UEAxMaRmlvcmF2YW50ZSBJYXp6ZXR0aSBHcmFuZG8xJjAkBgkqhkiG9w0BCQEWF2Zpb3JlQGluc2VtaW5hcnQuY29tLmJyMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDGltSCkzTuPe3PnY4KAZ1jMT+iIvbbNOykuXhMlHp4LzNh6Sz72VWd6f2wnKXM6JoyfuEBGyUnZnWKyo3mcyk1l2UVxbaTcY/cXDizz/fiBeSTALc/e7N5Unf4bYxZiMNJF9+YUY/+wz5jAaDn5SWOQyxIkuKMmu06S6IjMf1pWQIDAQABo4IDPjCCAzowgbkGA1UdEQSBsTCBrqA4BgVgTAEDBKAvBC0wODA3MTk2NDExMDIzMTM2ODgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDCgJQYFYEwBAwKgHAQaRmlvcmF2YW50ZSBJYXp6ZXR0aSBHcmFuZG+gGQYFYEwBAwOgEAQONjkwMzgyNDgwMDAxNDigFwYFYEwBAwegDgQMMDAwMDAwMDAwMDAwgRdmaW9yZUBpbnNlbWluYXJ0LmNvbS5icjAJBgNVHRMEAjAAMB8GA1UdIwQYMBaAFISwQjM0o0IlpSiXPoPrd/DoT8JUMA4GA1UdDwEB/wQEAwIF4DBVBgNVHSAETjBMMEoGBmBMAQIBCzBAMD4GCCsGAQUFBwIBFjJodHRwOi8vaWNwLWJyYXNpbC5jZXJ0aXNpZ24uY29tLmJyL3JlcG9zaXRvcmlvL2RwYzCCASUGA1UdHwSCARwwggEYMFygWqBYhlZodHRwOi8vaWNwLWJyYXNpbC5jZXJ0aXNpZ24uY29tLmJyL3JlcG9zaXRvcmlvL2xjci9BQ0NlcnRpc2lnbk11bHRpcGxhRzMvTGF0ZXN0Q1JMLmNybDBboFmgV4ZVaHR0cDovL2ljcC1icmFzaWwub3V0cmFsY3IuY29tLmJyL3JlcG9zaXRvcmlvL2xjci9BQ0NlcnRpc2lnbk11bHRpcGxhRzMvTGF0ZXN0Q1JMLmNybDBboFmgV4ZVaHR0cDovL3JlcG9zaXRvcmlvLmljcGJyYXNpbC5nb3YuYnIvbGNyL0NlcnRpc2lnbi9BQ0NlcnRpc2lnbk11bHRpcGxhRzMvTGF0ZXN0Q1JMLmNybDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwgaAGCCsGAQUFBwEBBIGTMIGQMCgGCCsGAQUFBzABhhxodHRwOi8vb2NzcC5jZXJ0aXNpZ24uY29tLmJyMGQGCCsGAQUFBzAChlhodHRwOi8vaWNwLWJyYXNpbC5jZXJ0aXNpZ24uY29tLmJyL3JlcG9zaXRvcmlvL2NlcnRpZmljYWRvcy9BQ19DZXJ0aXNpZ25fTXVsdGlwbGFfRzMucDdjMA0GCSqGSIb3DQEBBQUAA4IBAQAFZzPLpkwO95g5C8S1+mbUylzA21b80jHPC7GGD307DcSPu/UCxnFvpchd13AUbBgEfrn6fMRHqAL26a+6mF8Ij/Kjdve21VTn+oKAqkpG6Aix7pU33rwQiYCb/qm1GKBx5OqU7CscuTqT6+w2y0DJ0aos6Xj66LaecIOa/Pyaml/4ahqGYBmUAuotY0lTp9JhNWwZz7T9DHiw+kQ7ylwQG4pPHt1tbK09UrdeH1rwB1UKCbye1fGo+BkGjc0B0Zk8UKSuOFln7hSYniDdsQFqgtYdK3MbdNtnVWOoN3uCscOxwaPExIZLogm1SLkOEhISyorC4PBUCzco5BE4RFmf</X509Certificate>
+				</X509Data>
+			</KeyInfo>
+		</Signature>
+	</NFe>
+	<protNFe versao="2.00">
+		<infProt>
+			<tpAmb>2</tpAmb>
+			<verAplic>SP_NFE_PL_006j</verAplic>
+			<chNFe>351111XXXXXXXXXXXXXX550010000005841000005840</chNFe>
+			<dhRecbto>2011-11-08T10:01:35</dhRecbto>
+			<nProt>135110008834196</nProt>
+			<digVal>nUBRan5kuafhyLuknU/MHTXOKs8=</digVal>
+			<cStat>100</cStat>
+			<xMotivo>Autorizado o uso da NF-e</xMotivo>
+		</infProt>
+	</protNFe>
+</nfeProc>

@@ -26,24 +26,26 @@
  *
  */
 
-class ImpostoTipo {
-	const FEDERAL = 'federal';
-	const ESTADUAL = 'estadual';
-	const MUNICIPAL = 'municipal';
-	const TODOS = 'todos';
-}
-
-class ImpostoGrupo {
-	const ICMS = 'icms';
-	const PIS = 'pis';
-	const COFINS = 'cofins';
-	const IPI = 'ipi';
-}
-
 /**
  * Classe base dos impostos
  */
 abstract class Imposto implements NodeInterface {
+
+	/**
+	 * Tipo de imposto
+	 */
+	const TIPO_IMPORTADO = 'importado';
+	const TIPO_NACIONAL = 'nacional';
+	const TIPO_ESTADUAL = 'estadual';
+	const TIPO_MUNICIPAL = 'municipal';
+
+	/**
+	 * Grupo do imposto
+	 */
+	const GRUPO_ICMS = 'icms';
+	const GRUPO_PIS = 'pis';
+	const GRUPO_COFINS = 'cofins';
+	const GRUPO_IPI = 'ipi';
 
 	private $tipo;
 	private $grupo;
@@ -75,6 +77,16 @@ abstract class Imposto implements NodeInterface {
 	public function getGrupo($normalize = false) {
 		if(!$normalize)
 			return $this->grupo;
+		switch ($this->grupo) {
+			case self::GRUPO_ICMS:
+				return 'ICMS';
+			case self::GRUPO_PIS:
+				return 'PIS';
+			case self::GRUPO_COFINS:
+				return 'COFINS';
+			case self::GRUPO_IPI:
+				return 'IPI';
+		}
 		return $this->grupo;
 	}
 
@@ -103,7 +115,7 @@ abstract class Imposto implements NodeInterface {
 	public function getAliquota($normalize = false) {
 		if(!$normalize)
 			return $this->aliquota;
-		return $this->aliquota;
+		return Util::toFloat($this->aliquota);
 	}
 
 	public function setAliquota($aliquota) {
@@ -117,7 +129,7 @@ abstract class Imposto implements NodeInterface {
 	public function getBase($normalize = false) {
 		if(!$normalize)
 			return $this->base;
-		return $this->base;
+		return Util::toCurrency($this->base);
 	}
 
 	public function setBase($base) {
@@ -132,7 +144,14 @@ abstract class Imposto implements NodeInterface {
 		if(!$normalize)
 			return ($this->getBase() * $this->getAliquota()) / 100.0;
 		$valor = $this->getValor();
-		return $valor;
+		return Util::toCurrency($valor);
+	}
+
+	/**
+	 * Obtém o valor total do imposto
+	 */
+	public function getTotal($normalize = false) {
+		return $this->getValor($normalize);
 	}
 
 	public function toArray() {

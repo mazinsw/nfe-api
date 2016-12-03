@@ -2,6 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 require_once(__DIR__ . '/../api/autoload.php');
+$sefaz = SEFAZ::init();
 
 $cliente = new Cliente();
 $cliente->setRazaoSocial('Empresa LTDA');
@@ -11,10 +12,11 @@ $cliente->setIE('123456789');
 
 $endereco = new Endereco();
 $endereco->setCEP('01122500');
-$endereco->setUF('PR');
 $endereco->getMunicipio()
 		 ->setNome('Paranavaí')
-		 ->setCodigo(123456);
+		 ->setCodigo(123456)
+		 ->getEstado()
+		 ->setUF('PR');
 $endereco->setBairro('Centro');
 $endereco->setLogradouro('Rua Paranavaí');
 $endereco->setNumero('123');

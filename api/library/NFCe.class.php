@@ -29,11 +29,12 @@
 /**
  * Classe para validação da nota fiscal eletrônica do consumidor
  */
-class NFCe extends NFBase {
+class NFCe extends NF {
 
 	public function __construct($nfce = array()) {
-		$this->fromArray($nfce);
+		parent::__construct($nfce);
 		$this->setModelo(65);
+		$this->setFormato(self::FORMATO_CONSUMIDOR);
 	}
 
 	public function toArray() {

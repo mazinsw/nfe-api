@@ -26,45 +26,48 @@
  *
  */
 
-class IPI implements NodeInterface {
+/**
+ * Evento de emissão de nota fiscal eletrônica
+ */
+interface Evento {
 
-	private $id;
+	/**
+	 * Chamado quando o XML da nota foi gerado
+	 */
+	public function onNotaGerada(&$nota, &$xml);
 
-	public function __construct($ipi = array()) {
-		$this->fromArray($ipi);
-	}
+	/**
+	 * Chamado após o XML da nota ser assinado
+	 */
+	public function onNotaAssinada(&$nota, &$xml);
 
-	public function getID($normalize = false) {
-		if(!$normalize)
-			return $this->id;
-		return $this->id;
-	}
+	/**
+	 * Chamado antes de enviar a nota para a SEFAZ
+	 */
+	public function onNotaEnviando(&$nota, &$xml);
 
-	public function setID($id) {
-		$this->id = $id;
-		return $this;
-	}
+	/**
+	 * Chamado quando a forma de emissão da nota fiscal muda para normal ou
+	 * contigência
+	 */
+	public function onFormaEmissao(&$nota, $forma);
 
-	public function toArray() {
-		$ipi = array();
-		$ipi['id'] = $this->getID();
-		return $ipi;
-	}
+	/**
+	 * Chamado quando a nota foi enviada e aceita pela SEFAZ (Não é chamado
+	 * quando em contigência)
+	 */
+	public function onNotaEnviada(&$nota, &$xml);
 
-	public function fromArray($ipi = array()) {
-		if($ipi instanceof IPI)
-			$ipi = $ipi->toArray();
-		else if(!is_array($ipi))
-			return $this;
-		$this->setID($ipi['id']);
-		return $this;
-	}
+	/**
+	 * Chamado quando a emissão da nota foi concluída com sucesso independente
+	 * da forma de emissão
+	 */
+	public function onNotaCompleto(&$nota, &$xml);
 
-	public function getNode($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'':$name);
-		$element->appendChild($dom->createElement('', $this->getID(true)));
-		return $element;
-	}
+	/**
+	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
+	 * é chamado quando entra em contigência)
+	 */
+	public function onNotaErro(&$nota);
 
 }

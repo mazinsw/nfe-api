@@ -30,12 +30,23 @@
  * Classe que envia uma ou mais notas fiscais para os servidores da sefaz
  */
 class SEFAZ {
+
 	private $notas;
+	private $configuracao;
+	static private $instance;
 
 	public function __construct($sefaz = array()) {
-		if(is_array($sefaz)) {
-			$this->setNotas($sefaz['notas']);
-		}
+		$this->fromArray($sefaz);
+	}
+
+	public static function init() {
+		if(is_null(self::$instance))
+			self::$instance = new self();
+		return self::getInstance();
+	}
+
+	public static function getInstance() {
+		return self::$instance;
 	}
 
 	public function getNotas() {
@@ -44,41 +55,40 @@ class SEFAZ {
 
 	public function setNotas($notas) {
 		$this->notas = $notas;
+		return $this;
+	}
+
+	public function addNota($nota) {
+		$this->notas[] = $nota;
+		return $this;
+	}
+
+	public function getConfiguracao() {
+		return $this->configuracao;
+	}
+
+	public function setConfiguracao($configuracao) {
+		$this->configuracao = $configuracao;
+		return $this;
 	}
 
 	public function toArray() {
 		$sefaz = array();
 		$sefaz['notas'] = $this->getNotas();
+		$sefaz['configuracao'] = $this->getConfiguracao();
 		return $sefaz;
 	}
 
-	private static function validarCampos(&$sefaz) {
-		$erros = array();
-		if(!is_numeric($sefaz['notas']))
-			$erros['notas'] = 'O notas não foi informado';
-		if(!empty($erros))
-			throw new ValidationException($erros);
-	}
-
-	private static function initSearch() {
-		return   DB::$pdo->from('SEFAZ');
-	}
-
-	public static function getTodas($inicio = null, $quantidade = null) {
-		$query = self::initSearch();
-		if(!is_null($inicio) && !is_null($quantidade)) {
-			$query = $query->limit($quantidade)->offset($inicio);
-		}
-		$_sefazs = $query->fetchAll();
-		$sefazs = array();
-		foreach($_sefazs as $sefaz)
-			$sefazs[] = new SEFAZ($sefaz);
-		return $sefazs;
-	}
-
-	public static function getCount() {
-		$query = self::initSearch();
-		return $query->count();
+	public function fromArray($sefaz = array()) {
+		if($sefaz instanceof SEFAZ)
+			$sefaz = $sefaz->toArray();
+		else if(!is_array($sefaz))
+			return $this;
+		$this->setNotas($sefaz['notas']);
+		$this->setConfiguracao($sefaz['configuracao']);
+		if(is_null($this->getConfiguracao()))
+			$this->setConfiguracao(new Ajuste());
+		return $this;
 	}
 
 }

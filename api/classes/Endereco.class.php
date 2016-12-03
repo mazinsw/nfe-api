@@ -33,7 +33,6 @@ class Endereco implements NodeInterface {
 
 	private $pais;
 	private $cep;
-	private $uf;
 	private $municipio;
 	private $bairro;
 	private $logradouro;
@@ -61,17 +60,6 @@ class Endereco implements NodeInterface {
 
 	public function setCEP($cep) {
 		$this->cep = $cep;
-		return $this;
-	}
-
-	public function getUF($normalize = false) {
-		if(!$normalize)
-			return $this->uf;
-		return $this->uf;
-	}
-
-	public function setUF($uf) {
-		$this->uf = $uf;
 		return $this;
 	}
 
@@ -128,11 +116,14 @@ class Endereco implements NodeInterface {
 		return $this;
 	}
 
+	public function getEndereco($normalize = false) {
+		return $this->getLogradouro().', '.$this->getNumero().' - '.$this->getBairro();
+	}
+
 	public function toArray() {
 		$endereco = array();
 		$endereco['pais'] = $this->getPais();
 		$endereco['cep'] = $this->getCEP();
-		$endereco['uf'] = $this->getUF();
 		$endereco['municipio'] = $this->getMunicipio();
 		$endereco['bairro'] = $this->getBairro();
 		$endereco['logradouro'] = $this->getLogradouro();
@@ -150,7 +141,6 @@ class Endereco implements NodeInterface {
 		if(is_null($this->getPais()))
 			$this->setPais(new Pais(array('codigo' => 1058, 'nome' => 'Brasil')));
 		$this->setCEP($endereco['cep']);
-		$this->setUF($endereco['uf']);
 		$this->setMunicipio($endereco['municipio']);
 		if(is_null($this->getMunicipio()))
 			$this->setMunicipio(new Municipio());
@@ -161,8 +151,14 @@ class Endereco implements NodeInterface {
 		return $this;
 	}
 
+	public function checkCodigos() {
+		$this->getMunicipio()->checkCodigos();
+		$this->getMunicipio()->getEstado()->checkCodigos();
+	}
+
 	public function getNode($name = null) {
 		$dom = new DOMDocument('1.0', 'UTF-8');
+		$this->checkCodigos();
 		$element = $dom->createElement(is_null($name)?'enderEmit':$name);
 		$element->appendChild($dom->createElement('xLgr', $this->getLogradouro(true)));
 		$element->appendChild($dom->createElement('nro', $this->getNumero(true)));
@@ -171,7 +167,7 @@ class Endereco implements NodeInterface {
 		$element->appendChild($dom->createElement('xBairro', $this->getBairro(true)));
 		$element->appendChild($dom->createElement('cMun', $this->getMunicipio()->getCodigo(true)));
 		$element->appendChild($dom->createElement('xMun', $this->getMunicipio()->getNome(true)));
-		$element->appendChild($dom->createElement('UF', $this->getUF(true)));
+		$element->appendChild($dom->createElement('UF', $this->getMunicipio()->getEstado()->getUF(true)));
 		$element->appendChild($dom->createElement('CEP', $this->getCEP(true)));
 		$element->appendChild($dom->createElement('cPais', $this->getPais()->getCodigo(true)));
 		$element->appendChild($dom->createElement('xPais', $this->getPais()->getNome(true)));

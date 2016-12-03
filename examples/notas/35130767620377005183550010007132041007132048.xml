@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+	<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+		<infNFe versao="2.00" Id="NFe35130767620377005183550010007132041007132048">
+			<ide>
+				<cUF>35</cUF>
+				<cNF>00713204</cNF>
+				<natOp>VENDA MERC ADQ TERCEIROS</natOp>
+				<indPag>1</indPag>
+				<mod>55</mod>
+				<serie>1</serie>
+				<nNF>713204</nNF>
+				<dEmi>2013-07-29</dEmi>
+				<dSaiEnt>2013-07-29</dSaiEnt>
+				<hSaiEnt>21:28:33</hSaiEnt>
+				<tpNF>1</tpNF>
+				<cMunFG>3503208</cMunFG>
+				<tpImp>1</tpImp>
+				<tpEmis>1</tpEmis>
+				<cDV>8</cDV>
+				<tpAmb>1</tpAmb>
+				<finNFe>1</finNFe>
+				<procEmi>0</procEmi>
+				<verProc>1.0</verProc>
+			</ide>
+			<emit>
+				<CNPJ>67620377005183</CNPJ>
+				<xNome>MINERVA S/A (AQ)</xNome>
+				<xFant>MINERVA S/A (AQ)</xFant>
+				<enderEmit>
+					<xLgr>AV MANUEL DE ABREU</xLgr>
+					<nro>4455</nro>
+					<xBairro>VILA SEDENHO</xBairro>
+					<cMun>3503208</cMun>
+					<xMun>ARARAQUARA</xMun>
+					<UF>SP</UF>
+					<CEP>14806500</CEP>
+					<cPais>1058</cPais>
+					<fone>1633564000</fone>
+				</enderEmit>
+				<IE>181000717110</IE>
+				<CRT>3</CRT>
+			</emit>
+			<dest>
+				<CNPJ>02645436000163</CNPJ>
+				<xNome>NELOR CHURRASCARIA E RESTAURANTE LTDA EPP 16222</xNome>
+				<enderDest>
+					<xLgr>AV HIGIENOPOLIS</xLgr>
+					<nro>891</nro>
+					<xCpl>C</xCpl>
+					<xBairro>CENTRO</xBairro>
+					<cMun>4113700</cMun>
+					<xMun>LONDRINA</xMun>
+					<UF>PR</UF>
+					<CEP>86020080</CEP>
+					<cPais>1058</cPais>
+					<xPais>BRASIL</xPais>
+					<fone>433242700</fone>
+				</enderDest>
+				<IE>9016616858</IE>
+				<email>xml@minerva.ind.br</email>
+			</dest>
+			<det nItem="1">
+				<prod>
+					<cProd>79192</cProd>
+					<cEAN/>
+					<xProd>CARNE ENFRIADA DE VACUNO SIN HUESOS FILE MIGNON</xProd>
+					<NCM>02013000</NCM>
+					<CFOP>6102</CFOP>
+					<uCom>Kg</uCom>
+					<qCom>20.9400</qCom>
+					<vUnCom>21.9899713500</vUnCom>
+					<vProd>460.47</vProd>
+					<cEANTrib/>
+					<uTrib>Kg</uTrib>
+					<qTrib>20.9400</qTrib>
+					<vUnTrib>21.9899713500</vUnTrib>
+					<indTot>1</indTot>
+				</prod>
+				<imposto>
+					<ICMS>
+						<ICMS00>
+							<orig>1</orig>
+							<CST>00</CST>
+							<modBC>1</modBC>
+							<vBC>460.47</vBC>
+							<pICMS>4.00</pICMS>
+							<vICMS>18.42</vICMS>
+						</ICMS00>
+					</ICMS>
+					<IPI>
+						<cEnq>999</cEnq>
+						<IPINT>
+							<CST>53</CST>
+						</IPINT>
+					</IPI>
+					<PIS>
+						<PISAliq>
+							<CST>01</CST>
+							<vBC>460.47</vBC>
+							<pPIS>1.65</pPIS>
+							<vPIS>7.60</vPIS>
+						</PISAliq>
+					</PIS>
+					<COFINS>
+						<COFINSAliq>
+							<CST>01</CST>
+							<vBC>460.47</vBC>
+							<pCOFINS>7.60</pCOFINS>
+							<vCOFINS>35.00</vCOFINS>
+						</COFINSAliq>
+					</COFINS>
+				</imposto>
+			</det>
+			<det nItem="2">
+				<prod>
+					<cProd>3670</cProd>
+					<cEAN/>
+					<xProd>JERKED BEEF DT 2 X 5 KG MINERVA</xProd>
+					<NCM>02102000</NCM>
+					<CFOP>6102</CFOP>
+					<uCom>Kg</uCom>
+					<qCom>10.0000</qCom>
+					<vUnCom>11.5900000000</vUnCom>
+					<vProd>115.90</vProd>
+					<cEANTrib/>
+					<uTrib>Kg</uTrib>
+					<qTrib>10.0000</qTrib>
+					<vUnTrib>11.5900000000</vUnTrib>
+					<indTot>1</indTot>
+				</prod>
+				<imposto>
+					<ICMS>
+						<ICMS20>
+							<orig>0</orig>
+							<CST>20</CST>
+							<modBC>1</modBC>
+							<pRedBC>0.00</pRedBC>
+							<vBC>67.60</vBC>
+							<pICMS>12.00</pICMS>
+							<vICMS>8.11</vICMS>
+						</ICMS20>
+					</ICMS>
+					<IPI>
+						<cEnq>999</cEnq>
+						<IPINT>
+							<CST>53</CST>
+						</IPINT>
+					</IPI>
+					<PIS>
+						<PISNT>
+							<CST>09</CST>
+						</PISNT>
+					</PIS>
+					<COFINS>
+						<COFINSNT>
+							<CST>09</CST>
+						</COFINSNT>
+					</COFINS>
+				</imposto>
+			</det>
+			<det nItem="3">
+				<prod>
+					<cProd>94</cProd>
+					<cEAN/>
+					<xProd>CARNE RESFRIADA DE BOVINO SEM OSSO ALCATRA</xProd>
+					<NCM>02013000</NCM>
+					<CFOP>6101</CFOP>
+					<uCom>Kg</uCom>
+					<qCom>31.6600</qCom>
+					<vUnCom>16.1699305100</vUnCom>
+					<vProd>511.94</vProd>
+					<cEANTrib/>
+					<uTrib>Kg</uTrib>
+					<qTrib>31.6600</qTrib>
+					<vUnTrib>16.1699305100</vUnTrib>
+					<indTot>1</indTot>
+				</prod>
+				<imposto>
+					<ICMS>
+						<ICMS20>
+							<orig>0</orig>
+							<CST>20</CST>
+							<modBC>1</modBC>
+							<pRedBC>0.00</pRedBC>
+							<vBC>298.61</vBC>
+							<pICMS>12.00</pICMS>
+							<vICMS>35.83</vICMS>
+						</ICMS20>
+					</ICMS>
+					<IPI>
+						<cEnq>999</cEnq>
+						<IPINT>
+							<CST>53</CST>
+						</IPINT>
+					</IPI>
+					<PIS>
+						<PISNT>
+							<CST>09</CST>
+						</PISNT>
+					</PIS>
+					<COFINS>
+						<COFINSNT>
+							<CST>09</CST>
+						</COFINSNT>
+					</COFINS>
+				</imposto>
+			</det>
+			<det nItem="4">
+				<prod>
+					<cProd>301</cProd>
+					<cEAN/>
+					<xProd>CARNE RESFRIADA DE BOVINO SEM OSSO LAGARTO</xProd>
+					<NCM>02013000</NCM>
+					<CFOP>6101</CFOP>
+					<uCom>Kg</uCom>
+					<qCom>11.5500</qCom>
+					<vUnCom>9.5896103900</vUnCom>
+					<vProd>110.76</vProd>
+					<cEANTrib/>
+					<uTrib>Kg</uTrib>
+					<qTrib>11.5500</qTrib>
+					<vUnTrib>9.5896103900</vUnTrib>
+					<indTot>1</indTot>
+				</prod>
+				<imposto>
+					<ICMS>
+						<ICMS20>
+							<orig>0</orig>
+							<CST>20</CST>
+							<modBC>1</modBC>
+							<pRedBC>0.00</pRedBC>
+							<vBC>64.61</vBC>
+							<pICMS>12.00</pICMS>
+							<vICMS>7.75</vICMS>
+						</ICMS20>
+					</ICMS>
+					<IPI>
+						<cEnq>999</cEnq>
+						<IPINT>
+							<CST>53</CST>
+						</IPINT>
+					</IPI>
+					<PIS>
+						<PISNT>
+							<CST>09</CST>
+						</PISNT>
+					</PIS>
+					<COFINS>
+						<COFINSNT>
+							<CST>09</CST>
+						</COFINSNT>
+					</COFINS>
+				</imposto>
+			</det>
+			<total>
+				<ICMSTot>
+					<vBC>891.29</vBC>
+					<vICMS>70.12</vICMS>
+					<vBCST>0.00</vBCST>
+					<vST>0.00</vST>
+					<vProd>1199.07</vProd>
+					<vFrete>0.00</vFrete>
+					<vSeg>0.00</vSeg>
+					<vDesc>0.00</vDesc>
+					<vII>0.00</vII>
+					<vIPI>0.00</vIPI>
+					<vPIS>7.60</vPIS>
+					<vCOFINS>35.00</vCOFINS>
+					<vOutro>0.00</vOutro>
+					<vNF>1199.07</vNF>
+				</ICMSTot>
+			</total>
+			<transp>
+				<modFrete>0</modFrete>
+				<transporta>
+					<CNPJ>12801434000170</CNPJ>
+					<xNome>OLIVEIRA E FACIOLI LTDA ME</xNome>
+					<IE>181147569110</IE>
+					<xEnder>R DOUTOR JOSE AUGUSTO DE ARRUDA BOTELHO</xEnder>
+					<xMun>ARARAQUARA</xMun>
+					<UF>SP</UF>
+				</transporta>
+				<veicTransp>
+					<placa>DVT9988</placa>
+					<UF>SP</UF>
+				</veicTransp>
+				<vol>
+					<qVol>5</qVol>
+					<pesoL>74.150</pesoL>
+					<pesoB>78.200</pesoB>
+				</vol>
+			</transp>
+			<cobr>
+				<fat>
+					<nFat>713204</nFat>
+					<vOrig>1199.07</vOrig>
+					<vLiq>1199.07</vLiq>
+				</fat>
+				<dup>
+					<nDup>713204/1</nDup>
+					<dVenc>2013-08-19</dVenc>
+					<vDup>1199.07</vDup>
+				</dup>
+			</cobr>
+			<infAdic>
+				<infCpl>DECRETO N 49 921 DE 25 DE AGOSTO DE 2005 // VENDAS EFETUADAS COM SUSPENSAO DA CONTRIBUICAO PARA PIS E DA COFINS, CONFORME ARTIGO 32 DA LEI 12 058 DE 14/10/2009 E INSTRUCAO NORMATIVA 977 DE 14/12/2009 // A MATERIA PRIMA UTILIZADA NA ELABORACAO DESTE PRODUTO FOI ADQUIRIDA DE FONTE NAO INCLUIDAS NA LISTA SUJA DO TRABALHO ESCRAVO DO MTE (MINISTERIO DO TRABALHO E EMPREGO) E TAMPOUCO NA RELACAO DE AREAS EMBARGADAS PELO IBAMA // REDUCAO NA BASE DE CALCULO EM 41,67% CONFORME DECRETO 57143 DO DIA 18/07/2011 ARTIGO 1 INCISO II PARAGRAFO UNICO // CONFORME RESOLUCAO SINIEF 13/2012, AS OPERACOES INTERESTADUAIS COM BENS E MERCADORIAS IMPORTADAS DO EXTERIOR, A ALIQUOTA SERA DE 4% // CFOP: 6101 BASE ICMS: 363,22 VALOR ICMS: 43,59 // CFOP: 6102 BASE ICMS: 528,07 VALOR ICMS: 26,53 // BASE DE CALCULO ICMS SUBST : 0,00 VALOR ICMS SUBST : 0,00 // PD: 2125404 // BCO: // NAO NOS RESPONSABILIZAMOS POR PAGAMENTOS EFETUADOS AOS MOTORISTAS, AJUDANTE E REPRESENTANTE COMERCIAL, O MESMO DEVERA SER FEITO SOMENTE EM BANCO FAVOR CONFERIR OS PRODUTOS NO ATO DA ENTREGA, NAO ACEITAREMOS DEVOLUCOES POSTERIORES E TERMINANTEMENTE PROIBIDO A ENTREGA DE MERCADORIA EM OUTRO ENDERECO NAO CONSTANTE DA NOTA FISCAL,SALVO CADASTRADO NO CAMPO DADOS ADICIONAIS // Nome Fantasia: NELOR</infCpl>
+				<obsCont xCampo="EMAIL_DESTINATARIO">
+					<xTexto>xml@minerva.ind.br</xTexto>
+				</obsCont>
+				<obsCont xCampo="EMAIL_DESTINATARIO">
+					<xTexto>xml@minerva.ind.br</xTexto>
+				</obsCont>
+			</infAdic>
+		</infNFe>
+		<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+			<SignedInfo>
+				<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+				<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+				<Reference URI="#NFe35130767620377005183550010007132041007132048">
+					<Transforms>
+						<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+						<Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+					</Transforms>
+					<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+					<DigestValue>WfsJEyd1bSATIKzRFYLMrXrvK5g=</DigestValue>
+				</Reference>
+			</SignedInfo>
+			<SignatureValue>iYJ0GNDAuMbbMU4vMx5JKFG9wiSa6J0XGhw5HV8wITdt1nSc3xEJw6hV0shV5O+Ie8byJoAhjDetnw+JSYQDvykbRZW4+lB68ZgLOv6ikL7KjlRWXx4VReECPJIOisb7yu2dleq0z6PxZJGZ7z7+OfDvb9nDyCT0pbOPLvM9hX4=</SignatureValue>
+			<KeyInfo>
+				<X509Data>
+					<X509Certificate>MIICOTCCAaKgAwIBAgIQJpLn3fwH17RNXJHw5VenaDANBgkqhkiG9w0BAQUFADBbMVkwVwYDVQQDHlAAdwB3AHcALgBmAHMAaQBzAHQALgBjAG8AbQAuAGIAcgAgACgAUwBFAE0AIABWAEEATABJAEQAQQBEAEUAIABKAFUAUgDNAEQASQBDAEEAKTAeFw0xNTEyMjQwODI1MjVaFw0xODEyMjQwODI1MjVaMFsxWTBXBgNVBAMeUAB3AHcAdwAuAGYAcwBpAHMAdAAuAGMAbwBtAC4AYgByACAAKABTAEUATQAgAFYAQQBMAEkARABBAEQARQAgAEoAVQBSAM0ARABJAEMAQQApMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDX4BYmJiNwrPz9At2ioXYkMuMWAOf669VPS3SAzIKkJLhSE7Bf9sbTjGHRFZhs6STxKkMBKKnx6dqAEMGlQwDSU42/kqhGya28SUn3HigH2w3dR/536Gt4eAxyLp9ODNXUqWTpnraWCeT41kcnJ27cmOAUMxzxDcsA93n32L4u8wIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAAN89zf+wSFL+4+2Ic8mGva8Z51EzYzNgYEqXwEMHxw4jCxxbsuxewQWedSGWi3SFZla6zmNUEA+UO95tSZ353klTvWDzut2BFSJOPLcMu8HPTTdnMt4ofVeVqKyi2vp+3t78vjqDAAfSAu5C9wT7stoUx41Nok+L6WbmpOIgvHy</X509Certificate>
+				</X509Data>
+			</KeyInfo>
+		</Signature>
+	</NFe>
+	<protNFe versao="2.00">
+		<infProt>
+			<tpAmb>1</tpAmb>
+			<verAplic>1.0</verAplic>
+			<chNFe>35130767620377005183550010007132041007132048</chNFe>
+			<dhRecbto>2013-07-29T21:28:43</dhRecbto>
+			<nProt>135130447736703</nProt>
+			<digVal>WfsJEyd1bSATIKzRFYLMrXrvK5g=</digVal>
+			<cStat>100</cStat>
+			<xMotivo>Autorizado o uso da NF-e</xMotivo>
+		</infProt>
+	</protNFe>
+</nfeProc>

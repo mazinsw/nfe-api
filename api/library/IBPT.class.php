@@ -26,45 +26,40 @@
  *
  */
 
-class COFINS implements NodeInterface {
+class IBPT {
 
-	private $id;
+	private $tabela;
 
-	public function __construct($cofins = array()) {
-		$this->fromArray($cofins);
+	public function __construct() {
+		$this->tabela = array();
 	}
 
-	public function getID($normalize = false) {
-		if(!$normalize)
-			return $this->id;
-		return $this->id;
+	public function load($uf) {
+		if(isset($this->tabela[$uf]))
+			return $this->tabela[$uf];
+		$file = dirname(dirname(__FILE__)) . '/data/IBPT/'.$uf.'.json';
+		if(!file_exists($file))
+			return false;
+		$content = file_get_contents($file);
+		if($content === false)
+			return false;
+		$json = json_decode($content, true);
+		$array = $json['IBPT'][$uf];
+		$this->tabela[$uf] = $array;
+		return $array;
 	}
 
-	public function setID($id) {
-		$this->id = $id;
-		return $this;
-	}
-
-	public function toArray() {
-		$cofins = array();
-		$cofins['id'] = $this->getID();
-		return $cofins;
-	}
-
-	public function fromArray($cofins = array()) {
-		if($cofins instanceof COFINS)
-			$cofins = $cofins->toArray();
-		else if(!is_array($cofins))
-			return $this;
-		$this->setID($cofins['id']);
-		return $this;
-	}
-
-	public function getNode($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'':$name);
-		$element->appendChild($dom->createElement('', $this->getID(true)));
-		return $element;
+	public function getImposto($ncm, $uf, $ex) {
+		$uf = strtoupper($uf);
+		$uf = preg_replace('/[^A-Z]/', '', $uf);
+		$array = $this->load($uf);
+		if($array === false)
+			return false;
+		$key = $ncm.'.'.sprintf('%02s', $ex);
+		$o = $array[$key];
+		if(is_null($o))
+			return false;
+		return $o;
 	}
 
 }
