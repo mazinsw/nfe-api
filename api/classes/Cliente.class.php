@@ -31,13 +31,34 @@
  * receber a nota fiscal
  */
 class Cliente extends Pessoa {
+	
+	/**
+	 * Indicador da IE do destinatário:
+	 * 1 – Contribuinte ICMSpagamento à
+	 * vista;
+	 * 2 – Contribuinte isento de inscrição;
+	 * 9 – Não Contribuinte
+	 */
+	const INDICADOR_PAGAMENTO = 'pagamento';
+	const INDICADOR_ISENTO = 'isento';
+	const INDICADOR_NENHUM = 'nenhum';
 
 	private $nome;
 	private $cpf;
 	private $email;
+	private $indicador;
 
 	public function __construct($cliente = array()) {
 		parent::__construct($cliente);
+	}
+
+	/**
+	 * Número identificador do cliente
+	 */
+	public function getID($normalize = false) {
+		if(!is_null($this->getCNPJ()))
+			return $this->getCNPJ($normalize);
+		return $this->getCPF($normalize);
 	}
 
 	/**
@@ -80,11 +101,38 @@ class Cliente extends Pessoa {
 		return $this;
 	}
 
+	/**
+	 * Indicador da IE do destinatário:
+	 * 1 – Contribuinte ICMSpagamento à
+	 * vista;
+	 * 2 – Contribuinte isento de inscrição;
+	 * 9 – Não Contribuinte
+	 */
+	public function getIndicador($normalize = false) {
+		if(!$normalize)
+			return $this->indicador;
+		switch ($this->indicador) {
+			case self::INDICADOR_PAGAMENTO:
+				return '1';
+			case self::INDICADOR_ISENTO:
+				return '2';
+			case self::INDICADOR_NENHUM:
+				return '9';
+		}
+		return $this->indicador;
+	}
+
+	public function setIndicador($indicador) {
+		$this->indicador = $indicador;
+		return $this;
+	}
+
 	public function toArray() {
 		$cliente = parent::toArray();
 		$cliente['nome'] = $this->getNome();
 		$cliente['cpf'] = $this->getCPF();
 		$cliente['email'] = $this->getEmail();
+		$cliente['indicador'] = $this->getIndicador();
 		return $cliente;
 	}
 
@@ -97,6 +145,9 @@ class Cliente extends Pessoa {
 		$this->setNome($cliente['nome']);
 		$this->setCPF($cliente['cpf']);
 		$this->setEmail($cliente['email']);
+		$this->setIndicador($cliente['indicador']);
+		if(is_null($this->getIndicador()))
+			$this->setIndicador(self::INDICADOR_NENHUM);
 		return $this;
 	}
 
@@ -117,6 +168,7 @@ class Cliente extends Pessoa {
 			$endereco->appendChild($dom->createElement('fone', $this->getTelefone(true)));
 			$element->appendChild($endereco);
 		}
+		$element->appendChild($dom->createElement('indIEDest', $this->getIndicador(true)));
 		if(!is_null($this->getCNPJ())) {
 			$element->appendChild($dom->createElement('IE', $this->getIE(true)));
 			$element->appendChild($dom->createElement('email', $this->getEmail(true)));

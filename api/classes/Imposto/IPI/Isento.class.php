@@ -38,6 +38,7 @@ class Isento extends Imposto {
 
 	public function __construct($isento = array()) {
 		parent::__construct($isento);
+		$this->setGrupo(self::GRUPO_IPI);
 	}
 
 	/**

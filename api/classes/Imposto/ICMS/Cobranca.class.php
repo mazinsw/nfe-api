@@ -88,8 +88,12 @@ class Cobranca extends Parcial {
 
 	public function getNode($name = null) {
 		$element = $this->getNormal()->getNode(is_null($name)?'ICMS10':$name);
+		if(is_null($this->getModalidade()))
+			return $element;
 		$dom = $element->ownerDocument;
-		$parcial = parent::getNode();
+		$parcial = parent::getNode(is_null($name)?'ICMS10':$name);
+		if(is_null($this->getNormal()->getModalidade()))
+			return $parcial;
 		foreach ($parcial->childNodes as $node) {
 			$node = $dom->importNode($node, true);
 			$list = $element->getElementsByTagName($node->nodeName);

@@ -32,11 +32,12 @@ use DOMDocument;
  * Tributação pelo ICMS
  * 90 - Outras, estende de Normal
  */
-class Generico extends Normal {
+class Generico extends Mista {
 
 	public function __construct($generico = array()) {
 		parent::__construct($generico);
 		$this->setTributacao('90');
+		$this->getNormal()->setTributacao('90');
 	}
 
 	public function toArray() {
@@ -54,10 +55,15 @@ class Generico extends Normal {
 	}
 
 	public function getNode($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'ICMS90':$name);
-		$element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
-		$element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
+		if(is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
+			$dom = new DOMDocument('1.0', 'UTF-8');
+			$element = $dom->createElement(is_null($name)?'ICMS90':$name);
+			$element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
+			$element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
+			return $element;
+		}
+		$element = parent::getNode(is_null($name)?'ICMS90':$name);
+		$dom = $element->ownerDocument;
 		return $element;
 	}
 

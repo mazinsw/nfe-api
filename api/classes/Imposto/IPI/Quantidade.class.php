@@ -28,6 +28,7 @@
 namespace Imposto\IPI;
 use Imposto;
 use DOMDocument;
+use Util;
 
 /**
  * Quantidade x valor Unidade de Produto
@@ -36,6 +37,7 @@ class Quantidade extends Imposto {
 
 	public function __construct($quantidade = array()) {
 		parent::__construct($quantidade);
+		$this->setGrupo(self::GRUPO_IPI);
 	}
 
 	public function getQuantidade($normalize = false) {
@@ -51,7 +53,7 @@ class Quantidade extends Imposto {
 	public function getPreco($normalize = false) {
 		if(!$normalize)
 			return $this->getAliquota();
-		return Util::toCurrency($this->getPreco());
+		return Util::toCurrency($this->getPreco(), 4);
 	}
 
 	public function setPreco($preco) {

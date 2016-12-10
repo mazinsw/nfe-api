@@ -31,8 +31,6 @@ abstract class Configuracao {
 	private $banco;
 	private $emitente;
 	private $evento;
-	private $chave_publica;
-	private $chave_privada;
 
 	public function __construct($configuracao = array()) {
 		$this->fromArray($configuracao);
@@ -71,6 +69,10 @@ abstract class Configuracao {
 	abstract public function getChavePublica();
 
 	abstract public function getChavePrivada();
+
+	abstract public function getToken();
+
+	abstract public function getCSC();
 
 	public function toArray() {
 		$configuracao = array();

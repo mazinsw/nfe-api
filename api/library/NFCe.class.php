@@ -31,6 +31,8 @@
  */
 class NFCe extends NF {
 
+	const QRCODE_VERSAO = '100';
+
 	public function __construct($nfce = array()) {
 		parent::__construct($nfce);
 		$this->setModelo(65);
@@ -49,6 +51,71 @@ class NFCe extends NF {
 			return $this;
 		parent::fromArray($nfce);
 		return $this;
+	}
+
+	private function gerarQRCodeInfo(&$dom) {
+		$config = SEFAZ::getInstance()->getConfiguracao();
+		$totais = $this->getTotais();
+		$digest = $dom->getElementsByTagName('DigestValue')->item(0);
+		if($this->getEmissao() == self::EMISSAO_NORMAL)
+			$dig_val = $digest->nodeValue;
+		else
+			$dig_val = base64_encode(sha1($dom->saveXML(), true));
+		$params = array(
+			'chNFe' => $this->getID(),
+			'nVersao' => self::QRCODE_VERSAO,
+			'tpAmb' => $this->getAmbiente(true),
+			'cDest' => null,
+			'dhEmi' => Util::toHex($this->getDataEmissao(true)),
+			'vNF' => Util::toCurrency($totais['nota']),
+			'vICMS' => Util::toCurrency($totais[Imposto::GRUPO_ICMS]),
+			'digVal' => Util::toHex($dig_val),
+			'cIdToken' => Util::padDigit($config->getToken(), 6),
+			'CSC' => $config->getCSC(),
+			'cHashQRCode' => null
+		);
+		if(!is_null($this->getCliente()->getID()))
+			$params['cDest'] = $this->getCliente()->getID(true);
+		else
+			unset($params['cDest']);
+		$_params = $params;
+		unset($_params['cHashQRCode']);
+		$query = http_build_query($_params);
+		$params['cHashQRCode'] = sha1($query);
+		unset($params['CSC']);
+		return $params;
+	}
+
+	private function checkQRCode(&$dom) {
+		$estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
+		$db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
+		$params = $this->gerarQRCodeInfo($dom);
+		$query = http_build_query($params);
+		$info = $db->getInformacaoServico($estado->getUF(), 'nfce', $this->getAmbiente());
+		$url = $info['qrcode'];
+		$url .= (strpos($url, '?') === false?'?':'&').$query;
+		$this->setConsultaURL($url);
+		$this->setQrcodeData($url);
+	}
+
+	private function getNodeSuplementar(&$dom) {
+		$this->checkQRCode($dom);
+		$element = $dom->createElement(is_null($name)?'infNFeSupl':$name);
+		$qrcode = $dom->createElement('qrCode');
+		$data = $dom->createCDATASection($this->getConsultaURL(true));
+		$qrcode->appendChild($data);
+		$element->appendChild($qrcode);
+		return $element;
+	}
+
+	/**
+	 * Valida e insere as informações suplementares
+	 */
+	public function validar(&$dom) {
+		$suplementar = $this->getNodeSuplementar($dom);
+		$signature = $dom->getElementsByTagName('Signature')->item(0);
+		$signature->parentNode->insertBefore($suplementar, $signature);
+		return $dom;
 	}
 
 }

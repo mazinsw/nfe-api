@@ -53,6 +53,15 @@ class Reducao extends Normal {
 		return $this;
 	}
 
+	/**
+	 * Calcula o valor do reduzido da base de cálculo
+	 */
+	public function getReduzido($normalize = false) {
+		if($normalize)
+			return Util::toCurrency($this->getReduzido());
+		return ($this->getBase() * (100.0 - $this->getReducao())) / 100.0;
+	}
+
 	public function toArray() {
 		$reducao = parent::toArray();
 		$reducao['reducao'] = $this->getReducao();

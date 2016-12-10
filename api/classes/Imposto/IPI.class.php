@@ -47,6 +47,7 @@ class IPI extends Imposto {
 
 	public function __construct($ipi = array()) {
 		parent::__construct($ipi);
+		$this->setGrupo(self::GRUPO_IPI);
 	}
 
 	/**
@@ -170,8 +171,8 @@ class IPI extends Imposto {
 	}
 
 	public function getNode($name = null) {
-		$element = parent::getNode(is_null($name)?'IPI':$name);
-		$dom = $element->ownerDocument;
+		$dom = new DOMDocument('1.0', 'UTF-8');
+		$element = $dom->createElement(is_null($name)?'IPI':$name);
 		if(!is_null($this->getClasse())) {
 			$element->appendChild($dom->createElement('clEnq', $this->getClasse(true)));
 		}

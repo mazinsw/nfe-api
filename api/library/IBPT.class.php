@@ -34,7 +34,7 @@ class IBPT {
 		$this->tabela = array();
 	}
 
-	public function load($uf) {
+	private function load($uf) {
 		if(isset($this->tabela[$uf]))
 			return $this->tabela[$uf];
 		$file = dirname(dirname(__FILE__)) . '/data/IBPT/'.$uf.'.json';

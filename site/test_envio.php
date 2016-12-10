@@ -16,14 +16,14 @@ $nfce->setPresenca(NF::PRESENCA_PRESENCIAL);
 $emitente = new Emitente();
 $emitente->setRazaoSocial('Empresa LTDA');
 $emitente->setFantasia('Minha Empresa');
-$emitente->setCNPJ('08380787000176');
+$emitente->setCNPJ('71359835000180');
 $emitente->setTelefone('11955886644');
 $emitente->setIE('123456789');
 $emitente->setIM('95656');
 $emitente->setRegime(Emitente::REGIME_SIMPLES);
 
 $endereco = new Endereco();
-$endereco->setCEP('01122500');
+$endereco->setCEP('87701040');
 $endereco->getMunicipio()
 		 ->setNome('Paranavaí')
 		 ->getEstado()
@@ -39,12 +39,12 @@ $nfce->setEmitente($emitente);
 /* Destinatário */
 $cliente = new Cliente();
 $cliente->setNome('Fulano da Silva');
-$cliente->setCPF('12345678912');
+$cliente->setCPF('72321650567');
 $cliente->setEmail('fulano@site.com.br');
 $cliente->setTelefone('11988220055');
 
 $endereco = new Endereco();
-$endereco->setCEP('01122500');
+$endereco->setCEP('87701010');
 $endereco->getMunicipio()
 		 ->setNome('Paranavaí')
 		 ->getEstado()
@@ -58,14 +58,16 @@ $nfce->setCliente($cliente);
 
 /* Produtos */
 $produto = new Produto();
+$produto->setPedido(456);
 $produto->setCodigo(123456);
-$produto->setCodigoBarras('7894900011517');
+$produto->setCodigoBarras('7894900011531');
 $produto->setDescricao('REFRIGERANTE COCA-COLA 2L');
 $produto->setUnidade(Produto::UNIDADE_UNIDADE);
 $produto->setPreco(230.00);
 $produto->setQuantidade(1);
 $produto->setNCM('22021000');
 $produto->setCEST('0300700');
+$produto->setCFOP('5101');
 /* Impostos */
 $imposto = new \Imposto\ICMS\Cobrado();
 $imposto->setBase(0.00);
@@ -84,8 +86,9 @@ $produto->addImposto($imposto);
 $nfce->addProduto($produto);
 
 $produto = new Produto();
+$produto->setPedido(456);
 $produto->setCodigo(123456);
-$produto->setCodigoBarras('7894900011523');
+$produto->setCodigoBarras('7894900038392');
 $produto->setDescricao('REFRIGERANTE FANTA LARANJA 2L');
 $produto->setUnidade(Produto::UNIDADE_UNIDADE);
 $produto->setPreco(55.00);
@@ -93,6 +96,7 @@ $produto->setQuantidade(1);
 $produto->setDesconto(2.20);
 $produto->setNCM('22021000');
 $produto->setCEST('0300700');
+$produto->setCFOP('5101');
 /* Impostos */
 $imposto = new \Imposto\ICMS\Cobrado();
 $imposto->setBase(0.00);
@@ -125,9 +129,6 @@ $pagamento->setForma(Pagamento::FORMA_DINHEIRO);
 $pagamento->setValor(4.00);
 $nfce->addPagamento($pagamento);
 
-$xml = $nfce->getNode();
-$dom = $xml->ownerDocument;
-$dom->formatOutput = true;
-
-header('Content-Type: application/xml');
-echo $dom->saveXML();
+$sefaz->addNota($nfce);
+$sefaz->processa();
+echo 'ok';

@@ -43,6 +43,17 @@ class Util {
 		return date('Y-m-d\TH:i:sP', $time);
 	}
 
+	static public function toHex($string)
+	{
+		$hexstr = unpack('H*', $string);
+		return array_shift($hexstr);
+	}
+
+	static public function padDigit($text, $len, $digit = '0')
+	{
+		return str_pad($text, $len, $digit, STR_PAD_LEFT);
+	}
+
 	static public function isEqual($value, $compare, $delta = 0.005)
 	{
 		return $compare < ($value + $delta) && ($value - $delta) < $compare;

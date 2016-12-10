@@ -48,6 +48,7 @@ class Aliquota extends Imposto {
 
 	public function __construct($aliquota = array()) {
 		parent::__construct($aliquota);
+		$this->setGrupo(self::GRUPO_IPI);
 	}
 
 	/**

@@ -461,7 +461,6 @@ class Produto implements NodeInterface {
 		$element->appendChild($attr);
 
 		$produto = $dom->createElement('prod');
-		$produto->appendChild($dom->createElement('nItemPed', $this->getItem(true)));
 		$produto->appendChild($dom->createElement('cProd', $this->getCodigo(true)));
 		$produto->appendChild($dom->createElement('cEAN', $this->getCodigoBarras(true)));
 		$produto->appendChild($dom->createElement('xProd', $this->getDescricao(true)));
@@ -490,6 +489,7 @@ class Produto implements NodeInterface {
 //		$produto->appendChild($dom->createElement('DI', $this->getImportacoes(true)));
 //		$produto->appendChild($dom->createElement('detExport', $this->getDetalhes(true)));
 		$produto->appendChild($dom->createElement('xPed', $this->getPedido(true)));
+		$produto->appendChild($dom->createElement('nItemPed', $this->getItem(true)));
 //		$produto->appendChild($dom->createElement('nFCI', $this->getControle(true)));
 		$element->appendChild($produto);
 
@@ -510,19 +510,20 @@ class Produto implements NodeInterface {
 		$aliquota = $db->getImpostoAliquota($this->getNCM(), $endereco->getMunicipio()->getEstado()->getUF());
 		foreach ($imposto_tipos as $tipo) {
 			$_imposto->setAliquota($aliquota[$tipo]);
-			$imposto_info[$tipo] = $_imposto->getValor();
-			$imposto_info['total'] += $_imposto->getValor();
+			$imposto_info[$tipo] = $_imposto->getTotal();
+			$imposto_info['total'] += $_imposto->getTotal();
 		}
-		$imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_info['total']));
-		$imposto->appendChild($imp_total);
-
+		$imposto_info['total'] = 0.00; // reset?
 		$grupos = array();
 		$_impostos = $this->getImpostos();
 		foreach ($_impostos as $_imposto) {
 			if(is_null($_imposto->getBase()))
 				$_imposto->setBase($this->getBase());
 			$grupos[$_imposto->getGrupo(true)][] = $_imposto;
+			$imposto_info['total'] += $_imposto->getTotal(); // replace IBPT?
 		}
+		$imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_info['total']));
+		$imposto->appendChild($imp_total);
 		foreach ($grupos as $tag => $_grupo) {
 			$grupo = $dom->createElement($tag);
 			foreach ($_grupo as $_imposto) {

@@ -94,13 +94,114 @@ $icms_suspensao = new \Imposto\ICMS\Isenta();
 $icms_suspensao->setTributacao('50');
 $impostos[] = $icms_suspensao;
 
-// $icms_diferido = new \Imposto\ICMS\Diferido();
-// $impostos[] = $icms_diferido;
+$icms_diferido = new \Imposto\ICMS\Diferido();
+$impostos[] = $icms_diferido;
+
+$icms_diferido = new \Imposto\ICMS\Diferido();
+$icms_diferido->setModalidade(\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+$icms_diferido->setBase(80.00);
+$icms_diferido->setReducao(20.00);
+$icms_diferido->setAliquota(18.00);
+$icms_diferido->setDiferimento(100.00);
+$impostos[] = $icms_diferido;
+
+$icms_diferido = new \Imposto\ICMS\Diferido();
+$icms_diferido->setModalidade(\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+$icms_diferido->setBase(1000.00);
+$icms_diferido->setAliquota(18.00);
+$icms_diferido->setDiferimento(33.3333);
+$impostos[] = $icms_diferido;
 
 $icms_cobrado = new \Imposto\ICMS\Cobrado();
 $icms_cobrado->setBase(135.00);
 $icms_cobrado->setValor(24.30);
 $impostos[] = $icms_cobrado;
+
+$icms_mista = new \Imposto\ICMS\Mista();
+$icms_mista->getNormal()->setModalidade(\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+$icms_mista->getNormal()->setBase(90.00);
+$icms_mista->getNormal()->setAliquota(18.00);
+
+$icms_mista->setModalidade(\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
+$icms_mista->setBase(162.00);
+$icms_mista->setMargem(100.00);
+$icms_mista->setReducao(10.00);
+$icms_mista->setAliquota(18.00);
+$impostos[] = $icms_mista;
+
+$icms_generico = new \Imposto\ICMS\Generico();
+$impostos[] = $icms_generico;
+
+$icms_generico = new \Imposto\ICMS\Generico();
+$icms_generico->getNormal()->setModalidade(\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+$icms_generico->getNormal()->setBase(90.00);
+$icms_generico->getNormal()->setAliquota(18.00);
+$icms_generico->setReducao(10.00);
+$impostos[] = $icms_generico;
+
+$icms_generico = new \Imposto\ICMS\Generico();
+$icms_generico->getNormal()->setBase(90.00);
+$icms_generico->getNormal()->setAliquota(18.00);
+
+$icms_generico->setModalidade(\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
+$icms_generico->setBase(162.00);
+$icms_generico->setMargem(100.00);
+$icms_generico->setReducao(10.00);
+$icms_generico->setAliquota(18.00);
+$impostos[] = $icms_generico;
+
+$icms_generico = new \Imposto\ICMS\Generico();
+$icms_generico->getNormal()->setModalidade(\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+$icms_generico->getNormal()->setBase(90.00);
+$icms_generico->getNormal()->setAliquota(18.00);
+
+$icms_generico->setModalidade(\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
+$icms_generico->setBase(162.00);
+$icms_generico->setMargem(100.00);
+$icms_generico->setReducao(10.00);
+$icms_generico->setAliquota(18.00);
+$impostos[] = $icms_generico;
+
+/* IPI */
+// Exemplo para Alíquota ad valorem
+$ipi = new \Imposto\IPI();
+$ipi_aliquota = new \Imposto\IPI\Aliquota();
+$ipi_aliquota->setBase(1000.00);
+$ipi_aliquota->setAliquota(7.00);
+$ipi->setTributo($ipi_aliquota);
+$impostos[] = $ipi;
+// Exemplo para Alíquota específica
+$ipi = new \Imposto\IPI();
+$ipi_quantidade = new \Imposto\IPI\Quantidade();
+$ipi_quantidade->setQuantidade(1000.00);
+$ipi_quantidade->setPreco(0.7640);
+$ipi->setTributo($ipi_quantidade);
+$impostos[] = $ipi;
+// Exemplo para operação Não Tributada (só utilize se for contribuinte do IPI)
+$ipi = new \Imposto\IPI();
+$ipi_isento = new \Imposto\IPI\Isento();
+$ipi->setTributo($ipi_isento);
+$impostos[] = $ipi;
+
+/* II */
+$ii = new \Imposto\II();
+$ii->setBase(1000.00);
+$ii->setDespesas(150.00);
+$ii->setValor(100.00);
+$ii->setIOF(80.00);
+$impostos[] = $ii;
+
+/* PISST */
+$pisst_aliquota = new \Imposto\PISST\Aliquota();
+$pisst_aliquota->setTributacao(\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+$pisst_aliquota->setBase(100.00);
+$pisst_aliquota->setAliquota(0.65);
+$impostos[] = $pisst_aliquota;
+
+$pisst_quantidade = new \Imposto\PISST\Quantidade();
+$pisst_quantidade->setQuantidade(1000);
+$pisst_quantidade->setAliquota(0.0076);
+$impostos[] = $pisst_quantidade;
 
 $dom = new DOMDocument('1.0', 'UTF-8');
 $root = $dom->createElement('imposto');

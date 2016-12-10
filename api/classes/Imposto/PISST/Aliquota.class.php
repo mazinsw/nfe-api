@@ -25,49 +25,40 @@
  * SOFTWARE.
  *
  */
-namespace BD;
+namespace Imposto\PISST;
+use \Imposto\PIS\Aliquota as PISAliquota;
 
-abstract class Banco {
+/**
+ * Este grupo só deve ser informado se o produto for sujeito a PIS por ST,
+ * CST = 05, a informação deste grupo não desobriga a informação do grupo
+ * PIS.
+ */
+class Aliquota extends PISAliquota {
 
-	public function __construct($banco = array()) {
-		$this->fromArray($banco);
+	public function __construct($aliquota = array()) {
+		parent::__construct($aliquota);
+		$this->setGrupo(self::GRUPO_PISST);
 	}
-
-	/**
-	 * Obtém o código IBGE do estado
-	 */
-	abstract public function getCodigoEstado($uf);
-
-	/**
-	 * Obtém a aliquota do imposto de acordo com o tipo
-	 */
-	abstract public function getImpostoAliquota($ncm, $uf, $ex = null);
-
-	/**
-	 * Obtém o código IBGE do município
-	 */
-	abstract public function getCodigoMunicipio($municipio, $uf);
-
-	/**
-	 * Obtém as notas pendentes de envio
-	 */
-	abstract public function getNotasPendentes($inicio = null, $quantidade = null);
-
-	/**
-	 * Obtém informações dos servidores da SEFAZ como URLs e versões
-	 */
-	abstract public function getInformacaoServico($uf, $modelo = null, $ambiente = null);
 
 	public function toArray() {
-		$banco = array();
-		return $banco;
+		$aliquota = parent::toArray();
+		return $aliquota;
 	}
 
-	public function fromArray($banco = array()) {
-		if($banco instanceof Banco)
-			$banco = $banco->toArray();
-		else if(!is_array($banco))
+	public function fromArray($aliquota = array()) {
+		if($aliquota instanceof Aliquota)
+			$aliquota = $aliquota->toArray();
+		else if(!is_array($aliquota))
 			return $this;
+		parent::fromArray($aliquota);
 		return $this;
 	}
+
+	public function getNode($name = null) {
+		$element = parent::getNode(is_null($name)?'PISST':$name);
+		$item = $element->getElementsByTagName('CST')->item(0);
+		$element->removeChild($item);
+		return $element;
+	}
+
 }

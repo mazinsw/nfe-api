@@ -34,6 +34,7 @@ class Estatico extends Banco {
 	private $ibpt;
 	private $uf_codes;
 	private $mun_codes;
+	private $servicos;
 
 	public function __construct($estatico = array()) {
 		parent::__construct($estatico);
@@ -45,6 +46,8 @@ class Estatico extends Banco {
 		$this->uf_codes = json_decode($json, true);
 		$json = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/data/municipio_ibge_code.json');
 		$this->mun_codes = json_decode($json, true);
+		$json = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/data/servicos.json');
+		$this->servicos = json_decode($json, true);
 	}
 
 	public function getIBPT() {
@@ -91,6 +94,38 @@ class Estatico extends Banco {
 	 */
 	public function getNotasPendentes($inicio = null, $quantidade = null) {
 		return array(); // TODO implementar
+	}
+
+	public function getInformacaoServico($uf, $modelo = null, $ambiente = null) {
+		$array = $this->servicos['sefaz'][strtoupper($uf)];
+		if($array === false)
+			return false;
+		if(!is_array($array))
+			$array = $this->getInformacaoServico($array);
+		if($array === false)
+			return false;
+		$_modelos = array('nfe', 'nfce');
+		foreach ($_modelos as $_modelo) {
+			if(!isset($array[$_modelo]))
+				continue;
+			$node = $array[$_modelo];
+			if(!is_array($node))
+				$node = $this->getInformacaoServico($node, $_modelo);
+			if(isset($node['base'])) {
+				$base = $this->getInformacaoServico($node['base'], $_modelo);
+				$node = array_replace_recursive($node, $base);
+			}
+			$array[$_modelo] = $node;
+		}
+		if(!is_null($modelo))
+			$array = $array[$modelo];
+		if(is_null($array))
+			return false;
+		if(!is_null($modelo) && !is_null($ambiente))
+			$array = $array[$ambiente];
+		if(is_null($array))
+			return false;
+		return $array;
 	}
 
 	public function toArray() {

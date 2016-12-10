@@ -46,6 +46,8 @@ abstract class Imposto implements NodeInterface {
 	const GRUPO_PIS = 'pis';
 	const GRUPO_COFINS = 'cofins';
 	const GRUPO_IPI = 'ipi';
+	const GRUPO_II = 'ii';
+	const GRUPO_PISST = 'pisst';
 
 	private $tipo;
 	private $grupo;
@@ -86,6 +88,10 @@ abstract class Imposto implements NodeInterface {
 				return 'COFINS';
 			case self::GRUPO_IPI:
 				return 'IPI';
+			case self::GRUPO_II:
+				return 'II';
+			case self::GRUPO_PISST:
+				return 'PISST';
 		}
 		return $this->grupo;
 	}
@@ -143,8 +149,7 @@ abstract class Imposto implements NodeInterface {
 	public function getValor($normalize = false) {
 		if(!$normalize)
 			return ($this->getBase() * $this->getAliquota()) / 100.0;
-		$valor = $this->getValor();
-		return Util::toCurrency($valor);
+		return Util::toCurrency($this->getValor());
 	}
 
 	/**

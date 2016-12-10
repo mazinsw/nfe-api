@@ -44,6 +44,13 @@ abstract class Pessoa implements NodeInterface {
 	}
 
 	/**
+	 * Número identificador da pessoa
+	 */
+	public function getID($normalize = false) {
+		return $this->getCNPJ($normalize);
+	}
+
+	/**
 	 * Razão Social ou Nome
 	 */
 	public function getRazaoSocial($normalize = false) {

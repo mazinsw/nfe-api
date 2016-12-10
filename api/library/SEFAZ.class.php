@@ -91,4 +91,38 @@ class SEFAZ {
 		return $this;
 	}
 
+	public function processa() {
+		$evento = $this->getConfiguracao()->getEvento();
+		foreach ($this->getNotas() as $nota) {
+			try {
+				$dom = $nota->getNode()->ownerDocument;
+				if(!is_null($evento))
+					$evento->onNotaGerada($nota, $dom);
+				$dom = $nota->assinar($dom);
+				if(!is_null($evento))
+					$evento->onNotaAssinada($nota, $dom);
+				$dom = $nota->validar($dom);
+				if(!is_null($evento))
+					$evento->onNotaEnviando($nota, $dom);
+				$old_emissao = $nota->getEmissao();
+				$emissao = $this->envia($nota, $dom);
+				if($emissao != $old_emissao && !is_null($evento))
+					$evento->onFormaEmissao($nota, $emissao);
+				if($emissao != NF::EMISSAO_CONTINGENCIA && !is_null($evento))
+					$evento->onNotaEnviada($nota, $dom);
+				if(!is_null($evento))
+					$evento->onNotaCompleto($nota, $dom);
+			} catch(Exception $e) {
+				if(!is_null($evento))
+					$evento->onNotaErro($nota, $e);
+				else
+					throw $e;
+			}
+		}
+	}
+
+	public function envia(&$nota, &$dom) {
+		return NF::EMISSAO_NORMAL;
+	}
+
 }

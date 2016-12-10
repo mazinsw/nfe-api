@@ -26,6 +26,7 @@
  *
  */
 namespace Imposto\ICMS;
+use Util;
 
 /**
  * Tributação pelo ICMS
@@ -34,22 +35,9 @@ namespace Imposto\ICMS;
  */
 class Mista extends Cobranca {
 
-	private $reducao;
-
 	public function __construct($mista = array()) {
 		parent::__construct($mista);
 		$this->setTributacao('70');
-	}
-
-	public function getReducao($normalize = false) {
-		if(!$normalize)
-			return $this->reducao;
-		return Util::toFloat($this->reducao);
-	}
-
-	public function setReducao($reducao) {
-		$this->reducao = $reducao;
-		return $this;
 	}
 
 	public function toArray() {
@@ -64,14 +52,14 @@ class Mista extends Cobranca {
 		else if(!is_array($mista))
 			return $this;
 		parent::fromArray($mista);
-		$this->setReducao($mista['reducao']);
 		return $this;
 	}
 
 	public function getNode($name = null) {
 		$element = parent::getNode(is_null($name)?'ICMS70':$name);
 		$dom = $element->ownerDocument;
-		$element->appendChild($dom->createElement('pRedBC', $this->getReducao(true)));
+		if(!is_null($this->getNormal()->getModalidade()))
+			$element->appendChild($dom->createElement('pRedBC', $this->getReducao(true)));
 		return $element;
 	}
 

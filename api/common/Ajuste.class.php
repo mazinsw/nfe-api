@@ -37,10 +37,16 @@ class Ajuste extends Configuracao implements Evento {
 	private $arquivo_chave_privada;
 	private $pasta_xml_final;
 	private $pasta_xml_gerado;
+	private $token;
+	private $csc;
 
 	public function __construct($ajuste = array()) {
 		parent::__construct($ajuste);
 		$this->setEvento($this);
+		$this->setArquivoChavePublica(dirname(dirname(dirname(__FILE__))) . '/tests/cert/public.pem');
+		$this->setArquivoChavePrivada(dirname(dirname(dirname(__FILE__))) . '/tests/cert/private.pem');
+		$this->setPastaXmlGerado(dirname(dirname(dirname(__FILE__))) . '/site/xml/gerado');
+		$this->setPastaXmlFinal(dirname(dirname(dirname(__FILE__))) . '/site/xml/final');
 	}
 
 	public function getChavePublica() {
@@ -67,6 +73,8 @@ class Ajuste extends Configuracao implements Evento {
 
 	public function setArquivoChavePublica($arquivo_chave_publica) {
 		$this->arquivo_chave_publica = $arquivo_chave_publica;
+		if(file_exists($arquivo_chave_publica))
+			$this->setChavePublica(file_get_contents($arquivo_chave_publica));
 		return $this;
 	}
 
@@ -76,6 +84,8 @@ class Ajuste extends Configuracao implements Evento {
 
 	public function setArquivoChavePrivada($arquivo_chave_privada) {
 		$this->arquivo_chave_privada = $arquivo_chave_privada;
+		if(file_exists($arquivo_chave_privada))
+			$this->setChavePrivada(file_get_contents($arquivo_chave_privada));
 		return $this;
 	}
 
@@ -104,25 +114,47 @@ class Ajuste extends Configuracao implements Evento {
 		return $this;
 	}
 
+	public function getToken() {
+		return $this->token;
+	}
+
+	public function setToken($token) {
+		$this->token = $token;
+		return $this;
+	}
+
+	public function getCSC() {
+		return $this->csc;
+	}
+
+	public function setCSC($csc) {
+		$this->csc = $csc;
+		return $this;
+	}
+
 	/**
 	 * Chamado quando o XML da nota foi gerado
 	 */
 	public function onNotaGerada(&$nota, &$xml) {
-
+		echo 'XML gerado!<br>';
 	}
 
 	/**
 	 * Chamado após o XML da nota ser assinado
 	 */
 	public function onNotaAssinada(&$nota, &$xml) {
-
+		echo 'XML assinado!<br>';
 	}
 
 	/**
 	 * Chamado antes de enviar a nota para a SEFAZ
 	 */
 	public function onNotaEnviando(&$nota, &$xml) {
-
+		echo 'Enviando XML...<br>';
+		$filename = $this->getPastaXmlGerado() . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
+		if(!$nota->testar($filename))
+			throw new Exception('Falha na assinatura do XML');
 	}
 
 	/**
@@ -130,7 +162,7 @@ class Ajuste extends Configuracao implements Evento {
 	 * contigência
 	 */
 	public function onFormaEmissao(&$nota, $forma) {
-
+		echo 'Forma de emissão alterada para "'.$forma.'" <br>';
 	}
 
 	/**
@@ -138,7 +170,9 @@ class Ajuste extends Configuracao implements Evento {
 	 * quando em contigência)
 	 */
 	public function onNotaEnviada(&$nota, &$xml) {
-
+		echo 'XML enviado com sucesso!<br>';
+		$filename = $this->getPastaXmlFinal() . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
 	}
 
 	/**
@@ -146,15 +180,15 @@ class Ajuste extends Configuracao implements Evento {
 	 * da forma de emissão
 	 */
 	public function onNotaCompleto(&$nota, &$xml) {
-
+		echo 'XML processado com sucesso!<br>';
 	}
 
 	/**
 	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
 	 * é chamado quando entra em contigência)
 	 */
-	public function onNotaErro(&$nota) {
-		
+	public function onNotaErro(&$nota, $e) {
+		echo 'Falha no processamento da nota: '.$e->getMessage().'<br>';
 	}
 
 	public function toArray() {
@@ -165,6 +199,8 @@ class Ajuste extends Configuracao implements Evento {
 		$ajuste['arquivo_chave_privada'] = $this->getArquivoChavePrivada();
 		$ajuste['pasta_xml_final'] = $this->getPastaXmlFinal();
 		$ajuste['pasta_xml_gerado'] = $this->getPastaXmlGerado();
+		$configuracao['token'] = $this->getToken();
+		$configuracao['csc'] = $this->getCSC();
 		return $ajuste;
 	}
 
@@ -180,6 +216,8 @@ class Ajuste extends Configuracao implements Evento {
 		$this->setArquivoChavePrivada($ajuste['arquivo_chave_privada']);
 		$this->setPastaXmlFinal($ajuste['pasta_xml_final']);
 		$this->setPastaXmlGerado($ajuste['pasta_xml_gerado']);
+		$this->setToken($configuracao['token']);
+		$this->setCSC($configuracao['csc']);
 		return $this;
 	}
 

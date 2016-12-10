@@ -68,6 +68,6 @@ interface Evento {
 	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
 	 * é chamado quando entra em contigência)
 	 */
-	public function onNotaErro(&$nota);
+	public function onNotaErro(&$nota, $e);
 
 }

@@ -33,7 +33,8 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
  */
 abstract class NF implements NodeInterface {
 
-	const VERSAO = '1.0';
+	const VERSAO = '3.10';
+	const APP_VERSAO = '1.0';
 
 	/**
 	 * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
@@ -662,27 +663,23 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function gerarID() {
-        $id = sprintf('%02d%02d%02d%s%02d%03d%09d%01d%08d',
-            41,  // TODO: get config[Código do estado]
-            date('y', $this->getDataEmissao()), // Ano 2 dígitos
-            date('m', $this->getDataEmissao()), // Mês 2 dígitos
-            $this->getEmitente()->getCNPJ(),
-            $this->getModelo(true),
-            $this->getSerie(),
-            $this->getNumero(),
-            $this->getEmissao(true),
-            $this->getCodigo()
-        );
-        return $id.Util::getDAC($id, 11);
+		$estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
+		$id = sprintf('%02d%02d%02d%s%02d%03d%09d%01d%08d',
+			$estado->getCodigo(),  // TODO: get config[Código do estado]
+			date('y', $this->getDataEmissao()), // Ano 2 dígitos
+			date('m', $this->getDataEmissao()), // Mês 2 dígitos
+			$this->getEmitente()->getCNPJ(),
+			$this->getModelo(true),
+			$this->getSerie(),
+			$this->getNumero(),
+			$this->getEmissao(true),
+			$this->getCodigo()
+		);
+		return $id.Util::getDAC($id, 11);
 
 	}
 
-	public function getNodeTotal($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'total':$name);
-
-		// Totais referentes ao ICMS
-		$icms = $dom->createElement('ICMSTot');
+	protected function getTotais() {
 		$total = array();
 		$_produtos = $this->getProdutos();
 		foreach ($_produtos as $_produto) {
@@ -698,31 +695,35 @@ abstract class NF implements NodeInterface {
 				switch ($_imposto->getGrupo()) {
 					case Imposto::GRUPO_ICMS:
 						if($_imposto instanceof \Imposto\ICMS\Cobranca) {
-							$total['icms'] += $_imposto->getNormal()->getValor();
+							$total[$_imposto->getGrupo()] += $_imposto->getNormal()->getValor();
 							$total['base'] += $_imposto->getNormal()->getBase();
 						}
 						if($_imposto instanceof \Imposto\ICMS\Parcial) {
 							$total['icms.st'] += $_imposto->getValor();
 							$total['base.st'] += $_imposto->getBase();
 						} else {
-							$total['icms'] += $_imposto->getValor();
+							$total[$_imposto->getGrupo()] += $_imposto->getValor();
 							$total['base'] += $_imposto->getBase();
 						}
 						break;
-					case Imposto::GRUPO_PIS:
-						$total['pis'] += $_imposto->getValor();
-						break;
-					case Imposto::GRUPO_COFINS:
-						$total['cofins'] += $_imposto->getValor();
-						break;
-					case Imposto::GRUPO_IPI:
-						$total['ipi'] += $_imposto->getValor();
-						break;
+					default:
+						$total[$_imposto->getGrupo()] += $_imposto->getValor();
 				}
 			}
 		}
+		return $total;
+	}
+
+	private function getNodeTotal($name = null) {
+		$dom = new DOMDocument('1.0', 'UTF-8');
+		$element = $dom->createElement(is_null($name)?'total':$name);
+
+		// Totais referentes ao ICMS
+		$total = $this->getTotais();
+		$icms = $dom->createElement('ICMSTot');
 		$icms->appendChild($dom->createElement('vBC', Util::toCurrency($total['base'])));
 		$icms->appendChild($dom->createElement('vICMS', Util::toCurrency($total['icms'])));
+		$icms->appendChild($dom->createElement('vICMSDeson', Util::toCurrency($total['desoneracao'])));
 		$icms->appendChild($dom->createElement('vBCST', Util::toCurrency($total['base.st'])));
 		$icms->appendChild($dom->createElement('vST', Util::toCurrency($total['icms.st'])));
 		$icms->appendChild($dom->createElement('vProd', Util::toCurrency($total['produtos'])));
@@ -736,7 +737,6 @@ abstract class NF implements NodeInterface {
 		$icms->appendChild($dom->createElement('vOutro', Util::toCurrency($total['outros'])));
 		$icms->appendChild($dom->createElement('vNF', Util::toCurrency($total['nota'])));
 		$icms->appendChild($dom->createElement('vTotTrib', Util::toCurrency($total['tributos'])));
-		$icms->appendChild($dom->createElement('vICMSDeson', Util::toCurrency($total['desoneracao'])));
 		$element->appendChild($icms);
 
 		// TODO: Totais referentes ao ISSQN
@@ -746,33 +746,22 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function getNode($name = null) {
+		$this->getEmitente()->getEndereco()->checkCodigos();
 		$this->setID($this->gerarID());
 		$this->setDigitoVerificador(substr($this->getID(), -1, 1));
 
 		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'nfeProc':$name);
-		$xmlns = $dom->createAttribute('xmlns');
-		$xmlns->value = 'http://www.portalfiscal.inf.br/nfe';
-		$element->appendChild($xmlns);
-		$versao = $dom->createAttribute('versao');
-		$versao->value = '3.10';
-		$element->appendChild($versao);
-
-		$nota = $dom->createElement('NFe');
-		$xmlns = $dom->createAttribute('xmlns');
-		$xmlns->value = 'http://www.portalfiscal.inf.br/nfe';
-		$nota->appendChild($xmlns);
+		$element = $dom->createElement(is_null($name)?'NFe':$name);
+		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.portalfiscal.inf.br/nfe');
 
 		$info = $dom->createElement('infNFe');
-		$id = $dom->createAttribute('id');
+		$id = $dom->createAttribute('Id');
 		$id->value = $this->getID(true);
 		$info->appendChild($id);
 		$versao = $dom->createAttribute('versao');
-		$versao->value = '3.10';
+		$versao->value = self::VERSAO;
 		$info->appendChild($versao);
 
-		$db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
-		$this->getEmitente()->getEndereco()->checkCodigos();
 		$municipio = $this->getEmitente()->getEndereco()->getMunicipio();
 		$estado = $municipio->getEstado();
 		$ident = $dom->createElement('ide');
@@ -795,7 +784,7 @@ abstract class NF implements NodeInterface {
 		$ident->appendChild($dom->createElement('indFinal', $this->getConsumidorFinal(true)));
 		$ident->appendChild($dom->createElement('indPres', $this->getPresenca(true)));
 		$ident->appendChild($dom->createElement('procEmi', 0));
-		$ident->appendChild($dom->createElement('verProc', self::VERSAO));
+		$ident->appendChild($dom->createElement('verProc', self::APP_VERSAO));
 
 		$info->appendChild($ident);
 
@@ -834,31 +823,40 @@ abstract class NF implements NodeInterface {
 		// TODO: adicionar exportação
 		// TODO: adicionar compra
 		// TODO: adicionar cana
-		$nota->appendChild($info);
-		$element->appendChild($nota);
+		$element->appendChild($info);
 		$dom->appendChild($element);
 		return $element;
 	}
 
-	public static function assinar()
+	public function assinar($dom = null) {
+		if(is_null($dom)) {
+			$xml = $this->getNode();
+			$dom = $xml->ownerDocument;
+		}
+		$config = SEFAZ::getInstance()->getConfiguracao();
+
+		$adapter = new XmlseclibsAdapter();
+		$adapter->setPrivateKey($config->getChavePrivada());
+		$adapter->setPublicKey($config->getChavePublica());
+		$adapter->addTransform(AdapterInterface::ENVELOPED);
+		$adapter->addTransform(AdapterInterface::XML_C14N);
+		$adapter->sign($dom, 'infNFe');
+		return $dom;
+	}
+
+	/**
+	 * Valida o documento após assinar
+	 */
+	public function validar(&$dom) {
+		return $dom;
+	}
+
+	public function testar($filename)
 	{
-        $data = new DOMDocument();
-        $data->load(__DIR__ . '/../../tests/xml/nfe.xml');
-
-        $adapter = new XmlseclibsAdapter();
-        $adapter->setPrivateKey(file_get_contents(__DIR__ . '/../../tests/cert/private.pem'));
-        $adapter->setPublicKey(file_get_contents(__DIR__ . '/../../tests/cert/public.pem'));
-        $adapter->addTransform(AdapterInterface::ENVELOPED);
-        $adapter->addTransform(AdapterInterface::XML_C14N);
-        $adapter->sign($data, 'infNFe');
-        file_put_contents(__DIR__ . '/../../tests/xml/nfe.test.signed.xml', $data->saveXML());
-
-        // verificar
-        $data = new DOMDocument();
-        $data->load(__DIR__ . '/../../tests/xml/nfe.test.signed.xml');
-
-        $adapter = new XmlseclibsAdapter();
-        var_dump($adapter->verify($data));
+		$dom = new DOMDocument();
+		$dom->load($filename);
+		$adapter = new XmlseclibsAdapter();
+		return $adapter->verify($dom);
 	}
 
 }

@@ -94,6 +94,7 @@ O código foi implementado e testado com PHP 5.4, verifique sua versão do PHP e
 ### Dependências
 - PHP 5.3 ou superior
 - Extensão openssl para assinatura da nota
+- Extensão curl para envio da nota
 
 ### Limitações
 - Apenas para o modelo NFC-e foi implementado a geração da nota, mas ainda não foi testado
