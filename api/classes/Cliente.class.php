@@ -43,7 +43,6 @@ class Cliente extends Pessoa {
 	const INDICADOR_ISENTO = 'isento';
 	const INDICADOR_NENHUM = 'nenhum';
 
-	private $nome;
 	private $cpf;
 	private $email;
 	private $indicador;
@@ -65,14 +64,11 @@ class Cliente extends Pessoa {
 	 * Nome do destinatário
 	 */
 	public function getNome($normalize = false) {
-		if(!$normalize)
-			return $this->nome;
-		return $this->nome;
+		return $this->getRazaoSocial($normalize);
 	}
 
 	public function setNome($nome) {
-		$this->nome = $nome;
-		return $this;
+		return $this->setRazaoSocial($nome);
 	}
 
 	public function getCPF($normalize = false) {
@@ -158,10 +154,7 @@ class Cliente extends Pessoa {
 			$element->appendChild($dom->createElement('CNPJ', $this->getCNPJ(true)));
 		else
 			$element->appendChild($dom->createElement('CPF', $this->getCPF(true)));
-		if(!is_null($this->getCNPJ()))
-			$element->appendChild($dom->createElement('xNome', $this->getRazaoSocial(true)));
-		else
-			$element->appendChild($dom->createElement('xNome', $this->getNome(true)));
+		$element->appendChild($dom->createElement('xNome', $this->getNome(true)));
 		if(!is_null($this->getEndereco())) {
 			$endereco = $this->getEndereco()->getNode('enderDest');
 			$endereco = $dom->importNode($endereco, true);

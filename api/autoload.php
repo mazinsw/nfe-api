@@ -16,6 +16,11 @@ spl_autoload_register(function ($class) {
     if ( file_exists( $file_path ) ) {
         return require_once( $file_path );
     }
+    $file_name = $norm_name.'.php';
+    $file_path = DIR_ROOT. '/util/' . $file_name;
+    if ( file_exists( $file_path ) ) {
+        return require_once( $file_path );
+    }
     $start = intval(strrpos($norm_name, '/'));
     $file_name = trim(substr($norm_name, $start),'/').'.php';
     $file_path = DIR_ROOT. '/util/' . $file_name;

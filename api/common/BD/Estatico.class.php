@@ -44,10 +44,16 @@ class Estatico extends Banco {
 	public function load() {
 		$json = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/data/uf_ibge_code.json');
 		$this->uf_codes = json_decode($json, true);
+		if($this->uf_codes === false || is_null($this->uf_codes))
+			throw new Exception('Falha ao carregar os códigos das unidades federadas', json_last_error());
 		$json = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/data/municipio_ibge_code.json');
 		$this->mun_codes = json_decode($json, true);
+		if($this->mun_codes === false || is_null($this->mun_codes))
+			throw new Exception('Falha ao carregar os códigos dos municípios', json_last_error());
 		$json = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/data/servicos.json');
 		$this->servicos = json_decode($json, true);
+		if($this->servicos === false || is_null($this->servicos))
+			throw new Exception('Falha ao carregar serviços da SEFAZ', json_last_error());
 	}
 
 	public function getIBPT() {
@@ -63,14 +69,17 @@ class Estatico extends Banco {
 	 * Obtém o código IBGE do estado
 	 */
 	public function getCodigoEstado($uf) {
-		return intval($this->uf_codes['estados'][strtoupper($uf)]);
+		$codigo = $this->uf_codes['estados'][strtoupper($uf)];
+		if(is_null($codigo))
+			throw new Exception('Não foi encontrado o código do IBGE para o estado "'.$uf.'"', 404);
+		return intval($codigo);
 	}
 
 	/**
 	 * Obtém a aliquota do imposto de acordo com o tipo
 	 */
-	public function getImpostoAliquota($ncm, $uf, $ex = null) {
-		return $this->getIBPT()->getImposto($ncm, $uf, $ex);
+	public function getImpostoAliquota($ncm, $uf, $ex = null, $cnpj = null, $token = null) {
+		return $this->getIBPT()->getImposto($cnpj, $token, $ncm, $uf, $ex);
 	}
 
 	/**
@@ -85,7 +94,7 @@ class Estatico extends Banco {
 			return strcasecmp($n1, $n2);
 		});
 		if($o === false)
-			return false;
+			throw new Exception('Não foi encontrado o código do IBGE para o município "'.$municipio.'" do estado "'.$uf.'"', 404);
 		return $o['codigo'];
 	}
 
@@ -96,35 +105,54 @@ class Estatico extends Banco {
 		return array(); // TODO implementar
 	}
 
-	public function getInformacaoServico($uf, $modelo = null, $ambiente = null) {
-		$array = $this->servicos['sefaz'][strtoupper($uf)];
-		if($array === false)
-			return false;
+	public function getInformacaoServico($emissao, $uf, $modelo = null, $ambiente = null) {
+		switch ($emissao) {
+			case '1':
+				$emissao = 'normal';
+				break;
+			case '9':
+				$emissao = 'contingencia';
+				break;
+		}
+		$array = $this->servicos[$emissao];
+		if(is_null($array))
+			throw new Exception('Falha ao obter o serviço da SEFAZ para o tipo de emissão "'.$emissao.'"', 404);
+		$array = $array[strtoupper($uf)];
+		if(is_null($array))
+			throw new Exception('Falha ao obter o serviço da SEFAZ para a UF "'.$uf.'"', 404);
 		if(!is_array($array))
-			$array = $this->getInformacaoServico($array);
-		if($array === false)
-			return false;
+			$array = $this->getInformacaoServico($emissao, $array);
 		$_modelos = array('nfe', 'nfce');
 		foreach ($_modelos as $_modelo) {
 			if(!isset($array[$_modelo]))
 				continue;
 			$node = $array[$_modelo];
 			if(!is_array($node))
-				$node = $this->getInformacaoServico($node, $_modelo);
+				$node = $this->getInformacaoServico($emissao, $node, $_modelo);
 			if(isset($node['base'])) {
-				$base = $this->getInformacaoServico($node['base'], $_modelo);
+				$base = $this->getInformacaoServico($emissao, $node['base'], $_modelo);
 				$node = array_replace_recursive($node, $base);
 			}
 			$array[$_modelo] = $node;
 		}
-		if(!is_null($modelo))
+		switch ($modelo) {
+			case '55':
+				$modelo = 'nfe';
+				break;
+			case '65':
+				$modelo = 'nfce';
+				break;
+		}
+		if(!is_null($modelo)) {
 			$array = $array[$modelo];
-		if(is_null($array))
-			return false;
-		if(!is_null($modelo) && !is_null($ambiente))
+			if(is_null($array))
+				throw new Exception('Falha ao obter o serviço da SEFAZ para o modelo de nota "'.$modelo.'"', 404);
+		}
+		if(!is_null($modelo) && !is_null($ambiente)) {
 			$array = $array[$ambiente];
-		if(is_null($array))
-			return false;
+			if(is_null($array))
+				throw new Exception('Falha ao obter o serviço da SEFAZ para o ambiente "'.$ambiente.'"', 404);
+		}
 		return $array;
 	}
 

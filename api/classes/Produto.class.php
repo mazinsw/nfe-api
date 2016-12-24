@@ -392,6 +392,34 @@ class Produto implements NodeInterface {
 		return Util::toCurrency($this->getContabilizado());
 	}
 
+	public function getImpostoInfo() {
+		$config = SEFAZ::getInstance()->getConfiguracao();
+		$db = $config->getBanco();
+		$endereco = $config->getEmitente()->getEndereco();
+		$info = array('total' => 0.00);
+		$tipos = array(
+			// Imposto::TIPO_IMPORTADO, // TODO: determinar quando usar
+			Imposto::TIPO_NACIONAL,
+			Imposto::TIPO_ESTADUAL,
+			Imposto::TIPO_MUNICIPAL
+		);
+		$imposto = new \Imposto\Total();
+		$imposto->setBase($this->getBase());
+		// TODO: detectar EX
+		$aliquota = $db->getImpostoAliquota($this->getNCM(), $endereco->getMunicipio()->getEstado()->getUF(),
+			null, $config->getEmitente()->getCNPJ(), $config->getTokenIBPT());
+		if($aliquota === false)
+			throw new Exception('Não foi possível obter o tributo aproximado do produto "'.$this->getDescricao().'" e item '.$this->getItem(), 404);
+		foreach ($tipos as $tipo) {
+			$imposto->setAliquota($aliquota[$tipo]);
+			$tributo = round($imposto->getTotal(), 2);
+			$info[$tipo] = $tributo;
+			$info['total'] += $tributo;
+		}
+		$info['info'] = $aliquota['info'];
+		return $info;
+	}
+
 	public function toArray() {
 		$produto = array();
 		$produto['item'] = $this->getItem();
@@ -453,6 +481,31 @@ class Produto implements NodeInterface {
 		return $this;
 	}
 
+	static public function addNodeInformacoes($tributos, $element, $name = null) {
+		$detalhes = array();
+		$formatos = array(
+			Imposto::TIPO_IMPORTADO => '%s Importado',
+			Imposto::TIPO_NACIONAL => '%s Federal',
+			Imposto::TIPO_ESTADUAL => '%s Estadual',
+			Imposto::TIPO_MUNICIPAL => '%s Municipal'
+		);
+		foreach ($formatos as $tipo => $formato) {
+			if(!Util::isGreater($tributos[$tipo], 0.00))
+				continue;
+			$detalhes[] = sprintf($formato, Util::toMoney($tributos[$tipo]));
+		}
+		if(count($detalhes) == 0)
+			return;
+		$dom = $element->ownerDocument;
+		$fonte = 'Fonte: '.$tributos['info']['fonte'].' '.$tributos['info']['chave'];
+		$ultimo = '';
+		if(count($detalhes) > 1)
+			$ultimo = ' e '.array_pop($detalhes);
+		$texto = 'Trib. aprox.: '.implode(', ', $detalhes).$ultimo.'. '.$fonte;
+		$info = $dom->createElement(is_null($name)?'infAdProd':$name, $texto);
+		$element->appendChild($info);
+	}
+
 	public function getNode($name = null) {
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$element = $dom->createElement(is_null($name)?'det':$name);
@@ -494,34 +547,14 @@ class Produto implements NodeInterface {
 		$element->appendChild($produto);
 
 		$imposto = $dom->createElement('imposto');
-		$db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
-		$endereco = SEFAZ::getInstance()->getConfiguracao()->getEmitente()->getEndereco();
-
-		// TODO: informar total de tributos apenas para NFC-e
-		$imposto_info = array();
-		$imposto_tipos = array(
-			Imposto::TIPO_IMPORTADO,
-			Imposto::TIPO_NACIONAL,
-			Imposto::TIPO_ESTADUAL,
-			Imposto::TIPO_MUNICIPAL
-		);
-		$_imposto = new \Imposto\Total();
-		$_imposto->setBase($this->getBase());
-		$aliquota = $db->getImpostoAliquota($this->getNCM(), $endereco->getMunicipio()->getEstado()->getUF());
-		foreach ($imposto_tipos as $tipo) {
-			$_imposto->setAliquota($aliquota[$tipo]);
-			$imposto_info[$tipo] = $_imposto->getTotal();
-			$imposto_info['total'] += $_imposto->getTotal();
-		}
-		$imposto_info['total'] = 0.00; // reset?
 		$grupos = array();
 		$_impostos = $this->getImpostos();
 		foreach ($_impostos as $_imposto) {
 			if(is_null($_imposto->getBase()))
 				$_imposto->setBase($this->getBase());
 			$grupos[$_imposto->getGrupo(true)][] = $_imposto;
-			$imposto_info['total'] += $_imposto->getTotal(); // replace IBPT?
 		}
+		$imposto_info = $this->getImpostoInfo();
 		$imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_info['total']));
 		$imposto->appendChild($imp_total);
 		foreach ($grupos as $tag => $_grupo) {
@@ -535,23 +568,7 @@ class Produto implements NodeInterface {
 		}
 		$element->appendChild($imposto);
 		// TODO: verificar se é obrigatório a informação adicional abaixo
-		$_info = array();
-		$_info_fmt = array(
-			Imposto::TIPO_IMPORTADO => '%s Importado',
-			Imposto::TIPO_NACIONAL => '%s Federal',
-			Imposto::TIPO_ESTADUAL => '%s Estadual',
-			Imposto::TIPO_MUNICIPAL => '%s Municipal'
-		);
-		foreach ($imposto_tipos as $tipo) {
-			if(!Util::isGreater($imposto_info[$tipo], 0.00))
-				continue;
-			$_info[] = sprintf($_info_fmt[$tipo], Util::toMoney($imposto_info[$tipo]));
-		}
-		if(count($_info) > 0) {
-			$info_str = 'Trib. aprox.: '.implode(', ', $_info).'. Fonte: IBPT';
-			$info = $dom->createElement('infAdProd', $info_str);
-			$element->appendChild($info);
-		}
+		self::addNodeInformacoes($imposto_info, $element);
 		return $element;
 	}
 

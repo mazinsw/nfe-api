@@ -41,7 +41,7 @@ abstract class Banco {
 	/**
 	 * Obtém a aliquota do imposto de acordo com o tipo
 	 */
-	abstract public function getImpostoAliquota($ncm, $uf, $ex = null);
+	abstract public function getImpostoAliquota($ncm, $uf, $ex = null, $cnpj = null, $token = null);
 
 	/**
 	 * Obtém o código IBGE do município
@@ -56,7 +56,7 @@ abstract class Banco {
 	/**
 	 * Obtém informações dos servidores da SEFAZ como URLs e versões
 	 */
-	abstract public function getInformacaoServico($uf, $modelo = null, $ambiente = null);
+	abstract public function getInformacaoServico($emissao, $uf, $modelo = null, $ambiente = null);
 
 	public function toArray() {
 		$banco = array();

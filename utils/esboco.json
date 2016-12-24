@@ -1,0 +1,24 @@
+NE: {
+	Protocolo: {
+	},
+	Autorizacao: {
+		enviar
+		executar
+	},
+	Inutilizacao: {
+		executar
+	},
+	Evento: {
+		cancelar: {
+			justificativa
+		},
+		prorrogar: {
+			
+		}
+	},
+	Retorno: {
+		codigo
+		motivo
+		node
+	}
+}

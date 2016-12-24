@@ -35,6 +35,7 @@ abstract class NF implements NodeInterface {
 
 	const VERSAO = '3.10';
 	const APP_VERSAO = '1.0';
+	const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
 	/**
 	 * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
@@ -131,6 +132,7 @@ abstract class NF implements NodeInterface {
 	private $finalidade;
 	private $consumidor_final;
 	private $presenca;
+	private $protocolo;
 
 	public function __construct($nf = array()) {
 		$this->fromArray($nf);
@@ -569,6 +571,15 @@ abstract class NF implements NodeInterface {
 		return $this;
 	}
 
+	public function getProtocolo() {
+		return $this->protocolo;
+	}
+
+	public function setProtocolo($protocolo) {
+		$this->protocolo = $protocolo;
+		return $this;
+	}
+
 	public function toArray() {
 		$nf = array();
 		$nf['id'] = $this->getID();
@@ -597,6 +608,7 @@ abstract class NF implements NodeInterface {
 		$nf['finalidade'] = $this->getFinalidade();
 		$nf['consumidor_final'] = $this->getConsumidorFinal();
 		$nf['presenca'] = $this->getPresenca();
+		$nf['protocolo'] = $this->getProtocolo();
 		return $nf;
 	}
 
@@ -659,6 +671,7 @@ abstract class NF implements NodeInterface {
 		if(is_null($this->getConsumidorFinal()))
 			$this->setConsumidorFinal('Y');
 		$this->setPresenca($nf['presenca']);
+		$this->setProtocolo($nf['protocolo']);
 		return $this;
 	}
 
@@ -683,31 +696,34 @@ abstract class NF implements NodeInterface {
 		$total = array();
 		$_produtos = $this->getProdutos();
 		foreach ($_produtos as $_produto) {
+			$imposto_info = $_produto->getImpostoInfo();
 			$total['produtos'] += $_produto->getPreco();
 			$total['descontos'] += $_produto->getDesconto();
 			$total['frete'] += $_produto->getFrete();
 			$total['seguro'] += $_produto->getSeguro();
 			$total['outros'] += $_produto->getDespesas();
 			$total['nota'] += $_produto->getContabilizado();
+			$total['tributos'] += $imposto_info['total'];
 			$_impostos = $_produto->getImpostos();
 			foreach ($_impostos as $_imposto) {
-				$total['tributos'] += $_imposto->getTotal();
 				switch ($_imposto->getGrupo()) {
 					case Imposto::GRUPO_ICMS:
-						if($_imposto instanceof \Imposto\ICMS\Cobranca) {
-							$total[$_imposto->getGrupo()] += $_imposto->getNormal()->getValor();
+						if(($_imposto instanceof \Imposto\ICMS\Cobranca) || 
+								($_imposto instanceof \Imposto\ICMS\Simples\Cobranca)) {
+							$total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
 							$total['base'] += $_imposto->getNormal()->getBase();
 						}
-						if($_imposto instanceof \Imposto\ICMS\Parcial) {
+						if(($_imposto instanceof \Imposto\ICMS\Parcial) ||
+								($_imposto instanceof \Imposto\ICMS\Simples\Parcial)) {
 							$total['icms.st'] += $_imposto->getValor();
 							$total['base.st'] += $_imposto->getBase();
 						} else {
-							$total[$_imposto->getGrupo()] += $_imposto->getValor();
+							$total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);
 							$total['base'] += $_imposto->getBase();
 						}
 						break;
 					default:
-						$total[$_imposto->getGrupo()] += $_imposto->getValor();
+						$total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);
 				}
 			}
 		}
@@ -752,7 +768,7 @@ abstract class NF implements NodeInterface {
 
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$element = $dom->createElement(is_null($name)?'NFe':$name);
-		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.portalfiscal.inf.br/nfe');
+		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', self::PORTAL);
 
 		$info = $dom->createElement('infNFe');
 		$id = $dom->createAttribute('Id');
@@ -791,10 +807,14 @@ abstract class NF implements NodeInterface {
 		$emitente = $this->getEmitente()->getNode();
 		$emitente = $dom->importNode($emitente, true);
 		$info->appendChild($emitente);
+		if($this->getAmbiente() == self::AMBIENTE_HOMOLOGACAO) {
+			$this->getCliente()->setNome('NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
+		}
 		$cliente = $this->getCliente()->getNode();
 		$cliente = $dom->importNode($cliente, true);
 		$info->appendChild($cliente);
 		$item = 0;
+		$tributos = array();
 		$_produtos = $this->getProdutos();
 		foreach ($_produtos as $_produto) {
 			if(is_null($_produto->getItem())) {
@@ -802,9 +822,20 @@ abstract class NF implements NodeInterface {
 				$_produto->setItem($item);
 			} else
 				$item = $_produto->getItem();
+			if($this->getAmbiente() == self::AMBIENTE_HOMOLOGACAO) {
+				$_produto->setDescricao('NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
+			}
 			$produto = $_produto->getNode();
 			$produto = $dom->importNode($produto, true);
 			$info->appendChild($produto);
+			// Soma os tributos aproximados dos produtos
+			$imposto_info = $_produto->getImpostoInfo();
+			$tributos['info'] = $imposto_info['info'];
+			foreach ($imposto_info as $key => $value) {
+				if(!is_numeric($value))
+					continue;
+				$tributos[$key] += $value;
+			}
 		}
 		$total = $this->getNodeTotal();
 		$total = $dom->importNode($total, true);
@@ -819,7 +850,10 @@ abstract class NF implements NodeInterface {
 			$pagamento = $dom->importNode($pagamento, true);
 			$info->appendChild($pagamento);
 		}
-		// TODO: adicionar informações adicionais
+		// TODO: adicionar informações adicionais somente na NFC-e? 
+		$adicional = $dom->createElement('infAdic');
+		Produto::addNodeInformacoes($tributos, $adicional, 'infCpl');
+		$info->appendChild($adicional);
 		// TODO: adicionar exportação
 		// TODO: adicionar compra
 		// TODO: adicionar cana
@@ -828,6 +862,9 @@ abstract class NF implements NodeInterface {
 		return $element;
 	}
 
+	/**
+	 * Assina o XML com a assinatura eletrônica do tipo A1
+	 */
 	public function assinar($dom = null) {
 		if(is_null($dom)) {
 			$xml = $this->getNode();
@@ -848,6 +885,57 @@ abstract class NF implements NodeInterface {
 	 * Valida o documento após assinar
 	 */
 	public function validar(&$dom) {
+		$dom->loadXML($dom->saveXML());
+		$xsd_path = dirname(dirname(__FILE__)) . '/schema';
+		if(is_null($this->getProtocolo()))
+			$xsd_file = $xsd_path . '/nfe_v3.10.xsd';
+		else
+			$xsd_file = $xsd_path . '/procNFe_v3.10.xsd';
+		if(!file_exists($xsd_file))
+			throw new Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+		// Enable user error handling
+		$save = libxml_use_internal_errors(true);
+		if ($dom->schemaValidate($xsd_file)) {
+			libxml_use_internal_errors($save);
+			return $dom;
+		}
+		$msg = array();
+		$errors = libxml_get_errors();
+		foreach ($errors as $error) {
+			$msg[] = 'Não foi possível validar o XML: '.$error->message;
+		}
+		libxml_clear_errors();
+		libxml_use_internal_errors($save);
+		throw new ValidationException($msg);
+	}
+
+	/**
+	 * Adiciona o protocolo no XML da nota
+	 */
+	public function addProtocolo(&$dom) {
+		$nfe = $dom->getElementsByTagName('NFe')->item(0);
+		// Corrige xmlns:default
+		$nfe_xml = $dom->saveXML($nfe);
+
+		$element = $dom->createElement('nfeProc');
+		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', self::PORTAL);
+		$versao = $dom->createAttribute('versao');
+		$versao->value = self::VERSAO;
+		$element->appendChild($versao);
+		$dom->removeChild($nfe);
+		// Corrige xmlns:default
+		$nfe = $dom->createElement('NFe', 0);
+
+		$element->appendChild($nfe);
+		$info = $this->getProtocolo()->getNode();
+		$info = $dom->importNode($info, true);
+		$element->appendChild($info);
+		$dom->appendChild($element);
+		// Corrige xmlns:default
+		$xml = $dom->saveXML();
+		$xml = str_replace('<NFe>0</NFe>', $nfe_xml, $xml);
+		$dom->loadXML($xml);
+
 		return $dom;
 	}
 

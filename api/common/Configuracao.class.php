@@ -74,6 +74,8 @@ abstract class Configuracao {
 
 	abstract public function getCSC();
 
+	abstract public function getTokenIBPT();
+
 	public function toArray() {
 		$configuracao = array();
 		$configuracao['banco'] = $this->getBanco();

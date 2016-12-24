@@ -50,3 +50,5 @@ Temporary Items
 *.sublime-workspace
 utils/tmp/
 *.mwb.bak
+utils/IBPT/*.csv
+api/logs/*.txt

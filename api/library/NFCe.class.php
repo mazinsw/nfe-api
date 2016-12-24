@@ -71,7 +71,6 @@ class NFCe extends NF {
 			'vICMS' => Util::toCurrency($totais[Imposto::GRUPO_ICMS]),
 			'digVal' => Util::toHex($dig_val),
 			'cIdToken' => Util::padDigit($config->getToken(), 6),
-			'CSC' => $config->getCSC(),
 			'cHashQRCode' => null
 		);
 		if(!is_null($this->getCliente()->getID()))
@@ -81,8 +80,7 @@ class NFCe extends NF {
 		$_params = $params;
 		unset($_params['cHashQRCode']);
 		$query = http_build_query($_params);
-		$params['cHashQRCode'] = sha1($query);
-		unset($params['CSC']);
+		$params['cHashQRCode'] = sha1($query.$config->getCSC());
 		return $params;
 	}
 
@@ -91,7 +89,7 @@ class NFCe extends NF {
 		$db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
 		$params = $this->gerarQRCodeInfo($dom);
 		$query = http_build_query($params);
-		$info = $db->getInformacaoServico($estado->getUF(), 'nfce', $this->getAmbiente());
+		$info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), 'nfce', $this->getAmbiente());
 		$url = $info['qrcode'];
 		$url .= (strpos($url, '?') === false?'?':'&').$query;
 		$this->setConsultaURL($url);
@@ -109,9 +107,10 @@ class NFCe extends NF {
 	}
 
 	/**
-	 * Valida e insere as informações suplementares
+	 * Assina e adiciona informações suplementares da nota
 	 */
-	public function validar(&$dom) {
+	public function assinar($dom = null) {
+		$dom = parent::assinar($dom);
 		$suplementar = $this->getNodeSuplementar($dom);
 		$signature = $dom->getElementsByTagName('Signature')->item(0);
 		$signature->parentNode->insertBefore($suplementar, $signature);

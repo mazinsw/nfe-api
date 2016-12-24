@@ -54,6 +54,11 @@ class Util {
 		return str_pad($text, $len, $digit, STR_PAD_LEFT);
 	}
 
+	static public function padText($str, $len, $txt = '0')
+	{
+		return str_pad($str, $len, $txt, STR_PAD_RIGHT);
+	}
+
 	static public function isEqual($value, $compare, $delta = 0.005)
 	{
 		return $compare < ($value + $delta) && ($value - $delta) < $compare;

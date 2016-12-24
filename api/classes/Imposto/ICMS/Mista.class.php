@@ -38,11 +38,11 @@ class Mista extends Cobranca {
 	public function __construct($mista = array()) {
 		parent::__construct($mista);
 		$this->setTributacao('70');
+		$this->setNormal(new Reducao());
 	}
 
 	public function toArray() {
 		$mista = parent::toArray();
-		$mista['reducao'] = $this->getReducao();
 		return $mista;
 	}
 
@@ -58,8 +58,6 @@ class Mista extends Cobranca {
 	public function getNode($name = null) {
 		$element = parent::getNode(is_null($name)?'ICMS70':$name);
 		$dom = $element->ownerDocument;
-		if(!is_null($this->getNormal()->getModalidade()))
-			$element->appendChild($dom->createElement('pRedBC', $this->getReducao(true)));
 		return $element;
 	}
 

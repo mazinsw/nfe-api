@@ -95,34 +95,52 @@ class SEFAZ {
 		$evento = $this->getConfiguracao()->getEvento();
 		foreach ($this->getNotas() as $nota) {
 			try {
-				$dom = $nota->getNode()->ownerDocument;
-				if(!is_null($evento))
-					$evento->onNotaGerada($nota, $dom);
-				$dom = $nota->assinar($dom);
-				if(!is_null($evento))
-					$evento->onNotaAssinada($nota, $dom);
-				$dom = $nota->validar($dom);
-				if(!is_null($evento))
-					$evento->onNotaEnviando($nota, $dom);
-				$old_emissao = $nota->getEmissao();
-				$emissao = $this->envia($nota, $dom);
-				if($emissao != $old_emissao && !is_null($evento))
-					$evento->onFormaEmissao($nota, $emissao);
-				if($emissao != NF::EMISSAO_CONTINGENCIA && !is_null($evento))
-					$evento->onNotaEnviada($nota, $dom);
+				$envia = true;
+				do {
+					$dom = $nota->getNode()->ownerDocument;
+					if(!is_null($evento))
+						$evento->onNotaGerada($nota, $dom);
+					$dom = $nota->assinar($dom);
+					$dom = $nota->validar($dom); // valida o XML da nota
+					if(!is_null($evento))
+						$evento->onNotaAssinada($nota, $dom);
+					if(!$envia)
+						break;
+					if(!is_null($evento))
+						$evento->onNotaEnviando($nota, $dom);
+					$autorizacao = new NF\Autorizacao();
+					try {
+						$autorizacao->envia($nota, $dom);
+					} catch (Exception $e) {
+						if($nota->getEmissao() == NF::EMISSAO_CONTINGENCIA)
+							throw $e;
+						Log::debug('Mudando emissão para contingência: '.$e->getMessage());
+						$envia = false;
+						$nota->setEmissao(NF::EMISSAO_CONTINGENCIA);
+						if(!is_null($evento))
+							$evento->onFormaEmissao($nota, $nota->getEmissao());
+						continue;
+					}
+					Log::debug('('.$autorizacao->getStatus().') - '.$autorizacao->getMotivo());
+					if(is_null($nota->getProtocolo()))
+						throw new Exception($autorizacao->getMotivo(), $autorizacao->getStatus());
+					$dom = $nota->addProtocolo($dom);
+					// $dom = $nota->validar($dom); // valida após protocolada
+					Log::debug('('.$nota->getProtocolo()->getStatus().') - '.$nota->getProtocolo()->getMotivo());
+					if(!is_null($evento))
+						$evento->onNotaEnviada($nota, $dom);
+					break;
+				} while (true);
 				if(!is_null($evento))
 					$evento->onNotaCompleto($nota, $dom);
 			} catch(Exception $e) {
+				Log::error('('.$e->getCode().') - '.$e->getMessage());
 				if(!is_null($evento))
 					$evento->onNotaErro($nota, $e);
 				else
 					throw $e;
 			}
 		}
-	}
-
-	public function envia(&$nota, &$dom) {
-		return NF::EMISSAO_NORMAL;
 	}
 
 }

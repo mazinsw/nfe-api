@@ -53,8 +53,7 @@ interface Evento {
 	public function onFormaEmissao(&$nota, $forma);
 
 	/**
-	 * Chamado quando a nota foi enviada e aceita pela SEFAZ (Não é chamado
-	 * quando em contigência)
+	 * Chamado quando a nota foi enviada e aceita pela SEFAZ
 	 */
 	public function onNotaEnviada(&$nota, &$xml);
 

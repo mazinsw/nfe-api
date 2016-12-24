@@ -35,7 +35,7 @@ use Util;
  * 50 - Suspensão,
  * estende de Generico
  */
-class Isenta extends Generico {
+class Isento extends Generico {
 
 	/**
 	 * Informar o motivo da desoneração:
@@ -71,9 +71,18 @@ class Isenta extends Generico {
 	private $desoneracao;
 	private $motivo;
 
-	public function __construct($isenta = array()) {
-		parent::__construct($isenta);
+	public function __construct($isento = array()) {
+		parent::__construct($isento);
 		$this->setTributacao('40');
+	}
+
+	/**
+	 * Valor base para cálculo do imposto
+	 */
+	public function getBase($normalize = false) {
+		if(!$normalize)
+			return 0.00; // sempre zero
+		return Util::toCurrency($this->base);
 	}
 
 	/**
@@ -146,20 +155,20 @@ class Isenta extends Generico {
 	}
 
 	public function toArray() {
-		$isenta = parent::toArray();
-		$isenta['desoneracao'] = $this->getDesoneracao();
-		$isenta['motivo'] = $this->getMotivo();
-		return $isenta;
+		$isento = parent::toArray();
+		$isento['desoneracao'] = $this->getDesoneracao();
+		$isento['motivo'] = $this->getMotivo();
+		return $isento;
 	}
 
-	public function fromArray($isenta = array()) {
-		if($isenta instanceof Isenta)
-			$isenta = $isenta->toArray();
-		else if(!is_array($isenta))
+	public function fromArray($isento = array()) {
+		if($isento instanceof Isento)
+			$isento = $isento->toArray();
+		else if(!is_array($isento))
 			return $this;
-		parent::fromArray($isenta);
-		$this->setDesoneracao($isenta['desoneracao']);
-		$this->setMotivo($isenta['motivo']);
+		parent::fromArray($isento);
+		$this->setDesoneracao($isento['desoneracao']);
+		$this->setMotivo($isento['motivo']);
 		return $this;
 	}
 

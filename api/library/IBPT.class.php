@@ -25,6 +25,7 @@
  * SOFTWARE.
  *
  */
+use Curl\Curl;
 
 class IBPT {
 
@@ -43,22 +44,70 @@ class IBPT {
 		$content = file_get_contents($file);
 		if($content === false)
 			return false;
-		$json = json_decode($content, true);
-		$array = $json['IBPT'][$uf];
-		$this->tabela[$uf] = $array;
-		return $array;
+		$data = json_decode($content, true);
+		$this->tabela[$uf] = $data;
+		return $data;
 	}
 
-	public function getImposto($ncm, $uf, $ex) {
-		$uf = strtoupper($uf);
-		$uf = preg_replace('/[^A-Z]/', '', $uf);
-		$array = $this->load($uf);
-		if($array === false)
+	private function getImpostoOffline($ncm, $uf, $ex) {
+		$data = $this->load($uf);
+		if($data === false)
 			return false;
 		$key = $ncm.'.'.sprintf('%02s', $ex);
-		$o = $array[$key];
+		$o = $data['estados'][$uf][$key];
 		if(is_null($o))
 			return false;
+		$o['info'] = $data['info'];
+		$o['info']['origem'] = 'Tabela offline';
+		return $o;
+	}
+
+	private function getImpostoOnline($cnpj, $token, $ncm, $uf, $ex) {
+		$url = 'http://iws.ibpt.org.br/api/Produtos';
+		$params = array(
+			'token' => $token,
+			'cnpj' => $cnpj,
+			'codigo' => $ncm,
+			'uf' => $uf,
+			'ex' => intval($ex)
+		);
+		$curl = new Curl($url);
+		$curl->setConnectTimeout(10);
+		$curl->setTimeout(10);
+		$data = $curl->get($params);
+		if($curl->error)
+			return false;
+		$o = array(
+			'importado' => $data->Importado, 
+			'nacional' => $data->Nacional, 
+			'estadual' => $data->Estadual, 
+			'municipal' => $data->Municipal, 
+			'tipo' => $data->Tipo
+		);
+		$vigenciainicio = date_create_from_format('d/m/Y', $data->VigenciaInicio);
+		$vigenciafim = date_create_from_format('d/m/Y', $data->VigenciaFim);
+		$info = array(
+			'origem' => 'API IBPT',
+			'fonte' => $data->Fonte,
+			'versao' => $data->Versao,
+			'chave' => $data->Chave,
+			'vigencia' => array(
+				'inicio' => date_format($vigenciainicio, 'Y-m-d'),
+				'fim' => date_format($vigenciafim, 'Y-m-d')
+			)
+		);
+		$o['info'] = $info;
+		return $o;
+	}
+
+	public function getImposto($cnpj, $token, $ncm, $uf, $ex) {
+		$uf = strtoupper($uf);
+		$uf = preg_replace('/[^A-Z]/', '', $uf);
+		if(is_null($cnpj) || is_null($token))
+			return $this->getImpostoOffline($ncm, $uf, $ex);
+		$o = $this->getImpostoOnline($cnpj, $token, $ncm, $uf, $ex);
+		if($o === false)
+			return $this->getImpostoOffline($ncm, $uf, $ex);
 		return $o;
 	}
 

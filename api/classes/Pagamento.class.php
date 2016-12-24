@@ -56,6 +56,7 @@ class Pagamento implements NodeInterface {
 
 	private $forma;
 	private $valor;
+	private $integrado;
 	private $credenciadora;
 	private $autorizacao;
 	private $bandeira;
@@ -113,6 +114,33 @@ class Pagamento implements NodeInterface {
 
 	public function setValor($valor) {
 		$this->valor = $valor;
+		return $this;
+	}
+
+	/**
+	 * Tipo de Integração do processo de pagamento com o sistema de automação
+	 * da empresa/1=Pagamento integrado com o sistema de automação da empresa
+	 * Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com
+	 * o sistema de automação da empresa Ex: equipamento POS
+	 */
+	public function getIntegrado($normalize = false) {
+		if(!$normalize)
+			return $this->integrado;
+		return $this->isIntegrado()?'1':'2';
+	}
+
+	/**
+	 * Tipo de Integração do processo de pagamento com o sistema de automação
+	 * da empresa/1=Pagamento integrado com o sistema de automação da empresa
+	 * Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com
+	 * o sistema de automação da empresa Ex: equipamento POS
+	 */
+	public function isIntegrado() {
+		return $this->integrado == 'Y';
+	}
+
+	public function setIntegrado($integrado) {
+		$this->integrado = $integrado;
 		return $this;
 	}
 
@@ -175,6 +203,7 @@ class Pagamento implements NodeInterface {
 		$pagamento = array();
 		$pagamento['forma'] = $this->getForma();
 		$pagamento['valor'] = $this->getValor();
+		$pagamento['integrado'] = $this->getIntegrado();
 		$pagamento['credenciadora'] = $this->getCredenciadora();
 		$pagamento['autorizacao'] = $this->getAutorizacao();
 		$pagamento['bandeira'] = $this->getBandeira();
@@ -188,6 +217,9 @@ class Pagamento implements NodeInterface {
 			return $this;
 		$this->setForma($pagamento['forma']);
 		$this->setValor($pagamento['valor']);
+		$this->setIntegrado($pagamento['integrado']);
+		if(is_null($this->getIntegrado()))
+			$this->setIntegrado('N');
 		$this->setCredenciadora($pagamento['credenciadora']);
 		$this->setAutorizacao($pagamento['autorizacao']);
 		$this->setBandeira($pagamento['bandeira']);
@@ -202,9 +234,12 @@ class Pagamento implements NodeInterface {
 		if($this->getForma() != self::FORMA_CREDITO && $this->getForma() != self::FORMA_DEBITO)
 			return $element;
 		$cartao = $dom->createElement('card');
-		$cartao->appendChild($dom->createElement('CNPJ', $this->getCredenciadora(true)));
-		$cartao->appendChild($dom->createElement('tBand', $this->getBandeira(true)));
-		$cartao->appendChild($dom->createElement('cAut', $this->getAutorizacao(true)));
+		$cartao->appendChild($dom->createElement('tpIntegra', $this->getIntegrado(true)));
+		if(is_numeric($this->getCredenciadora())) {
+			$cartao->appendChild($dom->createElement('CNPJ', $this->getCredenciadora(true)));
+			$cartao->appendChild($dom->createElement('tBand', $this->getBandeira(true)));
+			$cartao->appendChild($dom->createElement('cAut', $this->getAutorizacao(true)));
+		}
 		$element->appendChild($cartao);
 		return $element;
 	}
