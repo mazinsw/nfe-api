@@ -114,9 +114,9 @@ abstract class NF implements NodeInterface {
 	private $transporte;
 	private $pagamentos;
 	private $consulta_url;
-	private $qrcode_data;
-	private $data_saida;
-	private $data_entrada;
+	private $data_movimentacao;
+	private $data_contingencia;
+	private $justificativa;
 	private $modelo;
 	private $tipo;
 	private $destino;
@@ -229,42 +229,45 @@ abstract class NF implements NodeInterface {
 		return $this;
 	}
 
-	public function getQrcodeData($normalize = false) {
+	/**
+	 * Data e Hora da saída ou de entrada da mercadoria / produto
+	 */
+	public function getDataMovimentacao($normalize = false) {
 		if(!$normalize)
-			return $this->qrcode_data;
-		return $this->qrcode_data;
+			return $this->data_movimentacao;
+		return Util::toDateTime($this->data_movimentacao);
 	}
 
-	public function setQrcodeData($qrcode_data) {
-		$this->qrcode_data = $qrcode_data;
+	public function setDataMovimentacao($data_movimentacao) {
+		$this->data_movimentacao = $data_movimentacao;
 		return $this;
 	}
 
 	/**
-	 * Data e Hora da saída da mercadoria / produto
+	 * Informar a data e hora de entrada em contingência
 	 */
-	public function getDataSaida($normalize = false) {
+	public function getDataContingencia($normalize = false) {
 		if(!$normalize)
-			return $this->data_saida;
-		return Util::toDateTime($this->data_saida);
+			return $this->data_contingencia;
+		return Util::toDateTime($this->data_contingencia);
 	}
 
-	public function setDataSaida($data_saida) {
-		$this->data_saida = $data_saida;
+	public function setDataContingencia($data_contingencia) {
+		$this->data_contingencia = $data_contingencia;
 		return $this;
 	}
 
 	/**
-	 * Data e Hora de entrada da mercadoria / produto
+	 * Informar a Justificativa da entrada em contingência
 	 */
-	public function getDataEntrada($normalize = false) {
+	public function getJustificativa($normalize = false) {
 		if(!$normalize)
-			return $this->data_entrada;
-		return Util::toDateTime($this->data_entrada);
+			return $this->justificativa;
+		return $this->justificativa;
 	}
 
-	public function setDataEntrada($data_entrada) {
-		$this->data_entrada = $data_entrada;
+	public function setJustificativa($justificativa) {
+		$this->justificativa = $justificativa;
 		return $this;
 	}
 
@@ -295,6 +298,14 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setTipo($tipo) {
+		switch ($tipo) {
+			case '0':
+				$tipo = self::TIPO_ENTRADA;
+				break;
+			case '1':
+				$tipo = self::TIPO_SAIDA;
+				break;
+		}
 		$this->tipo = $tipo;
 		return $this;
 	}
@@ -318,6 +329,17 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setDestino($destino) {
+		switch ($destino) {
+			case '1':
+				$destino = self::DESTINO_INTERNA;
+				break;
+			case '2':
+				$destino = self::DESTINO_INTERESTADUAL;
+				break;
+			case '3':
+				$destino = self::DESTINO_EXTERIOR;
+				break;
+		}
 		$this->destino = $destino;
 		return $this;
 	}
@@ -370,6 +392,17 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setIndicador($indicador) {
+		switch ($indicador) {
+			case '0':
+				$indicador = self::INDICADOR_AVISTA;
+				break;
+			case '1':
+				$indicador = self::INDICADOR_APRAZO;
+				break;
+			case '2':
+				$indicador = self::INDICADOR_OUTROS;
+				break;
+		}
 		$this->indicador = $indicador;
 		return $this;
 	}
@@ -429,6 +462,26 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setFormato($formato) {
+		switch ($formato) {
+			case '0':
+				$formato = self::FORMATO_NENHUMA;
+				break;
+			case '1':
+				$formato = self::FORMATO_RETRATO;
+				break;
+			case '2':
+				$formato = self::FORMATO_PAISAGEM;
+				break;
+			case '3':
+				$formato = self::FORMATO_SIMPLIFICADO;
+				break;
+			case '4':
+				$formato = self::FORMATO_CONSUMIDOR;
+				break;
+			case '5':
+				$formato = self::FORMATO_MENSAGEM;
+				break;
+		}
 		$this->formato = $formato;
 		return $this;
 	}
@@ -449,6 +502,14 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setEmissao($emissao) {
+		switch ($emissao) {
+			case '1':
+				$emissao = self::EMISSAO_NORMAL;
+				break;
+			case '9':
+				$emissao = self::EMISSAO_CONTINGENCIA;
+				break;
+		}
 		$this->emissao = $emissao;
 		return $this;
 	}
@@ -483,6 +544,14 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setAmbiente($ambiente) {
+		switch ($ambiente) {
+			case '1':
+				$ambiente = self::AMBIENTE_PRODUCAO;
+				break;
+			case '2':
+				$ambiente = self::AMBIENTE_HOMOLOGACAO;
+				break;
+		}
 		$this->ambiente = $ambiente;
 		return $this;
 	}
@@ -508,6 +577,20 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setFinalidade($finalidade) {
+		switch ($finalidade) {
+			case '1':
+				$finalidade = self::FINALIDADE_NORMAL;
+				break;
+			case '2':
+				$finalidade = self::FINALIDADE_COMPLEMENTAR;
+				break;
+			case '3':
+				$finalidade = self::FINALIDADE_AJUSTE;
+				break;
+			case '4':
+				$finalidade = self::FINALIDADE_RETORNO;
+				break;
+		}
 		$this->finalidade = $finalidade;
 		return $this;
 	}
@@ -535,6 +618,12 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setConsumidorFinal($consumidor_final) {
+		switch ($consumidor_final) {
+			case '0':
+				return 'N';
+			case '1':
+				return 'Y';
+		}
 		$this->consumidor_final = $consumidor_final;
 		return $this;
 	}
@@ -567,6 +656,26 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setPresenca($presenca) {
+		switch ($presenca) {
+			case '0':
+				$presenca = self::PRESENCA_NENHUM;
+				break;
+			case '1':
+				$presenca = self::PRESENCA_PRESENCIAL;
+				break;
+			case '2':
+				$presenca = self::PRESENCA_INTERNET;
+				break;
+			case '3':
+				$presenca = self::PRESENCA_TELEATENDIMENTO;
+				break;
+			case '4':
+				$presenca = self::PRESENCA_ENTREGA;
+				break;
+			case '9':
+				$presenca = self::PRESENCA_OUTROS;
+				break;
+		}
 		$this->presenca = $presenca;
 		return $this;
 	}
@@ -590,9 +699,9 @@ abstract class NF implements NodeInterface {
 		$nf['transporte'] = $this->getTransporte();
 		$nf['pagamentos'] = $this->getPagamentos();
 		$nf['consulta_url'] = $this->getConsultaURL();
-		$nf['qrcode_data'] = $this->getQrcodeData();
-		$nf['data_saida'] = $this->getDataSaida();
-		$nf['data_entrada'] = $this->getDataEntrada();
+		$nf['data_movimentacao'] = $this->getDataMovimentacao();
+		$nf['data_contingencia'] = $this->getDataContingencia();
+		$nf['justificativa'] = $this->getJustificativa();
 		$nf['modelo'] = $this->getModelo();
 		$nf['tipo'] = $this->getTipo();
 		$nf['destino'] = $this->getDestino();
@@ -635,9 +744,9 @@ abstract class NF implements NodeInterface {
 		if(is_null($this->getPagamentos()))
 			$this->setPagamentos(array());
 		$this->setConsultaURL($nf['consulta_url']);
-		$this->setQrcodeData($nf['qrcode_data']);
-		$this->setDataSaida($nf['data_saida']);
-		$this->setDataEntrada($nf['data_entrada']);
+		$this->setDataMovimentacao($nf['data_movimentacao']);
+		$this->setDataContingencia($nf['data_contingencia']);
+		$this->setJustificativa($nf['justificativa']);
 		$this->setModelo($nf['modelo']);
 		$this->setTipo($nf['tipo']);
 		if(is_null($this->getTipo()))
@@ -677,8 +786,9 @@ abstract class NF implements NodeInterface {
 
 	public function gerarID() {
 		$estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
+		$estado->checkCodigos();
 		$id = sprintf('%02d%02d%02d%s%02d%03d%09d%01d%08d',
-			$estado->getCodigo(),  // TODO: get config[Código do estado]
+			$estado->getCodigo(),
 			date('y', $this->getDataEmissao()), // Ano 2 dígitos
 			date('m', $this->getDataEmissao()), // Mês 2 dígitos
 			$this->getEmitente()->getCNPJ(),
@@ -799,9 +909,14 @@ abstract class NF implements NodeInterface {
 		$ident->appendChild($dom->createElement('finNFe', $this->getFinalidade(true)));
 		$ident->appendChild($dom->createElement('indFinal', $this->getConsumidorFinal(true)));
 		$ident->appendChild($dom->createElement('indPres', $this->getPresenca(true)));
-		$ident->appendChild($dom->createElement('procEmi', 0));
+		$ident->appendChild($dom->createElement('procEmi', 0)); // emissão de NF-e com aplicativo do contribuinte
 		$ident->appendChild($dom->createElement('verProc', self::APP_VERSAO));
-
+		if(!is_null($this->getDataMovimentacao()))
+			$ident->appendChild($dom->createElement('dhSaiEnt', $this->getDataMovimentacao(true)));
+		if($this->getEmissao() != self::EMISSAO_NORMAL) {
+			$ident->appendChild($dom->createElement('dhCont', $this->getDataContingencia(true)));
+			$ident->appendChild($dom->createElement('xJust', $this->getJustificativa(true)));
+		}
 		$info->appendChild($ident);
 
 		$emitente = $this->getEmitente()->getNode();
@@ -912,7 +1027,7 @@ abstract class NF implements NodeInterface {
 	/**
 	 * Adiciona o protocolo no XML da nota
 	 */
-	public function addProtocolo(&$dom) {
+	public function addProtocolo($dom) {
 		$nfe = $dom->getElementsByTagName('NFe')->item(0);
 		// Corrige xmlns:default
 		$nfe_xml = $dom->saveXML($nfe);

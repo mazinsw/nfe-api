@@ -30,9 +30,11 @@ use Curl\Curl;
 class IBPT {
 
 	private $tabela;
+	private $offline;
 
 	public function __construct() {
 		$this->tabela = array();
+		$this->offline = false;
 	}
 
 	private function load($uf) {
@@ -63,6 +65,8 @@ class IBPT {
 	}
 
 	private function getImpostoOnline($cnpj, $token, $ncm, $uf, $ex) {
+		if($this->offline)
+			return false;
 		$url = 'http://iws.ibpt.org.br/api/Produtos';
 		$params = array(
 			'token' => $token,
@@ -72,11 +76,14 @@ class IBPT {
 			'ex' => intval($ex)
 		);
 		$curl = new Curl($url);
-		$curl->setConnectTimeout(10);
-		$curl->setTimeout(10);
+		$curl->setConnectTimeout(2);
+		$curl->setTimeout(3);
 		$data = $curl->get($params);
-		if($curl->error)
+		if($curl->error) {
+			Log::warning('IBPT ('.$curl->errorCode.') - '.$curl->errorMessage);
+			$this->offline = true;
 			return false;
+		}
 		$o = array(
 			'importado' => $data->Importado, 
 			'nacional' => $data->Nacional, 

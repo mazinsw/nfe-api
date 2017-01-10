@@ -57,6 +57,7 @@ class Produto implements NodeInterface {
 	private $seguro;
 	private $frete;
 	private $despesas;
+	private $excecao;
 	private $cfop;
 	private $ncm;
 	private $cest;
@@ -307,6 +308,20 @@ class Produto implements NodeInterface {
 		return $this;
 	}
 
+	/**
+	 * Código EX TIPI
+	 */
+	public function getExcecao($normalize = false) {
+		if(!$normalize)
+			return $this->excecao;
+		return Util::padDigit($this->excecao, 2);
+	}
+
+	public function setExcecao($excecao) {
+		$this->excecao = $excecao;
+		return $this;
+	}
+
 	public function getCFOP($normalize = false) {
 		if(!$normalize)
 			return $this->cfop;
@@ -405,9 +420,8 @@ class Produto implements NodeInterface {
 		);
 		$imposto = new \Imposto\Total();
 		$imposto->setBase($this->getBase());
-		// TODO: detectar EX
 		$aliquota = $db->getImpostoAliquota($this->getNCM(), $endereco->getMunicipio()->getEstado()->getUF(),
-			null, $config->getEmitente()->getCNPJ(), $config->getTokenIBPT());
+			$this->getExcecao(), $config->getEmitente()->getCNPJ(), $config->getTokenIBPT());
 		if($aliquota === false)
 			throw new Exception('Não foi possível obter o tributo aproximado do produto "'.$this->getDescricao().'" e item '.$this->getItem(), 404);
 		foreach ($tipos as $tipo) {
@@ -438,6 +452,7 @@ class Produto implements NodeInterface {
 		$produto['seguro'] = $this->getSeguro();
 		$produto['frete'] = $this->getFrete();
 		$produto['despesas'] = $this->getDespesas();
+		$produto['excecao'] = $this->getExcecao();
 		$produto['cfop'] = $this->getCFOP();
 		$produto['ncm'] = $this->getNCM();
 		$produto['cest'] = $this->getCEST();
@@ -472,6 +487,7 @@ class Produto implements NodeInterface {
 		$this->setSeguro($produto['seguro']);
 		$this->setFrete($produto['frete']);
 		$this->setDespesas($produto['despesas']);
+		$this->setExcecao($produto['excecao']);
 		$this->setCFOP($produto['cfop']);
 		$this->setNCM($produto['ncm']);
 		$this->setCEST($produto['cest']);
@@ -481,7 +497,7 @@ class Produto implements NodeInterface {
 		return $this;
 	}
 
-	static public function addNodeInformacoes($tributos, $element, $name = null) {
+	public static function addNodeInformacoes($tributos, $element, $name = null) {
 		$detalhes = array();
 		$formatos = array(
 			Imposto::TIPO_IMPORTADO => '%s Importado',
@@ -520,7 +536,9 @@ class Produto implements NodeInterface {
 		$produto->appendChild($dom->createElement('NCM', $this->getNCM(true)));
 //		$produto->appendChild($dom->createElement('NVE', $this->getNVE(true)));
 		$produto->appendChild($dom->createElement('CEST', $this->getCEST(true)));
-//		$produto->appendChild($dom->createElement('EXTIPI', $this->getEXTIPI(true)));
+		if(!is_null($this->getExcecao())) {
+			$produto->appendChild($dom->createElement('EXTIPI', $this->getExcecao(true)));
+		}
 		$produto->appendChild($dom->createElement('CFOP', $this->getCFOP(true)));
 		$produto->appendChild($dom->createElement('uCom', $this->getUnidade(true)));
 		$produto->appendChild($dom->createElement('qCom', $this->getQuantidade(true)));

@@ -34,39 +34,42 @@ interface Evento {
 	/**
 	 * Chamado quando o XML da nota foi gerado
 	 */
-	public function onNotaGerada(&$nota, &$xml);
+	public function onNotaGerada($nota, $xml);
 
 	/**
 	 * Chamado após o XML da nota ser assinado
 	 */
-	public function onNotaAssinada(&$nota, &$xml);
+	public function onNotaAssinada($nota, $xml);
 
 	/**
 	 * Chamado antes de enviar a nota para a SEFAZ
 	 */
-	public function onNotaEnviando(&$nota, &$xml);
+	public function onNotaEnviando($nota, $xml);
 
 	/**
-	 * Chamado quando a forma de emissão da nota fiscal muda para normal ou
-	 * contigência
+	 * Chamado quando a forma de emissão da nota fiscal muda para contigência
 	 */
-	public function onFormaEmissao(&$nota, $forma);
+	public function onNotaContingencia($nota, $offline);
 
 	/**
 	 * Chamado quando a nota foi enviada e aceita pela SEFAZ
 	 */
-	public function onNotaEnviada(&$nota, &$xml);
+	public function onNotaEnviada($nota, $xml);
 
 	/**
 	 * Chamado quando a emissão da nota foi concluída com sucesso independente
 	 * da forma de emissão
 	 */
-	public function onNotaCompleto(&$nota, &$xml);
+	public function onNotaCompleto($nota, $xml);
 
 	/**
 	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
 	 * é chamado quando entra em contigência)
 	 */
-	public function onNotaErro(&$nota, $e);
+	public function onNotaErro($nota, $e);
 
+	/**
+	 * Chamado quando um ou mais números de notas forem inutilizados
+	 */
+	public function onInutilizado($inutilizacao, $xml);
 }

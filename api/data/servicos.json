@@ -757,12 +757,6 @@
 					"autorizacao": "https://hom.svc.fazenda.gov.br/NfeAutorizacao/NfeAutorizacao.asmx",
 					"retorno": "https://hom.svc.fazenda.gov.br/NfeRetAutorizacao/NfeRetAutorizacao.asmx"
 				}
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"SVCRS": {
@@ -780,336 +774,168 @@
 					"autorizacao": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeAutorizacao/NFeAutorizacao.asmx",
 					"retorno": "https://nfe-homologacao.svrs.rs.gov.br/ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx"
 				}
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"AC": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"AL": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"AP": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"DF": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"ES": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"MG": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"PB": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"RJ": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"RN": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"RO": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"RR": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"RS": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"SC": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"SE": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"SP": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"TO": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCAN"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"AM": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"BA": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"CE": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"GO": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"MA": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"MS": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"MT": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"PA": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"PE": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"PI": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		},
 		"PR": {
 			"versao": "3.10",
 			"nfe": {
 				"base": "SVCRS"
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
-				}
 			}
 		}
 	},
@@ -1124,12 +950,6 @@
 				"homologacao": {
 					"destinadas": "https://hom.nfe.fazenda.gov.br/NFeConsultaDest/NFeConsultaDest.asmx",
 					"download": "https://hom.nfe.fazenda.gov.br/NfeDownloadNF/NfeDownloadNF.asmx"
-				}
-			},
-			"nfce": {
-				"producao": {
-				},
-				"homologacao": {
 				}
 			}
 		}

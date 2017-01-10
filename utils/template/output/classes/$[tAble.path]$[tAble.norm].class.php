@@ -113,6 +113,15 @@ $[field.end]
 $[field.end]
 
 	public function set$[fIeld.norm]($$[field.unix]) {
+$[field.if(enum)]
+		switch ($$[field.unix]) {
+$[field.each(option)]
+			case '$[fIeld.option.name]':
+				$$[field.unix] = self::$[FIELD.unix]_$[FIELD.option.norm];
+				break;
+$[field.end]
+		}
+$[field.end]
 		$this->$[field.unix] = $$[field.unix];
 		return $this;
 	}
@@ -199,6 +208,84 @@ $[field.else.if(searchable)]
 		$element->appendChild($$[field.unix]);
 $[field.else]
 		$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
+$[field.end]
+$[field.end]
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'$[tAble.style]':$name;
+$[table.if(inherited)]
+		$element = parent::loadNode($element, $name);
+$[table.else]
+		$_fields = $element->getElementsByTagName($name);
+		if($_fields->length == 0)
+			throw new Exception('Tag "'.$name.'" não encontrada', 404);
+		$element = $_fields->item(0);
+$[table.end]
+$[field.each(all)]
+$[field.if(null)]
+$[field.if(descriptor)]
+		$_fields = $element->getElementsByTagName('$[fIeld.style]');
+		$$[field.unix] = null;
+		if($_fields->length > 0) {
+$[field.if(default)]
+			$$[field.unix] = $[fIeld.info];
+$[field.else]
+			$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
+$[field.end]
+			$$[field.unix]->loadNode($_fields->item(0), '$[fIeld.style]');
+		}
+		$this->set$[fIeld.norm]($$[field.unix]);
+$[field.else.if(searchable)]
+		$_fields = $element->getElementsByTagName('$[fIeld.norm.plural]'); // TODO: predictable tag name
+		$$[field.unix.plural] = array();
+		if($_fields->length > 0) {
+			$_items = $_fields->item(0)->getElementsByTagName('$[fIeld.style]');
+			foreach ($_items as $_item) {
+$[field.if(default)]
+				$$[field.unix] = $[fIeld.info];
+$[field.else]
+				$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
+$[field.end]
+				$$[field.unix]->loadNode($_item, '$[fIeld.style]');
+				$$[field.unix.plural][] = $$[field.unix];
+			}
+		}
+		$this->set$[fIeld.norm]($$[field.unix.plural]);
+$[field.else]
+		$_fields = $element->getElementsByTagName('$[fIeld.style]');
+		$$[field.unix] = null;
+		if($_fields->length > 0)
+			$$[field.unix] = $_fields->item(0)->nodeValue;
+		$this->set$[fIeld.norm]($$[field.unix]);
+$[field.end]
+$[field.else.if(descriptor)]
+$[field.if(default)]
+		$$[field.unix] = $[fIeld.info];
+$[field.else]
+		$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
+$[field.end]
+		$$[field.unix]->loadNode($element->getElementsByTagName('$[fIeld.style]')->item(0), '$[fIeld.style]');
+		$this->set$[fIeld.norm]($$[field.unix]);
+$[field.else.if(searchable)]
+		$$[field.unix.plural] = array();
+		$_fields = $element->getElementsByTagName('$[fIeld.norm.plural]'); // TODO: predictable tag name
+		if($_fields->length == 0)
+			throw new Exception('Tag "$[fIeld.norm.plural]" não encontrada', 404); // TODO: predictable tag name
+		$_items = $_fields->item(0)->getElementsByTagName('$[fIeld.style]');
+		foreach ($_items as $_item) {
+$[field.if(default)]
+			$$[field.unix] = $[fIeld.info];
+$[field.else]
+			$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
+$[field.end]
+			$$[field.unix]->loadNode($_item, '$[fIeld.style]');
+			$$[field.unix.plural][] = $$[field.unix];
+		}
+		$this->set$[fIeld.norm]($$[field.unix.plural]);
+$[field.else]
+		$this->set$[fIeld.norm]($element->getElementsByTagName('$[fIeld.style]')->item(0)->nodeValue);
 $[field.end]
 $[field.end]
 		return $element;

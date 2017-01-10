@@ -57,10 +57,10 @@ class NFCe extends NF {
 		$config = SEFAZ::getInstance()->getConfiguracao();
 		$totais = $this->getTotais();
 		$digest = $dom->getElementsByTagName('DigestValue')->item(0);
-		if($this->getEmissao() == self::EMISSAO_NORMAL)
+		// if($this->getEmissao() == self::EMISSAO_NORMAL)
 			$dig_val = $digest->nodeValue;
-		else
-			$dig_val = base64_encode(sha1($dom->saveXML(), true));
+		// else
+		// 	$dig_val = base64_encode(sha1($dom->saveXML(), true));
 		$params = array(
 			'chNFe' => $this->getID(),
 			'nVersao' => self::QRCODE_VERSAO,
@@ -90,10 +90,11 @@ class NFCe extends NF {
 		$params = $this->gerarQRCodeInfo($dom);
 		$query = http_build_query($params);
 		$info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), 'nfce', $this->getAmbiente());
+		if(!isset($info['qrcode']))
+			throw new Exception('Não existe URL de consulta de QRCode para o estado "'.$estado->getUF().'"', 404);
 		$url = $info['qrcode'];
 		$url .= (strpos($url, '?') === false?'?':'&').$query;
 		$this->setConsultaURL($url);
-		$this->setQrcodeData($url);
 	}
 
 	private function getNodeSuplementar(&$dom) {

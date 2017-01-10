@@ -48,8 +48,8 @@ class CurlSoap extends Curl {
 		$this->setHeader('Content-Type', 'application/soap+xml; charset=utf-8');
 		$this->setOpt(CURLOPT_SSL_VERIFYPEER, false);
 		$this->setOpt(CURLOPT_SSLVERSION, 1);
-		$this->setConnectTimeout(10);
-		$this->setTimeout(10);
+		$this->setConnectTimeout(4);
+		$this->setTimeout(6);
 		$this->setXmlDecoder(function ($response) {
 			$dom = new DOMDocument();
 			$xml_obj = $dom->loadXML($response);
@@ -106,8 +106,11 @@ class CurlSoap extends Curl {
 		$data = str_replace('<soap12:Header/>', '<soap12:Header>'.$header.'</soap12:Header>', self::ENVELOPE);
 		$data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $data);
 		$this->post($url, $data);
-		if($this->error)
+		if($this->error) {
+			if($this->errorCode >= 5 && $this->errorCode <= 7)
+				throw new DomainException($this->errorMessage, $this->errorCode);
 			throw new Exception($this->errorMessage, $this->errorCode);
+		}
 		return $this->response;
 	}
 

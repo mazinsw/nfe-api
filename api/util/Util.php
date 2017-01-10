@@ -28,58 +28,58 @@
 
 class Util {
 	
-	static public function toCurrency($value, $places = 2)
+	public static function toCurrency($value, $places = 2)
 	{
 		return number_format($value, $places, '.', '');
 	}
 
-	static public function toFloat($value, $places = 4)
+	public static function toFloat($value, $places = 4)
 	{
 		return number_format($value, $places, '.', '');
 	}
 
-	static public function toDateTime($time)
+	public static function toDateTime($time)
 	{
 		return date('Y-m-d\TH:i:sP', $time);
 	}
 
-	static public function toHex($string)
+	public static function toHex($string)
 	{
 		$hexstr = unpack('H*', $string);
 		return array_shift($hexstr);
 	}
 
-	static public function padDigit($text, $len, $digit = '0')
+	public static function padDigit($text, $len, $digit = '0')
 	{
 		return str_pad($text, $len, $digit, STR_PAD_LEFT);
 	}
 
-	static public function padText($str, $len, $txt = '0')
+	public static function padText($str, $len, $txt = '0')
 	{
 		return str_pad($str, $len, $txt, STR_PAD_RIGHT);
 	}
 
-	static public function isEqual($value, $compare, $delta = 0.005)
+	public static function isEqual($value, $compare, $delta = 0.005)
 	{
 		return $compare < ($value + $delta) && ($value - $delta) < $compare;
 	}
 
-	static public function isGreater($value, $compare, $delta = 0.005)
+	public static function isGreater($value, $compare, $delta = 0.005)
 	{
 		return $value > ($compare + $delta);
 	}
 
-	static public function isLess($value, $compare, $delta = 0.005)
+	public static function isLess($value, $compare, $delta = 0.005)
 	{
 		return ($value + $delta) < $compare;
 	}
 	
-	static public function toMoney($value)
+	public static function toMoney($value)
 	{
 		return 'R$ '.number_format($value, 2, ',', '.');
 	}
 
-	static public function binarySearch($elem, $array, $cmp_fn) {
+	public static function binarySearch($elem, $array, $cmp_fn) {
 		$bot = 0;
 		$top = count($array) -1;
 		while($top >= $bot) 
@@ -97,7 +97,7 @@ class Util {
 		return false;
 	}
 
-	static public function removeAccent($str)
+	public static function removeAccent($str)
 	{
 		return strtr(
 			utf8_decode($str), 
@@ -112,7 +112,7 @@ class Util {
 	 *
 	 * @return int
 	 */
-	static public function getModulo11($digitos)
+	public static function getModulo11($digitos)
 	{
 		$sum = 0;
 		$mul = 1;
@@ -134,7 +134,7 @@ class Util {
 	 *
 	 * @return int
 	 */
-	static public function getModulo10($digitos)
+	public static function getModulo10($digitos)
 	{
 		$sum = 0;
 		$mul = 1;
@@ -159,7 +159,7 @@ class Util {
 	 *
 	 * @return int
 	 */
-	static public function getDAC($digitos, $div, $presente = 0)
+	public static function getDAC($digitos, $div, $presente = 0)
 	{
 		$ext = $div % 10;
 		if($div == 10)

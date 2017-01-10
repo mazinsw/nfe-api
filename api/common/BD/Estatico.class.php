@@ -28,6 +28,7 @@
 namespace BD;
 use IBPT;
 use Util;
+use Exception;
 
 class Estatico extends Banco {
 
@@ -114,6 +115,16 @@ class Estatico extends Banco {
 				$emissao = 'contingencia';
 				break;
 		}
+		switch ($modelo) {
+			case '55':
+				$modelo = 'nfe';
+				break;
+			case '65':
+				$modelo = 'nfce';
+				break;
+		}
+		if($modelo == 'nfce')
+			$emissao = 'normal'; // NFCe envia contingência pelo webservice normal
 		$array = $this->servicos[$emissao];
 		if(is_null($array))
 			throw new Exception('Falha ao obter o serviço da SEFAZ para o tipo de emissão "'.$emissao.'"', 404);
@@ -135,18 +146,18 @@ class Estatico extends Banco {
 			}
 			$array[$_modelo] = $node;
 		}
-		switch ($modelo) {
-			case '55':
-				$modelo = 'nfe';
-				break;
-			case '65':
-				$modelo = 'nfce';
-				break;
-		}
 		if(!is_null($modelo)) {
 			$array = $array[$modelo];
 			if(is_null($array))
 				throw new Exception('Falha ao obter o serviço da SEFAZ para o modelo de nota "'.$modelo.'"', 404);
+		}
+		switch ($ambiente) {
+			case '1':
+				$ambiente = 'producao';
+				break;
+			case '2':
+				$ambiente = 'homologacao';
+				break;
 		}
 		if(!is_null($modelo) && !is_null($ambiente)) {
 			$array = $array[$ambiente];

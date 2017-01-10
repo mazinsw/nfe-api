@@ -245,14 +245,14 @@ class Ajuste extends Configuracao implements Evento {
 	/**
 	 * Chamado quando o XML da nota foi gerado
 	 */
-	public function onNotaGerada(&$nota, &$xml) {
+	public function onNotaGerada($nota, $xml) {
 		//echo 'XML gerado!<br>';
 	}
 
 	/**
 	 * Chamado após o XML da nota ser assinado
 	 */
-	public function onNotaAssinada(&$nota, &$xml) {
+	public function onNotaAssinada($nota, $xml) {
 		//echo 'XML assinado!<br>';
 		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
 		file_put_contents($filename, $xml->saveXML());
@@ -263,22 +263,28 @@ class Ajuste extends Configuracao implements Evento {
 	/**
 	 * Chamado antes de enviar a nota para a SEFAZ
 	 */
-	public function onNotaEnviando(&$nota, &$xml) {
+	public function onNotaEnviando($nota, $xml) {
 		//echo 'Enviando XML...<br>';
 	}
 
 	/**
-	 * Chamado quando a forma de emissão da nota fiscal muda para normal ou
-	 * contigência
+	 * Chamado quando a forma de emissão da nota fiscal muda contigência
 	 */
-	public function onFormaEmissao(&$nota, $forma) {
-		echo 'Forma de emissão alterada para "'.$forma.'" <br>';
+	public function onNotaContingencia($nota, $offline) {
+		echo 'Forma de emissão alterada para "'.$nota->getEmissao().'" <br>';
+		// remove o XML salvo anteriormente com a emissão normal
+		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename) && $offline)
+			unlink($filename);
+		// incrementa o número da nota se existir a possibilidade de ter enviado com sucesso
+		if(!$offline)
+			$nota->setNumero($nota->getNumero() + 1);
 	}
 
 	/**
 	 * Chamado quando a nota foi enviada e aceita pela SEFAZ
 	 */
-	public function onNotaEnviada(&$nota, &$xml) {
+	public function onNotaEnviada($nota, $xml) {
 		//echo 'XML enviado com sucesso!<br>';
 		$filename = $this->getPastaXmlAutorizado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
 		file_put_contents($filename, $xml->saveXML());
@@ -288,7 +294,7 @@ class Ajuste extends Configuracao implements Evento {
 	 * Chamado quando a emissão da nota foi concluída com sucesso independente
 	 * da forma de emissão
 	 */
-	public function onNotaCompleto(&$nota, &$xml) {
+	public function onNotaCompleto($nota, $xml) {
 		//echo 'XML processado com sucesso!<br>';
 	}
 
@@ -296,9 +302,16 @@ class Ajuste extends Configuracao implements Evento {
 	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
 	 * é chamado quando entra em contigência)
 	 */
-	public function onNotaErro(&$nota, $e) {
+	public function onNotaErro($nota, $e) {
 		echo 'Falha no processamento da nota: '.$e->getMessage().'<br>';
-		die();
+	}
+
+	/**
+	 * Chamado quando um ou mais números de notas forem inutilizados
+	 */
+	public function onInutilizado($inutilizacao, $xml) {
+		$filename = $this->getPastaXmlInutilizado($inutilizacao->getAmbiente()) . '/' . $inutilizacao->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
 	}
 
 	public function toArray() {

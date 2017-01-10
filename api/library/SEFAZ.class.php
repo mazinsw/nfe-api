@@ -33,7 +33,7 @@ class SEFAZ {
 
 	private $notas;
 	private $configuracao;
-	static private $instance;
+	private static $instance;
 
 	public function __construct($sefaz = array()) {
 		$this->fromArray($sefaz);
@@ -91,7 +91,12 @@ class SEFAZ {
 		return $this;
 	}
 
-	public function processa() {
+	/**
+	 * Envia as notas adicionadas para a SEFAZ, caso não consiga, torna-as em contingência
+	 * todos os status são informados no evento da configuração, caso não possua evento, 
+	 * uma Exception será lançada na primeira falha
+	 */
+	public function autoriza() {
 		$evento = $this->getConfiguracao()->getEvento();
 		foreach ($this->getNotas() as $nota) {
 			try {
@@ -114,19 +119,21 @@ class SEFAZ {
 					} catch (Exception $e) {
 						if($nota->getEmissao() == NF::EMISSAO_CONTINGENCIA)
 							throw $e;
-						Log::debug('Mudando emissão para contingência: '.$e->getMessage());
-						$envia = false;
+						Log::debug('Mudando emissão para contingência: '.$e->getMessage().' - '.$nota->getID(true));
+						$msg = substr('Falha no envio da nota: '.$e->getMessage(), 0, 256);
 						$nota->setEmissao(NF::EMISSAO_CONTINGENCIA);
+						$nota->setDataContingencia(time());
+						$nota->setJustificativa($msg);
 						if(!is_null($evento))
-							$evento->onFormaEmissao($nota, $nota->getEmissao());
+							$evento->onNotaContingencia($nota, $e instanceof DomainException);
 						continue;
 					}
-					Log::debug('('.$autorizacao->getStatus().') - '.$autorizacao->getMotivo());
+					Log::debug('('.$autorizacao->getStatus().') - '.$autorizacao->getMotivo().' - '.$nota->getID(true));
 					if(is_null($nota->getProtocolo()))
 						throw new Exception($autorizacao->getMotivo(), $autorizacao->getStatus());
 					$dom = $nota->addProtocolo($dom);
 					// $dom = $nota->validar($dom); // valida após protocolada
-					Log::debug('('.$nota->getProtocolo()->getStatus().') - '.$nota->getProtocolo()->getMotivo());
+					Log::debug('('.$nota->getProtocolo()->getStatus().') - '.$nota->getProtocolo()->getMotivo().' - '.$nota->getID(true));
 					if(!is_null($evento))
 						$evento->onNotaEnviada($nota, $dom);
 					break;
@@ -141,6 +148,36 @@ class SEFAZ {
 					throw $e;
 			}
 		}
+	}
+
+	/* *
+	 * Inutiliza um intervalo de números de notas fiscais e insere o resultado no
+	 * próprio objeto de inutilização
+	 */
+	public function inutiliza($inutilizacao) {
+		$evento = $this->getConfiguracao()->getEvento();
+		try {
+			$dom = $inutilizacao->getNode()->ownerDocument;
+			$dom = $inutilizacao->assinar($dom);
+			$dom = $inutilizacao->validar($dom); // valida o XML da inutilização
+			$dom = $inutilizacao->envia($dom);
+			Log::debug('('.$inutilizacao->getStatus().') - '.$inutilizacao->getMotivo().' - '.$inutilizacao->getID(true));
+			if(!is_null($evento))
+				$evento->onInutilizado($inutilizacao, $dom);
+		} catch(Exception $e) {
+			Log::error('('.$e->getCode().') - '.$e->getMessage());
+			throw $e;
+		}
+	}
+
+	/**
+	 * Obtém as notas pendentes de autorização e envia para a SEFAZ 
+	 */
+	public function processa() {
+		$db = $this->getConfiguracao()->getBanco();
+		$notas = $db->getNotasPendentes();
+		$this->setNotas($notas);
+		$this->autoriza();
 	}
 
 }

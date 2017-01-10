@@ -26,12 +26,18 @@
  *
  */
 namespace NF;
+use NF;
+use SEFAZ;
+use Estado;
+use Exception;
+use DOMDocument;
+use FR3D\XmlDSig\Adapter\AdapterInterface;
+use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
+use ValidationException;
 
-class Inutilizacao implements NodeInterface {
+class Inutilizacao extends Retorno {
 
 	private $id;
-	private $ambiente;
-	private $uf;
 	private $ano;
 	private $cnpj;
 	private $modelo;
@@ -41,7 +47,7 @@ class Inutilizacao implements NodeInterface {
 	private $justificativa;
 
 	public function __construct($inutilizacao = array()) {
-		$this->fromArray($inutilizacao);
+		parent::__construct($inutilizacao);
 	}
 
 	/**
@@ -60,7 +66,7 @@ class Inutilizacao implements NodeInterface {
 	public function getID($normalize = false) {
 		if(!$normalize)
 			return $this->id;
-		return $this->id;
+		return 'ID'.$this->id;
 	}
 
 	public function setID($id) {
@@ -68,26 +74,10 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getAmbiente() {
-		return $this->ambiente;
-	}
-
-	public function setAmbiente($ambiente) {
-		$this->ambiente = $ambiente;
-		return $this;
-	}
-
-	public function getUF() {
-		return $this->uf;
-	}
-
-	public function setUF($uf) {
-		$this->uf = $uf;
-		return $this;
-	}
-
-	public function getAno() {
-		return $this->ano;
+	public function getAno($normalize = false) {
+		if(!$normalize)
+			return $this->ano;
+		return $this->ano % 100;
 	}
 
 	public function setAno($ano) {
@@ -95,7 +85,9 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getCNPJ() {
+	public function getCNPJ($normalize = false) {
+		if(!$normalize)
+			return $this->cnpj;
 		return $this->cnpj;
 	}
 
@@ -104,7 +96,9 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getModelo() {
+	public function getModelo($normalize = false) {
+		if(!$normalize)
+			return $this->modelo;
 		return $this->modelo;
 	}
 
@@ -113,7 +107,9 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getSerie() {
+	public function getSerie($normalize = false) {
+		if(!$normalize)
+			return $this->serie;
 		return $this->serie;
 	}
 
@@ -122,7 +118,9 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getInicio() {
+	public function getInicio($normalize = false) {
+		if(!$normalize)
+			return $this->inicio;
 		return $this->inicio;
 	}
 
@@ -131,7 +129,9 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getFinal() {
+	public function getFinal($normalize = false) {
+		if(!$normalize)
+			return $this->final;
 		return $this->final;
 	}
 
@@ -140,7 +140,9 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
-	public function getJustificativa() {
+	public function getJustificativa($normalize = false) {
+		if(!$normalize)
+			return $this->justificativa;
 		return $this->justificativa;
 	}
 
@@ -150,10 +152,8 @@ class Inutilizacao implements NodeInterface {
 	}
 
 	public function toArray() {
-		$inutilizacao = array();
+		$inutilizacao = parent::toArray();
 		$inutilizacao['id'] = $this->getID();
-		$inutilizacao['ambiente'] = $this->getAmbiente();
-		$inutilizacao['uf'] = $this->getUF();
 		$inutilizacao['ano'] = $this->getAno();
 		$inutilizacao['cnpj'] = $this->getCNPJ();
 		$inutilizacao['modelo'] = $this->getModelo();
@@ -169,9 +169,8 @@ class Inutilizacao implements NodeInterface {
 			$inutilizacao = $inutilizacao->toArray();
 		else if(!is_array($inutilizacao))
 			return $this;
+		parent::fromArray($inutilizacao);
 		$this->setID($inutilizacao['id']);
-		$this->setAmbiente($inutilizacao['ambiente']);
-		$this->setUF($inutilizacao['uf']);
 		$this->setAno($inutilizacao['ano']);
 		$this->setCNPJ($inutilizacao['cnpj']);
 		$this->setModelo($inutilizacao['modelo']);
@@ -182,38 +181,151 @@ class Inutilizacao implements NodeInterface {
 		return $this;
 	}
 
+	public function gerarID() {
+		$id = sprintf('%02d%02d%s%02d%03d%09d%09d',
+			$this->getUF(true),
+			$this->getAno(true), // 2 dígitos
+			$this->getCNPJ(true),
+			$this->getModelo(true),
+			$this->getSerie(true),
+			$this->getInicio(true),
+			$this->getFinal(true)
+		);
+		return $id;
+
+	}
+
+	public function envia($dom) {
+		$envio = new Envio();
+		$envio->setServico(Envio::SERVICO_INUTILIZACAO);
+		$envio->setAmbiente($this->getAmbiente());
+		$envio->setModelo($this->getModelo());
+		$envio->setEmissao(NF::EMISSAO_NORMAL);
+		$envio->setConteudo($dom);
+		$resp = $envio->envia();
+		$this->loadNode($resp);
+		if($this->getStatus() != '102')
+			throw new Exception($this->getMotivo(), $this->getStatus());
+		return $this->getReturnNode()->ownerDocument;
+	}
+
 	public function getNode($name = null) {
+		$this->setID($this->gerarID());
+
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$element = $dom->createElement(is_null($name)?'inutNFe':$name);
-		$element->appendChild($dom->createElement('infInut', $this->getID(true)));
-		$ambiente = $this->getAmbiente()->getNode();
-		$ambiente = $dom->importNode($ambiente, true);
-		$element->appendChild($ambiente);
-		$uf = $this->getUF()->getNode();
-		$uf = $dom->importNode($uf, true);
-		$element->appendChild($uf);
-		$ano = $this->getAno()->getNode();
-		$ano = $dom->importNode($ano, true);
-		$element->appendChild($ano);
-		$cnpj = $this->getCNPJ()->getNode();
-		$cnpj = $dom->importNode($cnpj, true);
-		$element->appendChild($cnpj);
-		$modelo = $this->getModelo()->getNode();
-		$modelo = $dom->importNode($modelo, true);
-		$element->appendChild($modelo);
-		$serie = $this->getSerie()->getNode();
-		$serie = $dom->importNode($serie, true);
-		$element->appendChild($serie);
-		$inicio = $this->getInicio()->getNode();
-		$inicio = $dom->importNode($inicio, true);
-		$element->appendChild($inicio);
-		$final = $this->getFinal()->getNode();
-		$final = $dom->importNode($final, true);
-		$element->appendChild($final);
-		$justificativa = $this->getJustificativa()->getNode();
-		$justificativa = $dom->importNode($justificativa, true);
-		$element->appendChild($justificativa);
+		$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NF::PORTAL);
+		$versao = $dom->createAttribute('versao');
+		$versao->value = NF::VERSAO;
+		$element->appendChild($versao);
+
+		$info = $dom->createElement('infInut');
+		$id = $dom->createAttribute('Id');
+		$id->value = $this->getID(true);
+		$info->appendChild($id);
+
+		$info->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
+		$info->appendChild($dom->createElement('xServ', 'INUTILIZAR'));
+		$info->appendChild($dom->createElement('cUF', $this->getUF(true)));
+		$info->appendChild($dom->createElement('ano', $this->getAno(true)));
+		$info->appendChild($dom->createElement('CNPJ', $this->getCNPJ(true)));
+		$info->appendChild($dom->createElement('mod', $this->getModelo(true)));
+		$info->appendChild($dom->createElement('serie', $this->getSerie(true)));
+		$info->appendChild($dom->createElement('nNFIni', $this->getInicio(true)));
+		$info->appendChild($dom->createElement('nNFFin', $this->getFinal(true)));
+		$info->appendChild($dom->createElement('xJust', $this->getJustificativa(true)));
+		$element->appendChild($info);
+		$dom->appendChild($element);
 		return $element;
+	}
+
+	public function getReturnNode() {
+		$outros = parent::getNode('infInut');
+		$element = $this->getNode('retInutNFe');
+		$dom = $element->ownerDocument;
+		$info = $dom->getElementsByTagName('infInut')->item(0);
+		$info->removeAttribute('Id');
+		$removeTags = array('tpAmb', 'xServ', 'xJust');
+		foreach ($removeTags as $key) {
+			$node = $info->getElementsByTagName($key)->item(0);
+			$info->removeChild($node);
+		}
+		$uf = $info->getElementsByTagName('cUF')->item(0);
+		foreach ($outros->childNodes as $node) {
+			$node = $dom->importNode($node, true);
+			$list = $info->getElementsByTagName($node->nodeName);
+			if($list->length == 1)
+				continue;
+			switch ($node->nodeName) {
+				case 'dhRecbto':
+				case 'nProt':
+					$info->appendChild($node);
+					break;
+				default:
+					$info->insertBefore($node, $uf);
+			}
+		}
+		return $element;
+	}
+
+
+	public function loadNode($dom, $name = null) {
+		$tag = is_null($name)?'infInut':$name;
+		parent::loadNode($dom, $tag);
+		if($this->getStatus() != '102')
+			return $this;
+		$info = $dom->getElementsByTagName($tag)->item(0);
+		$this->setAno($info->getElementsByTagName('ano')->item(0)->nodeValue);
+		$this->setCNPJ($info->getElementsByTagName('CNPJ')->item(0)->nodeValue);
+		$this->setModelo($info->getElementsByTagName('mod')->item(0)->nodeValue);
+		$this->setSerie($info->getElementsByTagName('serie')->item(0)->nodeValue);
+		$this->setInicio($info->getElementsByTagName('nNFIni')->item(0)->nodeValue);
+		$this->setFinal($info->getElementsByTagName('nNFFin')->item(0)->nodeValue);
+		return $this;
+	}
+
+	/**
+	 * Assina o XML com a assinatura eletrônica do tipo A1
+	 */
+	public function assinar($dom = null) {
+		if(is_null($dom)) {
+			$xml = $this->getNode();
+			$dom = $xml->ownerDocument;
+		}
+		$config = SEFAZ::getInstance()->getConfiguracao();
+
+		$adapter = new XmlseclibsAdapter();
+		$adapter->setPrivateKey($config->getChavePrivada());
+		$adapter->setPublicKey($config->getChavePublica());
+		$adapter->addTransform(AdapterInterface::ENVELOPED);
+		$adapter->addTransform(AdapterInterface::XML_C14N);
+		$adapter->sign($dom, 'infInut');
+		return $dom;
+	}
+
+	/**
+	 * Valida o documento após assinar
+	 */
+	public function validar(&$dom) {
+		$dom->loadXML($dom->saveXML());
+		$xsd_path = dirname(dirname(dirname(__FILE__))) . '/schema';
+		$xsd_file = $xsd_path . '/inutNFe_v3.10.xsd';
+		if(!file_exists($xsd_file))
+			throw new Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+		// Enable user error handling
+		$save = libxml_use_internal_errors(true);
+		if ($dom->schemaValidate($xsd_file)) {
+			libxml_use_internal_errors($save);
+			return $dom;
+		}
+		$msg = array();
+		$errors = libxml_get_errors();
+		foreach ($errors as $error) {
+			$msg[] = 'Não foi possível validar o XML: '.$error->message;
+		}
+		libxml_clear_errors();
+		libxml_use_internal_errors($save);
+		throw new ValidationException($msg);
 	}
 
 }
