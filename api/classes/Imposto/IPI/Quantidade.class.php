@@ -26,9 +26,10 @@
  *
  */
 namespace Imposto\IPI;
-use Imposto;
-use DOMDocument;
 use Util;
+use Imposto;
+use Exception;
+use DOMDocument;
 
 /**
  * Quantidade x valor Unidade de Produto
@@ -90,6 +91,35 @@ class Quantidade extends Imposto {
 		$element->appendChild($dom->createElement('qUnid', $this->getQuantidade(true)));
 		$element->appendChild($dom->createElement('vUnid', $this->getPreco(true)));
 		$element->appendChild($dom->createElement('vIPI', $this->getValor(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'IPITrib':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
+		$_fields = $element->getElementsByTagName('qUnid');
+		if($_fields->length > 0)
+			$quantidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "qUnid" do campo "Quantidade" não encontrada', 404);
+		$this->setQuantidade($quantidade);
+		$_fields = $element->getElementsByTagName('vUnid');
+		if($_fields->length > 0)
+			$preco = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vUnid" do campo "Preco" não encontrada', 404);
+		$this->setPreco($preco);
 		return $element;
 	}
 

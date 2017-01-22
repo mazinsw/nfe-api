@@ -3,6 +3,8 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 require_once(__DIR__ . '/../api/autoload.php');
 
+$sefaz = SEFAZ::init();
+
 $transporte = new Transporte();
 $transporte->setFrete(Transporte::FRETE_EMITENTE);
 $transporte->getVeiculo()
@@ -32,6 +34,18 @@ $endereco->setNumero('123');
 $transportador->setEndereco($endereco);
 $transporte->setTransportador($transportador);
 
+$retencao = new \Transporte\Tributo();
+$retencao->setServico(300.00);
+$retencao->setBase(300.00);
+$retencao->setAliquota(12.00);
+$retencao->setCFOP('5351');
+$retencao->getMunicipio()
+		 ->setNome('Paranavaí')
+		 ->getEstado()
+		 ->setUF('PR');
+
+$transporte->setRetencao($retencao);
+
 $volume = new Volume();
 $volume->setQuantidade(2);
 $volume->setEspecie('caixa');
@@ -46,7 +60,7 @@ $volume->addLacre(new Lacre(array('numero' => 123456)));
 $volume->addLacre(new Lacre(array('numero' => 123457)));
 $volume->addLacre(new Lacre(array('numero' => 123458)));
 
-$transporte->setVolume($volume);
+$transporte->addVolume($volume);
 
 $xml = $transporte->getNode();
 $dom = $xml->ownerDocument;

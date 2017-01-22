@@ -175,4 +175,74 @@ class Endereco implements NodeInterface {
 		return $element;
 	}
 
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'enderEmit':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('xLgr');
+		if($_fields->length > 0)
+			$logradouro = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "xLgr" do campo "Logradouro" não encontrada', 404);
+		$this->setLogradouro($logradouro);
+		$_fields = $element->getElementsByTagName('nro');
+		if($_fields->length > 0)
+			$numero = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "nro" do campo "Numero" não encontrada', 404);
+		$this->setNumero($numero);
+		$_fields = $element->getElementsByTagName('xCpl');
+		$complemento = null;
+		if($_fields->length > 0)
+			$complemento = $_fields->item(0)->nodeValue;
+		$this->setComplemento($complemento);
+		$_fields = $element->getElementsByTagName('xBairro');
+		if($_fields->length > 0)
+			$bairro = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "xBairro" do campo "Bairro" não encontrada', 404);
+		$this->setBairro($bairro);
+		$_fields = $element->getElementsByTagName('cMun');
+		if($_fields->length > 0)
+			$codigo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cMun" do objeto "Municipio" não encontrada', 404);
+		$this->getMunicipio()->setCodigo($codigo);
+		$_fields = $element->getElementsByTagName('xMun');
+		if($_fields->length > 0)
+			$nome = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "xMun" do objeto "Municipio" não encontrada', 404);
+		$this->getMunicipio()->setNome($nome);
+		$_fields = $element->getElementsByTagName('UF');
+		if($_fields->length > 0)
+			$uf = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "UF" do campo "UF" não encontrada', 404);
+		$this->getMunicipio()->getEstado()->setUF($uf);
+		$_fields = $element->getElementsByTagName('CEP');
+		if($_fields->length > 0)
+			$cep = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CEP" do campo "CEP" não encontrada', 404);
+		$this->setCEP($cep);
+		$_fields = $element->getElementsByTagName('cPais');
+		if($_fields->length > 0) {
+			$codigo = $_fields->item(0)->nodeValue;
+		} else
+			throw new Exception('Tag "cPais" do objeto "Pais" não encontrada', 404);
+		$this->getPais()->setCodigo($codigo);
+		$_fields = $element->getElementsByTagName('xPais');
+		if($_fields->length > 0) {
+			$nome = $_fields->item(0)->nodeValue;
+		} else
+			throw new Exception('Tag "xPais" do objeto "Pais" não encontrada', 404);
+		$this->getPais()->setNome($nome);
+		return $element;
+	}
+
 }

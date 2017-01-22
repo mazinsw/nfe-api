@@ -26,9 +26,10 @@
  *
  */
 namespace Imposto\COFINS;
-use Imposto;
-use DOMDocument;
 use Util;
+use Imposto;
+use Exception;
+use DOMDocument;
 
 class Generico extends Imposto {
 
@@ -72,6 +73,29 @@ class Generico extends Imposto {
 		$element = $dom->createElement(is_null($name)?'COFINSOutr':$name);
 		$element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
 		$element->appendChild($dom->createElement('vCOFINS', $this->getValor(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'COFINSOutr':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
+		$_fields = $element->getElementsByTagName('vCOFINS');
+		if($_fields->length > 0)
+			$valor = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vCOFINS" do campo "Valor" não encontrada', 404);
+		$this->setValor($valor);
 		return $element;
 	}
 

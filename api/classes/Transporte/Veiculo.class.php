@@ -26,8 +26,9 @@
  *
  */
 namespace Transporte;
-use NodeInterface;
+use Exception;
 use DOMDocument;
+use NodeInterface;
 
 class Veiculo implements NodeInterface {
 
@@ -99,6 +100,34 @@ class Veiculo implements NodeInterface {
 		if(!is_null($this->getRNTC())) {
 			$element->appendChild($dom->createElement('RNTC', $this->getRNTC(true)));
 		}
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'veicTransp':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" do Veiculo não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('placa');
+		if($_fields->length > 0)
+			$placa = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "placa" do campo "Placa" não encontrada no Veiculo', 404);
+		$this->setPlaca($placa);
+		$_fields = $element->getElementsByTagName('UF');
+		if($_fields->length > 0)
+			$uf = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "UF" do campo "UF" não encontrada no Veiculo', 404);
+		$this->setUF($uf);
+		$_fields = $element->getElementsByTagName('RNTC');
+		$rntc = null;
+		if($_fields->length > 0)
+			$rntc = $_fields->item(0)->nodeValue;
+		$this->setRNTC($rntc);
 		return $element;
 	}
 

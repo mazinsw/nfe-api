@@ -154,4 +154,59 @@ abstract class Pessoa implements NodeInterface {
 		return $this;
 	}
 
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'emit':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('xNome');
+		if($_fields->length > 0)
+			$razao_social = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "xNome" do campo "RazaoSocial" não encontrada', 404);
+		$this->setRazaoSocial($razao_social);
+		$cnpj = null;
+		$_fields = $element->getElementsByTagName('CNPJ');
+		if($_fields->length > 0)
+			$cnpj = $_fields->item(0)->nodeValue;
+		else if($this instanceof Emitente)
+			throw new Exception('Tag "CNPJ" do campo "CNPJ" não encontrada', 404);
+		$this->setCNPJ($cnpj);
+		$ie = null;
+		$_fields = $element->getElementsByTagName('IE');
+		if($_fields->length > 0)
+			$ie = $_fields->item(0)->nodeValue;
+		else if($this instanceof Emitente)
+			throw new Exception('Tag "IE" do campo "IE" não encontrada', 404);
+		$this->setIE($ie);
+		$_fields = $element->getElementsByTagName('IM');
+		$im = null;
+		if($_fields->length > 0)
+			$im = $_fields->item(0)->nodeValue;
+		$this->setIM($im);
+		if($this instanceof Emitente)
+			$tag_ender = 'enderEmit';
+		else
+			$tag_ender = 'enderDest';
+		$endereco = $this->getEndereco();
+		if(is_null($endereco))
+			$endereco = new Endereco();
+		$_fields = $element->getElementsByTagName($tag_ender);
+		if($_fields->length > 0) {
+			$endereco->loadNode($_fields->item(0), $tag_ender);
+		} else
+			throw new Exception('Tag "'.$tag_ender.'" do objeto "Endereco" não encontrada', 404);
+		$this->setEndereco($endereco);
+		$ender = $_fields->item(0);
+		$_fields = $ender->getElementsByTagName('fone');
+		$telefone = null;
+		if($_fields->length > 0)
+			$telefone = $_fields->item(0)->nodeValue;
+		$this->setTelefone($telefone);
+		return $element;
+	}
+
 }

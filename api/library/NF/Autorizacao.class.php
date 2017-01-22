@@ -27,8 +27,8 @@
  */
 namespace NF;
 use NF;
+use SEFAZ;
 use DOMDocument;
-use Util;
 
 class Autorizacao extends Retorno {
 
@@ -51,6 +51,7 @@ class Autorizacao extends Retorno {
 	}
 
 	private function getConteudo($dom) {
+		$config = SEFAZ::getInstance()->getConfiguracao();
 		$dob = new DOMDocument('1.0', 'UTF-8');
 		$envio = $dob->createElement('enviNFe');
 		$envio->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NF::PORTAL);
@@ -58,7 +59,7 @@ class Autorizacao extends Retorno {
 		$versao->value = NF::VERSAO;
 		$envio->appendChild($versao);
 		$envio->appendChild($dob->createElement('idLote', self::genLote()));
-		$envio->appendChild($dob->createElement('indSinc', 1));
+		$envio->appendChild($dob->createElement('indSinc', $config->getSincrono(true)));
 		// Corrige xmlns:default
 		// $data = $dob->importNode($dom->documentElement, true);
 		// $envio->appendChild($data);
@@ -79,20 +80,25 @@ class Autorizacao extends Retorno {
 		$envio->setConteudo($this->getConteudo($dom));
 		$resp = $envio->envia();
 		$this->loadNode($resp);
-		if($this->getStatus() == '104') {
+		if($this->isProcessado()) {
 			$protocolo = new Protocolo();
 			$protocolo->loadNode($resp);
-			$nota->setProtocolo($protocolo);
-		} else {
-			$nota->setProtocolo(null);
+			if($protocolo->isAutorizado())
+				$nota->setProtocolo($protocolo);
+			return $protocolo;
+		} else if($this->isRecebido()) {
+			$recibo = new Recibo($this->toArray());
+			$recibo->setModelo($nota->getModelo());
+			$recibo->loadNode($resp, Recibo::INFO_TAGNAME);
+			return $recibo;
 		}
+		return $this;
 	}
 
-	public function loadNode($dom, $name = null) {
+	public function loadNode($element, $name = null) {
 		$tag = is_null($name)?'retEnviNFe':$name;
-		parent::loadNode($dom, $tag);
-		$retorno = $dom->getElementsByTagName($tag)->item(0);
-		return $this;
+		$element = parent::loadNode($element, $tag);
+		return $element;
 	}
 
 }

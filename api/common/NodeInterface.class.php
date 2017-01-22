@@ -28,4 +28,5 @@
 
 interface NodeInterface {
 	public function getNode($name = null);
+	public function loadNode($element, $name = null);
 }

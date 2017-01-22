@@ -106,6 +106,35 @@ abstract class Imposto implements NodeInterface {
 	}
 
 	public function setGrupo($grupo) {
+		switch ($grupo) {
+			case 'ICMS':
+				$grupo = self::GRUPO_ICMS;
+				break;
+			case 'PIS':
+				$grupo = self::GRUPO_PIS;
+				break;
+			case 'COFINS':
+				$grupo = self::GRUPO_COFINS;
+				break;
+			case 'IPI':
+				$grupo = self::GRUPO_IPI;
+				break;
+			case 'II':
+				$grupo = self::GRUPO_II;
+				break;
+			case 'PISST':
+				$grupo = self::GRUPO_PISST;
+				break;
+			case 'COFINSST':
+				$grupo = self::GRUPO_COFINSST;
+				break;
+			case 'ISSQN':
+				$grupo = self::GRUPO_ISSQN;
+				break;
+			case 'ICMSUFDest':
+				$grupo = self::GRUPO_ICMSUFDEST;
+				break;
+		}
 		$this->grupo = $grupo;
 		return $this;
 	}
@@ -190,6 +219,128 @@ abstract class Imposto implements NodeInterface {
 		$this->setAliquota($imposto['aliquota']);
 		$this->setBase($imposto['base']);
 		return $this;
+	}
+	public static function loadImposto($element, $grupo = null) {
+		switch ($element->tagName) {
+			/* Grupo COFINS */
+			case 'COFINSAliq':
+				$imposto = new \Imposto\COFINS\Aliquota();
+				break;
+			case 'COFINSOutr':
+				$imposto = new \Imposto\COFINS\Generico();
+				break;
+			case 'COFINSNT':
+				$imposto = new \Imposto\COFINS\Isento();
+				break;
+			case 'COFINSQtde':
+				$imposto = new \Imposto\COFINS\Quantidade();
+				break;
+			/* Grupo COFINSST */
+			case 'COFINSST':
+				$_fields = $element->getElementsByTagName('pCOFINS');
+				if($_fields->length > 0)
+					$imposto = new \Imposto\COFINSST\Aliquota();
+				else
+					$imposto = new \Imposto\COFINSST\Quantidade();
+				break;
+			/* Grupo ICMS */
+			case 'ICMS60':
+				$imposto = new \Imposto\ICMS\Cobrado();
+				break;
+			case 'ICMS10':
+				$imposto = new \Imposto\ICMS\Cobranca();
+				break;
+			case 'ICMS51':
+				$imposto = new \Imposto\ICMS\Diferido();
+				break;
+			case 'ICMS90':
+				$imposto = new \Imposto\ICMS\Generico();
+				break;
+			case 'ICMS00':
+				$imposto = new \Imposto\ICMS\Integral();
+				break;
+			case 'ICMS40':
+				$imposto = new \Imposto\ICMS\Isento();
+				break;
+			case 'ICMS70':
+				$imposto = new \Imposto\ICMS\Mista();
+				break;
+			case 'IMCS30':
+				$imposto = new \Imposto\ICMS\Parcial();
+				break;
+			case 'ICMSPart':
+				$imposto = new \Imposto\ICMS\Partilha();
+				break;
+			case 'ICMS20':
+				$imposto = new \Imposto\ICMS\Reducao();
+				break;
+			case 'ICMSST':
+				$imposto = new \Imposto\ICMS\Substituto();
+				break;
+			/* Grupo COFINS Simples */
+			case 'ICMSSN500':
+				$imposto = new \Imposto\ICMS\Simples\Cobrado();
+				break;
+			case 'ICMSSN201':
+				$imposto = new \Imposto\ICMS\Simples\Cobranca();
+				break;
+			case 'ICMSSN900':
+				$imposto = new \Imposto\ICMS\Simples\Generico();
+				break;
+			case 'ICMSSN102':
+				$imposto = new \Imposto\ICMS\Simples\Isento();
+				break;
+			case 'ICMSSN101':
+				$imposto = new \Imposto\ICMS\Simples\Normal();
+				break;
+			case 'IMCSSN202':
+				$imposto = new \Imposto\ICMS\Simples\Parcial();
+				break;
+			/* Grupo IPI */
+			case 'IPITrib':
+				$_fields = $element->getElementsByTagName('pIPI');
+				if($_fields->length > 0)
+					$imposto = new \Imposto\IPI\Aliquota();
+				else
+					$imposto = new \Imposto\IPI\Quantidade();
+				break;
+			case 'IPINT':
+				$imposto = new \Imposto\IPI\Isento();
+				break;
+			/* Grupo PIS */
+			case 'PISAliq':
+				$imposto = new \Imposto\PIS\Aliquota();
+				break;
+			case 'PISOutr':
+				$imposto = new \Imposto\PIS\Generico();
+				break;
+			case 'PISNT':
+				$imposto = new \Imposto\PIS\Isento();
+				break;
+			case 'PISQtde':
+				$imposto = new \Imposto\PIS\Quantidade();
+				break;
+			/* Grupo PISST */
+			case 'PISST':
+				$_fields = $element->getElementsByTagName('pPIS');
+				if($_fields->length > 0)
+					$imposto = new \Imposto\PISST\Aliquota();
+				else
+					$imposto = new \Imposto\PISST\Quantidade();
+				break;
+			/* Grupo II básico */
+			case 'II':
+				$imposto = new \Imposto\II();
+				break;
+			/* Grupo IPI básico */
+			case 'IPI':
+				$imposto = new \Imposto\IPI();
+				break;
+			default:
+				return false;
+		}
+		$imposto->loadNode($element, $element->tagName);
+		return $imposto;
 	}
 
 }

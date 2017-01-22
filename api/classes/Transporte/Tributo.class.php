@@ -29,6 +29,7 @@ namespace Transporte;
 use Imposto;
 use DOMDocument;
 use Util;
+use Municipio;
 
 /**
  * ICMS retido do Transportador
@@ -109,6 +110,49 @@ class Tributo extends Imposto {
 		$municipio = $this->getMunicipio();
 		$municipio->checkCodigos();
 		$element->appendChild($dom->createElement('cMunFG', $municipio->getCodigo(true)));
+		return $element;
+	}
+
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'retTransp':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" do Tributo não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('vServ');
+		if($_fields->length > 0)
+			$servico = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vServ" do campo "Servico" não encontrada no Tributo', 404);
+		$this->setServico($servico);
+		$_fields = $element->getElementsByTagName('vBCRet');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBCRet" do campo "Base" não encontrada no Tributo', 404);
+		$this->setBase($base);
+		$_fields = $element->getElementsByTagName('pICMSRet');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pICMSRet" do campo "Aliquota" não encontrada no Tributo', 404);
+		$this->setAliquota($aliquota);
+		$_fields = $element->getElementsByTagName('CFOP');
+		if($_fields->length > 0)
+			$cfop = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CFOP" do campo "CFOP" não encontrada no Tributo', 404);
+		$this->setCFOP($cfop);
+		$_fields = $element->getElementsByTagName('cMunFG');
+		$municipio = null;
+		if($_fields->length > 0) {
+			$municipio = new Municipio();
+			$municipio->setCodigo($_fields->item(0)->nodeValue);
+		}
+		$this->setMunicipio($municipio);
 		return $element;
 	}
 

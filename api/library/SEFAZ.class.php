@@ -25,6 +25,7 @@
  * SOFTWARE.
  *
  */
+use NF\Tarefa;
 
 /**
  * Classe que envia uma ou mais notas fiscais para os servidores da sefaz
@@ -91,63 +92,138 @@ class SEFAZ {
 		return $this;
 	}
 
+	private function despacha($nota, &$dom, $retorno) {
+		$evento = $this->getConfiguracao()->getEvento();
+		if($retorno->isRecebido()) {
+			Log::debug('SEFAZ.despacha - Recibo: '.$retorno->getNumero().' da '.$nota->getID(true));
+			$evento->onNotaProcessando($nota, $dom, $retorno);
+		} else if($retorno->isAutorizado()) {
+			$dom = $nota->addProtocolo($dom);
+			Log::debug('SEFAZ.despacha('.$retorno->getStatus().') - '.$retorno->getMotivo().
+				', Protocolo: '.$retorno->getNumero().' - '.$nota->getID(true));
+			$evento->onNotaAutorizada($nota, $dom, $retorno);
+		} else if($retorno->isDenegada()) {
+			$evento->onNotaDenegada($nota, $dom, $retorno);
+		} else if($retorno->isCancelado()) {
+			$evento->onNotaCancelada($nota, $dom, $retorno);
+		} else {
+			$evento->onNotaRejeitada($nota, $dom, $retorno);
+			throw new Exception($retorno->getMotivo(), $retorno->getStatus());
+		}
+	}
+
 	/**
 	 * Envia as notas adicionadas para a SEFAZ, caso não consiga, torna-as em contingência
 	 * todos os status são informados no evento da configuração, caso não possua evento, 
 	 * uma Exception será lançada na primeira falha
 	 */
 	public function autoriza() {
+		$i = 0;
 		$evento = $this->getConfiguracao()->getEvento();
 		foreach ($this->getNotas() as $nota) {
 			try {
 				$envia = true;
 				do {
 					$dom = $nota->getNode()->ownerDocument;
-					if(!is_null($evento))
-						$evento->onNotaGerada($nota, $dom);
+					$evento->onNotaGerada($nota, $dom);
 					$dom = $nota->assinar($dom);
+					$evento->onNotaAssinada($nota, $dom);
 					$dom = $nota->validar($dom); // valida o XML da nota
-					if(!is_null($evento))
-						$evento->onNotaAssinada($nota, $dom);
+					$evento->onNotaValidada($nota, $dom);
 					if(!$envia)
 						break;
-					if(!is_null($evento))
-						$evento->onNotaEnviando($nota, $dom);
+					$evento->onNotaEnviando($nota, $dom);
 					$autorizacao = new NF\Autorizacao();
 					try {
-						$autorizacao->envia($nota, $dom);
+						$retorno = $autorizacao->envia($nota, $dom);
 					} catch (Exception $e) {
+						$offline = $e instanceof DomainException;
+						if(!$offline)
+							$evento->onNotaPendente($nota, $dom);
 						if($nota->getEmissao() == NF::EMISSAO_CONTINGENCIA)
 							throw $e;
-						Log::debug('Mudando emissão para contingência: '.$e->getMessage().' - '.$nota->getID(true));
+						Log::debug('SEFAZ.autoriza('.$e->getCode().') - Mudando emissão para contingência: '.$e->getMessage().' - '.$nota->getID(true));
 						$msg = substr('Falha no envio da nota: '.$e->getMessage(), 0, 256);
 						$nota->setEmissao(NF::EMISSAO_CONTINGENCIA);
 						$nota->setDataContingencia(time());
 						$nota->setJustificativa($msg);
-						if(!is_null($evento))
-							$evento->onNotaContingencia($nota, $e instanceof DomainException);
+						$evento->onNotaContingencia($nota, $offline);
+						$envia = false;
 						continue;
 					}
-					Log::debug('('.$autorizacao->getStatus().') - '.$autorizacao->getMotivo().' - '.$nota->getID(true));
-					if(is_null($nota->getProtocolo()))
-						throw new Exception($autorizacao->getMotivo(), $autorizacao->getStatus());
-					$dom = $nota->addProtocolo($dom);
-					// $dom = $nota->validar($dom); // valida após protocolada
-					Log::debug('('.$nota->getProtocolo()->getStatus().') - '.$nota->getProtocolo()->getMotivo().' - '.$nota->getID(true));
-					if(!is_null($evento))
-						$evento->onNotaEnviada($nota, $dom);
+					Log::debug('SEFAZ.autoriza('.$retorno->getStatus().') - '.$retorno->getMotivo().' - '.$nota->getID(true));
+					$this->despacha($nota, $dom, $retorno);
 					break;
 				} while (true);
-				if(!is_null($evento))
-					$evento->onNotaCompleto($nota, $dom);
+				$evento->onNotaCompleto($nota, $dom);
+				$i++;
 			} catch(Exception $e) {
-				Log::error('('.$e->getCode().') - '.$e->getMessage());
-				if(!is_null($evento))
-					$evento->onNotaErro($nota, $e);
-				else
-					throw $e;
+				Log::error('SEFAZ.autoriza('.$e->getCode().') - '.$e->getMessage());
+				$evento->onNotaErro($nota, $e);
 			}
 		}
+		return $i;
+	}
+
+	/**
+	 * Consulta o status das notas em processamento
+	 */
+	public function consulta($pendencias) {
+		$i = 0;
+		$evento = $this->getConfiguracao()->getEvento();
+		foreach ($pendencias as $pendencia) {
+			$nota = $pendencia->getNota();
+			try {
+				$retorno = $pendencia->executa();
+				$dom = $pendencia->getDocumento();
+				Log::debug('SEFAZ.consulta('.$retorno->getStatus().') - '.$retorno->getMotivo().' - '.$nota->getID(true));
+				$this->despacha($nota, $dom, $retorno);
+				$evento->onNotaCompleto($nota, $dom);
+				$pendencia->setDocumento($dom);
+				$evento->onTarefaExecutada($pendencia, $retorno);
+				$i++;
+			} catch(Exception $e) {
+				Log::error('SEFAZ.consulta('.$e->getCode().') - '.$e->getMessage());
+				$evento->onNotaErro($nota, $e);
+			}
+		}
+		return $i;
+	}
+
+	/* Consulta se as notas existem e cancela ou inutiliza seus números 
+	 * Também processa pedido de inutilização e cancelamento de notas 
+	 */
+	public function executa($tarefas) {
+		$i = 0;
+		$evento = $this->getConfiguracao()->getEvento();
+		foreach ($tarefas as $tarefa) {
+			try {
+				$save_dom = $tarefa->getDocumento();
+				$retorno = $tarefa->executa();
+				$dom = $tarefa->getDocumento();
+				Log::debug('SEFAZ.executa('.$retorno->getStatus().') - '.$retorno->getMotivo().
+					' - Tarefa: '.$tarefa->getID());
+				switch ($tarefa->getAcao()) {
+					case Tarefa::ACAO_INUTILIZAR:
+						$inutilizacao = $tarefa->getAgente();
+						Log::debug('SEFAZ.executa[inutiliza]('.$inutilizacao->getStatus().') - '.
+							$inutilizacao->getMotivo().' - '.$inutilizacao->getID(true));
+						$evento->onInutilizado($inutilizacao, $dom);
+						break;
+					case Tarefa::ACAO_CANCELAR:
+						$nota = $tarefa->getNota();
+						$this->despacha($nota, $save_dom, $retorno);
+						$evento->onNotaCompleto($nota, $save_dom);
+						break;
+				}
+				$evento->onTarefaExecutada($tarefa, $retorno);
+				$i++;
+			} catch(Exception $e) {
+				Log::error('SEFAZ.executa('.$e->getCode().') - '.$e->getMessage());
+				$evento->onTarefaErro($tarefa, $e);
+			}
+		}
+		return $i;
 	}
 
 	/* *
@@ -155,29 +231,51 @@ class SEFAZ {
 	 * próprio objeto de inutilização
 	 */
 	public function inutiliza($inutilizacao) {
-		$evento = $this->getConfiguracao()->getEvento();
+		$tarefa = new Tarefa();
+		$tarefa->setAcao(Tarefa::ACAO_INUTILIZAR);
+		$tarefa->setAgente($inutilizacao);
 		try {
-			$dom = $inutilizacao->getNode()->ownerDocument;
-			$dom = $inutilizacao->assinar($dom);
-			$dom = $inutilizacao->validar($dom); // valida o XML da inutilização
-			$dom = $inutilizacao->envia($dom);
-			Log::debug('('.$inutilizacao->getStatus().') - '.$inutilizacao->getMotivo().' - '.$inutilizacao->getID(true));
-			if(!is_null($evento))
-				$evento->onInutilizado($inutilizacao, $dom);
+			$this->executa(array($tarefa));
 		} catch(Exception $e) {
-			Log::error('('.$e->getCode().') - '.$e->getMessage());
-			throw $e;
+			Log::error('SEFAZ.inutiliza('.$e->getCode().') - '.$e->getMessage());
+			return false;
 		}
+		return true;
 	}
 
 	/**
 	 * Obtém as notas pendentes de autorização e envia para a SEFAZ 
 	 */
 	public function processa() {
-		$db = $this->getConfiguracao()->getBanco();
-		$notas = $db->getNotasPendentes();
-		$this->setNotas($notas);
-		$this->autoriza();
+		$i = 0;
+		/* Envia as notas não enviadas, rejeitadas e em contingência */
+		try {
+			$db = $this->getConfiguracao()->getBanco();
+			$notas = $db->getNotasAbertas();
+			$this->setNotas($notas);
+			$i += $this->autoriza();
+		} catch (Exception $e) {
+			Log::error('SEFAZ.processa[autoriza]('.$e->getCode().') - '.$e->getMessage());
+		}
+		/* Consulta o status das notas em processamento */
+		try {
+			$db = $this->getConfiguracao()->getBanco();
+			$pendencias = $db->getNotasPendentes();
+			$i += $this->consulta($pendencias);
+		} catch (Exception $e) {
+			Log::error('SEFAZ.processa[pendentes]('.$e->getCode().') - '.$e->getMessage());
+		}
+		/* Consulta se as notas existem e cancela ou inutiliza seus números 
+		 * Também processa pedido de inutilização e cancelamento de notas 
+		 */
+		try {
+			$db = $this->getConfiguracao()->getBanco();
+			$tarefas = $db->getNotasTarefas();
+			$i += $this->executa($tarefas);
+		} catch (Exception $e) {
+			Log::error('SEFAZ.processa[tarefas]('.$e->getCode().') - '.$e->getMessage());
+		}
+		return $i;
 	}
 
 }

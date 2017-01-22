@@ -96,6 +96,8 @@ class Isento extends Generico {
 	}
 
 	public function setDesoneracao($desoneracao) {
+		if(trim($desoneracao) != '')
+			$desoneracao = floatval($desoneracao);
 		$this->desoneracao = $desoneracao;
 		return $this;
 	}
@@ -179,6 +181,22 @@ class Isento extends Generico {
 			$element->appendChild($dom->createElement('vICMSDeson', $this->getDesoneracao(true)));
 		if(!is_null($this->getDesoneracao()))
 			$element->appendChild($dom->createElement('motDesICMS', $this->getMotivo(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMS40':$name;
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('vICMSDeson');
+		$desoneracao = null;
+		if($_fields->length > 0)
+			$desoneracao = $_fields->item(0)->nodeValue;
+		$this->setDesoneracao($desoneracao);
+		$_fields = $element->getElementsByTagName('motDesICMS');
+		$motivo = null;
+		if($_fields->length > 0)
+			$motivo = $_fields->item(0)->nodeValue;
+		$this->setMotivo($motivo);
 		return $element;
 	}
 

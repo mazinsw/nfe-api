@@ -7,4 +7,4 @@ $sefaz = SEFAZ::init();
 $banco = SEFAZ::getInstance()->getConfiguracao()->getBanco();
 $emitente = SEFAZ::getInstance()->getConfiguracao()->getEmitente();
 
-echo 'ok';
+echo 'OK';

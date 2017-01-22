@@ -26,9 +26,10 @@
  *
  */
 namespace Imposto;
-use Imposto;
-use DOMDocument;
 use Util;
+use Imposto;
+use Exception;
+use DOMDocument;
 use ValidationException;
 
 /**
@@ -191,6 +192,52 @@ class IPI extends Imposto {
 		$tributo = $this->getTributo()->getNode();
 		$tributo = $dom->importNode($tributo, true);
 		$element->appendChild($tributo);
+		return $element;
+	}
+
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'IPI':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('clEnq');
+		$classe = null;
+		if($_fields->length > 0)
+			$classe = $_fields->item(0)->nodeValue;
+		$this->setClasse($classe);
+		$_fields = $element->getElementsByTagName('CNPJProd');
+		$cnpj = null;
+		if($_fields->length > 0)
+			$cnpj = $_fields->item(0)->nodeValue;
+		$this->setCNPJ($cnpj);
+		$_fields = $element->getElementsByTagName('cSelo');
+		$selo = null;
+		if($_fields->length > 0)
+			$selo = $_fields->item(0)->nodeValue;
+		$this->setSelo($selo);
+		$_fields = $element->getElementsByTagName('qSelo');
+		$quantidade = null;
+		if($_fields->length > 0)
+			$quantidade = $_fields->item(0)->nodeValue;
+		$this->setQuantidade($quantidade);
+		$_fields = $element->getElementsByTagName('cEnq');
+		if($_fields->length > 0)
+			$enquadramento = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cEnq" do campo "Enquadramento" não encontrada', 404);
+		$this->setEnquadramento($enquadramento);
+		$_fields = $element->getElementsByTagName('IPITrib');
+		if($_fields->length == 0)
+			$_fields = $element->getElementsByTagName('IPINT');
+		if($_fields->length > 0) {
+			$tributo = Imposto::loadImposto($_fields->item(0));
+		} else
+			throw new Exception('Tag "IPITrib" ou "IPINT" do objeto "Tributo" não encontrada', 404);
+		$this->setTributo($tributo);
 		return $element;
 	}
 

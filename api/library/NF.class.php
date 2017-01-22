@@ -113,7 +113,6 @@ abstract class NF implements NodeInterface {
 	private $produtos;
 	private $transporte;
 	private $pagamentos;
-	private $consulta_url;
 	private $data_movimentacao;
 	private $data_contingencia;
 	private $justificativa;
@@ -218,17 +217,6 @@ abstract class NF implements NodeInterface {
 		return $this;
 	}
 
-	public function getConsultaURL($normalize = false) {
-		if(!$normalize)
-			return $this->consulta_url;
-		return $this->consulta_url;
-	}
-
-	public function setConsultaURL($consulta_url) {
-		$this->consulta_url = $consulta_url;
-		return $this;
-	}
-
 	/**
 	 * Data e Hora da saída ou de entrada da mercadoria / produto
 	 */
@@ -239,6 +227,8 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setDataMovimentacao($data_movimentacao) {
+		if(!is_null($data_movimentacao) && !is_numeric($data_movimentacao))
+			$data_movimentacao = strtotime($data_movimentacao);
 		$this->data_movimentacao = $data_movimentacao;
 		return $this;
 	}
@@ -253,6 +243,8 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setDataContingencia($data_contingencia) {
+		if(!is_null($data_contingencia) && !is_numeric($data_contingencia))
+			$data_contingencia = strtotime($data_contingencia);
 		$this->data_contingencia = $data_contingencia;
 		return $this;
 	}
@@ -278,6 +270,7 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setModelo($modelo) {
+		$modelo = intval($modelo);
 		$this->modelo = $modelo;
 		return $this;
 	}
@@ -417,6 +410,8 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setDataEmissao($data_emissao) {
+		if(!is_numeric($data_emissao))
+			$data_emissao = strtotime($data_emissao);
 		$this->data_emissao = $data_emissao;
 		return $this;
 	}
@@ -618,12 +613,8 @@ abstract class NF implements NodeInterface {
 	}
 
 	public function setConsumidorFinal($consumidor_final) {
-		switch ($consumidor_final) {
-			case '0':
-				return 'N';
-			case '1':
-				return 'Y';
-		}
+		if(!in_array($consumidor_final, array('N', 'Y')))
+			$consumidor_final = $consumidor_final?'Y':'N';
 		$this->consumidor_final = $consumidor_final;
 		return $this;
 	}
@@ -698,7 +689,6 @@ abstract class NF implements NodeInterface {
 		$nf['produtos'] = $this->getProdutos();
 		$nf['transporte'] = $this->getTransporte();
 		$nf['pagamentos'] = $this->getPagamentos();
-		$nf['consulta_url'] = $this->getConsultaURL();
 		$nf['data_movimentacao'] = $this->getDataMovimentacao();
 		$nf['data_contingencia'] = $this->getDataContingencia();
 		$nf['justificativa'] = $this->getJustificativa();
@@ -743,7 +733,6 @@ abstract class NF implements NodeInterface {
 		$this->setPagamentos($nf['pagamentos']);
 		if(is_null($this->getPagamentos()))
 			$this->setPagamentos(array());
-		$this->setConsultaURL($nf['consulta_url']);
 		$this->setDataMovimentacao($nf['data_movimentacao']);
 		$this->setDataContingencia($nf['data_contingencia']);
 		$this->setJustificativa($nf['justificativa']);
@@ -776,9 +765,10 @@ abstract class NF implements NodeInterface {
 		$this->setFinalidade($nf['finalidade']);
 		if(is_null($this->getFinalidade()))
 			$this->setFinalidade(self::FINALIDADE_NORMAL);
-		$this->setConsumidorFinal($nf['consumidor_final']);
-		if(is_null($this->getConsumidorFinal()))
+		if(is_null($nf['consumidor_final']))
 			$this->setConsumidorFinal('Y');
+		else
+			$this->setConsumidorFinal($nf['consumidor_final']);
 		$this->setPresenca($nf['presenca']);
 		$this->setProtocolo($nf['protocolo']);
 		return $this;
@@ -925,9 +915,11 @@ abstract class NF implements NodeInterface {
 		if($this->getAmbiente() == self::AMBIENTE_HOMOLOGACAO) {
 			$this->getCliente()->setNome('NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
 		}
-		$cliente = $this->getCliente()->getNode();
-		$cliente = $dom->importNode($cliente, true);
-		$info->appendChild($cliente);
+		if(!is_null($this->getCliente())) {
+			$cliente = $this->getCliente()->getNode();
+			$cliente = $dom->importNode($cliente, true);
+			$info->appendChild($cliente);
+		}
 		$item = 0;
 		$tributos = array();
 		$_produtos = $this->getProdutos();
@@ -977,6 +969,200 @@ abstract class NF implements NodeInterface {
 		return $element;
 	}
 
+	public function loadNode($element, $name = null) {
+		$root = $element;
+		$name = is_null($name)?'NFe':$name;
+		$nodes = $element->getElementsByTagName($name);
+		if($nodes->length == 0)
+			throw new Exception('Tag "'.$name.'" não encontrada', 404);
+		$element = $nodes->item(0);
+		$_fields = $element->getElementsByTagName('infNFe');
+		if($_fields->length > 0)
+			$info = $_fields->item(0);
+		else
+			throw new Exception('Tag "infNFe" não encontrada', 404);
+
+		$id = $info->getAttribute('Id');
+		if(strlen($id) != 47)
+			throw new Exception('Atributo "Id" inválido, encontrado: "'.$id.'"', 500);
+		$this->setID(substr($id, 3));
+		$_fields = $info->getElementsByTagName('ide');
+		if($_fields->length > 0)
+			$ident = $_fields->item(0);
+		else
+			throw new Exception('Tag "ide" não encontrada', 404);
+		$emitente = new Emitente();
+		$_fields = $ident->getElementsByTagName('cUF');
+		if($_fields->length > 0)
+			$codigo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cUF" do campo "Codigo IBGE da UF" não encontrada', 404);
+		$emitente->getEndereco()->getMunicipio()->getEstado()->setCodigo($codigo);
+		$_fields = $ident->getElementsByTagName('cNF');
+		if($_fields->length > 0)
+			$codigo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cNF" do campo "Codigo" não encontrada', 404);
+		$this->setCodigo($codigo);
+		$_fields = $ident->getElementsByTagName('natOp');
+		if($_fields->length > 0)
+			$natureza = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "natOp" do campo "Natureza" não encontrada', 404);
+		$this->setNatureza($natureza);
+		$_fields = $ident->getElementsByTagName('indPag');
+		if($_fields->length > 0)
+			$indicador = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "indPag" do campo "Indicador" não encontrada', 404);
+		$this->setIndicador($indicador);
+		$_fields = $ident->getElementsByTagName('mod');
+		if($_fields->length > 0)
+			$modelo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "mod" do campo "Modelo" não encontrada', 404);
+		$this->setModelo($modelo);
+		$_fields = $ident->getElementsByTagName('serie');
+		if($_fields->length > 0)
+			$serie = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "serie" do campo "Serie" não encontrada', 404);
+		$this->setSerie($serie);
+		$_fields = $ident->getElementsByTagName('nNF');
+		if($_fields->length > 0)
+			$numero = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "nNF" do campo "Numero" não encontrada', 404);
+		$this->setNumero($numero);
+		$_fields = $ident->getElementsByTagName('dhEmi');
+		if($_fields->length > 0)
+			$data_emissao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "dhEmi" do campo "DataEmissao" não encontrada', 404);
+		$this->setDataEmissao($data_emissao);
+		$_fields = $ident->getElementsByTagName('tpNF');
+		if($_fields->length > 0)
+			$tipo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "tpNF" do campo "Tipo" não encontrada', 404);
+		$this->setTipo($tipo);
+		$_fields = $ident->getElementsByTagName('idDest');
+		if($_fields->length > 0)
+			$destino = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "idDest" do campo "Destino" não encontrada', 404);
+		$this->setDestino($destino);
+		$_fields = $ident->getElementsByTagName('cMunFG');
+		if($_fields->length > 0)
+			$codigo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cMunFG" do campo "Codigo IBGE do município" não encontrada', 404);
+		$emitente->getEndereco()->getMunicipio()->setCodigo($codigo);
+		$_fields = $ident->getElementsByTagName('dhSaiEnt');
+		$data_movimentacao = null;
+		if($_fields->length > 0)
+			$data_movimentacao = $_fields->item(0)->nodeValue;
+		$this->setDataMovimentacao($data_movimentacao);
+		$_fields = $ident->getElementsByTagName('tpImp');
+		if($_fields->length > 0)
+			$formato = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "tpImp" do campo "Formato" não encontrada', 404);
+		$this->setFormato($formato);
+		$_fields = $ident->getElementsByTagName('tpEmis');
+		if($_fields->length > 0)
+			$emissao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "tpEmis" do campo "Emissao" não encontrada', 404);
+		$this->setEmissao($emissao);
+		$_fields = $ident->getElementsByTagName('cDV');
+		if($_fields->length > 0)
+			$digito_verificador = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cDV" do campo "DigitoVerificador" não encontrada', 404);
+		$this->setDigitoVerificador($digito_verificador);
+		$_fields = $ident->getElementsByTagName('tpAmb');
+		if($_fields->length > 0)
+			$ambiente = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "tpAmb" do campo "Ambiente" não encontrada', 404);
+		$this->setAmbiente($ambiente);
+		$_fields = $ident->getElementsByTagName('finNFe');
+		if($_fields->length > 0)
+			$finalidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "finNFe" do campo "Finalidade" não encontrada', 404);
+		$this->setFinalidade($finalidade);
+		$_fields = $ident->getElementsByTagName('indFinal');
+		if($_fields->length > 0)
+			$consumidor_final = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "indFinal" do campo "ConsumidorFinal" não encontrada', 404);
+		$this->setConsumidorFinal($consumidor_final);
+		$_fields = $ident->getElementsByTagName('indPres');
+		if($_fields->length > 0)
+			$presenca = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "indPres" do campo "Presenca" não encontrada', 404);
+		$this->setPresenca($presenca);
+		$_fields = $ident->getElementsByTagName('dhCont');
+		$data_contingencia = null;
+		if($_fields->length > 0)
+			$data_contingencia = $_fields->item(0)->nodeValue;
+		$this->setDataContingencia($data_contingencia);
+		$_fields = $ident->getElementsByTagName('xJust');
+		$justificativa = null;
+		if($_fields->length > 0)
+			$justificativa = $_fields->item(0)->nodeValue;
+		$this->setJustificativa($justificativa);
+
+		$_fields = $info->getElementsByTagName('emit');
+		if($_fields->length > 0) {
+			$emitente->loadNode($_fields->item(0), 'emit');
+		} else
+			throw new Exception('Tag "emit" do objeto "Emitente" não encontrada', 404);
+		$this->setEmitente($emitente);
+		$_fields = $info->getElementsByTagName('dest');
+		$cliente = null;
+		if($_fields->length > 0) {
+			$cliente = new Cliente();
+			$cliente->loadNode($_fields->item(0), 'dest');
+		}
+		$this->setCliente($cliente);
+		$produtos = array();
+		$_items = $info->getElementsByTagName('det');
+		foreach ($_items as $_item) {
+			$produto = new Produto();
+			$produto->loadNode($_item, 'det');
+			$produtos[] = $produto;
+		}
+		$this->setProdutos($produtos);
+		$_fields = $info->getElementsByTagName('transp');
+		$transporte = null;
+		if($_fields->length > 0) {
+			$transporte = new Transporte();
+			$transporte->loadNode($_fields->item(0), 'transp');
+		}
+		$this->setTransporte($transporte);
+		$pagamentos = array();
+		$_items = $info->getElementsByTagName('pag');
+		foreach ($_items as $_item) {
+			$pagamento = new Pagamento();
+			$pagamento->loadNode($_item, 'pag');
+			$pagamentos[] = $pagamento;
+		}
+		$this->setPagamentos($pagamentos);
+
+		$_fields = $root->getElementsByTagName('protNFe');
+		$protocolo = null;
+		if($_fields->length > 0) {
+			$protocolo = new NF\Protocolo();
+			$protocolo->loadNode($_fields->item(0), 'infProt');
+		}
+		$this->setProtocolo($protocolo);
+		return $element;
+	}
+
 	/**
 	 * Assina o XML com a assinatura eletrônica do tipo A1
 	 */
@@ -999,7 +1185,7 @@ abstract class NF implements NodeInterface {
 	/**
 	 * Valida o documento após assinar
 	 */
-	public function validar(&$dom) {
+	public function validar($dom) {
 		$dom->loadXML($dom->saveXML());
 		$xsd_path = dirname(dirname(__FILE__)) . '/schema';
 		if(is_null($this->getProtocolo()))
@@ -1028,6 +1214,8 @@ abstract class NF implements NodeInterface {
 	 * Adiciona o protocolo no XML da nota
 	 */
 	public function addProtocolo($dom) {
+		if(is_null($this->getProtocolo()))
+			throw new Exception('O protocolo não foi informado na nota "'.$this->getID().'"', 404);
 		$nfe = $dom->getElementsByTagName('NFe')->item(0);
 		// Corrige xmlns:default
 		$nfe_xml = $dom->saveXML($nfe);
@@ -1052,14 +1240,6 @@ abstract class NF implements NodeInterface {
 		$dom->loadXML($xml);
 
 		return $dom;
-	}
-
-	public function testar($filename)
-	{
-		$dom = new DOMDocument();
-		$dom->load($filename);
-		$adapter = new XmlseclibsAdapter();
-		return $adapter->verify($dom);
 	}
 
 }

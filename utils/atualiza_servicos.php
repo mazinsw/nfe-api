@@ -93,6 +93,7 @@ function converteServicos($array)
 		'NfeConsultaCadastro' => 'cadastro',
 		'NFeAutorizacao' => 'autorizacao',
 		'NFeRetAutorizacao' => 'retorno',
+		'NFeDistribuicaoDFe' => 'distribuicao',
 	);
 	$data =  array();
 	$normal = array();
@@ -110,8 +111,9 @@ function converteServicos($array)
 				$emissao[$estado['uf']] = array(
 					'versao' => '3.10',
 					'nfe' => array(),
-					'nfce' => array(),
 				);
+				if(!in_array($estado['uf'], array('SVCAN', 'SVCRS', 'AN')))
+					$emissao[$estado['uf']]['nfce'] = array();
 			}
 			$versao = $estado['versoes']['3.10'];
 			if(is_null($versao))
@@ -120,6 +122,32 @@ function converteServicos($array)
 			foreach ($versao as $servico) {
 				$key = $service_map[$servico['servico']];
 				$servicos[$key] = $servico['url'];
+			}
+			/* adiciona serviços não existentes na versão 3.10 */
+			$versao = $estado['versoes']['2.00'];
+			if(!is_null($versao)) {
+				foreach ($versao as $servico) {
+					$key = $service_map[$servico['servico']];
+					if(isset($servicos[$key]))
+						continue;
+					$servicos[$key] = array(
+						'url' => $servico['url'],
+						'versao' => '2.00',
+					);
+				}
+			}
+			/* adiciona serviços não existentes na versão 3.10 e 2.00 */
+			$versao = $estado['versoes']['1.00'];
+			if(!is_null($versao)) {
+				foreach ($versao as $servico) {
+					$key = $service_map[$servico['servico']];
+					if(isset($servicos[$key]))
+						continue;
+					$servicos[$key] = array(
+						'url' => $servico['url'],
+						'versao' => '1.00',
+					);
+				}
 			}
 			$emissao[$estado['uf']]['nfe'][$ambiente] = $servicos;
 		}
@@ -142,7 +170,6 @@ function converteServicos($array)
 				$contingencia[$estado] = array(
 					'versao' => '3.10',
 					'nfe' => array('base' => $row['servico']),
-					'nfce' => array(),
 				);
 			}
 		}

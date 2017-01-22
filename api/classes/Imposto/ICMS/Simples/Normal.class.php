@@ -26,6 +26,7 @@
  *
  */
 namespace Imposto\ICMS\Simples;
+use Exception;
 use DOMDocument;
 use Imposto\ICMS\Normal as ICMSNormal;
 
@@ -60,6 +61,40 @@ class Normal extends ICMSNormal {
 		$element->appendChild($dom->createElement('CSOSN', $this->getTributacao(true)));
 		$element->appendChild($dom->createElement('pCredSN', $this->getAliquota(true)));
 		$element->appendChild($dom->createElement('vCredICMSSN', $this->getValor(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMSSN101':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('orig');
+		if($_fields->length > 0)
+			$origem = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "orig" do campo "Origem" não encontrada', 404);
+		$this->setOrigem($origem);
+		$_fields = $element->getElementsByTagName('CSOSN');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CSOSN" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
+		$_fields = $element->getElementsByTagName('pCredSN');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pCredSN" do campo "Aliquota" não encontrada', 404);
+		$this->setAliquota($aliquota);
+		$_fields = $element->getElementsByTagName('vCredICMSSN');
+		if($_fields->length == 0)
+			throw new Exception('Tag "vCredICMSSN" do campo "Valor" não encontrada', 404);
+		$valor = $_fields->item(0)->nodeValue;
+		$this->setBase($valor * 100.0 / $this->getAliquota());
 		return $element;
 	}
 

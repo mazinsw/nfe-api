@@ -77,6 +77,16 @@ class Estatico extends Banco {
 	}
 
 	/**
+	 * Obtém o código do orgão por estado
+	 */
+	public function getCodigoOrgao($uf) {
+		$codigo = $this->uf_codes['orgaos'][strtoupper($uf)];
+		if(is_null($codigo))
+			throw new Exception('Não foi encontrado o código do orgão para o estado "'.$uf.'"', 404);
+		return intval($codigo);
+	}
+
+	/**
 	 * Obtém a aliquota do imposto de acordo com o tipo
 	 */
 	public function getImpostoAliquota($ncm, $uf, $ex = null, $cnpj = null, $token = null) {
@@ -100,9 +110,25 @@ class Estatico extends Banco {
 	}
 
 	/**
-	 * Obtém as notas pendentes de envio
+	 * Obtém as notas pendentes de envio, em contingência e corrigidas após
+	 * rejeitadas
+	 */
+	public function getNotasAbertas($inicio = null, $quantidade = null) {
+		return array(); // TODO implementar
+	}
+
+	/**
+	 * Obtém as notas em processamento para consulta e possível protocolação
 	 */
 	public function getNotasPendentes($inicio = null, $quantidade = null) {
+		return array(); // TODO implementar
+	}
+
+	/**
+	 * Obtém as tarefas de inutilização, cancelamento e consulta de notas
+	 * pendentes que entraram em contingência
+	 */
+	public function getNotasTarefas($inicio = null, $quantidade = null) {
 		return array(); // TODO implementar
 	}
 

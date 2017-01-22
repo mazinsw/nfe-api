@@ -46,9 +46,12 @@ class Transporte implements NodeInterface {
 
 	private $frete;
 	private $transportador;
+	private $retencao;
 	private $veiculo;
 	private $reboque;
-	private $volume;
+	private $vagao;
+	private $balsa;
+	private $volumes;
 
 	public function __construct($transporte = array()) {
 		$this->fromArray($transporte);
@@ -79,6 +82,20 @@ class Transporte implements NodeInterface {
 	}
 
 	public function setFrete($frete) {
+		switch ($frete) {
+			case '0':
+				$frete = self::FRETE_EMITENTE;
+				break;
+			case '1':
+				$frete = self::FRETE_DESTINATARIO;
+				break;
+			case '2':
+				$frete = self::FRETE_TERCEIROS;
+				break;
+			case '9':
+				$frete = self::FRETE_NENHUM;
+				break;
+		}
 		$this->frete = $frete;
 		return $this;
 	}
@@ -92,6 +109,18 @@ class Transporte implements NodeInterface {
 
 	public function setTransportador($transportador) {
 		$this->transportador = $transportador;
+		return $this;
+	}
+
+	/**
+	 * Dados da retenção  ICMS do Transporte
+	 */
+	public function getRetencao() {
+		return $this->retencao;
+	}
+
+	public function setRetencao($retencao) {
+		$this->retencao = $retencao;
 		return $this;
 	}
 
@@ -113,12 +142,48 @@ class Transporte implements NodeInterface {
 		return $this;
 	}
 
-	public function getVolume() {
-		return $this->volume;
+	/**
+	 * Identificação do vagão (v2.0)
+	 */
+	public function getVagao($normalize = false) {
+		if(!$normalize)
+			return $this->vagao;
+		return $this->vagao;
 	}
 
-	public function setVolume($volume) {
-		$this->volume = $volume;
+	public function setVagao($vagao) {
+		$this->vagao = $vagao;
+		return $this;
+	}
+
+	/**
+	 * Identificação da balsa (v2.0)
+	 */
+	public function getBalsa($normalize = false) {
+		if(!$normalize)
+			return $this->balsa;
+		return $this->balsa;
+	}
+
+	public function setBalsa($balsa) {
+		$this->balsa = $balsa;
+		return $this;
+	}
+
+	/**
+	 * Dados dos volumes
+	 */
+	public function getVolumes() {
+		return $this->volumes;
+	}
+
+	public function setVolumes($volumes) {
+		$this->volumes = $volumes;
+		return $this;
+	}
+
+	public function addVolume($volume) {
+		$this->volumes[] = $volume;
 		return $this;
 	}
 
@@ -126,9 +191,12 @@ class Transporte implements NodeInterface {
 		$transporte = array();
 		$transporte['frete'] = $this->getFrete();
 		$transporte['transportador'] = $this->getTransportador();
+		$transporte['retencao'] = $this->getRetencao();
 		$transporte['veiculo'] = $this->getVeiculo();
 		$transporte['reboque'] = $this->getReboque();
-		$transporte['volume'] = $this->getVolume();
+		$transporte['vagao'] = $this->getVagao();
+		$transporte['balsa'] = $this->getBalsa();
+		$transporte['volumes'] = $this->getVolumes();
 		return $transporte;
 	}
 
@@ -143,15 +211,20 @@ class Transporte implements NodeInterface {
 		$this->setTransportador($transporte['transportador']);
 		if(is_null($this->getTransportador()))
 			$this->setTransportador(new \Transporte\Transportador());
+		$this->setRetencao($transporte['retencao']);
+		if(is_null($this->getRetencao()))
+			$this->setRetencao(new \Transporte\Tributo());
 		$this->setVeiculo($transporte['veiculo']);
 		if(is_null($this->getVeiculo()))
 			$this->setVeiculo(new \Transporte\Veiculo());
 		$this->setReboque($transporte['reboque']);
 		if(is_null($this->getReboque()))
 			$this->setReboque(new \Transporte\Veiculo());
-		$this->setVolume($transporte['volume']);
-		if(is_null($this->getVolume()))
-			$this->setVolume(new Volume());
+		$this->setVagao($transporte['vagao']);
+		$this->setBalsa($transporte['balsa']);
+		$this->setVolumes($transporte['volumes']);
+		if(is_null($this->getVolumes()))
+			$this->setVolumes(array());
 		return $this;
 	}
 
@@ -166,6 +239,11 @@ class Transporte implements NodeInterface {
 			$transportador = $dom->importNode($transportador, true);
 			$element->appendChild($transportador);
 		}
+		if(!is_null($this->getRetencao())) {
+			$retencao = $this->getRetencao()->getNode();
+			$retencao = $dom->importNode($retencao, true);
+			$element->appendChild($retencao);
+		}
 		if(!is_null($this->getVeiculo())) {
 			$veiculo = $this->getVeiculo()->getNode('veicTransp');
 			$veiculo = $dom->importNode($veiculo, true);
@@ -176,11 +254,83 @@ class Transporte implements NodeInterface {
 			$reboque = $dom->importNode($reboque, true);
 			$element->appendChild($reboque);
 		}
-		if(!is_null($this->getVolume())) {
-			$volume = $this->getVolume()->getNode();
-			$volume = $dom->importNode($volume, true);
-			$element->appendChild($volume);
+		if(!is_null($this->getVagao())) {
+			$element->appendChild($dom->createElement('vagao', $this->getVagao(true)));
 		}
+		if(!is_null($this->getBalsa())) {
+			$element->appendChild($dom->createElement('balsa', $this->getBalsa(true)));
+		}
+		if(!is_null($this->getVolumes())) {
+			$_volumes = $this->getVolumes();
+			foreach ($_volumes as $_volume) {
+				$volume = $_volume->getNode();
+				$volume = $dom->importNode($volume, true);
+				$element->appendChild($volume);
+			}
+		}
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'transp':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('modFrete');
+		if($_fields->length > 0)
+			$frete = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "modFrete" do campo "Frete" não encontrada', 404);
+		$this->setFrete($frete);
+		$_fields = $element->getElementsByTagName('transporta');
+		$transportador = null;
+		if($_fields->length > 0) {
+			$transportador = new \Transporte\Transportador();
+			$transportador->loadNode($_fields->item(0), 'transporta');
+		}
+		$this->setTransportador($transportador);
+		$_fields = $element->getElementsByTagName('retTransp');
+		$retencao = null;
+		if($_fields->length > 0) {
+			$retencao = new \Transporte\Tributo();
+			$retencao->loadNode($_fields->item(0), 'retTransp');
+		}
+		$this->setRetencao($retencao);
+		$_fields = $element->getElementsByTagName('veicTransp');
+		$veiculo = null;
+		if($_fields->length > 0) {
+			$veiculo = new \Transporte\Veiculo();
+			$veiculo->loadNode($_fields->item(0), 'veicTransp');
+		}
+		$this->setVeiculo($veiculo);
+		$_fields = $element->getElementsByTagName('reboque');
+		$reboque = null;
+		if($_fields->length > 0) {
+			$reboque = new \Transporte\Veiculo();
+			$reboque->loadNode($_fields->item(0), 'reboque');
+		}
+		$this->setReboque($reboque);
+		$_fields = $element->getElementsByTagName('vagao');
+		$vagao = null;
+		if($_fields->length > 0)
+			$vagao = $_fields->item(0)->nodeValue;
+		$this->setVagao($vagao);
+		$_fields = $element->getElementsByTagName('balsa');
+		$balsa = null;
+		if($_fields->length > 0)
+			$balsa = $_fields->item(0)->nodeValue;
+		$this->setBalsa($balsa);
+		$volumes = array();
+		$_fields = $element->getElementsByTagName('vol');
+		foreach ($_fields as $_item) {
+			$volume = new Volume();
+			$volume->loadNode($_item, 'vol');
+			$volumes[] = $volume;
+		}
+		$this->setVolumes($volumes);
 		return $element;
 	}
 

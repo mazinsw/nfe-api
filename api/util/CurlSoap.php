@@ -107,7 +107,8 @@ class CurlSoap extends Curl {
 		$data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $data);
 		$this->post($url, $data);
 		if($this->error) {
-			if($this->errorCode >= 5 && $this->errorCode <= 7)
+			$transfer = $this->getInfo(CURLINFO_PRETRANSFER_TIME);
+			if($transfer == 0) // never started the transfer
 				throw new DomainException($this->errorMessage, $this->errorCode);
 			throw new Exception($this->errorMessage, $this->errorCode);
 		}

@@ -31,7 +31,6 @@ use Util;
 class Retorno extends Status {
 
 	private $data_recebimento;
-	private $numero;
 
 	public function __construct($retorno = array()) {
 		parent::__construct($retorno);
@@ -48,21 +47,44 @@ class Retorno extends Status {
 		return $this;
 	}
 
-	public function getNumero($normalize = false) {
-		if(!$normalize)
-			return $this->numero;
-		return $this->numero;
+	/**
+	 * Informa se a nota foi autorizada no prazo ou fora do prazo
+	 */
+	public function isAutorizado() {
+		return in_array($this->getStatus(), array('100', '150'));
 	}
 
-	public function setNumero($numero) {
-		$this->numero = $numero;
-		return $this;
+	/**
+	 * Informa se a nota está cancelada
+	 */
+	public function isCancelado() {
+		return in_array($this->getStatus(), array('101', '151'));
+	}
+
+	/**
+	 * Informa se o lote já foi processado e já tem um protocolo
+	 */
+	public function isProcessado() {
+		return $this->getStatus() == '104';
+	}
+
+	/**
+	 * Informa se o lote foi recebido com sucesso
+	 */
+	public function isRecebido() {
+		return in_array($this->getStatus(), array('103', '105'));
+	}
+
+	/**
+	 * Informa se a nota foi denegada
+	 */
+	public function isDenegada() {
+		return in_array($this->getStatus(), array('110', '301', '302', '303'));
 	}
 
 	public function toArray() {
 		$retorno = parent::toArray();
 		$retorno['data_recebimento'] = $this->getDataRecebimento();
-		$retorno['numero'] = $this->getNumero();
 		return $retorno;
 	}
 
@@ -73,7 +95,6 @@ class Retorno extends Status {
 			return $this;
 		parent::fromArray($retorno);
 		$this->setDataRecebimento($retorno['data_recebimento']);
-		$this->setNumero($retorno['numero']);
 		return $this;
 	}
 
@@ -83,26 +104,18 @@ class Retorno extends Status {
 		$status = $element->getElementsByTagName('cStat')->item(0);
 		if(!is_null($this->getDataRecebimento()))
 			$element->insertBefore($dom->createElement('dhRecbto', $this->getDataRecebimento(true)), $status);
-		if(!is_null($this->getNumero()))
-			$element->insertBefore($dom->createElement('nProt', $this->getNumero(true)), $status);
 		return $element;
 	}
 
-	public function loadNode($dom, $name = null) {
-		$tag = is_null($name)?'Retorno':$name;
-		parent::loadNode($dom, $tag);
-		$retorno = $dom->getElementsByTagName($tag)->item(0);
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'Retorno':$name;
+		$retorno = parent::loadNode($element, $name);
 		$nodes = $retorno->getElementsByTagName('dhRecbto');
 		$data_recebimento = null;
 		if($nodes->length > 0)
 			$data_recebimento = strtotime($nodes->item(0)->nodeValue);
 		$this->setDataRecebimento($data_recebimento);
-		$nodes = $retorno->getElementsByTagName('nProt');
-		$numero = null;
-		if($nodes->length > 0)
-			$numero = $nodes->item(0)->nodeValue;
-		$this->setNumero($numero);
-		return $this;
+		return $retorno;
 	}
 
 }

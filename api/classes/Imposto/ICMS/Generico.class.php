@@ -26,6 +26,7 @@
  *
  */
 namespace Imposto\ICMS;
+use Exception;
 use DOMDocument;
 
 /**
@@ -64,6 +65,35 @@ class Generico extends Mista {
 		}
 		$element = parent::getNode(is_null($name)?'ICMS90':$name);
 		$dom = $element->ownerDocument;
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMS90':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_mod = $element->getElementsByTagName('modBC');
+		$_mod_st = $element->getElementsByTagName('modBCST');
+		if($_mod->length > 0 || $_mod_st->length > 0) {
+			$element = parent::loadNode($element, $name);
+			return $element;
+		}
+		$_fields = $element->getElementsByTagName('orig');
+		if($_fields->length > 0)
+			$origem = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "orig" do campo "Origem" não encontrada', 404);
+		$this->setOrigem($origem);
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
 		return $element;
 	}
 

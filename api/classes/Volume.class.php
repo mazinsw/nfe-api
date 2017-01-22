@@ -46,6 +46,8 @@ class Volume implements NodeInterface {
 	}
 
 	public function setQuantidade($quantidade) {
+		if(!is_null($quantidade))
+			$quantidade = intval($quantidade);
 		$this->quantidade = $quantidade;
 		return $this;
 	}
@@ -170,6 +172,61 @@ class Volume implements NodeInterface {
 				$element->appendChild($lacre);
 			}
 		}
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'vol':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('qVol');
+		$quantidade = null;
+		if($_fields->length > 0)
+			$quantidade = $_fields->item(0)->nodeValue;
+		$this->setQuantidade($quantidade);
+		$_fields = $element->getElementsByTagName('esp');
+		$especie = null;
+		if($_fields->length > 0)
+			$especie = $_fields->item(0)->nodeValue;
+		$this->setEspecie($especie);
+		$_fields = $element->getElementsByTagName('marca');
+		$marca = null;
+		if($_fields->length > 0)
+			$marca = $_fields->item(0)->nodeValue;
+		$this->setMarca($marca);
+		$numeracoes = array();
+		$_fields = $element->getElementsByTagName('nVol');
+		if($_fields->length > 0) {
+			$volumes = $_fields->item(0)->nodeValue;
+			if($volumes != '')
+				$numeracoes = explode(', ', $volumes);
+		}
+		$this->setNumeracoes($numeracoes);
+		$_fields = $element->getElementsByTagName('pesoL');
+		$peso = null;
+		if($_fields->length > 0) {
+			$peso = new Peso();
+			$peso->setLiquido($_fields->item(0)->nodeValue);
+		}
+		$_fields = $element->getElementsByTagName('pesoB');
+		if($_fields->length > 0) {
+			if(is_null($peso))
+				$peso = new Peso();
+			$peso->setBruto($_fields->item(0)->nodeValue);
+		}
+		$this->setPeso($peso);
+		$lacres = array();
+		$_fields = $element->getElementsByTagName('lacres');
+		foreach ($_fields as $_item) {
+			$lacre = new Lacre();
+			$lacre->loadNode($_item, 'lacres');
+			$lacres[] = $lacre;
+		}
+		$this->setLacres($lacres);
 		return $element;
 	}
 

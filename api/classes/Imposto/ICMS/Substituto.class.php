@@ -26,6 +26,7 @@
  *
  */
 namespace Imposto\ICMS;
+use Exception;
 
 /**
  * Grupo de informação do ICMSST devido para a UF de destino, nas operações
@@ -59,6 +60,24 @@ class Substituto extends Cobrado {
 		$dom = $element->ownerDocument;
 		$element->appendChild($dom->createElement('vBCSTDest', $this->getNormal()->getBase(true)));
 		$element->appendChild($dom->createElement('vICMSSTDest', $this->getNormal()->getValor(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMSST':$name;
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('vBCSTDest');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBCSTDest" do campo "Normal.Base" não encontrada no Substituto', 404);
+		$this->getNormal()->setBase($base);
+		$_fields = $element->getElementsByTagName('vICMSSTDest');
+		if($_fields->length > 0)
+			$valor = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vICMSSTDest" do campo "Normal.Valor" não encontrada no Substituto', 404);
+		$this->getNormal()->setValor($valor);
 		return $element;
 	}
 

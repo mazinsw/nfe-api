@@ -57,4 +57,10 @@ class Integral extends Normal {
 		return $element;
 	}
 
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMS00':$name;
+		$element = parent::loadNode($element, $name);
+		return $element;
+	}
+
 }

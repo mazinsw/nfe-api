@@ -80,7 +80,7 @@ class IBPT {
 		$curl->setTimeout(3);
 		$data = $curl->get($params);
 		if($curl->error) {
-			Log::warning('IBPT ('.$curl->errorCode.') - '.$curl->errorMessage);
+			Log::warning('IBPT.getImpostoOnline('.$curl->errorCode.') - '.$curl->errorMessage);
 			$this->offline = true;
 			return false;
 		}

@@ -93,6 +93,8 @@ $[field.each(option)]
 $[field.end]
 		}
 		return $this->$[field.unix];
+$[field.else.if(boolean)]
+		return $this->is$[fIeld.norm]()?'1':'0';
 $[field.else]
 		return $this->$[field.unix];
 $[field.end]
@@ -121,6 +123,21 @@ $[field.each(option)]
 				break;
 $[field.end]
 		}
+$[field.else.if(integer)]
+		if(trim($$[field.unix]) != '')
+			$$[field.unix] = intval($$[field.unix]);
+$[field.else.if(currency)]
+		if(trim($$[field.unix]) != '')
+			$$[field.unix] = floatval($$[field.unix]);
+$[field.else.if(float|double)]
+		if(trim($$[field.unix]) != '')
+			$$[field.unix] = floatval($$[field.unix]);
+$[field.else.if(datetime)]
+		if($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]!is_numeric($$[field.unix]))
+			$$[field.unix] = strtotime($$[field.unix]);
+$[field.else.if(boolean)]
+		if($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]!in_array($$[field.unix], array('N', 'Y')))
+			$$[field.unix] = $$[field.unix]?'Y':'N';
 $[field.end]
 		$this->$[field.unix] = $$[field.unix];
 		return $this;
@@ -156,10 +173,13 @@ $[table.if(inherited)]
 		parent::fromArray($$[table.unix]);
 $[table.end]
 $[field.each(all)]
-		$this->set$[fIeld.norm]($$[table.unix]['$[field]']);
 $[field.if(default)]
-		if(is_null($this->get$[fIeld.norm]()))
+		if(is_null($$[table.unix]['$[field]']))
 			$this->set$[fIeld.norm]($[fIeld.info]);
+		else
+			$this->set$[fIeld.norm]($$[table.unix]['$[field]']);
+$[field.else]
+		$this->set$[fIeld.norm]($$[table.unix]['$[field]']);
 $[field.end]
 $[field.end]
 		return $this;
@@ -176,38 +196,25 @@ $[table.end]
 $[field.each(all)]
 $[field.if(null)]
 		if(!is_null($this->get$[fIeld.norm]())) {
-$[field.if(descriptor)]
-			$$[field.unix] = $this->get$[fIeld.norm]()->getNode();
-			$$[field.unix] = $dom->importNode($$[field.unix], true);
-			$element->appendChild($$[field.unix]);
-$[field.else.if(searchable)]
-			$_$[field.unix] = $this->get$[fIeld.norm]();
-			$$[field.unix] = $dom->createElement('$[fIeld.style]');
-			foreach ($_$[field.unix] as $_$[field.unix.plural]) {
-				$$[field.unix.plural] = $_$[field.unix.plural]->getNode();
-				$$[field.unix.plural] = $dom->importNode($$[field.unix.plural], true);
-				$$[field.unix]->appendChild($$[field.unix.plural]);
-			}
-			$element->appendChild($$[field.unix]);
-$[field.else]
-			$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
 $[field.end]
-		}
-$[field.else.if(descriptor)]
-		$$[field.unix] = $this->get$[fIeld.norm]()->getNode();
-		$$[field.unix] = $dom->importNode($$[field.unix], true);
-		$element->appendChild($$[field.unix]);
+$[field.if(descriptor)]
+	$[field.if(null)]	$[field.end]	$$[field.unix] = $this->get$[fIeld.norm]()->getNode();
+	$[field.if(null)]	$[field.end]	$$[field.unix] = $dom->importNode($$[field.unix], true);
+	$[field.if(null)]	$[field.end]	$element->appendChild($$[field.unix]);
 $[field.else.if(searchable)]
-		$_$[field.unix] = $this->get$[fIeld.norm]();
-		$$[field.unix] = $dom->createElement('$[fIeld.style]');
-		foreach ($_$[field.unix] as $_$[field.unix.plural]) {
-			$$[field.unix.plural] = $_$[field.unix.plural]->getNode();
-			$$[field.unix.plural] = $dom->importNode($$[field.unix.plural], true);
-			$$[field.unix]->appendChild($$[field.unix.plural]);
-		}
-		$element->appendChild($$[field.unix]);
+	$[field.if(null)]	$[field.end]	$_$[field.unix] = $this->get$[fIeld.norm]();
+	$[field.if(null)]	$[field.end]	$$[field.unix] = $dom->createElement('$[fIeld.style]');
+	$[field.if(null)]	$[field.end]	foreach ($_$[field.unix] as $_$[field.unix.plural]) {
+	$[field.if(null)]	$[field.end]		$$[field.unix.plural] = $_$[field.unix.plural]->getNode();
+	$[field.if(null)]	$[field.end]		$$[field.unix.plural] = $dom->importNode($$[field.unix.plural], true);
+	$[field.if(null)]	$[field.end]		$$[field.unix]->appendChild($$[field.unix.plural]);
+	$[field.if(null)]	$[field.end]	}
+	$[field.if(null)]	$[field.end]	$element->appendChild($$[field.unix]);
 $[field.else]
-		$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
+	$[field.if(null)]	$[field.end]	$element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
+$[field.end]
+$[field.if(null)]
+		}
 $[field.end]
 $[field.end]
 		return $element;
@@ -218,16 +225,19 @@ $[field.end]
 $[table.if(inherited)]
 		$element = parent::loadNode($element, $name);
 $[table.else]
-		$_fields = $element->getElementsByTagName($name);
-		if($_fields->length == 0)
-			throw new Exception('Tag "'.$name.'" não encontrada', 404);
-		$element = $_fields->item(0);
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" d$[table.gender] $[tAble.norm] não encontrada', 404);
+			$element = $_fields->item(0);
+		}
 $[table.end]
 $[field.each(all)]
-$[field.if(null)]
 $[field.if(descriptor)]
 		$_fields = $element->getElementsByTagName('$[fIeld.style]');
+$[field.if(null)]
 		$$[field.unix] = null;
+$[field.end]
 		if($_fields->length > 0) {
 $[field.if(default)]
 			$$[field.unix] = $[fIeld.info];
@@ -235,57 +245,47 @@ $[field.else]
 			$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
 $[field.end]
 			$$[field.unix]->loadNode($_fields->item(0), '$[fIeld.style]');
+$[field.if(null)]
 		}
+$[field.else]
+		} else
+			throw new Exception('Tag "$[fIeld.style]" do objeto "$[fIeld.norm]" não encontrada n$[table.gender] $[tAble.norm]', 404);
+$[field.end]
 		$this->set$[fIeld.norm]($$[field.unix]);
 $[field.else.if(searchable)]
+		$$[field.unix] = array();
 		$_fields = $element->getElementsByTagName('$[fIeld.norm.plural]'); // TODO: predictable tag name
-		$$[field.unix.plural] = array();
 		if($_fields->length > 0) {
 			$_items = $_fields->item(0)->getElementsByTagName('$[fIeld.style]');
 			foreach ($_items as $_item) {
 $[field.if(default)]
-				$$[field.unix] = $[fIeld.info];
+				$$[field.unix.plural] = $[fIeld.info];
 $[field.else]
-				$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
+				$$[field.unix.plural] = new $[fIeld.norm](); // TODO: predictable class name
 $[field.end]
-				$$[field.unix]->loadNode($_item, '$[fIeld.style]');
-				$$[field.unix.plural][] = $$[field.unix];
+				$$[field.unix.plural]->loadNode($_item, '$[fIeld.style]');
+				$$[field.unix][] = $$[field.unix.plural];
 			}
+$[field.if(null)]
 		}
-		$this->set$[fIeld.norm]($$[field.unix.plural]);
+$[field.else]
+		} else
+			throw new Exception('Tag "$[fIeld.norm.plural]" da lista de "$[fIeld.norm]" não encontrada n$[table.gender] $[tAble.norm]', 404); // TODO: predictable tag name
+$[field.end]
+		$this->set$[fIeld.norm]($$[field.unix]);
 $[field.else]
 		$_fields = $element->getElementsByTagName('$[fIeld.style]');
+$[field.if(null)]
 		$$[field.unix] = null;
+$[field.end]
 		if($_fields->length > 0)
 			$$[field.unix] = $_fields->item(0)->nodeValue;
+$[field.if(null)]
+$[field.else]
+		else
+			throw new Exception('Tag "$[fIeld.style]" do campo "$[fIeld.norm]" não encontrada n$[table.gender] $[tAble.norm]', 404);
+$[field.end]
 		$this->set$[fIeld.norm]($$[field.unix]);
-$[field.end]
-$[field.else.if(descriptor)]
-$[field.if(default)]
-		$$[field.unix] = $[fIeld.info];
-$[field.else]
-		$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
-$[field.end]
-		$$[field.unix]->loadNode($element->getElementsByTagName('$[fIeld.style]')->item(0), '$[fIeld.style]');
-		$this->set$[fIeld.norm]($$[field.unix]);
-$[field.else.if(searchable)]
-		$$[field.unix.plural] = array();
-		$_fields = $element->getElementsByTagName('$[fIeld.norm.plural]'); // TODO: predictable tag name
-		if($_fields->length == 0)
-			throw new Exception('Tag "$[fIeld.norm.plural]" não encontrada', 404); // TODO: predictable tag name
-		$_items = $_fields->item(0)->getElementsByTagName('$[fIeld.style]');
-		foreach ($_items as $_item) {
-$[field.if(default)]
-			$$[field.unix] = $[fIeld.info];
-$[field.else]
-			$$[field.unix] = new $[fIeld.norm](); // TODO: predictable class name
-$[field.end]
-			$$[field.unix]->loadNode($_item, '$[fIeld.style]');
-			$$[field.unix.plural][] = $$[field.unix];
-		}
-		$this->set$[fIeld.norm]($$[field.unix.plural]);
-$[field.else]
-		$this->set$[fIeld.norm]($element->getElementsByTagName('$[fIeld.style]')->item(0)->nodeValue);
 $[field.end]
 $[field.end]
 		return $element;

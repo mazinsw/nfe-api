@@ -2,22 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "/D/Projects/NFe-API/api"
-		},
-		{
-			"path": "/D/Projects/NFe-API/site"
-		},
-		{
-			"path": "/D/Projects/NFe-API/utils"
-		},
-		{
-			"path": "/D/Projects/NFe-API/tests"
-		},
-		{
-			"path": "/D/Projects/NFe-API/docs"
-		},
-		{
-			"path": "/D/Projects/NFe-API/examples"
+			"path": "../"
 		}
 	]
 }

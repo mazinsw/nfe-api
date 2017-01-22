@@ -160,11 +160,11 @@ class Status implements NodeInterface {
 		return $element;
 	}
 
-	public function loadNode($dom, $name = null) {
-		$tag = is_null($name)?'Status':$name;
-		$nodes = $dom->getElementsByTagName($tag);
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'Status':$name;
+		$nodes = $element->getElementsByTagName($name);
 		if($nodes->length == 0)
-			throw new Exception('Tag "'.$tag.'" não encontrada', 404);
+			throw new Exception('Tag "'.$name.'" não encontrada', 404);
 		$status = $nodes->item(0);
 		$this->setAmbiente($status->getElementsByTagName('tpAmb')->item(0)->nodeValue);
 		$this->setVersao($status->getElementsByTagName('verAplic')->item(0)->nodeValue);
@@ -175,7 +175,7 @@ class Status implements NodeInterface {
 		if($nodes->length > 0)
 			$uf = $nodes->item(0)->nodeValue;
 		$this->setUF($uf);
-		return $this;
+		return $status;
 	}
 
 }

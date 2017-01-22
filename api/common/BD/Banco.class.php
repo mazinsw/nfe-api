@@ -39,6 +39,11 @@ abstract class Banco {
 	abstract public function getCodigoEstado($uf);
 
 	/**
+	 * Obtém o código do orgão por estado
+	 */
+	abstract public function getCodigoOrgao($uf);
+	
+	/**
 	 * Obtém a aliquota do imposto de acordo com o tipo
 	 */
 	abstract public function getImpostoAliquota($ncm, $uf, $ex = null, $cnpj = null, $token = null);
@@ -49,9 +54,21 @@ abstract class Banco {
 	abstract public function getCodigoMunicipio($municipio, $uf);
 
 	/**
-	 * Obtém as notas pendentes de envio
+	 * Obtém as notas pendentes de envio, em contingência e corrigidas após
+	 * rejeitadas
+	 */
+	abstract public function getNotasAbertas($inicio = null, $quantidade = null);
+
+	/**
+	 * Obtém as notas em processamento para consulta e possível protocolação
 	 */
 	abstract public function getNotasPendentes($inicio = null, $quantidade = null);
+
+	/**
+	 * Obtém as tarefas de inutilização, cancelamento e consulta de notas
+	 * pendentes que entraram em contingência
+	 */
+	abstract public function getNotasTarefas($inicio = null, $quantidade = null);
 
 	/**
 	 * Obtém informações dos servidores da SEFAZ como URLs e versões

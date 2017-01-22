@@ -33,14 +33,28 @@ class NFCe extends NF {
 
 	const QRCODE_VERSAO = '100';
 
+	private $consulta_url;
+
 	public function __construct($nfce = array()) {
 		parent::__construct($nfce);
 		$this->setModelo(65);
 		$this->setFormato(self::FORMATO_CONSUMIDOR);
 	}
 
+	public function getConsultaURL($normalize = false) {
+		if(!$normalize)
+			return $this->consulta_url;
+		return $this->consulta_url;
+	}
+
+	public function setConsultaURL($consulta_url) {
+		$this->consulta_url = $consulta_url;
+		return $this;
+	}
+
 	public function toArray() {
 		$nfce = parent::toArray();
+		$nfce['consulta_url'] = $this->getConsultaURL();
 		return $nfce;
 	}
 
@@ -50,6 +64,7 @@ class NFCe extends NF {
 		else if(!is_array($nfce))
 			return $this;
 		parent::fromArray($nfce);
+		$this->setConsultaURL($nfce['consulta_url']);
 		return $this;
 	}
 
@@ -104,6 +119,17 @@ class NFCe extends NF {
 		$data = $dom->createCDATASection($this->getConsultaURL(true));
 		$qrcode->appendChild($data);
 		$element->appendChild($qrcode);
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('qrCode');
+		if($_fields->length > 0)
+			$consulta_url = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "qrCode" não encontrada', 404);
+		$this->setConsultaURL($consulta_url);
 		return $element;
 	}
 

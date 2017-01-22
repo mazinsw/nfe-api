@@ -27,6 +27,7 @@
  */
 namespace Imposto\ICMS;
 use Util;
+use Exception;
 
 /**
  * Tributção pelo ICMS
@@ -49,6 +50,8 @@ class Reducao extends Normal {
 	}
 
 	public function setReducao($reducao) {
+		if(trim($reducao) != '')
+			$reducao = floatval($reducao);
 		$this->reducao = $reducao;
 		return $this;
 	}
@@ -82,6 +85,18 @@ class Reducao extends Normal {
 		$element = parent::getNode(is_null($name)?'ICMS20':$name);
 		$dom = $element->ownerDocument;
 		$element->appendChild($dom->createElement('pRedBC', $this->getReducao(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMS20':$name;
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('pRedBC');
+		if($_fields->length > 0)
+			$reducao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pRedBC" do campo "Reducao" não encontrada na Reducao', 404);
+		$this->setReducao($reducao);
 		return $element;
 	}
 

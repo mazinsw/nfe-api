@@ -169,4 +169,28 @@ class Cliente extends Pessoa {
 		return $element;
 	}
 
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'dest':$name;
+		$element = parent::loadNode($element, $name);
+		$cpf = null;
+		$_fields = $element->getElementsByTagName('CPF');
+		if($_fields->length > 0)
+			$cpf = $_fields->item(0)->nodeValue;
+		else if(is_null($this->getCNPJ()))
+			throw new Exception('Tag "CPF" do campo "CPF" não encontrada', 404);
+		$this->setCPF($cpf);
+		$email = null;
+		$_fields = $element->getElementsByTagName('email');
+		if($_fields->length > 0)
+			$email = $_fields->item(0)->nodeValue;
+		$this->setEmail($email);
+		$_fields = $element->getElementsByTagName('indIEDest');
+		if($_fields->length > 0)
+			$indicador = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "indIEDest" do campo "Indicador" não encontrada', 404);
+		$this->setIndicador($indicador);
+		return $element;
+	}
+
 }

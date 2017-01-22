@@ -78,6 +78,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setItem($item) {
+		if(trim($item) != '')
+			$item = intval($item);
 		$this->item = $item;
 		return $this;
 	}
@@ -181,6 +183,23 @@ class Produto implements NodeInterface {
 	}
 
 	public function setUnidade($unidade) {
+		switch ($unidade) {
+			case 'UN':
+				$unidade = self::UNIDADE_UNIDADE;
+				break;
+			case 'PC':
+				$unidade = self::UNIDADE_PECA;
+				break;
+			case 'm':
+				$unidade = self::UNIDADE_METRO;
+				break;
+			case 'g':
+				$unidade = self::UNIDADE_GRAMA;
+				break;
+			case 'L':
+				$unidade = self::UNIDADE_LITRO;
+				break;
+		}
 		$this->unidade = $unidade;
 		return $this;
 	}
@@ -192,6 +211,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setMultiplicador($multiplicador) {
+		if(trim($multiplicador) != '')
+			$multiplicador = intval($multiplicador);
 		$this->multiplicador = $multiplicador;
 		return $this;
 	}
@@ -207,6 +228,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setPreco($preco) {
+		if(trim($preco) != '')
+			$preco = floatval($preco);
 		$this->preco = $preco;
 		return $this;
 	}
@@ -222,6 +245,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setQuantidade($quantidade) {
+		if(trim($quantidade) != '')
+			$quantidade = floatval($quantidade);
 		$this->quantidade = $quantidade;
 		return $this;
 	}
@@ -236,6 +261,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setTributada($tributada) {
+		if(trim($tributada) != '')
+			$tributada = floatval($tributada);
 		$this->tributada = $tributada;
 		return $this;
 	}
@@ -259,6 +286,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setDesconto($desconto) {
+		if(trim($desconto) != '')
+			$desconto = floatval($desconto);
 		$this->desconto = $desconto;
 		return $this;
 	}
@@ -274,6 +303,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setSeguro($seguro) {
+		if(trim($seguro) != '')
+			$seguro = floatval($seguro);
 		$this->seguro = $seguro;
 		return $this;
 	}
@@ -289,6 +320,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setFrete($frete) {
+		if(trim($frete) != '')
+			$frete = floatval($frete);
 		$this->frete = $frete;
 		return $this;
 	}
@@ -304,6 +337,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setDespesas($despesas) {
+		if(trim($despesas) != '')
+			$despesas = floatval($despesas);
 		$this->despesas = $despesas;
 		return $this;
 	}
@@ -329,6 +364,8 @@ class Produto implements NodeInterface {
 	}
 
 	public function setCFOP($cfop) {
+		if(trim($cfop) != '')
+			$cfop = intval($cfop);
 		$this->cfop = $cfop;
 		return $this;
 	}
@@ -474,9 +511,10 @@ class Produto implements NodeInterface {
 		$this->setUnidade($produto['unidade']);
 		if(is_null($this->getUnidade()))
 			$this->setUnidade(self::UNIDADE_UNIDADE);
-		$this->setMultiplicador($produto['multiplicador']);
-		if(is_null($this->getMultiplicador()))
+		if(is_null($produto['multiplicador']))
 			$this->setMultiplicador(1);
+		else
+			$this->setMultiplicador($produto['multiplicador']);
 		$this->setPreco($produto['preco']);
 		$this->setQuantidade($produto['quantidade']);
 		$this->setTributada($produto['tributada']);
@@ -559,7 +597,8 @@ class Produto implements NodeInterface {
 		$produto->appendChild($dom->createElement('indTot', $this->getMultiplicador(true)));
 //		$produto->appendChild($dom->createElement('DI', $this->getImportacoes(true)));
 //		$produto->appendChild($dom->createElement('detExport', $this->getDetalhes(true)));
-		$produto->appendChild($dom->createElement('xPed', $this->getPedido(true)));
+		if(!is_null($this->getPedido()))
+			$produto->appendChild($dom->createElement('xPed', $this->getPedido(true)));
 		$produto->appendChild($dom->createElement('nItemPed', $this->getItem(true)));
 //		$produto->appendChild($dom->createElement('nFCI', $this->getControle(true)));
 		$element->appendChild($produto);
@@ -587,6 +626,150 @@ class Produto implements NodeInterface {
 		$element->appendChild($imposto);
 		// TODO: verificar se é obrigatório a informação adicional abaixo
 		self::addNodeInformacoes($imposto_info, $element);
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'det':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" do Produto não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$root = $element;
+		$_fields = $element->getElementsByTagName('prod');
+		if($_fields->length == 0)
+			throw new Exception('Tag "prod" do Produto não encontrada', 404);
+		$element = $_fields->item(0);
+		$_fields = $element->getElementsByTagName('nItemPed');
+		$item = null;
+		if($_fields->length > 0)
+			$item = $_fields->item(0)->nodeValue;
+		$this->setItem($item);
+		$_fields = $element->getElementsByTagName('xPed');
+		$pedido = null;
+		if($_fields->length > 0)
+			$pedido = $_fields->item(0)->nodeValue;
+		$this->setPedido($pedido);
+		$_fields = $element->getElementsByTagName('cProd');
+		if($_fields->length > 0)
+			$codigo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cProd" do campo "Codigo" não encontrada no Produto', 404);
+		$this->setCodigo($codigo);
+		$_fields = $element->getElementsByTagName('cEANTrib');
+		if($_fields->length > 0)
+			$codigo_tributario = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cEANTrib" do campo "CodigoTributario" não encontrada no Produto', 404);
+		$this->setCodigoTributario($codigo_tributario);
+		$_fields = $element->getElementsByTagName('cEAN');
+		if($_fields->length > 0)
+			$codigo_barras = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "cEAN" do campo "CodigoBarras" não encontrada no Produto', 404);
+		$this->setCodigoBarras($codigo_barras);
+		$_fields = $element->getElementsByTagName('xProd');
+		if($_fields->length > 0)
+			$descricao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "xProd" do campo "Descricao" não encontrada no Produto', 404);
+		$this->setDescricao($descricao);
+		$_fields = $element->getElementsByTagName('uCom');
+		if($_fields->length > 0)
+			$unidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "uCom" do campo "Unidade" não encontrada no Produto', 404);
+		$this->setUnidade($unidade);
+		$_fields = $element->getElementsByTagName('indTot');
+		if($_fields->length > 0)
+			$multiplicador = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "indTot" do campo "Multiplicador" não encontrada no Produto', 404);
+		$this->setMultiplicador($multiplicador);
+		$_fields = $element->getElementsByTagName('vProd');
+		if($_fields->length > 0)
+			$preco = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vProd" do campo "Preco" não encontrada no Produto', 404);
+		$this->setPreco($preco);
+		$_fields = $element->getElementsByTagName('qCom');
+		if($_fields->length > 0)
+			$quantidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "qCom" do campo "Quantidade" não encontrada no Produto', 404);
+		$this->setQuantidade($quantidade);
+		$_fields = $element->getElementsByTagName('qTrib');
+		if($_fields->length > 0)
+			$tributada = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "qTrib" do campo "Tributada" não encontrada no Produto', 404);
+		$this->setTributada($tributada);
+		$_fields = $element->getElementsByTagName('vDesc');
+		$desconto = null;
+		if($_fields->length > 0)
+			$desconto = $_fields->item(0)->nodeValue;
+		$this->setDesconto($desconto);
+		$_fields = $element->getElementsByTagName('vSeg');
+		$seguro = null;
+		if($_fields->length > 0)
+			$seguro = $_fields->item(0)->nodeValue;
+		$this->setSeguro($seguro);
+		$_fields = $element->getElementsByTagName('vFrete');
+		$frete = null;
+		if($_fields->length > 0)
+			$frete = $_fields->item(0)->nodeValue;
+		$this->setFrete($frete);
+		$_fields = $element->getElementsByTagName('vOutro');
+		$despesas = null;
+		if($_fields->length > 0)
+			$despesas = $_fields->item(0)->nodeValue;
+		$this->setDespesas($despesas);
+		$_fields = $element->getElementsByTagName('EXTIPI');
+		$excecao = null;
+		if($_fields->length > 0)
+			$excecao = $_fields->item(0)->nodeValue;
+		$this->setExcecao($excecao);
+		$_fields = $element->getElementsByTagName('CFOP');
+		if($_fields->length > 0)
+			$cfop = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CFOP" do campo "CFOP" não encontrada no Produto', 404);
+		$this->setCFOP($cfop);
+		$_fields = $element->getElementsByTagName('NCM');
+		if($_fields->length > 0)
+			$ncm = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "NCM" do campo "NCM" não encontrada no Produto', 404);
+		$this->setNCM($ncm);
+		$_fields = $element->getElementsByTagName('CEST');
+		$cest = null;
+		if($_fields->length > 0)
+			$cest = $_fields->item(0)->nodeValue;
+		$this->setCEST($cest);
+		$impostos = array();
+		$_fields = $root->getElementsByTagName('imposto');
+		if($_fields->length == 0)
+			throw new Exception('Tag "imposto" da lista de "Impostos" não encontrada no Produto', 404);
+		$_items = $_fields->item(0)->childNodes;
+		$total = new \Imposto\Total();
+		foreach ($_items as $_item) {
+			if(!$_item->hasChildNodes() || $_item->nodeType !== XML_ELEMENT_NODE) {
+				continue;
+			}
+			$total->setGrupo($_item->tagName);
+			foreach ($_item->childNodes as $_subitem) {
+				if($_subitem->nodeType !== XML_ELEMENT_NODE)
+					continue;
+				$imposto = Imposto::loadImposto($_subitem, $total->getGrupo());
+				if($imposto === false)
+					continue;
+				$imposto->setGrupo($total->getGrupo());
+				$impostos[] = $imposto;
+			}
+		}
+		$this->setImpostos($impostos);
 		return $element;
 	}
 

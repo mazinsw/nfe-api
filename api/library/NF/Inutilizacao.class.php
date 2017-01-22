@@ -31,9 +31,9 @@ use SEFAZ;
 use Estado;
 use Exception;
 use DOMDocument;
+use ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
-use ValidationException;
 
 class Inutilizacao extends Retorno {
 
@@ -45,6 +45,7 @@ class Inutilizacao extends Retorno {
 	private $inicio;
 	private $final;
 	private $justificativa;
+	private $numero;
 
 	public function __construct($inutilizacao = array()) {
 		parent::__construct($inutilizacao);
@@ -151,6 +152,24 @@ class Inutilizacao extends Retorno {
 		return $this;
 	}
 
+	public function getNumero($normalize = false) {
+		if(!$normalize)
+			return $this->numero;
+		return $this->numero;
+	}
+
+	public function setNumero($numero) {
+		$this->numero = $numero;
+		return $this;
+	}
+
+	/**
+	 * Informa se os números foram inutilizados
+	 */
+	public function isInutilizado() {
+		return $this->getStatus() == '102';
+	}
+
 	public function toArray() {
 		$inutilizacao = parent::toArray();
 		$inutilizacao['id'] = $this->getID();
@@ -161,6 +180,7 @@ class Inutilizacao extends Retorno {
 		$inutilizacao['inicio'] = $this->getInicio();
 		$inutilizacao['final'] = $this->getFinal();
 		$inutilizacao['justificativa'] = $this->getJustificativa();
+		$inutilizacao['numero'] = $this->getNumero();
 		return $inutilizacao;
 	}
 
@@ -178,6 +198,7 @@ class Inutilizacao extends Retorno {
 		$this->setInicio($inutilizacao['inicio']);
 		$this->setFinal($inutilizacao['final']);
 		$this->setJustificativa($inutilizacao['justificativa']);
+		$this->setNumero($inutilizacao['numero']);
 		return $this;
 	}
 
@@ -193,20 +214,6 @@ class Inutilizacao extends Retorno {
 		);
 		return $id;
 
-	}
-
-	public function envia($dom) {
-		$envio = new Envio();
-		$envio->setServico(Envio::SERVICO_INUTILIZACAO);
-		$envio->setAmbiente($this->getAmbiente());
-		$envio->setModelo($this->getModelo());
-		$envio->setEmissao(NF::EMISSAO_NORMAL);
-		$envio->setConteudo($dom);
-		$resp = $envio->envia();
-		$this->loadNode($resp);
-		if($this->getStatus() != '102')
-			throw new Exception($this->getMotivo(), $this->getStatus());
-		return $this->getReturnNode()->ownerDocument;
 	}
 
 	public function getNode($name = null) {
@@ -258,30 +265,78 @@ class Inutilizacao extends Retorno {
 				continue;
 			switch ($node->nodeName) {
 				case 'dhRecbto':
-				case 'nProt':
 					$info->appendChild($node);
 					break;
 				default:
 					$info->insertBefore($node, $uf);
 			}
 		}
+		$info->appendChild($dom->createElement('nProt', $this->getNumero(true)));
 		return $element;
 	}
 
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'infInut':$name;
+		$element = parent::loadNode($element, $name);
+		if(!$this->isInutilizado())
+			return $element;
+		$_fields = $element->getElementsByTagName('ano');
+		if($_fields->length > 0)
+			$ano = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "ano" do campo "Ano" não encontrada', 404);
+		$this->setAno($ano);
+		$_fields = $element->getElementsByTagName('CNPJ');
+		if($_fields->length > 0)
+			$cnpj = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CNPJ" do campo "CNPJ" não encontrada', 404);
+		$this->setCNPJ($cnpj);
+		$_fields = $element->getElementsByTagName('mod');
+		if($_fields->length > 0)
+			$modelo = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "mod" do campo "Modelo" não encontrada', 404);
+		$this->setModelo($modelo);
+		$_fields = $element->getElementsByTagName('serie');
+		if($_fields->length > 0)
+			$serie = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "serie" do campo "Serie" não encontrada', 404);
+		$this->setSerie($serie);
+		$_fields = $element->getElementsByTagName('nNFIni');
+		if($_fields->length > 0)
+			$inicio = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "nNFIni" do campo "Inicio" não encontrada', 404);
+		$this->setInicio($inicio);
+		$_fields = $element->getElementsByTagName('nNFFin');
+		if($_fields->length > 0)
+			$final = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "nNFFin" do campo "Final" não encontrada', 404);
+		$this->setFinal($final);
+		$_fields = $element->getElementsByTagName('nProt');
+		if($_fields->length > 0)
+			$numero = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "nProt" do campo "Numero" não encontrada', 404);
+		$this->setNumero($numero);
+		return $element;
+	}
 
-	public function loadNode($dom, $name = null) {
-		$tag = is_null($name)?'infInut':$name;
-		parent::loadNode($dom, $tag);
-		if($this->getStatus() != '102')
-			return $this;
-		$info = $dom->getElementsByTagName($tag)->item(0);
-		$this->setAno($info->getElementsByTagName('ano')->item(0)->nodeValue);
-		$this->setCNPJ($info->getElementsByTagName('CNPJ')->item(0)->nodeValue);
-		$this->setModelo($info->getElementsByTagName('mod')->item(0)->nodeValue);
-		$this->setSerie($info->getElementsByTagName('serie')->item(0)->nodeValue);
-		$this->setInicio($info->getElementsByTagName('nNFIni')->item(0)->nodeValue);
-		$this->setFinal($info->getElementsByTagName('nNFFin')->item(0)->nodeValue);
-		return $this;
+	public function envia($dom) {
+		$envio = new Envio();
+		$envio->setServico(Envio::SERVICO_INUTILIZACAO);
+		$envio->setAmbiente($this->getAmbiente());
+		$envio->setModelo($this->getModelo());
+		$envio->setEmissao(NF::EMISSAO_NORMAL);
+		$envio->setConteudo($dom);
+		$resp = $envio->envia();
+		$this->loadNode($resp);
+		if(!$this->isInutilizado())
+			throw new Exception($this->getMotivo(), $this->getStatus());
+		return $this->getReturnNode()->ownerDocument;
 	}
 
 	/**
@@ -306,7 +361,7 @@ class Inutilizacao extends Retorno {
 	/**
 	 * Valida o documento após assinar
 	 */
-	public function validar(&$dom) {
+	public function validar($dom) {
 		$dom->loadXML($dom->saveXML());
 		$xsd_path = dirname(dirname(dirname(__FILE__))) . '/schema';
 		$xsd_file = $xsd_path . '/inutNFe_v3.10.xsd';

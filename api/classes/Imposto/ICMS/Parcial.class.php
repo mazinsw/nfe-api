@@ -26,9 +26,10 @@
  *
  */
 namespace Imposto\ICMS;
-use Imposto;
-use DOMDocument;
 use Util;
+use Imposto;
+use Exception;
+use DOMDocument;
 
 /**
  * Tributação pelo ICMS
@@ -196,6 +197,59 @@ class Parcial extends Imposto {
 		$element->appendChild($dom->createElement('vBCST', $this->getBase(true)));
 		$element->appendChild($dom->createElement('pICMSST', $this->getAliquota(true)));
 		$element->appendChild($dom->createElement('vICMSST', $this->getValor(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'IMCS30':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" do ICMS Parcial não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('orig');
+		if($_fields->length > 0)
+			$origem = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "orig" do campo "Origem" não encontrada no ICMS Parcial', 404);
+		$this->setOrigem($origem);
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada no ICMS Parcial', 404);
+		$this->setTributacao($tributacao);
+		$_fields = $element->getElementsByTagName('modBCST');
+		if($_fields->length > 0)
+			$modalidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "modBCST" do campo "Modalidade" não encontrada no ICMS Parcial', 404);
+		$this->setModalidade($modalidade);
+		$_fields = $element->getElementsByTagName('pMVAST');
+		if($_fields->length > 0)
+			$margem = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pMVAST" do campo "Margem" não encontrada no ICMS Parcial', 404);
+		$this->setMargem($margem);
+		$_fields = $element->getElementsByTagName('pRedBCST');
+		if($_fields->length > 0)
+			$reducao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pRedBCST" do campo "Reducao" não encontrada no ICMS Parcial', 404);
+		$this->setReducao($reducao);
+		$_fields = $element->getElementsByTagName('vBCST');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBCST" do campo "Base" não encontrada no ICMS Parcial', 404);
+		$this->setBase($base);
+		$_fields = $element->getElementsByTagName('pICMSST');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pICMSST" do campo "Aliquota" não encontrada no ICMS Parcial', 404);
+		$this->setAliquota($aliquota);
 		return $element;
 	}
 

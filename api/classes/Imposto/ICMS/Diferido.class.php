@@ -27,6 +27,7 @@
  */
 namespace Imposto\ICMS;
 use Util;
+use Exception;
 use DOMDocument;
 
 /**
@@ -124,6 +125,44 @@ class Diferido extends Reducao {
 			$item = $element->getElementsByTagName('vICMS')->item(0);
 			$element->removeChild($item);
 		}
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMS51':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$dom = $element->ownerDocument;
+		$element = $dom->importNode($element, true);
+		$_fields = $element->getElementsByTagName('pRedBC');
+		if($_fields->length == 0)
+			$element->appendChild($dom->createElement('pRedBC', '0.0000'));
+		$_dif = $element->getElementsByTagName('pDif');
+		if($_dif->length > 0) {
+			$element = parent::loadNode($element, $name);
+			if($_dif->length > 0)
+				$diferimento = $_dif->item(0)->nodeValue;
+			else
+				throw new Exception('Tag "pDif" do campo "Diferimento" não encontrada no Diferido', 404);
+			$this->setDiferimento($diferimento);
+			return $element;
+		}
+		$_fields = $element->getElementsByTagName('orig');
+		if($_fields->length > 0)
+			$origem = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "orig" do campo "Origem" não encontrada', 404);
+		$this->setOrigem($origem);
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
 		return $element;
 	}
 

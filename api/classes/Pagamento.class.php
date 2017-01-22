@@ -99,6 +99,38 @@ class Pagamento implements NodeInterface {
 	}
 
 	public function setForma($forma) {
+		switch ($forma) {
+			case '01':
+				$forma = self::FORMA_DINHEIRO;
+				break;
+			case '02':
+				$forma = self::FORMA_CHEQUE;
+				break;
+			case '03':
+				$forma = self::FORMA_CREDITO;
+				break;
+			case '04':
+				$forma = self::FORMA_DEBITO;
+				break;
+			case '05':
+				$forma = self::FORMA_CREDIARIO;
+				break;
+			case '10':
+				$forma = self::FORMA_ALIMENTACAO;
+				break;
+			case '11':
+				$forma = self::FORMA_REFEICAO;
+				break;
+			case '12':
+				$forma = self::FORMA_PRESENTE;
+				break;
+			case '13':
+				$forma = self::FORMA_COMBUSTIVEL;
+				break;
+			case '99':
+				$forma = self::FORMA_OUTROS;
+				break;
+		}
 		$this->forma = $forma;
 		return $this;
 	}
@@ -113,6 +145,7 @@ class Pagamento implements NodeInterface {
 	}
 
 	public function setValor($valor) {
+		$valor = floatval($valor);
 		$this->valor = $valor;
 		return $this;
 	}
@@ -140,6 +173,8 @@ class Pagamento implements NodeInterface {
 	}
 
 	public function setIntegrado($integrado) {
+		if(!in_array($integrado, array('N', 'Y')))
+			$integrado = $integrado == '1'?'Y':'N';
 		$this->integrado = $integrado;
 		return $this;
 	}
@@ -195,8 +230,32 @@ class Pagamento implements NodeInterface {
 	}
 
 	public function setBandeira($bandeira) {
+		switch ($bandeira) {
+			case '01':
+				$bandeira = self::BANDEIRA_VISA;
+				break;
+			case '02':
+				$bandeira = self::BANDEIRA_MASTERCARD;
+				break;
+			case '03':
+				$bandeira = self::BANDEIRA_AMEX;
+				break;
+			case '04':
+				$bandeira = self::BANDEIRA_SOROCRED;
+				break;
+			case '99':
+				$bandeira = self::BANDEIRA_OUTROS;
+				break;
+		}
 		$this->bandeira = $bandeira;
 		return $this;
+	}
+
+	/**
+	 * Informa se o pagamento é em cartão
+	 */
+	public function isCartao() {
+		return in_array($this->getForma(), array(self::FORMA_CREDITO, self::FORMA_DEBITO));
 	}
 
 	public function toArray() {
@@ -231,7 +290,7 @@ class Pagamento implements NodeInterface {
 		$element = $dom->createElement(is_null($name)?'pag':$name);
 		$element->appendChild($dom->createElement('tPag', $this->getForma(true)));
 		$element->appendChild($dom->createElement('vPag', $this->getValor(true)));
-		if($this->getForma() != self::FORMA_CREDITO && $this->getForma() != self::FORMA_DEBITO)
+		if(!$this->isCartao())
 			return $element;
 		$cartao = $dom->createElement('card');
 		$cartao->appendChild($dom->createElement('tpIntegra', $this->getIntegrado(true)));
@@ -241,6 +300,55 @@ class Pagamento implements NodeInterface {
 			$cartao->appendChild($dom->createElement('cAut', $this->getAutorizacao(true)));
 		}
 		$element->appendChild($cartao);
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'pag':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('tPag');
+		if($_fields->length > 0)
+			$forma = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "tPag" do campo "Forma" não encontrada', 404);
+		$this->setForma($forma);
+		$_fields = $element->getElementsByTagName('vPag');
+		if($_fields->length > 0)
+			$valor = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vPag" do campo "Valor" não encontrada', 404);
+		$this->setValor($valor);
+		$integrado = null;
+		$_fields = $element->getElementsByTagName('tpIntegra');
+		if($_fields->length > 0)
+			$integrado = $_fields->item(0)->nodeValue;
+		else if($this->isCartao())
+			throw new Exception('Tag "tpIntegra" do campo "Integrado" não encontrada', 404);
+		$this->setIntegrado($integrado);
+		$credenciadora = null;
+		$_fields = $element->getElementsByTagName('CNPJ');
+		if($_fields->length > 0)
+			$credenciadora = $_fields->item(0)->nodeValue;
+		$this->setCredenciadora($credenciadora);
+		$autorizacao = null;
+		$_fields = $element->getElementsByTagName('cAut');
+		if($_fields->length > 0)
+			$autorizacao = $_fields->item(0)->nodeValue;
+		else if($this->isCartao() && is_numeric($this->getCredenciadora()))
+			throw new Exception('Tag "cAut" do campo "Autorizacao" não encontrada', 404);
+		$this->setAutorizacao($autorizacao);
+		$bandeira = null;
+		$_fields = $element->getElementsByTagName('tBand');
+		if($_fields->length > 0)
+			$bandeira = $_fields->item(0)->nodeValue;
+		else if($this->isCartao() && is_numeric($this->getCredenciadora()))
+			throw new Exception('Tag "tBand" do campo "Bandeira" não encontrada', 404);
+		$this->setBandeira($bandeira);
 		return $element;
 	}
 

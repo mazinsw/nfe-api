@@ -27,6 +27,7 @@
  */
 namespace Imposto\ICMS;
 use Imposto;
+use Exception;
 use DOMDocument;
 
 /**
@@ -132,6 +133,48 @@ class Normal extends Imposto {
 		$element->appendChild($dom->createElement('vBC', $this->getBase(true)));
 		$element->appendChild($dom->createElement('pICMS', $this->getAliquota(true)));
 		$element->appendChild($dom->createElement('vICMS', $this->getValor(true)));
+		return $element;
+	}
+
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'IMCS':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('orig');
+		if($_fields->length > 0)
+			$origem = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "orig" do campo "Origem" não encontrada', 404);
+		$this->setOrigem($origem);
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
+		$_fields = $element->getElementsByTagName('modBC');
+		if($_fields->length > 0)
+			$modalidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "modBC" do campo "Modalidade" não encontrada', 404);
+		$this->setModalidade($modalidade);
+		$_fields = $element->getElementsByTagName('vBC');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBC" do campo "Base" não encontrada', 404);
+		$this->setBase($base);
+		$_fields = $element->getElementsByTagName('pICMS');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pICMS" do campo "Aliquota" não encontrada', 404);
+		$this->setAliquota($aliquota);
 		return $element;
 	}
 

@@ -42,19 +42,26 @@ interface Evento {
 	public function onNotaAssinada($nota, $xml);
 
 	/**
+	 * Chamado após o XML da nota ser validado com sucesso
+	 */
+	public function onNotaValidada($nota, $xml);
+
+	/**
 	 * Chamado antes de enviar a nota para a SEFAZ
 	 */
 	public function onNotaEnviando($nota, $xml);
 
 	/**
-	 * Chamado quando a forma de emissão da nota fiscal muda para contigência
+	 * Chamado quando a forma de emissão da nota fiscal muda para contigência,
+	 * aqui deve ser decidido se o número da nota deverá ser pulado e se esse
+	 * número deve ser cancelado ou inutilizado
 	 */
 	public function onNotaContingencia($nota, $offline);
 
 	/**
 	 * Chamado quando a nota foi enviada e aceita pela SEFAZ
 	 */
-	public function onNotaEnviada($nota, $xml);
+	public function onNotaAutorizada($nota, $xml, $retorno);
 
 	/**
 	 * Chamado quando a emissão da nota foi concluída com sucesso independente
@@ -63,13 +70,52 @@ interface Evento {
 	public function onNotaCompleto($nota, $xml);
 
 	/**
-	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
-	 * é chamado quando entra em contigência)
+	 * Chamado quando uma nota é rejeitada pela SEFAZ, a nota deve ser
+	 * corrigida para depois ser enviada novamente
 	 */
-	public function onNotaErro($nota, $e);
+	public function onNotaRejeitada($nota, $xml, $retorno);
+
+	/**
+	 * Chamado quando a nota é denegada e não pode ser utilizada (outra nota
+	 * deve ser gerada)
+	 */
+	public function onNotaDenegada($nota, $xml, $retorno);
+
+	/**
+	 * Chamado após tentar enviar uma nota e não ter certeza se ela foi
+	 * recebida ou não (problemas técnicos), deverá ser feito uma consulta pela
+	 * chave para obter o estado da nota
+	 */
+	public function onNotaPendente($nota, $xml);
+
+	/**
+	 * Chamado quando uma nota é enviada, mas não retornou o protocolo que será
+	 * consultado mais tarde
+	 */
+	public function onNotaProcessando($nota, $xml, $retorno);
+
+	/**
+	 * Chamado quando uma nota autorizada é cancelada na SEFAZ
+	 */
+	public function onNotaCancelada($nota, $xml, $retorno);
+
+	/**
+	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota
+	 */
+	public function onNotaErro($nota, $exception);
 
 	/**
 	 * Chamado quando um ou mais números de notas forem inutilizados
 	 */
 	public function onInutilizado($inutilizacao, $xml);
+
+	/**
+	 * Chamado quando uma tarefa é executada
+	 */
+	public function onTarefaExecutada($tarefa, $retorno);
+
+	/**
+	 * Chamado quando ocorre uma falha na execução de uma tarefa
+	 */
+	public function onTarefaErro($tarefa, $exception);
 }

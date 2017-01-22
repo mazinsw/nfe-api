@@ -27,6 +27,7 @@
  */
 namespace Imposto\ICMS\Simples;
 use Util;
+use Exception;
 
 /**
  * Tributada pelo Simples Nacional com permissão de crédito e com cobrança
@@ -101,6 +102,32 @@ class Cobranca extends Parcial {
 			else
 				$element->appendChild($node);
 		}
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMSSN201':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$normal = $this->getNormal();
+		if(is_null($normal))
+			$normal = new Normal();
+		$this->setNormal($normal);
+		$_fields = $element->getElementsByTagName('modBCST');
+		if($_fields->length == 0) {
+			$normal->loadNode($element, $name);
+			return $element;
+		}
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('pCredSN');
+		if($_fields->length == 0)
+			return $element;
+		$normal->setModalidade(Normal::MODALIDADE_OPERACAO); // forçar escrita
+		$normal->loadNode($element, $name);
 		return $element;
 	}
 

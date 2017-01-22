@@ -26,8 +26,9 @@
  *
  */
 namespace Imposto;
-use Imposto;
 use Util;
+use Imposto;
+use Exception;
 use DOMDocument;
 
 /**
@@ -115,6 +116,41 @@ class II extends Imposto {
 		$element->appendChild($dom->createElement('vDespAdu', $this->getDespesas(true)));
 		$element->appendChild($dom->createElement('vII', $this->getValor(true)));
 		$element->appendChild($dom->createElement('vIOF', $this->getIOF(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'II':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('vBC');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBC" do campo "Base" não encontrada', 404);
+		$this->setBase($base);
+		$_fields = $element->getElementsByTagName('vDespAdu');
+		if($_fields->length > 0)
+			$despesas = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vDespAdu" do campo "Despesas" não encontrada', 404);
+		$this->setDespesas($despesas);
+		$_fields = $element->getElementsByTagName('vII');
+		if($_fields->length > 0)
+			$valor = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vII" do campo "Valor" não encontrada', 404);
+		$this->setValor($valor);
+		$_fields = $element->getElementsByTagName('vIOF');
+		if($_fields->length > 0)
+			$iof = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vIOF" do campo "Iof" não encontrada', 404);
+		$this->setIOF($iof);
 		return $element;
 	}
 

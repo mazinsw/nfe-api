@@ -200,6 +200,9 @@ $icms_cobranca->setReducao(10.00);
 $icms_cobranca->setAliquota(18.00);
 $impostos[] = $icms_cobranca; // TODO: verificar vICMSST = 12.96
 
+$icms_generico = new \Imposto\ICMS\Simples\Generico();
+$impostos[] = $icms_generico;
+
 $icms_isento = new \Imposto\ICMS\Simples\Isento();
 $impostos[] = $icms_isento;
 

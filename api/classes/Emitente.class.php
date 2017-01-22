@@ -126,4 +126,21 @@ class Emitente extends Pessoa {
 		return $element;
 	}
 
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'emit':$name;
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('xFant');
+		$fantasia = null;
+		if($_fields->length > 0)
+			$fantasia = $_fields->item(0)->nodeValue;
+		$this->setFantasia($fantasia);
+		$_fields = $element->getElementsByTagName('CRT');
+		if($_fields->length > 0)
+			$regime = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CRT" do campo "Regime" não encontrada', 404);
+		$this->setRegime($regime);
+		return $element;
+	}
+
 }

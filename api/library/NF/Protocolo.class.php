@@ -27,12 +27,12 @@
  */
 namespace NF;
 use NF;
-use DOMDocument;
 
 class Protocolo extends Retorno {
 
 	private $chave;
 	private $validacao;
+	private $numero;
 
 	public function __construct($protocolo = array()) {
 		parent::__construct($protocolo);
@@ -60,10 +60,22 @@ class Protocolo extends Retorno {
 		return $this;
 	}
 
+	public function getNumero($normalize = false) {
+		if(!$normalize)
+			return $this->numero;
+		return $this->numero;
+	}
+
+	public function setNumero($numero) {
+		$this->numero = $numero;
+		return $this;
+	}
+
 	public function toArray() {
 		$protocolo = parent::toArray();
 		$protocolo['chave'] = $this->getChave();
 		$protocolo['validacao'] = $this->getValidacao();
+		$protocolo['numero'] = $this->getNumero();
 		return $protocolo;
 	}
 
@@ -75,17 +87,25 @@ class Protocolo extends Retorno {
 		parent::fromArray($protocolo);
 		$this->setChave($protocolo['chave']);
 		$this->setValidacao($protocolo['validacao']);
+		$this->setNumero($protocolo['numero']);
 		return $this;
 	}
 
-	public function loadNode($dom, $name = null) {
-		$tag = is_null($name)?'infProt':$name;
-		parent::loadNode($dom, $tag);
-
-		$info = $dom->getElementsByTagName($tag)->item(0);
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'infProt':$name;
+		$info = parent::loadNode($element, $name);
 		$this->setChave($info->getElementsByTagName('chNFe')->item(0)->nodeValue);
-		$this->setValidacao($info->getElementsByTagName('digVal')->item(0)->nodeValue);
-		return $this;
+		$_fields = $info->getElementsByTagName('digVal');
+		$validacao = null;
+		if($_fields->length > 0)
+			$validacao = $_fields->item(0)->nodeValue;
+		$this->setValidacao($validacao);
+		$_fields = $info->getElementsByTagName('nProt');
+		$numero = null;
+		if($_fields->length > 0)
+			$numero = $_fields->item(0)->nodeValue;
+		$this->setNumero($numero);
+		return $info;
 	}
 
 	public function getNode($name = null) {
@@ -104,6 +124,7 @@ class Protocolo extends Retorno {
 		$info->appendChild($id);
 
 		$status = $info->getElementsByTagName('cStat')->item(0);
+		$info->insertBefore($dom->createElement('nProt', $this->getNumero(true)), $status);
 		$info->insertBefore($dom->createElement('digVal', $this->getValidacao(true)), $status);
 		$nodes = $info->getElementsByTagName('dhRecbto');
 		if($nodes->length > 0)

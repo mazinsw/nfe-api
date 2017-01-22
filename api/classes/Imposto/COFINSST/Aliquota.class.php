@@ -26,6 +26,7 @@
  *
  */
 namespace Imposto\COFINSST;
+use Exception;
 use \Imposto\COFINS\Aliquota as COFINSAliquota;
 
 /**
@@ -58,6 +59,29 @@ class Aliquota extends COFINSAliquota {
 		$element = parent::getNode(is_null($name)?'COFINSST':$name);
 		$item = $element->getElementsByTagName('CST')->item(0);
 		$element->removeChild($item);
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'COFINSST':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('vBC');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBC" do campo "Base" não encontrada', 404);
+		$this->setBase($base);
+		$_fields = $element->getElementsByTagName('pCOFINS');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pCOFINS" do campo "Aliquota" não encontrada', 404);
+		$this->setAliquota($aliquota);
 		return $element;
 	}
 

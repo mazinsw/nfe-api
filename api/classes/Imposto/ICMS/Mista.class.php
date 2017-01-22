@@ -27,6 +27,7 @@
  */
 namespace Imposto\ICMS;
 use Util;
+use Exception;
 
 /**
  * Tributação pelo ICMS
@@ -58,6 +59,27 @@ class Mista extends Cobranca {
 	public function getNode($name = null) {
 		$element = parent::getNode(is_null($name)?'ICMS70':$name);
 		$dom = $element->ownerDocument;
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$normal = new Reducao();
+		$this->setNormal($normal);
+		$name = is_null($name)?'ICMS70':$name;
+		$element = parent::loadNode($element, $name);
+		if(is_null($this->getNormal()->getReducao()))
+			$this->getNormal()->setReducao($this->getReducao());
+		if(is_null($this->getNormal()->getAliquota()))
+			$this->getNormal()->setAliquota($this->getAliquota());
+		if(!is_null($this->getNormal()->getBase()))
+			return $element;
+		$_fields = $element->getElementsByTagName('vICMSST');
+		if($_fields->length == 0)
+			throw new Exception('Tag "vICMSST" do campo "Normal.Valor" não encontrada na Mista', 404);
+		$valor = floatval($_fields->item(0)->nodeValue);
+		$diferenca = $this->getValor() - $valor;
+		$base = $diferenca * 100.0 / $this->getNormal()->getAliquota();
+		$this->getNormal()->setBase($base);
 		return $element;
 	}
 

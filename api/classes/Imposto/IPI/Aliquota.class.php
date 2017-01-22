@@ -27,6 +27,7 @@
  */
 namespace Imposto\IPI;
 use Imposto;
+use Exception;
 use DOMDocument;
 
 class Aliquota extends Imposto {
@@ -105,6 +106,35 @@ class Aliquota extends Imposto {
 		$element->appendChild($dom->createElement('vBC', $this->getBase(true)));
 		$element->appendChild($dom->createElement('pIPI', $this->getAliquota(true)));
 		$element->appendChild($dom->createElement('vIPI', $this->getValor(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'IPITrib':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('CST');
+		if($_fields->length > 0)
+			$tributacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+		$this->setTributacao($tributacao);
+		$_fields = $element->getElementsByTagName('vBC');
+		if($_fields->length > 0)
+			$base = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vBC" do campo "Base" não encontrada', 404);
+		$this->setBase($base);
+		$_fields = $element->getElementsByTagName('pIPI');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pIPI" do campo "Aliquota" não encontrada', 404);
+		$this->setAliquota($aliquota);
 		return $element;
 	}
 

@@ -25,16 +25,15 @@
  * SOFTWARE.
  *
  */
+use NF\Tarefa;
+use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 /**
  * Configurações padrão para emissão de nota fiscal
  */
 class Ajuste extends Configuracao implements Evento {
 
-	private $chave_publica;
-	private $chave_privada;
-	private $arquivo_chave_publica;
-	private $arquivo_chave_privada;
+	private $pasta_xml_base;
 	private $pasta_xml_inutilizado;
 	private $pasta_xml_cancelado;
 	private $pasta_xml_pendente;
@@ -43,63 +42,52 @@ class Ajuste extends Configuracao implements Evento {
 	private $pasta_xml_autorizado;
 	private $pasta_xml_processamento;
 	private $pasta_xml_assinado;
-	private $token;
-	private $csc;
-	private $token_ibpt;
 
 	public function __construct($ajuste = array()) {
 		parent::__construct($ajuste);
 		$this->setEvento($this);
+		//$this->setSincrono(true);
+		$this->setTempoLimite(4);
 		$this->setArquivoChavePublica(dirname(dirname(dirname(__FILE__))) . '/tests/cert/public.pem');
 		$this->setArquivoChavePrivada(dirname(dirname(dirname(__FILE__))) . '/tests/cert/private.pem');
-		$this->setPastaXmlInutilizado(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/inutilizado');
-		$this->setPastaXmlCancelado(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/cancelado');
-		$this->setPastaXmlPendente(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/pendente');
-		$this->setPastaXmlDenegado(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/denegado');
-		$this->setPastaXmlRejeitado(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/rejeitado');
-		$this->setPastaXmlAutorizado(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/autorizado');
-		$this->setPastaXmlProcessamento(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/processamento');
-		$this->setPastaXmlAssinado(dirname(dirname(dirname(__FILE__))) . '/site/xml/{ambiente}/assinado');
+
+		$this->setPastaXmlBase(dirname(dirname(dirname(__FILE__))) . '/site/xml');
+		$this->setPastaXmlInutilizado('{ambiente}/inutilizado');
+		$this->setPastaXmlCancelado('{ambiente}/cancelado');
+		$this->setPastaXmlPendente('{ambiente}/pendente');
+		$this->setPastaXmlDenegado('{ambiente}/denegado');
+		$this->setPastaXmlRejeitado('{ambiente}/rejeitado');
+		$this->setPastaXmlAutorizado('{ambiente}/autorizado');
+		$this->setPastaXmlProcessamento('{ambiente}/processamento');
+		$this->setPastaXmlAssinado('{ambiente}/assinado');
 	}
 
-	public function getChavePublica() {
-		return $this->chave_publica;
+	/**
+	 * Caminho da pasta base para armazenamento dos XML
+	 */
+	public function getPastaXmlBase() {
+		return $this->pasta_xml_base;
 	}
 
-	public function setChavePublica($chave_publica) {
-		$this->chave_publica = $chave_publica;
+	public function setPastaXmlBase($pasta_xml_base) {
+		$this->pasta_xml_base = $pasta_xml_base;
 		return $this;
 	}
 
-	public function getChavePrivada() {
-		return $this->chave_privada;
-	}
-
-	public function setChavePrivada($chave_privada) {
-		$this->chave_privada = $chave_privada;
-		return $this;
-	}
-
-	public function getArquivoChavePublica() {
-		return $this->arquivo_chave_publica;
-	}
-
-	public function setArquivoChavePublica($arquivo_chave_publica) {
-		$this->arquivo_chave_publica = $arquivo_chave_publica;
-		if(file_exists($arquivo_chave_publica))
-			$this->setChavePublica(file_get_contents($arquivo_chave_publica));
-		return $this;
-	}
-
-	public function getArquivoChavePrivada() {
-		return $this->arquivo_chave_privada;
-	}
-
-	public function setArquivoChavePrivada($arquivo_chave_privada) {
-		$this->arquivo_chave_privada = $arquivo_chave_privada;
-		if(file_exists($arquivo_chave_privada))
-			$this->setChavePrivada(file_get_contents($arquivo_chave_privada));
-		return $this;
+	/**
+	 * Pasta onde ficam os XML das inutilizações de números de notas
+	 */
+	private function aplicaAmbiente($ambiente, $caminho) {
+		switch ($ambiente) {
+			case '1':
+				$ambiente = self::AMBIENTE_PRODUCAO;
+				break;
+			case '2':
+				$ambiente = self::AMBIENTE_HOMOLOGACAO;
+				break;
+		}
+		return rtrim(str_replace('{ambiente}', $ambiente, rtrim($this->getPastaXmlBase(), '/').
+			'/'.ltrim($caminho, '/')), '/');
 	}
 
 	/**
@@ -108,7 +96,7 @@ class Ajuste extends Configuracao implements Evento {
 	public function getPastaXmlInutilizado($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_inutilizado;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_inutilizado);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_inutilizado);
 	}
 
 	public function setPastaXmlInutilizado($pasta_xml_inutilizado) {
@@ -122,7 +110,7 @@ class Ajuste extends Configuracao implements Evento {
 	public function getPastaXmlCancelado($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_cancelado;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_cancelado);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_cancelado);
 	}
 
 	public function setPastaXmlCancelado($pasta_xml_cancelado) {
@@ -131,12 +119,12 @@ class Ajuste extends Configuracao implements Evento {
 	}
 
 	/**
-	 * Pasta onde ficam os XML das notas pendentes
+	 * Pasta onde ficam os XML das notas pendentes de consulta
 	 */
 	public function getPastaXmlPendente($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_pendente;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_pendente);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_pendente);
 	}
 
 	public function setPastaXmlPendente($pasta_xml_pendente) {
@@ -150,7 +138,7 @@ class Ajuste extends Configuracao implements Evento {
 	public function getPastaXmlDenegado($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_denegado;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_denegado);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_denegado);
 	}
 
 	public function setPastaXmlDenegado($pasta_xml_denegado) {
@@ -164,7 +152,7 @@ class Ajuste extends Configuracao implements Evento {
 	public function getPastaXmlRejeitado($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_rejeitado;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_rejeitado);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_rejeitado);
 	}
 
 	public function setPastaXmlRejeitado($pasta_xml_rejeitado) {
@@ -179,7 +167,7 @@ class Ajuste extends Configuracao implements Evento {
 	public function getPastaXmlAutorizado($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_autorizado;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_autorizado);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_autorizado);
 	}
 
 	public function setPastaXmlAutorizado($pasta_xml_autorizado) {
@@ -188,12 +176,13 @@ class Ajuste extends Configuracao implements Evento {
 	}
 
 	/**
-	 * Pasta onde ficam os XMLs em processamento de retorno de autorização
+	 * Pasta onde ficam os XML das notas em processamento de retorno de
+	 * autorização
 	 */
 	public function getPastaXmlProcessamento($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_processamento;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_processamento);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_processamento);
 	}
 
 	public function setPastaXmlProcessamento($pasta_xml_processamento) {
@@ -207,38 +196,11 @@ class Ajuste extends Configuracao implements Evento {
 	public function getPastaXmlAssinado($ambiente = null) {
 		if(is_null($ambiente))
 			return $this->pasta_xml_assinado;
-		return str_replace('{ambiente}', $ambiente, $this->pasta_xml_assinado);
+		return $this->aplicaAmbiente($ambiente, $this->pasta_xml_assinado);
 	}
 
 	public function setPastaXmlAssinado($pasta_xml_assinado) {
 		$this->pasta_xml_assinado = $pasta_xml_assinado;
-		return $this;
-	}
-
-	public function getToken() {
-		return $this->token;
-	}
-
-	public function setToken($token) {
-		$this->token = $token;
-		return $this;
-	}
-
-	public function getCSC() {
-		return $this->csc;
-	}
-
-	public function setCSC($csc) {
-		$this->csc = $csc;
-		return $this;
-	}
-
-	public function getTokenIBPT() {
-		return $this->token_ibpt;
-	}
-
-	public function setTokenIBPT($token_ibpt) {
-		$this->token_ibpt = $token_ibpt;
 		return $this;
 	}
 
@@ -254,9 +216,19 @@ class Ajuste extends Configuracao implements Evento {
 	 */
 	public function onNotaAssinada($nota, $xml) {
 		//echo 'XML assinado!<br>';
+	}
+
+	/**
+	 * Chamado após o XML da nota ser validado com sucesso
+	 */
+	public function onNotaValidada($nota, $xml) {
+		//echo 'XML validado!<br>';
 		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
 		file_put_contents($filename, $xml->saveXML());
-		if(!$nota->testar($filename))
+		$dom = new DOMDocument();
+		$dom->load($filename);
+		$adapter = new XmlseclibsAdapter();
+		if(!$adapter->verify($dom))
 			throw new Exception('Falha na assinatura do XML');
 	}
 
@@ -268,14 +240,16 @@ class Ajuste extends Configuracao implements Evento {
 	}
 
 	/**
-	 * Chamado quando a forma de emissão da nota fiscal muda contigência
+	 * Chamado quando a forma de emissão da nota fiscal muda para contigência,
+	 * aqui deve ser decidido se o número da nota deverá ser pulado e se esse
+	 * número deve ser cancelado ou inutilizado
 	 */
 	public function onNotaContingencia($nota, $offline) {
 		echo 'Forma de emissão alterada para "'.$nota->getEmissao().'" <br>';
 		// remove o XML salvo anteriormente com a emissão normal
 		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
 		if(file_exists($filename) && $offline)
-			unlink($filename);
+			unlink($filename); // só remove se tiver certeza que nenhum dado foi enviado para a SEFAZ
 		// incrementa o número da nota se existir a possibilidade de ter enviado com sucesso
 		if(!$offline)
 			$nota->setNumero($nota->getNumero() + 1);
@@ -284,8 +258,18 @@ class Ajuste extends Configuracao implements Evento {
 	/**
 	 * Chamado quando a nota foi enviada e aceita pela SEFAZ
 	 */
-	public function onNotaEnviada($nota, $xml) {
-		//echo 'XML enviado com sucesso!<br>';
+	public function onNotaAutorizada($nota, $xml, $retorno) {
+		//echo 'XML autorizado com sucesso!<br>';
+
+		// TODO: obter o estado da nota e remover apenas do local correto
+		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlProcessamento($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
 		$filename = $this->getPastaXmlAutorizado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
 		file_put_contents($filename, $xml->saveXML());
 	}
@@ -299,11 +283,93 @@ class Ajuste extends Configuracao implements Evento {
 	}
 
 	/**
+	 * Chamado quando uma nota é rejeitada pela SEFAZ, a nota deve ser
+	 * corrigida para depois ser enviada novamente
+	 */
+	public function onNotaRejeitada($nota, $xml, $retorno) {
+		//echo 'XML rejeitado!<br>';
+
+		// TODO: obter o estado da nota e remover apenas do local correto
+		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlProcessamento($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlRejeitado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
+	}
+
+	/**
+	 * Chamado quando a nota é denegada e não pode ser utilizada (outra nota
+	 * deve ser gerada)
+	 */
+	public function onNotaDenegada($nota, $xml, $retorno) {
+		//echo 'XML denagado!<br>';
+
+		// TODO: obter o estado da nota e remover apenas do local correto
+		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlProcessamento($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlDenegado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
+	}
+
+	/**
+	 * Chamado após tentar enviar uma nota e não ter certeza se ela foi
+	 * recebida ou não (problemas técnicos), deverá ser feito uma consulta pela
+	 * chave para obter o estado da nota
+	 */
+	public function onNotaPendente($nota, $xml) {
+		//echo 'XML pendente!<br>';
+		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlPendente($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
+	}
+
+	/**
+	 * Chamado quando uma nota é enviada, mas não retornou o protocolo que será
+	 * consultado mais tarde
+	 */
+	public function onNotaProcessando($nota, $xml, $retorno) {
+		//echo 'XML em processamento!<br>';
+		$filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+
+		$filename = $this->getPastaXmlProcessamento($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
+	}
+
+	/**
+	 * Chamado quando uma nota autorizada é cancelada na SEFAZ
+	 */
+	public function onNotaCancelada($nota, $xml, $retorno) {
+		//echo 'XML cancelado!<br>';
+		$filename = $this->getPastaXmlAutorizado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		if(file_exists($filename))
+			unlink($filename);
+		
+		$filename = $this->getPastaXmlCancelado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
+		file_put_contents($filename, $xml->saveXML());
+	}
+
+	/**
 	 * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
 	 * é chamado quando entra em contigência)
 	 */
-	public function onNotaErro($nota, $e) {
-		echo 'Falha no processamento da nota: '.$e->getMessage().'<br>';
+	public function onNotaErro($nota, $exception) {
+		echo 'Falha no processamento da nota: '.$exception->getMessage().'<br>';
 	}
 
 	/**
@@ -313,13 +379,30 @@ class Ajuste extends Configuracao implements Evento {
 		$filename = $this->getPastaXmlInutilizado($inutilizacao->getAmbiente()) . '/' . $inutilizacao->getID() . '.xml';
 		file_put_contents($filename, $xml->saveXML());
 	}
+	
+	/**
+	 * Chamado quando uma ação é executada
+	 */
+	public function onTarefaExecutada($tarefa, $retorno) {
+		//echo 'Tarefa executada!<br>';
+		$nota = $tarefa->getNota();
+		$xml = $tarefa->getDocumento();
+		if($tarefa->getAcao() == Tarefa::ACAO_CANCELAR && $retorno->isCancelado()) {
+			$filename = $this->getPastaXmlCancelado($nota->getAmbiente()) . '/' . $nota->getID() . '-procEventoNFe.xml';
+			file_put_contents($filename, $xml->saveXML());
+		}
+	}
+
+	/**
+	 * Chamado quando ocorre uma falha na execução de uma tarefa
+	 */
+	public function onTarefaErro($tarefa, $exception) {
+		echo 'Falha no processamento da tarefa: '.$exception->getMessage().'<br>';
+	}
 
 	public function toArray() {
 		$ajuste = parent::toArray();
-		$ajuste['chave_publica'] = $this->getChavePublica();
-		$ajuste['chave_privada'] = $this->getChavePrivada();
-		$ajuste['arquivo_chave_publica'] = $this->getArquivoChavePublica();
-		$ajuste['arquivo_chave_privada'] = $this->getArquivoChavePrivada();
+		$ajuste['pasta_xml_base'] = $this->getPastaXmlBase();
 		$ajuste['pasta_xml_inutilizado'] = $this->getPastaXmlInutilizado();
 		$ajuste['pasta_xml_cancelado'] = $this->getPastaXmlCancelado();
 		$ajuste['pasta_xml_pendente'] = $this->getPastaXmlPendente();
@@ -328,9 +411,6 @@ class Ajuste extends Configuracao implements Evento {
 		$ajuste['pasta_xml_autorizado'] = $this->getPastaXmlAutorizado();
 		$ajuste['pasta_xml_processamento'] = $this->getPastaXmlProcessamento();
 		$ajuste['pasta_xml_assinado'] = $this->getPastaXmlAssinado();
-		$ajuste['token'] = $this->getToken();
-		$ajuste['csc'] = $this->getCSC();
-		$ajuste['token_ibpt'] = $this->getTokenIBPT();
 		return $ajuste;
 	}
 
@@ -340,10 +420,7 @@ class Ajuste extends Configuracao implements Evento {
 		else if(!is_array($ajuste))
 			return $this;
 		parent::fromArray($ajuste);
-		$this->setChavePublica($ajuste['chave_publica']);
-		$this->setChavePrivada($ajuste['chave_privada']);
-		$this->setArquivoChavePublica($ajuste['arquivo_chave_publica']);
-		$this->setArquivoChavePrivada($ajuste['arquivo_chave_privada']);
+		$this->setPastaXmlBase($ajuste['pasta_xml_base']);
 		$this->setPastaXmlInutilizado($ajuste['pasta_xml_inutilizado']);
 		$this->setPastaXmlCancelado($ajuste['pasta_xml_cancelado']);
 		$this->setPastaXmlPendente($ajuste['pasta_xml_pendente']);
@@ -352,9 +429,6 @@ class Ajuste extends Configuracao implements Evento {
 		$this->setPastaXmlAutorizado($ajuste['pasta_xml_autorizado']);
 		$this->setPastaXmlProcessamento($ajuste['pasta_xml_processamento']);
 		$this->setPastaXmlAssinado($ajuste['pasta_xml_assinado']);
-		$this->setToken($ajuste['token']);
-		$this->setCSC($ajuste['csc']);
-		$this->setTokenIBPT($ajuste['token_ibpt']);
 		return $this;
 	}
 

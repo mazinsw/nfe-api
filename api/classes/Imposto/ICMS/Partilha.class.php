@@ -27,6 +27,7 @@
  */
 namespace Imposto\ICMS;
 use Util;
+use Exception;
 
 /**
  * Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida
@@ -98,6 +99,24 @@ class Partilha extends Mista {
 		$dom = $element->ownerDocument;
 		$element->appendChild($dom->createElement('pBCOp', $this->getOperacao(true)));
 		$element->appendChild($dom->createElement('UFST', $this->getUF(true)));
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'ICMSPart':$name;
+		$element = parent::loadNode($element, $name);
+		$_fields = $element->getElementsByTagName('pBCOp');
+		if($_fields->length > 0)
+			$operacao = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "pBCOp" do campo "Operacao" não encontrada na Partilha', 404);
+		$this->setOperacao($operacao);
+		$_fields = $element->getElementsByTagName('UFST');
+		if($_fields->length > 0)
+			$uf = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "UFST" do campo "UF" não encontrada na Partilha', 404);
+		$this->setUF($uf);
 		return $element;
 	}
 

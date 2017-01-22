@@ -26,6 +26,7 @@
  *
  */
 namespace Imposto\PISST;
+use Exception;
 use \Imposto\PIS\Quantidade as PISQuantidade;
 
 /**
@@ -56,6 +57,29 @@ class Quantidade extends PISQuantidade {
 		$element = parent::getNode(is_null($name)?'PISST':$name);
 		$item = $element->getElementsByTagName('CST')->item(0);
 		$element->removeChild($item);
+		return $element;
+	}
+
+	public function loadNode($element, $name = null) {
+		$name = is_null($name)?'PISST':$name;
+		if($element->tagName != $name) {
+			$_fields = $element->getElementsByTagName($name);
+			if($_fields->length == 0)
+				throw new Exception('Tag "'.$name.'" não encontrada', 404);
+			$element = $_fields->item(0);
+		}
+		$_fields = $element->getElementsByTagName('qBCProd');
+		if($_fields->length > 0)
+			$quantidade = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "qBCProd" do campo "Quantidade" não encontrada', 404);
+		$this->setQuantidade($quantidade);
+		$_fields = $element->getElementsByTagName('vAliqProd');
+		if($_fields->length > 0)
+			$aliquota = $_fields->item(0)->nodeValue;
+		else
+			throw new Exception('Tag "vAliqProd" do campo "Aliquota" não encontrada', 404);
+		$this->setAliquota($aliquota);
 		return $element;
 	}
 
