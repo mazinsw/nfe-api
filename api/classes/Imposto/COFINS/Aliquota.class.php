@@ -1,21 +1,21 @@
 <?php
 /**
  * MIT License
- * 
+ *
  * Copyright (c) 2016 MZ Desenvolvimento de Sistemas LTDA
- * 
+ *
  * @author Francimar Alves <mazinsw@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,97 +26,112 @@
  *
  */
 namespace Imposto\COFINS;
+
 use Imposto;
 use Exception;
 use DOMDocument;
 
-class Aliquota extends Imposto {
+class Aliquota extends Imposto
+{
 
-	const TRIBUTACAO_NORMAL = 'normal';
-	const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
+    const TRIBUTACAO_NORMAL = 'normal';
+    const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
 
-	public function __construct($cofins = array()) {
-		parent::__construct($cofins);
-		$this->setGrupo(self::GRUPO_COFINS);
-	}
+    public function __construct($cofins = array())
+    {
+        parent::__construct($cofins);
+        $this->setGrupo(self::GRUPO_COFINS);
+    }
 
-	public function getTributacao($normalize = false) {
-		if(!$normalize)
-			return parent::getTributacao();
-		switch (parent::getTributacao()) {
-			case self::TRIBUTACAO_NORMAL:
-				return '01';
-			case self::TRIBUTACAO_DIFERENCIADA:
-				return '02';
-		}
-		return parent::getTributacao($normalize);
-	}
+    public function getTributacao($normalize = false)
+    {
+        if (!$normalize) {
+            return parent::getTributacao();
+        }
+        switch (parent::getTributacao()) {
+            case self::TRIBUTACAO_NORMAL:
+                return '01';
+            case self::TRIBUTACAO_DIFERENCIADA:
+                return '02';
+        }
+        return parent::getTributacao($normalize);
+    }
 
-	public function setTributacao($tributacao) {
-		switch ($tributacao) {
-			case '01':
-				$tributacao = self::TRIBUTACAO_NORMAL;
-				break;
-			case '02':
-				$tributacao = self::TRIBUTACAO_DIFERENCIADA;
-				break;
-		}
-		return parent::setTributacao($tributacao);
-	}
+    public function setTributacao($tributacao)
+    {
+        switch ($tributacao) {
+            case '01':
+                $tributacao = self::TRIBUTACAO_NORMAL;
+                break;
+            case '02':
+                $tributacao = self::TRIBUTACAO_DIFERENCIADA;
+                break;
+        }
+        return parent::setTributacao($tributacao);
+    }
 
-	public function toArray() {
-		$cofins = parent::toArray();
-		return $cofins;
-	}
+    public function toArray()
+    {
+        $cofins = parent::toArray();
+        return $cofins;
+    }
 
-	public function fromArray($cofins = array()) {
-		if($cofins instanceof Aliquota)
-			$cofins = $cofins->toArray();
-		else if(!is_array($cofins))
-			return $this;
-		parent::fromArray($cofins);
-		if(is_null($this->getTributacao()))
-			$this->setTributacao(self::TRIBUTACAO_NORMAL);
-		return $this;
-	}
+    public function fromArray($cofins = array())
+    {
+        if ($cofins instanceof Aliquota) {
+            $cofins = $cofins->toArray();
+        } elseif (!is_array($cofins)) {
+            return $this;
+        }
+        parent::fromArray($cofins);
+        if (is_null($this->getTributacao())) {
+            $this->setTributacao(self::TRIBUTACAO_NORMAL);
+        }
+        return $this;
+    }
 
-	public function getNode($name = null) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
-		$element = $dom->createElement(is_null($name)?'COFINSAliq':$name);
-		$element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
-		$element->appendChild($dom->createElement('vBC', $this->getBase(true)));
-		$element->appendChild($dom->createElement('pCOFINS', $this->getAliquota(true)));
-		$element->appendChild($dom->createElement('vCOFINS', $this->getValor(true)));
-		return $element;
-	}
+    public function getNode($name = null)
+    {
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        $element = $dom->createElement(is_null($name)?'COFINSAliq':$name);
+        $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
+        $element->appendChild($dom->createElement('vBC', $this->getBase(true)));
+        $element->appendChild($dom->createElement('pCOFINS', $this->getAliquota(true)));
+        $element->appendChild($dom->createElement('vCOFINS', $this->getValor(true)));
+        return $element;
+    }
 
-	public function loadNode($element, $name = null) {
-		$name = is_null($name)?'COFINSAliq':$name;
-		if($element->tagName != $name) {
-			$_fields = $element->getElementsByTagName($name);
-			if($_fields->length == 0)
-				throw new Exception('Tag "'.$name.'" não encontrada', 404);
-			$element = $_fields->item(0);
-		}
-		$_fields = $element->getElementsByTagName('CST');
-		if($_fields->length > 0)
-			$tributacao = $_fields->item(0)->nodeValue;
-		else
-			throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-		$this->setTributacao($tributacao);
-		$_fields = $element->getElementsByTagName('vBC');
-		if($_fields->length > 0)
-			$base = $_fields->item(0)->nodeValue;
-		else
-			throw new Exception('Tag "vBC" do campo "Base" não encontrada', 404);
-		$this->setBase($base);
-		$_fields = $element->getElementsByTagName('pCOFINS');
-		if($_fields->length > 0)
-			$aliquota = $_fields->item(0)->nodeValue;
-		else
-			throw new Exception('Tag "pCOFINS" do campo "Aliquota" não encontrada', 404);
-		$this->setAliquota($aliquota);
-		return $element;
-	}
-
+    public function loadNode($element, $name = null)
+    {
+        $name = is_null($name)?'COFINSAliq':$name;
+        if ($element->tagName != $name) {
+            $_fields = $element->getElementsByTagName($name);
+            if ($_fields->length == 0) {
+                throw new Exception('Tag "'.$name.'" não encontrada', 404);
+            }
+            $element = $_fields->item(0);
+        }
+        $_fields = $element->getElementsByTagName('CST');
+        if ($_fields->length > 0) {
+            $tributacao = $_fields->item(0)->nodeValue;
+        } else {
+            throw new Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
+        }
+        $this->setTributacao($tributacao);
+        $_fields = $element->getElementsByTagName('vBC');
+        if ($_fields->length > 0) {
+            $base = $_fields->item(0)->nodeValue;
+        } else {
+            throw new Exception('Tag "vBC" do campo "Base" não encontrada', 404);
+        }
+        $this->setBase($base);
+        $_fields = $element->getElementsByTagName('pCOFINS');
+        if ($_fields->length > 0) {
+            $aliquota = $_fields->item(0)->nodeValue;
+        } else {
+            throw new Exception('Tag "pCOFINS" do campo "Aliquota" não encontrada', 404);
+        }
+        $this->setAliquota($aliquota);
+        return $element;
+    }
 }

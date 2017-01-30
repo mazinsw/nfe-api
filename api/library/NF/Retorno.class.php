@@ -1,21 +1,21 @@
 <?php
 /**
  * MIT License
- * 
+ *
  * Copyright (c) 2016 MZ Desenvolvimento de Sistemas LTDA
- * 
+ *
  * @author Francimar Alves <mazinsw@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,96 +26,117 @@
  *
  */
 namespace NF;
+
 use Util;
 
-class Retorno extends Status {
+class Retorno extends Status
+{
 
-	private $data_recebimento;
+    private $data_recebimento;
 
-	public function __construct($retorno = array()) {
-		parent::__construct($retorno);
-	}
+    public function __construct($retorno = array())
+    {
+        parent::__construct($retorno);
+    }
 
-	public function getDataRecebimento($normalize = false) {
-		if(!$normalize)
-			return $this->data_recebimento;
-		return Util::toDateTime($this->data_recebimento);
-	}
+    public function getDataRecebimento($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->data_recebimento;
+        }
+        return Util::toDateTime($this->data_recebimento);
+    }
 
-	public function setDataRecebimento($data_recebimento) {
-		$this->data_recebimento = $data_recebimento;
-		return $this;
-	}
+    public function setDataRecebimento($data_recebimento)
+    {
+        $this->data_recebimento = $data_recebimento;
+        return $this;
+    }
 
-	/**
-	 * Informa se a nota foi autorizada no prazo ou fora do prazo
-	 */
-	public function isAutorizado() {
-		return in_array($this->getStatus(), array('100', '150'));
-	}
+    /**
+     * Informa se a nota foi autorizada no prazo ou fora do prazo
+     */
+    public function isAutorizado()
+    {
+        return in_array($this->getStatus(), array('100', '150'));
+    }
 
-	/**
-	 * Informa se a nota está cancelada
-	 */
-	public function isCancelado() {
-		return in_array($this->getStatus(), array('101', '151'));
-	}
+    /**
+     * Informa se a nota está cancelada
+     */
+    public function isCancelado()
+    {
+        return in_array($this->getStatus(), array('101', '151'));
+    }
 
-	/**
-	 * Informa se o lote já foi processado e já tem um protocolo
-	 */
-	public function isProcessado() {
-		return $this->getStatus() == '104';
-	}
+    /**
+     * Informa se o lote já foi processado e já tem um protocolo
+     */
+    public function isProcessado()
+    {
+        return $this->getStatus() == '104';
+    }
 
-	/**
-	 * Informa se o lote foi recebido com sucesso
-	 */
-	public function isRecebido() {
-		return in_array($this->getStatus(), array('103', '105'));
-	}
+    /**
+     * Informa se o lote foi recebido com sucesso
+     */
+    public function isRecebido()
+    {
+        return in_array($this->getStatus(), array('103', '105'));
+    }
 
-	/**
-	 * Informa se a nota foi denegada
-	 */
-	public function isDenegada() {
-		return in_array($this->getStatus(), array('110', '301', '302', '303'));
-	}
+    /**
+     * Informa se a nota foi denegada
+     */
+    public function isDenegada()
+    {
+        return in_array($this->getStatus(), array('110', '301', '302', '303'));
+    }
 
-	public function toArray() {
-		$retorno = parent::toArray();
-		$retorno['data_recebimento'] = $this->getDataRecebimento();
-		return $retorno;
-	}
+    public function toArray()
+    {
+        $retorno = parent::toArray();
+        $retorno['data_recebimento'] = $this->getDataRecebimento();
+        return $retorno;
+    }
 
-	public function fromArray($retorno = array()) {
-		if($retorno instanceof Retorno)
-			$retorno = $retorno->toArray();
-		else if(!is_array($retorno))
-			return $this;
-		parent::fromArray($retorno);
-		$this->setDataRecebimento($retorno['data_recebimento']);
-		return $this;
-	}
+    public function fromArray($retorno = array())
+    {
+        if ($retorno instanceof Retorno) {
+            $retorno = $retorno->toArray();
+        } elseif (!is_array($retorno)) {
+            return $this;
+        }
+        parent::fromArray($retorno);
+        if (isset($retorno['data_recebimento'])) {
+            $this->setDataRecebimento($retorno['data_recebimento']);
+        } else {
+            $this->setDataRecebimento(null);
+        }
+        return $this;
+    }
 
-	public function getNode($name = null) {
-		$element = parent::getNode(is_null($name)?'':$name);
-		$dom = $element->ownerDocument;
-		$status = $element->getElementsByTagName('cStat')->item(0);
-		if(!is_null($this->getDataRecebimento()))
-			$element->insertBefore($dom->createElement('dhRecbto', $this->getDataRecebimento(true)), $status);
-		return $element;
-	}
+    public function getNode($name = null)
+    {
+        $element = parent::getNode(is_null($name)?'':$name);
+        $dom = $element->ownerDocument;
+        $status = $element->getElementsByTagName('cStat')->item(0);
+        if (!is_null($this->getDataRecebimento())) {
+            $element->insertBefore($dom->createElement('dhRecbto', $this->getDataRecebimento(true)), $status);
+        }
+        return $element;
+    }
 
-	public function loadNode($element, $name = null) {
-		$name = is_null($name)?'Retorno':$name;
-		$retorno = parent::loadNode($element, $name);
-		$nodes = $retorno->getElementsByTagName('dhRecbto');
-		$data_recebimento = null;
-		if($nodes->length > 0)
-			$data_recebimento = strtotime($nodes->item(0)->nodeValue);
-		$this->setDataRecebimento($data_recebimento);
-		return $retorno;
-	}
-
+    public function loadNode($element, $name = null)
+    {
+        $name = is_null($name)?'Retorno':$name;
+        $retorno = parent::loadNode($element, $name);
+        $nodes = $retorno->getElementsByTagName('dhRecbto');
+        $data_recebimento = null;
+        if ($nodes->length > 0) {
+            $data_recebimento = strtotime($nodes->item(0)->nodeValue);
+        }
+        $this->setDataRecebimento($data_recebimento);
+        return $retorno;
+    }
 }

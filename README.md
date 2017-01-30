@@ -1,4 +1,8 @@
-## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)
+## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)[![Build Status](https://img.shields.io/travis/mazinsw/NFe-API.svg)](https://travis-ci.org/mazinsw/NFe-API)
+
+[![Total Downloads](https://img.shields.io/packagist/dt/mazinsw/NFe-API.svg)](https://packagist.org/packages/mazinsw/NFe-API)
+[![Latest Stable Version](https://img.shields.io/packagist/v/mazinsw/NFe-API.svg)](https://packagist.org/packages/mazinsw/NFe-API)
+[![Reference Status](https://www.versioneye.com/php/mazinsw:NFe-API/reference_badge.svg)](https://www.versioneye.com/php/mazinsw:NFe-API/references)
 
 ###### Essa biblioteca permite a geração de notas fiscais de consumidor, serviço e outras
 

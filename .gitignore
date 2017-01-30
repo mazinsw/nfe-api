@@ -49,6 +49,8 @@ Temporary Items
 *.pem
 *.sublime-workspace
 utils/tmp/
+vendor/
+composer.lock
 *.mwb.bak
 utils/IBPT/*.csv
 api/logs/*.txt
