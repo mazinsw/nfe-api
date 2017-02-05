@@ -49,7 +49,7 @@ class Isento extends Generico
         if (!$normalize) {
             return 0.00; // sempre zero
         }
-        return Util::toCurrency($this->base);
+        return Util::toCurrency($this->getBase());
     }
 
     public function toArray()

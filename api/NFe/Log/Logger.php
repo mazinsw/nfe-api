@@ -115,22 +115,22 @@ class Logger
         }
     }
 
-    protected function error($message)
+    private function errorLog($message)
     {
         $this->write('error', $message);
     }
 
-    protected function warning($message)
+    private function warningLog($message)
     {
         $this->write('warning', $message);
     }
 
-    protected function debug($message)
+    private function debugLog($message)
     {
         $this->write('debug', $message);
     }
 
-    protected function information($message)
+    private function informationLog($message)
     {
         $this->write('information', $message);
     }
@@ -142,7 +142,7 @@ class Logger
             case 'warning':
             case 'debug':
             case 'information':
-                return call_user_func_array(array($this, $name), $arguments);
+                return call_user_func_array(array($this, $name . 'Log'), $arguments);
             default:
                 throw new \BadMethodCallException(
                     sprintf('Call to undefined function: %s->%s().', get_class($this), $name),
@@ -158,7 +158,7 @@ class Logger
             case 'warning':
             case 'debug':
             case 'information':
-                return call_user_func_array(array(self::getInstance(), $name), $arguments);
+                return call_user_func_array(array(self::getInstance(), $name . 'Log'), $arguments);
             default:
                 throw new \BadMethodCallException(
                     sprintf('Call to undefined function: %s::%s().', __CLASS__, $name),
