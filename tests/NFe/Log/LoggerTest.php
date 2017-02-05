@@ -3,7 +3,13 @@ namespace NFe\Log;
 
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
-    private $sefaz;
+    protected function setUp()
+    {
+        \NFe\Log\Logger::getInstance()->setWriteFunction(
+            function ($type, $message) {
+            }
+        );
+    }
 
     public function testLogs()
     {
@@ -31,15 +37,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\BadMethodCallException');
         \NFe\Log\Logger::getInstance()->erro('Error Test');
-        $this->setExpectedException(null);
-    }
-
-    public function testCannotWriteFile()
-    {
-        $log = new \NFe\Log\Logger();
-        $log->setDirectory('C:/..');
-        $this->setExpectedException('\Exception');
-        $log->error('Cannot write file');
         $this->setExpectedException(null);
     }
 }

@@ -5,6 +5,10 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
+        \NFe\Log\Logger::getInstance()->setWriteFunction(
+            function ($type, $message) {
+            }
+        );
     }
 
     public function testInstancia()

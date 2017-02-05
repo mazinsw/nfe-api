@@ -8,6 +8,10 @@ class IBPTTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ibpt = new \NFe\Database\IBPT();
+        \NFe\Log\Logger::getInstance()->setWriteFunction(
+            function ($type, $message) {
+            }
+        );
     }
 
     public function testAliquota()

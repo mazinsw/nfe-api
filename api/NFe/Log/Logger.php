@@ -33,11 +33,13 @@ namespace NFe\Log;
 class Logger
 {
     private $directory;
+    private $write_function;
     private static $instance;
 
     public function __construct($logger = array())
     {
         $this->fromArray($logger);
+        $this->setWriteFunction(array($this, 'writeLog'));
     }
 
     public static function getInstance()
@@ -59,6 +61,16 @@ class Logger
     public function setDirectory($directory)
     {
         $this->directory = $directory;
+        return $this;
+    }
+
+    /**
+     * Altera a função que escreve os logs
+     * @param function $write_function nova função que será usada
+     */
+    public function setWriteFunction($write_function)
+    {
+        $this->write_function = $write_function;
         return $this;
     }
 
@@ -84,7 +96,7 @@ class Logger
         return $this;
     }
 
-    private function write($type, $message)
+    private function writeLog($type, $message)
     {
         $filename = $this->getDirectory().'/'.date('Ymd').'.txt';
         $fp = @fopen($filename, 'a');
@@ -94,6 +106,13 @@ class Logger
         fwrite($fp, date('d/m/Y H:i:s').' - '.$type.': '.$message."\n");
         fclose($fp);
         chmod($filename, 0755);
+    }
+
+    private function write($type, $message)
+    {
+        if (!is_null($this->write_function)) {
+            call_user_func_array($this->write_function, func_get_args());
+        }
     }
 
     protected function error($message)
