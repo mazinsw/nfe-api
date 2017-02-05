@@ -1,0 +1,20 @@
+<emit>
+  <CNPJ>12345678000123</CNPJ>
+  <xNome>Empresa LTDA</xNome>
+  <xFant>Minha Empresa</xFant>
+  <enderEmit>
+    <xLgr>Rua Paranavaí</xLgr>
+    <nro>123</nro>
+    <xBairro>Centro</xBairro>
+    <cMun>123456</cMun>
+    <xMun>Paranavaí</xMun>
+    <UF>PR</UF>
+    <CEP>01122500</CEP>
+    <cPais>1058</cPais>
+    <xPais>Brasil</xPais>
+    <fone>11955886644</fone>
+  </enderEmit>
+  <IE>123456789</IE>
+  <IM>95656</IM>
+  <CRT>1</CRT>
+</emit>

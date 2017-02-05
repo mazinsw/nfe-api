@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-require_once(__DIR__ . '/../api/autoload.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
 
 use Curl\Curl;
 

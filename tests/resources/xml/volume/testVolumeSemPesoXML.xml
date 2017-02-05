@@ -1,0 +1,17 @@
+<root>
+  <vol>
+    <qVol>2</qVol>
+    <esp>caixa</esp>
+    <marca>MZSW</marca>
+    <nVol>1, 2, 3</nVol>
+    <lacres>
+      <nLacre>123456</nLacre>
+    </lacres>
+    <lacres>
+      <nLacre>123457</nLacre>
+    </lacres>
+    <lacres>
+      <nLacre>123458</nLacre>
+    </lacres>
+  </vol>
+</root>

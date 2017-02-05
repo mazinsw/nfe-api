@@ -1,0 +1,47 @@
+<transp>
+  <modFrete>2</modFrete>
+  <transporta>
+    <CNPJ>12345678000123</CNPJ>
+    <xNome>Empresa LTDA</xNome>
+    <IE>123456789</IE>
+    <xEnder>Rua Paranavaí, 123 - Centro</xEnder>
+    <xMun>Paranavaí</xMun>
+    <UF>PR</UF>
+  </transporta>
+  <retTransp>
+    <vServ>300.00</vServ>
+    <vBCRet>300.00</vBCRet>
+    <pICMSRet>12.0000</pICMSRet>
+    <vICMSRet>36.00</vICMSRet>
+    <CFOP>5351</CFOP>
+    <cMunFG>4118402</cMunFG>
+  </retTransp>
+  <veicTransp>
+    <placa>ALK1232</placa>
+    <UF>PR</UF>
+    <RNTC>123456789</RNTC>
+  </veicTransp>
+  <reboque>
+    <placa>KLM1234</placa>
+    <UF>PI</UF>
+  </reboque>
+  <vagao>2A</vagao>
+  <balsa>522</balsa>
+  <vol>
+    <qVol>2</qVol>
+    <esp>caixa</esp>
+    <marca>MZSW</marca>
+    <nVol>1, 2, 3</nVol>
+    <pesoL>15.000</pesoL>
+    <pesoB>21.000</pesoB>
+    <lacres>
+      <nLacre>123456</nLacre>
+    </lacres>
+    <lacres>
+      <nLacre>123457</nLacre>
+    </lacres>
+    <lacres>
+      <nLacre>123458</nLacre>
+    </lacres>
+  </vol>
+</transp>

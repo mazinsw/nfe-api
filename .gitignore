@@ -45,13 +45,15 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-*.pfx
-*.pem
+docs/cert/*.pfx
+docs/cert/*.pem
 *.sublime-workspace
 utils/tmp/
 vendor/
 composer.lock
 *.mwb.bak
 utils/IBPT/*.csv
-api/logs/*.txt
+docs/api/
+docs/logs/*.txt
 site/xml/**/*.xml
+build/

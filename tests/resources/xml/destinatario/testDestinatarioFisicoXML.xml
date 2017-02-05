@@ -1,0 +1,18 @@
+<dest>
+  <CPF>12345678912</CPF>
+  <xNome>Fulano da Silva</xNome>
+  <enderDest>
+    <xLgr>Rua Paranavaí</xLgr>
+    <nro>123</nro>
+    <xBairro>Centro</xBairro>
+    <cMun>123456</cMun>
+    <xMun>Paranavaí</xMun>
+    <UF>PR</UF>
+    <CEP>01122500</CEP>
+    <cPais>1058</cPais>
+    <xPais>Brasil</xPais>
+    <fone>11988220055</fone>
+  </enderDest>
+  <indIEDest>9</indIEDest>
+  <email>fulano@site.com.br</email>
+</dest>

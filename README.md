@@ -1,31 +1,37 @@
-## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)[![Build Status](https://img.shields.io/travis/mazinsw/NFe-API.svg)](https://travis-ci.org/mazinsw/NFe-API)
+# NFe-API
+## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)
 
+[![Build Status](https://img.shields.io/travis/mazinsw/NFe-API.svg)](https://travis-ci.org/mazinsw/NFe-API)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mazinsw/NFe-API/badges/quality-score.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/NFe-API/)
+[![Code Coverage](https://scrutinizer-ci.com/g/mazinsw/NFe-API/badges/coverage.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/NFe-API/)
 [![Total Downloads](https://img.shields.io/packagist/dt/mazinsw/NFe-API.svg)](https://packagist.org/packages/mazinsw/NFe-API)
 [![Latest Stable Version](https://img.shields.io/packagist/v/mazinsw/NFe-API.svg)](https://packagist.org/packages/mazinsw/NFe-API)
 [![Reference Status](https://www.versioneye.com/php/mazinsw:NFe-API/reference_badge.svg)](https://www.versioneye.com/php/mazinsw:NFe-API/references)
 
 ###### Essa biblioteca permite a geração de notas fiscais de consumidor, serviço e outras
 
-### Vantagens
+## Vantagens
 - Código bem estruturado e bem reaproveitado que permite a fácil manutenção
 - Estrutura de suporte para vários modelos de notas
 - Fácil configuração e usabilidade
-- Não escreve nenhum arquivo temporário nas pastas do servidor
 
-### Motivo do projeto
+## Motivo do projeto
 As biliotecas de código aberto encontradas até o momento (2016) não fornecem uma estrutura sólida e de fácil utilização/manutenção, dessa forma surgiu a necessidade de criar uma bilioteca capaz de gerar notas fiscais em diversos modelos e que seja de fácil utilização 
 
-### Ideia do projeto
+## Ideia do projeto
 A ideia é criar uma bilioteca em que as entidades da nota sejam implementadas em classes separadas, cada uma gerando seu próprio nó XML, no final da geração todos os nós são unificados assim gerando o XML por completo, dessa forma fica fácil a manutenção pois parte da ideia da divisão e conquista
 
-### Expansão do projeto
-Como o projeto é grande, precisamos da colaboração de desenvolvedores para melhoria do projeto, para isso envie suas implementações para o E-mail: suporte@mzsw.com.br ou faça um Pull request
+## Instalação
 
-### Outras bibliotecas
-Segue na lista abaixo outras billiotecas para geração de boleto em que algumas delas este projeto se baseia
-- NFePHP - https://github.com/nfephp-org/nfephp
- 
-### Exemplo básico de geração de nota fiscal
+Clone o repositório com `git clone https://github.com/mazinsw/NFe-API.git` ou [baixe a última versão](https://github.com/mazinsw/NFe-API/archive/master.zip).
+
+Execute o comando abaixo na pasta do projeto
+
+```sh
+composer install
+```
+
+## Exemplo básico de geração de nota fiscal
 ```php
 $nfce = new NFCe();
 $nfce->setCodigo('123456');
@@ -39,15 +45,15 @@ $emitente = new Emitente();
 $emitente->setRazaoSocial('Empresa LTDA');
 $emitente->setFantasia('Minha Empresa');
 $emitente->setCNPJ('08120787000152');
-/* outras informações */
-$emitente->setRegime(EmitenteRegime::SIMPLES);
+$emitente->setIE('123456789');
+$emitente->setRegime(Emitente::REGIME_SIMPLES);
 
 $endereco = new Endereco();
 $endereco->setCEP('01122500');
-$endereco->setUF('PR');
 $endereco->getMunicipio()
-		 ->setNome('Paranavaí')
-		 ->setCodigo(4118402);
+         ->setNome('Paranavaí')
+         ->getEstado()
+         ->setUF('PR');
 $endereco->setBairro('Centro');
 $endereco->setLogradouro('Rua Paranavaí');
 $endereco->setNumero('123');
@@ -56,52 +62,50 @@ $emitente->setEndereco($endereco);
 $nfce->setEmitente($emitente);
 
 /* Destinatário */
-$cliente = new Cliente();
-$cliente->setNome('Fulano da Silva');
-$cliente->setCPF('12345678912');
-$cliente->setEmail('fulano@site.com.br');
-$cliente->setTelefone('11988220055');
+$destinatario = new Destinatario();
+$destinatario->setNome('Fulano da Silva');
+$destinatario->setCPF('12345678912');
 
-$cliente->setEndereco($endereco);
-$nfce->setCliente($cliente);
+$destinatario->setEndereco($endereco);
+$nfce->setDestinatario($destinatario);
 
 /* Produtos */
 $produto = new Produto();
-$produto->setItem(1);
 $produto->setCodigo(123456);
-$produto->setCodigoBarras('7894900011517');
+$produto->setCodigoBarras('7894900011531');
 $produto->setDescricao('REFRIGERANTE COCA-COLA 2L');
-$produto->setUnidade(ProdutoUnidade::UNIDADE);
-$produto->setPreco(4.50);
-$produto->setQuantidade(2);
-$produto->setNCM('2202.10.00');
-$produto->setCEST('03.007.00');
+$produto->setUnidade(Produto::UNIDADE_UNIDADE);
+$produto->setPreco(4.99);
+$produto->setQuantidade(1);
+$produto->setNCM('22021000');
+$produto->setCEST('0300700');
+$produto->setCFOP('5405');
 $nfce->addProduto($produto);
 
 /* Pagamentos */
 $pagamento = new Pagamento();
-$pagamento->setForma(PagamentoForma::DINHEIRO);
-$pagamento->setValor(4.00);
+$pagamento->setForma(Pagamento::FORMA_DINHEIRO);
+$pagamento->setValor(9.49);
 $nfce->addPagamento($pagamento);
 
-$xml = $nfce->getNode();
-$dom = $xml->ownerDocument;
-$dom->formatOutput = true;
-
-header('Content-Type: application/xml');
-echo $dom->saveXML();
+$sefaz = SEFAZ::getInstance();
+$sefaz->addNota($nfce)
+	  ->autoriza();
 ```
 
-### Solução de problemas
-O código foi implementado e testado com PHP 5.4, verifique sua versão do PHP em caso de falhas na execução
+## Expansão do projeto
+Como o projeto é grande, precisamos da colaboração de desenvolvedores para melhoria do projeto, para isso envie suas implementações para o E-mail: desenvolvimento@mzsw.com.br ou faça um Pull request
 
-### Dependências
+## Solução de problemas
+O código foi implementado e testado com PHP 5.6, verifique sua versão do PHP em caso de falhas na execução
+
+## Dependências
 - PHP 5.3 ou superior
 - Extensão openssl para assinatura da nota
 - Extensão curl para envio da nota
 
-### Limitações
+## Limitações
 - Apenas para o modelo NFC-e foi implementado a geração da nota, mas ainda não foi testado
  
-### Licença
+## Licença
 Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.

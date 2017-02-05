@@ -1,0 +1,35 @@
+<det nItem="1">
+  <prod>
+    <cProd>123456</cProd>
+    <cEAN>7894900011517</cEAN>
+    <xProd>REFRIGERANTE COCA-COLA 2L</xProd>
+    <NCM>22021000</NCM>
+    <CEST>0300700</CEST>
+    <CFOP>5101</CFOP>
+    <uCom>UN</uCom>
+    <qCom>2.0000</qCom>
+    <vUnCom>2.25</vUnCom>
+    <vProd>4.50</vProd>
+    <cEANTrib>7894900011517</cEANTrib>
+    <uTrib>UN</uTrib>
+    <qTrib>2.0000</qTrib>
+    <vUnTrib>2.25</vUnTrib>
+    <vFrete>2.00</vFrete>
+    <vSeg>0.30</vSeg>
+    <vDesc>0.20</vDesc>
+    <vOutro>0.50</vOutro>
+    <indTot>1</indTot>
+    <xPed>123</xPed>
+    <nItemPed>1</nItemPed>
+  </prod>
+  <imposto>
+    <vTotTrib>1.03</vTotTrib>
+    <ICMS>
+      <ICMSSN500>
+        <orig>0</orig>
+        <CSOSN>500</CSOSN>
+      </ICMSSN500>
+    </ICMS>
+  </imposto>
+  <infAdProd>Trib. aprox.: R$ 0,26 Federal e R$ 0,77 Estadual. Fonte: IBPT W7m9E1</infAdProd>
+</det>
