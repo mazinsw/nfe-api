@@ -1,12 +1,12 @@
 # NFe-API
 ## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)
 
-[![Build Status](https://img.shields.io/travis/mazinsw/NFe-API.svg)](https://travis-ci.org/mazinsw/NFe-API)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mazinsw/NFe-API/badges/quality-score.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/NFe-API/)
-[![Code Coverage](https://scrutinizer-ci.com/g/mazinsw/NFe-API/badges/coverage.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/NFe-API/)
-[![Total Downloads](https://img.shields.io/packagist/dt/mazinsw/NFe-API.svg)](https://packagist.org/packages/mazinsw/NFe-API)
-[![Latest Stable Version](https://img.shields.io/packagist/v/mazinsw/NFe-API.svg)](https://packagist.org/packages/mazinsw/NFe-API)
-[![Reference Status](https://www.versioneye.com/php/mazinsw:NFe-API/reference_badge.svg)](https://www.versioneye.com/php/mazinsw:NFe-API/references)
+[![Build Status](https://img.shields.io/travis/mazinsw/nfe-api.svg)](https://travis-ci.org/mazinsw/nfe-api)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/quality-score.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/nfe-api/)
+[![Code Coverage](https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/coverage.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/nfe-api/)
+[![Total Downloads](https://img.shields.io/packagist/dt/mazinsw/nfe-api.svg)](https://packagist.org/packages/mazinsw/nfe-api)
+[![Latest Stable Version](https://img.shields.io/packagist/v/mazinsw/nfe-api.svg)](https://packagist.org/packages/mazinsw/nfe-api)
+[![Reference Status](https://www.versioneye.com/php/mazinsw:nfe-api/reference_badge.svg)](https://www.versioneye.com/php/mazinsw:nfe-api/references)
 
 ###### Essa biblioteca permite a geração de notas fiscais de consumidor, serviço e outras
 
@@ -23,7 +23,7 @@ A ideia é criar uma bilioteca em que as entidades da nota sejam implementadas e
 
 ## Instalação
 
-Clone o repositório com `git clone https://github.com/mazinsw/NFe-API.git` ou [baixe a última versão](https://github.com/mazinsw/NFe-API/archive/master.zip).
+Clone o repositório com `git clone https://github.com/mazinsw/nfe-api.git` ou [baixe a última versão](https://github.com/mazinsw/nfe-api/archive/master.zip).
 
 Execute o comando abaixo na pasta do projeto
 

@@ -1,9 +1,9 @@
 {
-    "name": "mazinsw/NFe-API",
+    "name": "mazinsw/nfe-api",
     "type": "library",
     "description": "API para geração e envio de notas fiscais eletrônicas brasileiras",
     "keywords": ["nfe","nfce"],
-    "homepage": "https://github.com/mazinsw/NFe-API",
+    "homepage": "https://github.com/mazinsw/nfe-api",
     "license": "MIT",
     "authors": [
         {
