@@ -1,12 +1,11 @@
 # NFe-API
 ## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)
 
-[![Build Status](https://img.shields.io/travis/mazinsw/nfe-api.svg)](https://travis-ci.org/mazinsw/nfe-api)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/quality-score.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/nfe-api/)
-[![Code Coverage](https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/coverage.png?s=TODO)](https://scrutinizer-ci.com/g/mazinsw/nfe-api/)
-[![Total Downloads](https://img.shields.io/packagist/dt/mazinsw/nfe-api.svg)](https://packagist.org/packages/mazinsw/nfe-api)
-[![Latest Stable Version](https://img.shields.io/packagist/v/mazinsw/nfe-api.svg)](https://packagist.org/packages/mazinsw/nfe-api)
-[![Reference Status](https://www.versioneye.com/php/mazinsw:nfe-api/reference_badge.svg)](https://www.versioneye.com/php/mazinsw:nfe-api/references)
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+[![Total Downloads][ico-downloads]][link-downloads]
 
 ###### Essa biblioteca permite a geração de notas fiscais de consumidor, serviço e outras
 
@@ -109,3 +108,15 @@ O código foi implementado e testado com PHP 5.6, verifique sua versão do PHP e
  
 ## Licença
 Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.
+
+[ico-version]: https://img.shields.io/packagist/v/mazinsw/nfe-api.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/mazinsw/nfe-api/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/mazinsw/nfe-api.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/mazinsw/nfe-api.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/mazinsw/nfe-api.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/mazinsw/nfe-api
+[link-travis]: https://travis-ci.org/mazinsw/nfe-api
+[link-scrutinizer]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/mazinsw/nfe-api
+[link-downloads]: https://packagist.org/packages/mazinsw/nfe-api

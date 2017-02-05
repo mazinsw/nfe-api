@@ -19,7 +19,8 @@
         "ext-openssl": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8",
+        "phpunit/phpunit": "^4.8",
+        "scrutinizer/ocular": "^1.3",
         "squizlabs/php_codesniffer": "2.8",
         "pdepend/pdepend" : "@stable",
         "phpmd/phpmd" : "@stable",
@@ -34,6 +35,11 @@
         "classmap": [
             "api/util"
         ] 
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "NFe\\": "tests/NFe"
+        }
     },
     "scripts": {
         "test": [

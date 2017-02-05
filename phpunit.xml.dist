@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit 
-		bootstrap="tests/bootstrap.php" 
-		convertNoticesToExceptions="false"
-		colors="true">
+        bootstrap="vendor/autoload.php"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        colors="true">
     <testsuites>
         <testsuite name="NFe-API Test Suite">
             <directory>tests/NFe/</directory>
@@ -10,7 +12,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./api/NFe</directory>
+            <directory suffix=".php">api/NFe</directory>
         </whitelist>
     </filter>
     <php>
