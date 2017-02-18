@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\ICMS;
 
+use NFe\Common\Util;
+
 /**
  * Grupo de informação do ICMSST devido para a UF de destino, nas operações
  * interestaduais de produtos que tiveram retenção antecipada de ICMS por
@@ -63,8 +65,8 @@ class Substituto extends Cobrado
     {
         $element = parent::getNode(is_null($name)?'ICMSST':$name);
         $dom = $element->ownerDocument;
-        $element->appendChild($dom->createElement('vBCSTDest', $this->getNormal()->getBase(true)));
-        $element->appendChild($dom->createElement('vICMSSTDest', $this->getNormal()->getValor(true)));
+        Util::appendNode($element, 'vBCSTDest', $this->getNormal()->getBase(true));
+        Util::appendNode($element, 'vICMSSTDest', $this->getNormal()->getValor(true));
         return $element;
     }
 

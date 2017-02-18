@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\COFINS\ST;
 
+use NFe\Common\Util;
+
 /**
  * Quantidade Vendida x Alíquota por Unidade de Produto
  */
@@ -74,20 +76,20 @@ class Quantidade extends \NFe\Entity\Imposto\COFINS\Quantidade
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('qBCProd');
-        if ($_fields->length > 0) {
-            $quantidade = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "qBCProd" do campo "Quantidade" não encontrada', 404);
-        }
-        $this->setQuantidade($quantidade);
-        $_fields = $element->getElementsByTagName('vAliqProd');
-        if ($_fields->length > 0) {
-            $aliquota = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vAliqProd" do campo "Aliquota" não encontrada', 404);
-        }
-        $this->setAliquota($aliquota);
+        $this->setQuantidade(
+            Util::loadNode(
+                $element,
+                'qBCProd',
+                'Tag "qBCProd" do campo "Quantidade" não encontrada'
+            )
+        );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'vAliqProd',
+                'Tag "vAliqProd" do campo "Aliquota" não encontrada'
+            )
+        );
         return $element;
     }
 }

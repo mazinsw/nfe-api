@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="3.10">
     <ide>
@@ -72,7 +73,7 @@
         <qCom>1.0000</qCom>
         <vUnCom>4.99</vUnCom>
         <vProd>4.99</vProd>
-        <cEANTrib></cEANTrib>
+        <cEANTrib/>
         <uTrib>UN</uTrib>
         <qTrib>1.0000</qTrib>
         <vUnTrib>4.99</vUnTrib>
@@ -120,7 +121,7 @@
         <qCom>2.0000</qCom>
         <vUnCom>4.50</vUnCom>
         <vProd>9.00</vProd>
-        <cEANTrib></cEANTrib>
+        <cEANTrib/>
         <uTrib>UN</uTrib>
         <qTrib>2.0000</qTrib>
         <vUnTrib>4.50</vUnTrib>

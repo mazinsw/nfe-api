@@ -28,6 +28,7 @@
 namespace NFe\Task;
 
 use NFe\Core\Nota;
+use NFe\Common\Util;
 use NFe\Exception\ValidationException;
 
 class Situacao extends Retorno
@@ -62,17 +63,38 @@ class Situacao extends Retorno
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * @return mixed modelo do Envio
      */
     public function getModelo($normalize = false)
     {
         if (!$normalize) {
             return $this->modelo;
         }
+        switch ($this->modelo) {
+            case Nota::MODELO_NFE:
+                return '55';
+            case Nota::MODELO_NFCE:
+                return '65';
+        }
         return $this->modelo;
     }
 
+    /**
+     * Altera o valor do Modelo para o informado no parâmetro
+     * @param mixed $modelo novo valor para Modelo
+     * @return Envio A própria instância da classe
+     */
     public function setModelo($modelo)
     {
+        switch ($modelo) {
+            case '55':
+                $modelo = Nota::MODELO_NFE;
+                break;
+            case '65':
+                $modelo = Nota::MODELO_NFCE;
+                break;
+        }
         $this->modelo = $modelo;
         return $this;
     }
@@ -149,9 +171,9 @@ class Situacao extends Retorno
         $versao->value = Nota::VERSAO;
         $element->appendChild($versao);
 
-        $element->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
-        $element->appendChild($dom->createElement('xServ', 'CONSULTAR'));
-        $element->appendChild($dom->createElement('chNFe', $this->getChave(true)));
+        Util::appendNode($element, 'tpAmb', $this->getAmbiente(true));
+        Util::appendNode($element, 'xServ', 'CONSULTAR');
+        Util::appendNode($element, 'chNFe', $this->getChave(true));
         $dom->appendChild($element);
         return $element;
     }

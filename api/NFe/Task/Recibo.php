@@ -28,6 +28,7 @@
 namespace NFe\Task;
 
 use NFe\Core\Nota;
+use NFe\Common\Util;
 use NFe\Exception\ValidationException;
 
 class Recibo extends Retorno
@@ -117,17 +118,38 @@ class Recibo extends Retorno
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * @return mixed modelo do Envio
      */
     public function getModelo($normalize = false)
     {
         if (!$normalize) {
             return $this->modelo;
         }
+        switch ($this->modelo) {
+            case Nota::MODELO_NFE:
+                return '55';
+            case Nota::MODELO_NFCE:
+                return '65';
+        }
         return $this->modelo;
     }
 
+    /**
+     * Altera o valor do Modelo para o informado no parâmetro
+     * @param mixed $modelo novo valor para Modelo
+     * @return Envio A própria instância da classe
+     */
     public function setModelo($modelo)
     {
+        switch ($modelo) {
+            case '55':
+                $modelo = Nota::MODELO_NFE;
+                break;
+            case '65':
+                $modelo = Nota::MODELO_NFCE;
+                break;
+        }
         $this->modelo = $modelo;
         return $this;
     }
@@ -221,8 +243,8 @@ class Recibo extends Retorno
         $versao->value = Nota::VERSAO;
         $element->appendChild($versao);
 
-        $element->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
-        $element->appendChild($dom->createElement('nRec', $this->getNumero(true)));
+        Util::appendNode($element, 'tpAmb', $this->getAmbiente(true));
+        Util::appendNode($element, 'nRec', $this->getNumero(true));
         $dom->appendChild($element);
         return $element;
     }
@@ -239,31 +261,16 @@ class Recibo extends Retorno
         } else {
             $element = parent::loadNode($element, $name);
         }
-        $_fields = $element->getElementsByTagName('nRec');
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nRec" do campo "Numero" não encontrada', 404);
-        }
-        $this->setNumero($numero);
-        $_fields = $element->getElementsByTagName('tMed');
-        $tempo_medio = null;
-        if ($_fields->length > 0) {
-            $tempo_medio = $_fields->item(0)->nodeValue;
-        }
-        $this->setTempoMedio($tempo_medio);
-        $_fields = $element->getElementsByTagName('cMsg');
-        $codigo = null;
-        if ($_fields->length > 0) {
-            $codigo = $_fields->item(0)->nodeValue;
-        }
-        $this->setCodigo($codigo);
-        $_fields = $element->getElementsByTagName('xMsg');
-        $mensagem = null;
-        if ($_fields->length > 0) {
-            $mensagem = $_fields->item(0)->nodeValue;
-        }
-        $this->setMensagem($mensagem);
+        $this->setNumero(
+            Util::loadNode(
+                $element,
+                'nRec',
+                'Tag "nRec" do campo "Numero" não encontrada'
+            )
+        );
+        $this->setTempoMedio(Util::loadNode($element, 'tMed'));
+        $this->setCodigo(Util::loadNode($element, 'cMsg'));
+        $this->setMensagem(Util::loadNode($element, 'xMsg'));
         return $element;
     }
 

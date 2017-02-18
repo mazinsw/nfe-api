@@ -278,7 +278,7 @@ $[field.else.if(searchable)]
     $[field.if(null)]    $[field.end]    }
     $[field.if(null)]    $[field.end]    $element->appendChild($$[field.unix]);
 $[field.else]
-    $[field.if(null)]    $[field.end]    $element->appendChild($dom->createElement('$[fIeld.style]', $this->get$[fIeld.norm](true)));
+    $[field.if(null)]    $[field.end]    Util::appendNode($element, '$[fIeld.style]', $this->get$[fIeld.norm](true));
 $[field.end]
 $[field.if(null)]
         }
@@ -351,20 +351,17 @@ $[field.else]
 $[field.end]
         $this->set$[fIeld.norm]($$[field.unix]);
 $[field.else]
-        $_fields = $element->getElementsByTagName('$[fIeld.style]');
 $[field.if(null)]
-        $$[field.unix] = null;
-$[field.end]
-        if ($_fields->length > 0) {
-            $$[field.unix] = $_fields->item(0)->nodeValue;
-$[field.if(null)]
-        }
+        $this->set$[fIeld.norm](Util::loadNode($element, '$[fIeld.style]'));
 $[field.else]
-        } else {
-            throw new \Exception('Tag "$[fIeld.style]" do campo "$[fIeld.norm]" não encontrada n$[table.gender] $[tAble.norm]', 404);
-        }
+        $this->set$[fIeld.norm](
+            Util::loadNode(
+                $element,
+                '$[fIeld.style]',
+                'Tag "$[fIeld.style]" não encontrada n$[table.gender] $[tAble.norm]'
+            )
+        );
 $[field.end]
-        $this->set$[fIeld.norm]($$[field.unix]);
 $[field.end]
 $[field.end]
         return $element;

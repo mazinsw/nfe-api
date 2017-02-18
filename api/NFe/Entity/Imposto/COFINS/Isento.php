@@ -27,6 +27,7 @@
  */
 namespace NFe\Entity\Imposto\COFINS;
 
+use NFe\Common\Util;
 use NFe\Entity\Imposto;
 
 class Isento extends Imposto
@@ -116,7 +117,7 @@ class Isento extends Imposto
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'COFINSNT':$name);
-        $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
+        Util::appendNode($element, 'CST', $this->getTributacao(true));
         return $element;
     }
 
@@ -130,13 +131,13 @@ class Isento extends Imposto
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada'
+            )
+        );
         return $element;
     }
 }

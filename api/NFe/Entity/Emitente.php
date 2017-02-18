@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity;
 
+use NFe\Common\Util;
+
 /**
  * Empresa que irá emitir as notas fiscais
  */
@@ -130,22 +132,22 @@ class Emitente extends Pessoa
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'emit':$name);
-        $element->appendChild($dom->createElement('CNPJ', $this->getCNPJ(true)));
-        $element->appendChild($dom->createElement('xNome', $this->getRazaoSocial(true)));
+        Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
+        Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
         if (!is_null($this->getFantasia())) {
-            $element->appendChild($dom->createElement('xFant', $this->getFantasia(true)));
+            Util::appendNode($element, 'xFant', $this->getFantasia(true));
         }
         $endereco = $this->getEndereco()->getNode('enderEmit');
         $endereco = $dom->importNode($endereco, true);
         if (!is_null($this->getTelefone())) {
-            $endereco->appendChild($dom->createElement('fone', $this->getTelefone(true)));
+            Util::appendNode($endereco, 'fone', $this->getTelefone(true));
         }
         $element->appendChild($endereco);
-        $element->appendChild($dom->createElement('IE', $this->getIE(true)));
+        Util::appendNode($element, 'IE', $this->getIE(true));
         if (!is_null($this->getIM())) {
-            $element->appendChild($dom->createElement('IM', $this->getIM(true)));
+            Util::appendNode($element, 'IM', $this->getIM(true));
         }
-        $element->appendChild($dom->createElement('CRT', $this->getRegime(true)));
+        Util::appendNode($element, 'CRT', $this->getRegime(true));
         return $element;
     }
 
@@ -153,19 +155,14 @@ class Emitente extends Pessoa
     {
         $name = is_null($name)?'emit':$name;
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('xFant');
-        $fantasia = null;
-        if ($_fields->length > 0) {
-            $fantasia = $_fields->item(0)->nodeValue;
-        }
-        $this->setFantasia($fantasia);
-        $_fields = $element->getElementsByTagName('CRT');
-        if ($_fields->length > 0) {
-            $regime = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CRT" do campo "Regime" não encontrada', 404);
-        }
-        $this->setRegime($regime);
+        $this->setFantasia(Util::loadNode($element, 'xFant'));
+        $this->setRegime(
+            Util::loadNode(
+                $element,
+                'CRT',
+                'Tag "CRT" do campo "Regime" não encontrada'
+            )
+        );
         return $element;
     }
 }

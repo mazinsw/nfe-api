@@ -117,8 +117,8 @@ class Partilha extends Mista
     {
         $element = parent::getNode(is_null($name)?'ICMSPart':$name);
         $dom = $element->ownerDocument;
-        $element->appendChild($dom->createElement('pBCOp', $this->getOperacao(true)));
-        $element->appendChild($dom->createElement('UFST', $this->getUF(true)));
+        Util::appendNode($element, 'pBCOp', $this->getOperacao(true));
+        Util::appendNode($element, 'UFST', $this->getUF(true));
         return $element;
     }
 
@@ -126,20 +126,20 @@ class Partilha extends Mista
     {
         $name = is_null($name)?'ICMSPart':$name;
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('pBCOp');
-        if ($_fields->length > 0) {
-            $operacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pBCOp" do campo "Operacao" não encontrada na Partilha', 404);
-        }
-        $this->setOperacao($operacao);
-        $_fields = $element->getElementsByTagName('UFST');
-        if ($_fields->length > 0) {
-            $uf = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "UFST" do campo "UF" não encontrada na Partilha', 404);
-        }
-        $this->setUF($uf);
+        $this->setOperacao(
+            Util::loadNode(
+                $element,
+                'pBCOp',
+                'Tag "pBCOp" do campo "Operacao" não encontrada na Partilha'
+            )
+        );
+        $this->setUF(
+            Util::loadNode(
+                $element,
+                'UFST',
+                'Tag "UFST" do campo "UF" não encontrada na Partilha'
+            )
+        );
         return $element;
     }
 }

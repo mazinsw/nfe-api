@@ -224,18 +224,18 @@ class IPI extends Imposto
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'IPI':$name);
         if (!is_null($this->getClasse())) {
-            $element->appendChild($dom->createElement('clEnq', $this->getClasse(true)));
+            Util::appendNode($element, 'clEnq', $this->getClasse(true));
         }
         if (!is_null($this->getCNPJ())) {
-            $element->appendChild($dom->createElement('CNPJProd', $this->getCNPJ(true)));
+            Util::appendNode($element, 'CNPJProd', $this->getCNPJ(true));
         }
         if (!is_null($this->getSelo())) {
-            $element->appendChild($dom->createElement('cSelo', $this->getSelo(true)));
+            Util::appendNode($element, 'cSelo', $this->getSelo(true));
         }
         if (!is_null($this->getQuantidade())) {
-            $element->appendChild($dom->createElement('qSelo', $this->getQuantidade(true)));
+            Util::appendNode($element, 'qSelo', $this->getQuantidade(true));
         }
-        $element->appendChild($dom->createElement('cEnq', $this->getEnquadramento(true)));
+        Util::appendNode($element, 'cEnq', $this->getEnquadramento(true));
         if (is_null($this->getTributo())) {
             throw new ValidationException(array('tributo' => 'O tributo do imposto IPI não foi informado'));
         }
@@ -256,37 +256,17 @@ class IPI extends Imposto
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('clEnq');
-        $classe = null;
-        if ($_fields->length > 0) {
-            $classe = $_fields->item(0)->nodeValue;
-        }
-        $this->setClasse($classe);
-        $_fields = $element->getElementsByTagName('CNPJProd');
-        $cnpj = null;
-        if ($_fields->length > 0) {
-            $cnpj = $_fields->item(0)->nodeValue;
-        }
-        $this->setCNPJ($cnpj);
-        $_fields = $element->getElementsByTagName('cSelo');
-        $selo = null;
-        if ($_fields->length > 0) {
-            $selo = $_fields->item(0)->nodeValue;
-        }
-        $this->setSelo($selo);
-        $_fields = $element->getElementsByTagName('qSelo');
-        $quantidade = null;
-        if ($_fields->length > 0) {
-            $quantidade = $_fields->item(0)->nodeValue;
-        }
-        $this->setQuantidade($quantidade);
-        $_fields = $element->getElementsByTagName('cEnq');
-        if ($_fields->length > 0) {
-            $enquadramento = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cEnq" do campo "Enquadramento" não encontrada', 404);
-        }
-        $this->setEnquadramento($enquadramento);
+        $this->setClasse(Util::loadNode($element, 'clEnq'));
+        $this->setCNPJ(Util::loadNode($element, 'CNPJProd'));
+        $this->setSelo(Util::loadNode($element, 'cSelo'));
+        $this->setQuantidade(Util::loadNode($element, 'qSelo'));
+        $this->setEnquadramento(
+            Util::loadNode(
+                $element,
+                'cEnq',
+                'Tag "cEnq" do campo "Enquadramento" não encontrada'
+            )
+        );
         $_fields = $element->getElementsByTagName('IPITrib');
         if ($_fields->length == 0) {
             $_fields = $element->getElementsByTagName('IPINT');

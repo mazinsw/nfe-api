@@ -260,16 +260,40 @@ class Evento extends Retorno
         return $this;
     }
 
+    /**
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * @return mixed modelo do Envio
+     */
     public function getModelo($normalize = false)
     {
         if (!$normalize) {
             return $this->modelo;
         }
+        switch ($this->modelo) {
+            case Nota::MODELO_NFE:
+                return '55';
+            case Nota::MODELO_NFCE:
+                return '65';
+        }
         return $this->modelo;
     }
 
+    /**
+     * Altera o valor do Modelo para o informado no parâmetro
+     * @param mixed $modelo novo valor para Modelo
+     * @return Envio A própria instância da classe
+     */
     public function setModelo($modelo)
     {
+        switch ($modelo) {
+            case '55':
+                $modelo = Nota::MODELO_NFE;
+                break;
+            case '65':
+                $modelo = Nota::MODELO_NFCE;
+                break;
+        }
         $this->modelo = $modelo;
         return $this;
     }
@@ -439,27 +463,27 @@ class Evento extends Retorno
         $id->value = $this->getID(true);
         $info->appendChild($id);
         
-        $info->appendChild($dom->createElement('cOrgao', $this->getOrgao(true)));
-        $info->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
+        Util::appendNode($info, 'cOrgao', $this->getOrgao(true));
+        Util::appendNode($info, 'tpAmb', $this->getAmbiente(true));
         if ($this->isCNPJ()) {
-            $info->appendChild($dom->createElement('CNPJ', $this->getIdentificador(true)));
+            Util::appendNode($info, 'CNPJ', $this->getIdentificador(true));
         } else {
-            $info->appendChild($dom->createElement('CPF', $this->getIdentificador(true)));
+            Util::appendNode($info, 'CPF', $this->getIdentificador(true));
         }
-        $info->appendChild($dom->createElement('chNFe', $this->getChave(true)));
-        $info->appendChild($dom->createElement('dhEvento', $this->getData(true)));
-        $info->appendChild($dom->createElement('tpEvento', $this->getTipo(true)));
-        $info->appendChild($dom->createElement('nSeqEvento', $this->getSequencia(true)));
-        $info->appendChild($dom->createElement('verEvento', self::VERSAO));
+        Util::appendNode($info, 'chNFe', $this->getChave(true));
+        Util::appendNode($info, 'dhEvento', $this->getData(true));
+        Util::appendNode($info, 'tpEvento', $this->getTipo(true));
+        Util::appendNode($info, 'nSeqEvento', $this->getSequencia(true));
+        Util::appendNode($info, 'verEvento', self::VERSAO);
 
         $detalhes = $dom->createElement('detEvento');
         $versao = $dom->createAttribute('versao');
         $versao->value = self::VERSAO;
         $detalhes->appendChild($versao);
 
-        $detalhes->appendChild($dom->createElement('descEvento', $this->getDescricao(true)));
-        $detalhes->appendChild($dom->createElement('nProt', $this->getNumero(true)));
-        $detalhes->appendChild($dom->createElement('xJust', $this->getJustificativa(true)));
+        Util::appendNode($detalhes, 'descEvento', $this->getDescricao(true));
+        Util::appendNode($detalhes, 'nProt', $this->getNumero(true));
+        Util::appendNode($detalhes, 'xJust', $this->getJustificativa(true));
         $info->appendChild($detalhes);
 
         $element->appendChild($info);
@@ -499,16 +523,16 @@ class Evento extends Retorno
         $info->insertBefore($dom->createElement('xEvento', $this->getDescricao(true)), $sequencia);
         if (!is_null($this->getIdentificador())) {
             if ($this->isCNPJ()) {
-                $info->appendChild($dom->createElement('CNPJDest', $this->getIdentificador(true)));
+                Util::appendNode($info, 'CNPJDest', $this->getIdentificador(true));
             } else {
-                $info->appendChild($dom->createElement('CPFDest', $this->getIdentificador(true)));
+                Util::appendNode($info, 'CPFDest', $this->getIdentificador(true));
             }
         }
         if (!is_null($this->getEmail())) {
-            $info->appendChild($dom->createElement('emailDest', $this->getEmail(true)));
+            Util::appendNode($info, 'emailDest', $this->getEmail(true));
         }
-        $info->appendChild($dom->createElement('dhRegEvento', $this->getData(true)));
-        $info->appendChild($dom->createElement('nProt', $this->getNumero(true)));
+        Util::appendNode($info, 'dhRegEvento', $this->getData(true));
+        Util::appendNode($info, 'nProt', $this->getNumero(true));
         return $element;
     }
 
@@ -516,51 +540,51 @@ class Evento extends Retorno
     {
         $name = is_null($name)?'infEvento':$name;
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('cOrgao');
-        if ($_fields->length > 0) {
-            $orgao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cOrgao" do campo "Orgao" não encontrada', 404);
-        }
-        $this->setOrgao($orgao);
+        $this->setOrgao(
+            Util::loadNode(
+                $element,
+                'cOrgao',
+                'Tag "cOrgao" do campo "Orgao" não encontrada'
+            )
+        );
         if ($name == 'retEnvEvento') {
             return $element;
         }
-        $_fields = $element->getElementsByTagName('chNFe');
-        if ($_fields->length > 0) {
-            $chave = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "chNFe" do campo "Chave" não encontrada', 404);
-        }
-        $this->setChave($chave);
-        $_fields = $element->getElementsByTagName('tpEvento');
-        if ($_fields->length > 0) {
-            $tipo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "tpEvento" do campo "Tipo" não encontrada', 404);
-        }
-        $this->setTipo($tipo);
-        $_fields = $element->getElementsByTagName('xEvento');
-        if ($_fields->length > 0) {
-            $descricao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "xEvento" do campo "Descricao" não encontrada', 404);
-        }
-        $this->setDescricao($descricao);
-        $_fields = $element->getElementsByTagName('nSeqEvento');
-        if ($_fields->length > 0) {
-            $sequencia = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nSeqEvento" do campo "Sequencia" não encontrada', 404);
-        }
-        $this->setSequencia($sequencia);
-        $_fields = $element->getElementsByTagName('dhRegEvento');
-        if ($_fields->length > 0) {
-            $data = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "dhRegEvento" do campo "Data" não encontrada', 404);
-        }
-        $this->setData($data);
+        $this->setChave(
+            Util::loadNode(
+                $element,
+                'chNFe',
+                'Tag "chNFe" do campo "Chave" não encontrada'
+            )
+        );
+        $this->setTipo(
+            Util::loadNode(
+                $element,
+                'tpEvento',
+                'Tag "tpEvento" do campo "Tipo" não encontrada'
+            )
+        );
+        $this->setDescricao(
+            Util::loadNode(
+                $element,
+                'xEvento',
+                'Tag "xEvento" do campo "Descricao" não encontrada'
+            )
+        );
+        $this->setSequencia(
+            Util::loadNode(
+                $element,
+                'nSeqEvento',
+                'Tag "nSeqEvento" do campo "Sequencia" não encontrada'
+            )
+        );
+        $this->setData(
+            Util::loadNode(
+                $element,
+                'dhRegEvento',
+                'Tag "dhRegEvento" do campo "Data" não encontrada'
+            )
+        );
         $identificador = null;
         $_fields = $element->getElementsByTagName('CNPJDest');
         if ($_fields->length == 0) {
@@ -594,11 +618,11 @@ class Evento extends Retorno
         $versao = $dob->createAttribute('versao');
         $versao->value = self::VERSAO;
         $envio->appendChild($versao);
-        $envio->appendChild($dob->createElement('idLote', self::genLote()));
+        Util::appendNode($envio, 'idLote', self::genLote());
         // Corrige xmlns:default
         // $data = $dob->importNode($dom->documentElement, true);
         // $envio->appendChild($data);
-        $envio->appendChild($dob->createElement('evento', 0));
+        Util::appendNode($envio, 'evento', 0);
         $dob->appendChild($envio);
         // Corrige xmlns:default
         // return $dob;

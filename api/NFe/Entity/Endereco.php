@@ -28,6 +28,7 @@
 namespace NFe\Entity;
 
 use NFe\Common\Node;
+use NFe\Common\Util;
 
 /**
  * Informação de endereço que será informado nos clientes e no emitente
@@ -236,19 +237,19 @@ class Endereco implements Node
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $this->checkCodigos();
         $element = $dom->createElement(is_null($name)?'enderEmit':$name);
-        $element->appendChild($dom->createElement('xLgr', $this->getLogradouro(true)));
-        $element->appendChild($dom->createElement('nro', $this->getNumero(true)));
+        Util::appendNode($element, 'xLgr', $this->getLogradouro(true));
+        Util::appendNode($element, 'nro', $this->getNumero(true));
         if (!is_null($this->getComplemento())) {
-            $element->appendChild($dom->createElement('xCpl', $this->getComplemento(true)));
+            Util::appendNode($element, 'xCpl', $this->getComplemento(true));
         }
-        $element->appendChild($dom->createElement('xBairro', $this->getBairro(true)));
-        $element->appendChild($dom->createElement('cMun', $this->getMunicipio()->getCodigo(true)));
-        $element->appendChild($dom->createElement('xMun', $this->getMunicipio()->getNome(true)));
-        $element->appendChild($dom->createElement('UF', $this->getMunicipio()->getEstado()->getUF(true)));
-        $element->appendChild($dom->createElement('CEP', $this->getCEP(true)));
-        $element->appendChild($dom->createElement('cPais', $this->getPais()->getCodigo(true)));
-        $element->appendChild($dom->createElement('xPais', $this->getPais()->getNome(true)));
-        // $element->appendChild($dom->createElement('fone', $this->getTelefone(true)));
+        Util::appendNode($element, 'xBairro', $this->getBairro(true));
+        Util::appendNode($element, 'cMun', $this->getMunicipio()->getCodigo(true));
+        Util::appendNode($element, 'xMun', $this->getMunicipio()->getNome(true));
+        Util::appendNode($element, 'UF', $this->getMunicipio()->getEstado()->getUF(true));
+        Util::appendNode($element, 'CEP', $this->getCEP(true));
+        Util::appendNode($element, 'cPais', $this->getPais()->getCodigo(true));
+        Util::appendNode($element, 'xPais', $this->getPais()->getNome(true));
+        // Util::appendNode($element, 'fone', $this->getTelefone(true));
         return $element;
     }
 
@@ -262,33 +263,28 @@ class Endereco implements Node
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('xLgr');
-        if ($_fields->length > 0) {
-            $logradouro = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "xLgr" do campo "Logradouro" não encontrada', 404);
-        }
-        $this->setLogradouro($logradouro);
-        $_fields = $element->getElementsByTagName('nro');
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nro" do campo "Numero" não encontrada', 404);
-        }
-        $this->setNumero($numero);
-        $_fields = $element->getElementsByTagName('xCpl');
-        $complemento = null;
-        if ($_fields->length > 0) {
-            $complemento = $_fields->item(0)->nodeValue;
-        }
-        $this->setComplemento($complemento);
-        $_fields = $element->getElementsByTagName('xBairro');
-        if ($_fields->length > 0) {
-            $bairro = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "xBairro" do campo "Bairro" não encontrada', 404);
-        }
-        $this->setBairro($bairro);
+        $this->setLogradouro(
+            Util::loadNode(
+                $element,
+                'xLgr',
+                'Tag "xLgr" do campo "Logradouro" não encontrada'
+            )
+        );
+        $this->setNumero(
+            Util::loadNode(
+                $element,
+                'nro',
+                'Tag "nro" do campo "Numero" não encontrada'
+            )
+        );
+        $this->setComplemento(Util::loadNode($element, 'xCpl'));
+        $this->setBairro(
+            Util::loadNode(
+                $element,
+                'xBairro',
+                'Tag "xBairro" do campo "Bairro" não encontrada'
+            )
+        );
         $_fields = $element->getElementsByTagName('cMun');
         if ($_fields->length > 0) {
             $codigo = $_fields->item(0)->nodeValue;
@@ -310,13 +306,13 @@ class Endereco implements Node
             throw new \Exception('Tag "UF" do campo "UF" não encontrada', 404);
         }
         $this->getMunicipio()->getEstado()->setUF($uf);
-        $_fields = $element->getElementsByTagName('CEP');
-        if ($_fields->length > 0) {
-            $cep = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CEP" do campo "CEP" não encontrada', 404);
-        }
-        $this->setCEP($cep);
+        $this->setCEP(
+            Util::loadNode(
+                $element,
+                'CEP',
+                'Tag "CEP" do campo "CEP" não encontrada'
+            )
+        );
         $_fields = $element->getElementsByTagName('cPais');
         if ($_fields->length > 0) {
             $codigo = $_fields->item(0)->nodeValue;

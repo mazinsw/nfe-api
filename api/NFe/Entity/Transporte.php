@@ -28,6 +28,7 @@
 namespace NFe\Entity;
 
 use NFe\Common\Node;
+use NFe\Common\Util;
 use NFe\Entity\Transporte\Veiculo;
 use NFe\Entity\Transporte\Tributo;
 use NFe\Entity\Transporte\Transportador;
@@ -289,7 +290,7 @@ class Transporte implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'transp':$name);
-        $element->appendChild($dom->createElement('modFrete', $this->getFrete(true)));
+        Util::appendNode($element, 'modFrete', $this->getFrete(true));
         if ($this->getFrete() == self::FRETE_NENHUM) {
             return $element;
         }
@@ -314,10 +315,10 @@ class Transporte implements Node
             $element->appendChild($reboque);
         }
         if (!is_null($this->getVagao())) {
-            $element->appendChild($dom->createElement('vagao', $this->getVagao(true)));
+            Util::appendNode($element, 'vagao', $this->getVagao(true));
         }
         if (!is_null($this->getBalsa())) {
-            $element->appendChild($dom->createElement('balsa', $this->getBalsa(true)));
+            Util::appendNode($element, 'balsa', $this->getBalsa(true));
         }
         if (!is_null($this->getVolumes())) {
             $_volumes = $this->getVolumes();
@@ -340,13 +341,13 @@ class Transporte implements Node
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('modFrete');
-        if ($_fields->length > 0) {
-            $frete = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "modFrete" do campo "Frete" não encontrada', 404);
-        }
-        $this->setFrete($frete);
+        $this->setFrete(
+            Util::loadNode(
+                $element,
+                'modFrete',
+                'Tag "modFrete" do campo "Frete" não encontrada'
+            )
+        );
         $_fields = $element->getElementsByTagName('transporta');
         $transportador = null;
         if ($_fields->length > 0) {
@@ -375,18 +376,8 @@ class Transporte implements Node
             $reboque->loadNode($_fields->item(0), 'reboque');
         }
         $this->setReboque($reboque);
-        $_fields = $element->getElementsByTagName('vagao');
-        $vagao = null;
-        if ($_fields->length > 0) {
-            $vagao = $_fields->item(0)->nodeValue;
-        }
-        $this->setVagao($vagao);
-        $_fields = $element->getElementsByTagName('balsa');
-        $balsa = null;
-        if ($_fields->length > 0) {
-            $balsa = $_fields->item(0)->nodeValue;
-        }
-        $this->setBalsa($balsa);
+        $this->setVagao(Util::loadNode($element, 'vagao'));
+        $this->setBalsa(Util::loadNode($element, 'balsa'));
         $volumes = array();
         $_fields = $element->getElementsByTagName('vol');
         foreach ($_fields as $_item) {

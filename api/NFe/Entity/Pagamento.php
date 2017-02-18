@@ -341,19 +341,19 @@ class Pagamento implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'pag':$name);
-        $element->appendChild($dom->createElement('tPag', $this->getForma(true)));
-        $element->appendChild($dom->createElement('vPag', $this->getValor(true)));
+        Util::appendNode($element, 'tPag', $this->getForma(true));
+        Util::appendNode($element, 'vPag', $this->getValor(true));
         if (!$this->isCartao()) {
             return $element;
         }
         $cartao = $dom->createElement('card');
-        $cartao->appendChild($dom->createElement('tpIntegra', $this->getIntegrado(true)));
+        Util::appendNode($cartao, 'tpIntegra', $this->getIntegrado(true));
         if ($this->isIntegrado()) {
-            $cartao->appendChild($dom->createElement('CNPJ', $this->getCredenciadora(true)));
+            Util::appendNode($cartao, 'CNPJ', $this->getCredenciadora(true));
         }
-        $cartao->appendChild($dom->createElement('tBand', $this->getBandeira(true)));
+        Util::appendNode($cartao, 'tBand', $this->getBandeira(true));
         if ($this->isIntegrado()) {
-            $cartao->appendChild($dom->createElement('cAut', $this->getAutorizacao(true)));
+            Util::appendNode($cartao, 'cAut', $this->getAutorizacao(true));
         }
         $element->appendChild($cartao);
         return $element;
@@ -369,20 +369,20 @@ class Pagamento implements Node
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('tPag');
-        if ($_fields->length > 0) {
-            $forma = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "tPag" do campo "Forma" não encontrada', 404);
-        }
-        $this->setForma($forma);
-        $_fields = $element->getElementsByTagName('vPag');
-        if ($_fields->length > 0) {
-            $valor = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vPag" do campo "Valor" não encontrada', 404);
-        }
-        $this->setValor($valor);
+        $this->setForma(
+            Util::loadNode(
+                $element,
+                'tPag',
+                'Tag "tPag" do campo "Forma" não encontrada'
+            )
+        );
+        $this->setValor(
+            Util::loadNode(
+                $element,
+                'vPag',
+                'Tag "vPag" do campo "Valor" não encontrada'
+            )
+        );
         $integrado = null;
         $_fields = $element->getElementsByTagName('tpIntegra');
         if ($_fields->length > 0) {

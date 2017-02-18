@@ -202,10 +202,10 @@ class Isento extends Generico
         $element = parent::getNode(is_null($name)?'ICMS40':$name);
         $dom = $element->ownerDocument;
         if (!is_null($this->getDesoneracao())) {
-            $element->appendChild($dom->createElement('vICMSDeson', $this->getDesoneracao(true)));
+            Util::appendNode($element, 'vICMSDeson', $this->getDesoneracao(true));
         }
         if (!is_null($this->getDesoneracao())) {
-            $element->appendChild($dom->createElement('motDesICMS', $this->getMotivo(true)));
+            Util::appendNode($element, 'motDesICMS', $this->getMotivo(true));
         }
         return $element;
     }
@@ -214,18 +214,8 @@ class Isento extends Generico
     {
         $name = is_null($name)?'ICMS40':$name;
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('vICMSDeson');
-        $desoneracao = null;
-        if ($_fields->length > 0) {
-            $desoneracao = $_fields->item(0)->nodeValue;
-        }
-        $this->setDesoneracao($desoneracao);
-        $_fields = $element->getElementsByTagName('motDesICMS');
-        $motivo = null;
-        if ($_fields->length > 0) {
-            $motivo = $_fields->item(0)->nodeValue;
-        }
-        $this->setMotivo($motivo);
+        $this->setDesoneracao(Util::loadNode($element, 'vICMSDeson'));
+        $this->setMotivo(Util::loadNode($element, 'motDesICMS'));
         return $element;
     }
 }

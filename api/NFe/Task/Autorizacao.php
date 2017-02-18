@@ -29,6 +29,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 use NFe\Core\SEFAZ;
+use NFe\Common\Util;
 
 class Autorizacao extends Retorno
 {
@@ -64,12 +65,12 @@ class Autorizacao extends Retorno
         $versao = $dob->createAttribute('versao');
         $versao->value = Nota::VERSAO;
         $envio->appendChild($versao);
-        $envio->appendChild($dob->createElement('idLote', self::genLote()));
-        $envio->appendChild($dob->createElement('indSinc', $config->getSincrono(true)));
+        Util::appendNode($envio, 'idLote', self::genLote());
+        Util::appendNode($envio, 'indSinc', $config->getSincrono(true));
         // Corrige xmlns:default
         // $data = $dob->importNode($dom->documentElement, true);
         // $envio->appendChild($data);
-        $envio->appendChild($dob->createElement('NFe', 0));
+        Util::appendNode($envio, 'NFe', 0);
         $dob->appendChild($envio);
         // Corrige xmlns:default
         // return $dob;

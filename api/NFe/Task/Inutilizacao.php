@@ -29,6 +29,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 use NFe\Core\SEFAZ;
+use NFe\Common\Util;
 use NFe\Exception\ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
@@ -106,16 +107,40 @@ class Inutilizacao extends Retorno
         return $this;
     }
 
+    /**
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * @return mixed modelo do Envio
+     */
     public function getModelo($normalize = false)
     {
         if (!$normalize) {
             return $this->modelo;
         }
+        switch ($this->modelo) {
+            case Nota::MODELO_NFE:
+                return '55';
+            case Nota::MODELO_NFCE:
+                return '65';
+        }
         return $this->modelo;
     }
 
+    /**
+     * Altera o valor do Modelo para o informado no parâmetro
+     * @param mixed $modelo novo valor para Modelo
+     * @return Envio A própria instância da classe
+     */
     public function setModelo($modelo)
     {
+        switch ($modelo) {
+            case '55':
+                $modelo = Nota::MODELO_NFE;
+                break;
+            case '65':
+                $modelo = Nota::MODELO_NFCE;
+                break;
+        }
         $this->modelo = $modelo;
         return $this;
     }
@@ -300,16 +325,16 @@ class Inutilizacao extends Retorno
         $id->value = $this->getID(true);
         $info->appendChild($id);
 
-        $info->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
-        $info->appendChild($dom->createElement('xServ', 'INUTILIZAR'));
-        $info->appendChild($dom->createElement('cUF', $this->getUF(true)));
-        $info->appendChild($dom->createElement('ano', $this->getAno(true)));
-        $info->appendChild($dom->createElement('CNPJ', $this->getCNPJ(true)));
-        $info->appendChild($dom->createElement('mod', $this->getModelo(true)));
-        $info->appendChild($dom->createElement('serie', $this->getSerie(true)));
-        $info->appendChild($dom->createElement('nNFIni', $this->getInicio(true)));
-        $info->appendChild($dom->createElement('nNFFin', $this->getFinal(true)));
-        $info->appendChild($dom->createElement('xJust', $this->getJustificativa(true)));
+        Util::appendNode($info, 'tpAmb', $this->getAmbiente(true));
+        Util::appendNode($info, 'xServ', 'INUTILIZAR');
+        Util::appendNode($info, 'cUF', $this->getUF(true));
+        Util::appendNode($info, 'ano', $this->getAno(true));
+        Util::appendNode($info, 'CNPJ', $this->getCNPJ(true));
+        Util::appendNode($info, 'mod', $this->getModelo(true));
+        Util::appendNode($info, 'serie', $this->getSerie(true));
+        Util::appendNode($info, 'nNFIni', $this->getInicio(true));
+        Util::appendNode($info, 'nNFFin', $this->getFinal(true));
+        Util::appendNode($info, 'xJust', $this->getJustificativa(true));
         $element->appendChild($info);
         $dom->appendChild($element);
         return $element;
@@ -342,7 +367,7 @@ class Inutilizacao extends Retorno
                     $info->insertBefore($node, $uf);
             }
         }
-        $info->appendChild($dom->createElement('nProt', $this->getNumero(true)));
+        Util::appendNode($info, 'nProt', $this->getNumero(true));
         return $element;
     }
 
@@ -353,55 +378,55 @@ class Inutilizacao extends Retorno
         if (!$this->isInutilizado()) {
             return $element;
         }
-        $_fields = $element->getElementsByTagName('ano');
-        if ($_fields->length > 0) {
-            $ano = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "ano" do campo "Ano" não encontrada', 404);
-        }
-        $this->setAno($ano);
-        $_fields = $element->getElementsByTagName('CNPJ');
-        if ($_fields->length > 0) {
-            $cnpj = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CNPJ" do campo "CNPJ" não encontrada', 404);
-        }
-        $this->setCNPJ($cnpj);
-        $_fields = $element->getElementsByTagName('mod');
-        if ($_fields->length > 0) {
-            $modelo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "mod" do campo "Modelo" não encontrada', 404);
-        }
-        $this->setModelo($modelo);
-        $_fields = $element->getElementsByTagName('serie');
-        if ($_fields->length > 0) {
-            $serie = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "serie" do campo "Serie" não encontrada', 404);
-        }
-        $this->setSerie($serie);
-        $_fields = $element->getElementsByTagName('nNFIni');
-        if ($_fields->length > 0) {
-            $inicio = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nNFIni" do campo "Inicio" não encontrada', 404);
-        }
-        $this->setInicio($inicio);
-        $_fields = $element->getElementsByTagName('nNFFin');
-        if ($_fields->length > 0) {
-            $final = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nNFFin" do campo "Final" não encontrada', 404);
-        }
-        $this->setFinal($final);
-        $_fields = $element->getElementsByTagName('nProt');
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nProt" do campo "Numero" não encontrada', 404);
-        }
-        $this->setNumero($numero);
+        $this->setAno(
+            Util::loadNode(
+                $element,
+                'ano',
+                'Tag "ano" do campo "Ano" não encontrada'
+            )
+        );
+        $this->setCNPJ(
+            Util::loadNode(
+                $element,
+                'CNPJ',
+                'Tag "CNPJ" do campo "CNPJ" não encontrada'
+            )
+        );
+        $this->setModelo(
+            Util::loadNode(
+                $element,
+                'mod',
+                'Tag "mod" do campo "Modelo" não encontrada'
+            )
+        );
+        $this->setSerie(
+            Util::loadNode(
+                $element,
+                'serie',
+                'Tag "serie" do campo "Serie" não encontrada'
+            )
+        );
+        $this->setInicio(
+            Util::loadNode(
+                $element,
+                'nNFIni',
+                'Tag "nNFIni" do campo "Inicio" não encontrada'
+            )
+        );
+        $this->setFinal(
+            Util::loadNode(
+                $element,
+                'nNFFin',
+                'Tag "nNFFin" do campo "Final" não encontrada'
+            )
+        );
+        $this->setNumero(
+            Util::loadNode(
+                $element,
+                'nProt',
+                'Tag "nProt" do campo "Numero" não encontrada'
+            )
+        );
         return $element;
     }
 

@@ -30,11 +30,18 @@ namespace NFe\Task;
 use NFe\Core\Nota;
 use NFe\Core\SEFAZ;
 use NFe\Common\Node;
+use NFe\Common\Util;
 use NFe\Common\CurlSoap;
 
+/**
+ * Envia requisições para os servidores da SEFAZ
+ */
 class Envio
 {
 
+    /**
+     * Tipo de serviço a ser executado
+     */
     const SERVICO_INUTILIZACAO = 'inutilizacao';
     const SERVICO_PROTOCOLO = 'protocolo';
     const SERVICO_STATUS = 'status';
@@ -48,17 +55,43 @@ class Envio
     const SERVICO_DOWNLOAD = 'download';
     const SERVICO_DISTRIBUICAO = 'distribuicao';
 
+    /**
+     * Tipo de serviço a ser executado
+     */
     private $servico;
+    /**
+     * Identificação do Ambiente:
+     * 1 - Produção
+     * 2 - Homologação
+     */
     private $ambiente;
+    /**
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     */
     private $modelo;
+    /**
+     * Forma de emissão da NF-e
+     */
     private $emissao;
+    /**
+     * Conteudo a ser enviado
+     */
     private $conteudo;
 
+    /**
+     * Constroi uma instância de Envio vazia
+     * @param  array $envio Array contendo dados do Envio
+     */
     public function __construct($envio = array())
     {
         $this->fromArray($envio);
     }
 
+    /**
+     * Tipo de serviço a ser executado
+     * @param boolean $normalize informa se o servico deve estar no formato do XML
+     * @return mixed servico do Envio
+     */
     public function getServico($normalize = false)
     {
         if (!$normalize) {
@@ -93,56 +126,157 @@ class Envio
         return $this->servico;
     }
 
+    /**
+     * Altera o valor do Servico para o informado no parâmetro
+     * @param mixed $servico novo valor para Servico
+     * @return Envio A própria instância da classe
+     */
     public function setServico($servico)
     {
         $this->servico = $servico;
         return $this;
     }
 
-    public function getAmbiente()
+    /**
+     * Identificação do Ambiente:
+     * 1 - Produção
+     * 2 - Homologação
+     * @param boolean $normalize informa se o ambiente deve estar no formato do XML
+     * @return mixed ambiente do Envio
+     */
+    public function getAmbiente($normalize = false)
     {
+        if (!$normalize) {
+            return $this->ambiente;
+        }
+        switch ($this->ambiente) {
+            case Nota::AMBIENTE_PRODUCAO:
+                return '1';
+            case Nota::AMBIENTE_HOMOLOGACAO:
+                return '2';
+        }
         return $this->ambiente;
     }
 
+    /**
+     * Altera o valor do Ambiente para o informado no parâmetro
+     * @param mixed $ambiente novo valor para Ambiente
+     * @return Envio A própria instância da classe
+     */
     public function setAmbiente($ambiente)
     {
+        switch ($ambiente) {
+            case '1':
+                $ambiente = Nota::AMBIENTE_PRODUCAO;
+                break;
+            case '2':
+                $ambiente = Nota::AMBIENTE_HOMOLOGACAO;
+                break;
+        }
         $this->ambiente = $ambiente;
         return $this;
     }
 
-    public function getModelo()
+    /**
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * @return mixed modelo do Envio
+     */
+    public function getModelo($normalize = false)
     {
+        if (!$normalize) {
+            return $this->modelo;
+        }
+        switch ($this->modelo) {
+            case Nota::MODELO_NFE:
+                return '55';
+            case Nota::MODELO_NFCE:
+                return '65';
+        }
         return $this->modelo;
     }
 
+    /**
+     * Altera o valor do Modelo para o informado no parâmetro
+     * @param mixed $modelo novo valor para Modelo
+     * @return Envio A própria instância da classe
+     */
     public function setModelo($modelo)
     {
+        switch ($modelo) {
+            case '55':
+                $modelo = Nota::MODELO_NFE;
+                break;
+            case '65':
+                $modelo = Nota::MODELO_NFCE;
+                break;
+        }
         $this->modelo = $modelo;
         return $this;
     }
 
-    public function getEmissao()
+    /**
+     * Forma de emissão da NF-e
+     * @param boolean $normalize informa se o emissao deve estar no formato do XML
+     * @return mixed emissao do Envio
+     */
+    public function getEmissao($normalize = false)
     {
+        if (!$normalize) {
+            return $this->emissao;
+        }
+        switch ($this->emissao) {
+            case Nota::EMISSAO_NORMAL:
+                return '1';
+            case Nota::EMISSAO_CONTINGENCIA:
+                return '9';
+        }
         return $this->emissao;
     }
 
+    /**
+     * Altera o valor do Emissao para o informado no parâmetro
+     * @param mixed $emissao novo valor para Emissao
+     * @return Envio A própria instância da classe
+     */
     public function setEmissao($emissao)
     {
+        switch ($emissao) {
+            case '1':
+                $emissao = Nota::EMISSAO_NORMAL;
+                break;
+            case '9':
+                $emissao = Nota::EMISSAO_CONTINGENCIA;
+                break;
+        }
         $this->emissao = $emissao;
         return $this;
     }
 
+    /**
+     * Conteudo a ser enviado
+     * @return mixed conteudo do Envio
+     */
     public function getConteudo()
     {
         return $this->conteudo;
     }
 
+    /**
+     * Altera o valor do Conteudo para o informado no parâmetro
+     * @param mixed $conteudo novo valor para Conteudo
+     * @return Envio A própria instância da classe
+     */
     public function setConteudo($conteudo)
     {
         $this->conteudo = $conteudo;
         return $this;
     }
 
+    /**
+     * Obtém a versão do serviço a ser utilizado
+     * @return string Versão do serviço
+     */
     public function getVersao()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
@@ -165,6 +299,10 @@ class Envio
         return Nota::VERSAO;
     }
 
+    /**
+     * Converte a instância da classe para um array de campos com valores
+     * @return array Array contendo todos os campos e valores da instância
+     */
     public function toArray()
     {
         $envio = array();
@@ -176,6 +314,11 @@ class Envio
         return $envio;
     }
 
+    /**
+     * Atribui os valores do array para a instância atual
+     * @param mixed $envio Array ou instância de Envio, para copiar os valores
+     * @return Envio A própria instância da classe
+     */
     public function fromArray($envio = array())
     {
         if ($envio instanceof Envio) {
@@ -211,6 +354,10 @@ class Envio
         return $this;
     }
 
+    /**
+     * Obtém o nó do cabeçalho da requisição SOAP
+     * @return DOMDocument Cabeçalho para adicionar na requisição
+     */
     private function getNodeHeader()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
@@ -219,12 +366,17 @@ class Envio
         $doh = new \DOMDocument('1.0', 'UTF-8');
         $element = $doh->createElement('nfeCabecMsg');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', $this->getServico(true));
-        $element->appendChild($doh->createElement('cUF', $estado->getCodigo(true)));
-        $element->appendChild($doh->createElement('versaoDados', $this->getVersao()));
+        Util::appendNode($element, 'cUF', $estado->getCodigo(true));
+        Util::appendNode($element, 'versaoDados', $this->getVersao());
         $doh->appendChild($element);
         return $doh;
     }
 
+    /**
+     * Cria um nó XML do envio de acordo com o leiaute da NFe
+     * @param  string $name Nome do nó que será criado
+     * @return DOMElement   Nó que contém todos os campos da classe
+     */
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -233,7 +385,7 @@ class Envio
         // Corrige xmlns:default
         // $data = $dom->importNode($this->getConteudo()->documentElement, true);
         // $element->appendChild($data);
-        $element->appendChild($dom->createElement('Conteudo', 0));
+        Util::appendNode($element, 'Conteudo', 0);
 
         $dom->appendChild($element);
 
@@ -249,6 +401,10 @@ class Envio
         return $dom;
     }
 
+    /**
+     * Envia o conteúdo para o serviço da SEFAZ informado
+     * @return DOMDocument Documento XML da resposta da SEFAZ
+     */
     public function envia()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
@@ -282,7 +438,7 @@ class Envio
             $resp = $soap->send($url, $dob, $doh);
             return $resp;
         } catch (\DomainException $e) {
-            $config->setOffline();
+            $config->setOffline(time());
             throw $e;
         }
     }

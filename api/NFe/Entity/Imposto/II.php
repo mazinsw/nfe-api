@@ -138,10 +138,10 @@ class II extends Imposto
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'II':$name);
-        $element->appendChild($dom->createElement('vBC', $this->getBase(true)));
-        $element->appendChild($dom->createElement('vDespAdu', $this->getDespesas(true)));
-        $element->appendChild($dom->createElement('vII', $this->getValor(true)));
-        $element->appendChild($dom->createElement('vIOF', $this->getIOF(true)));
+        Util::appendNode($element, 'vBC', $this->getBase(true));
+        Util::appendNode($element, 'vDespAdu', $this->getDespesas(true));
+        Util::appendNode($element, 'vII', $this->getValor(true));
+        Util::appendNode($element, 'vIOF', $this->getIOF(true));
         return $element;
     }
 
@@ -155,34 +155,34 @@ class II extends Imposto
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('vBC');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBC" do campo "Base" não encontrada', 404);
-        }
-        $this->setBase($base);
-        $_fields = $element->getElementsByTagName('vDespAdu');
-        if ($_fields->length > 0) {
-            $despesas = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vDespAdu" do campo "Despesas" não encontrada', 404);
-        }
-        $this->setDespesas($despesas);
-        $_fields = $element->getElementsByTagName('vII');
-        if ($_fields->length > 0) {
-            $valor = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vII" do campo "Valor" não encontrada', 404);
-        }
-        $this->setValor($valor);
-        $_fields = $element->getElementsByTagName('vIOF');
-        if ($_fields->length > 0) {
-            $iof = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vIOF" do campo "Iof" não encontrada', 404);
-        }
-        $this->setIOF($iof);
+        $this->setBase(
+            Util::loadNode(
+                $element,
+                'vBC',
+                'Tag "vBC" do campo "Base" não encontrada'
+            )
+        );
+        $this->setDespesas(
+            Util::loadNode(
+                $element,
+                'vDespAdu',
+                'Tag "vDespAdu" do campo "Despesas" não encontrada'
+            )
+        );
+        $this->setValor(
+            Util::loadNode(
+                $element,
+                'vII',
+                'Tag "vII" do campo "Valor" não encontrada'
+            )
+        );
+        $this->setIOF(
+            Util::loadNode(
+                $element,
+                'vIOF',
+                'Tag "vIOF" do campo "Iof" não encontrada'
+            )
+        );
         return $element;
     }
 }

@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\ICMS\Simples;
 
+use NFe\Common\Util;
+
 /**
  * Tributação do ICMS pelo SIMPLES NACIONAL, CRT=1 – Simples Nacional e
  * CSOSN=900 (v2.0)
@@ -63,8 +65,8 @@ class Generico extends Cobranca
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
             $element = $dom->createElement(is_null($name)?'ICMSSN900':$name);
-            $element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
-            $element->appendChild($dom->createElement('CSOSN', $this->getTributacao(true)));
+            Util::appendNode($element, 'orig', $this->getOrigem(true));
+            Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
             return $element;
         }
         $element = parent::getNode(is_null($name)?'ICMSSN900':$name);
@@ -88,20 +90,20 @@ class Generico extends Cobranca
             $element = parent::loadNode($element, $name);
             return $element;
         }
-        $_fields = $element->getElementsByTagName('orig');
-        if ($_fields->length > 0) {
-            $origem = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "orig" do campo "Origem" não encontrada', 404);
-        }
-        $this->setOrigem($origem);
-        $_fields = $element->getElementsByTagName('CSOSN');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CSOSN" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
+        $this->setOrigem(
+            Util::loadNode(
+                $element,
+                'orig',
+                'Tag "orig" do campo "Origem" não encontrada'
+            )
+        );
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CSOSN',
+                'Tag "CSOSN" do campo "Tributacao" não encontrada'
+            )
+        );
         return $element;
     }
 }

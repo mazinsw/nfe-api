@@ -247,9 +247,9 @@ class Configuracao
     /**
      * Entra no modo offline e sai automaticamente após 3 minutos
      */
-    public function setOffline($offline_start = null)
+    public function setOffline($offline_start)
     {
-        $this->offline_start = is_null($offline_start)?time():$offline_start;
+        $this->offline_start = $offline_start;
         return $this;
     }
 
@@ -343,11 +343,6 @@ class Configuracao
             $this->setSincrono('Y');
         } else {
             $this->setSincrono($configuracao['sincrono']);
-        }
-        if (isset($configuracao['offline'])) {
-            $this->setOffline($configuracao['offline']);
-        } else {
-            $this->setOffline(null);
         }
         return $this;
     }

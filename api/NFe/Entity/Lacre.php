@@ -28,6 +28,7 @@
 namespace NFe\Entity;
 
 use NFe\Common\Node;
+use NFe\Common\Util;
 
 /**
  * Lacre do volume
@@ -86,7 +87,7 @@ class Lacre implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'lacres':$name);
-        $element->appendChild($dom->createElement('nLacre', $this->getNumero(true)));
+        Util::appendNode($element, 'nLacre', $this->getNumero(true));
         return $element;
     }
 
@@ -100,13 +101,13 @@ class Lacre implements Node
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('nLacre');
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nLacre" do campo "Numero" não encontrada', 404);
-        }
-        $this->setNumero($numero);
+        $this->setNumero(
+            Util::loadNode(
+                $element,
+                'nLacre',
+                'Tag "nLacre" do campo "Numero" não encontrada'
+            )
+        );
         return $element;
     }
 }

@@ -173,14 +173,14 @@ class Parcial extends Base
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'IMCS30':$name);
-        $element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
-        $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
-        $element->appendChild($dom->createElement('modBCST', $this->getModalidade(true)));
-        $element->appendChild($dom->createElement('pMVAST', $this->getMargem(true)));
-        $element->appendChild($dom->createElement('pRedBCST', $this->getReducao(true)));
-        $element->appendChild($dom->createElement('vBCST', $this->getBase(true)));
-        $element->appendChild($dom->createElement('pICMSST', $this->getAliquota(true)));
-        $element->appendChild($dom->createElement('vICMSST', $this->getValor(true)));
+        Util::appendNode($element, 'orig', $this->getOrigem(true));
+        Util::appendNode($element, 'CST', $this->getTributacao(true));
+        Util::appendNode($element, 'modBCST', $this->getModalidade(true));
+        Util::appendNode($element, 'pMVAST', $this->getMargem(true));
+        Util::appendNode($element, 'pRedBCST', $this->getReducao(true));
+        Util::appendNode($element, 'vBCST', $this->getBase(true));
+        Util::appendNode($element, 'pICMSST', $this->getAliquota(true));
+        Util::appendNode($element, 'vICMSST', $this->getValor(true));
         return $element;
     }
 
@@ -194,55 +194,55 @@ class Parcial extends Base
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('orig');
-        if ($_fields->length > 0) {
-            $origem = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "orig" do campo "Origem" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setOrigem($origem);
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setTributacao($tributacao);
-        $_fields = $element->getElementsByTagName('modBCST');
-        if ($_fields->length > 0) {
-            $modalidade = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "modBCST" do campo "Modalidade" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setModalidade($modalidade);
-        $_fields = $element->getElementsByTagName('pMVAST');
-        if ($_fields->length > 0) {
-            $margem = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pMVAST" do campo "Margem" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setMargem($margem);
-        $_fields = $element->getElementsByTagName('pRedBCST');
-        if ($_fields->length > 0) {
-            $reducao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pRedBCST" do campo "Reducao" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setReducao($reducao);
-        $_fields = $element->getElementsByTagName('vBCST');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBCST" do campo "Base" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setBase($base);
-        $_fields = $element->getElementsByTagName('pICMSST');
-        if ($_fields->length > 0) {
-            $aliquota = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pICMSST" do campo "Aliquota" não encontrada no ICMS Parcial', 404);
-        }
-        $this->setAliquota($aliquota);
+        $this->setOrigem(
+            Util::loadNode(
+                $element,
+                'orig',
+                'Tag "orig" do campo "Origem" não encontrada no ICMS Parcial'
+            )
+        );
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada no ICMS Parcial'
+            )
+        );
+        $this->setModalidade(
+            Util::loadNode(
+                $element,
+                'modBCST',
+                'Tag "modBCST" do campo "Modalidade" não encontrada no ICMS Parcial'
+            )
+        );
+        $this->setMargem(
+            Util::loadNode(
+                $element,
+                'pMVAST',
+                'Tag "pMVAST" do campo "Margem" não encontrada no ICMS Parcial'
+            )
+        );
+        $this->setReducao(
+            Util::loadNode(
+                $element,
+                'pRedBCST',
+                'Tag "pRedBCST" do campo "Reducao" não encontrada no ICMS Parcial'
+            )
+        );
+        $this->setBase(
+            Util::loadNode(
+                $element,
+                'vBCST',
+                'Tag "vBCST" do campo "Base" não encontrada no ICMS Parcial'
+            )
+        );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'pICMSST',
+                'Tag "pICMSST" do campo "Aliquota" não encontrada no ICMS Parcial'
+            )
+        );
         return $element;
     }
 }

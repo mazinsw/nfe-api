@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\ICMS;
 
+use NFe\Common\Util;
+
 /**
  * Classe base do ICMS normal, estende de ICMS\Base
  */
@@ -96,12 +98,12 @@ class Normal extends Base
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'IMCS':$name);
-        $element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
-        $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
-        $element->appendChild($dom->createElement('modBC', $this->getModalidade(true)));
-        $element->appendChild($dom->createElement('vBC', $this->getBase(true)));
-        $element->appendChild($dom->createElement('pICMS', $this->getAliquota(true)));
-        $element->appendChild($dom->createElement('vICMS', $this->getValor(true)));
+        Util::appendNode($element, 'orig', $this->getOrigem(true));
+        Util::appendNode($element, 'CST', $this->getTributacao(true));
+        Util::appendNode($element, 'modBC', $this->getModalidade(true));
+        Util::appendNode($element, 'vBC', $this->getBase(true));
+        Util::appendNode($element, 'pICMS', $this->getAliquota(true));
+        Util::appendNode($element, 'vICMS', $this->getValor(true));
         return $element;
     }
 
@@ -116,41 +118,41 @@ class Normal extends Base
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('orig');
-        if ($_fields->length > 0) {
-            $origem = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "orig" do campo "Origem" não encontrada', 404);
-        }
-        $this->setOrigem($origem);
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
-        $_fields = $element->getElementsByTagName('modBC');
-        if ($_fields->length > 0) {
-            $modalidade = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "modBC" do campo "Modalidade" não encontrada', 404);
-        }
-        $this->setModalidade($modalidade);
-        $_fields = $element->getElementsByTagName('vBC');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBC" do campo "Base" não encontrada', 404);
-        }
-        $this->setBase($base);
-        $_fields = $element->getElementsByTagName('pICMS');
-        if ($_fields->length > 0) {
-            $aliquota = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pICMS" do campo "Aliquota" não encontrada', 404);
-        }
-        $this->setAliquota($aliquota);
+        $this->setOrigem(
+            Util::loadNode(
+                $element,
+                'orig',
+                'Tag "orig" do campo "Origem" não encontrada'
+            )
+        );
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada'
+            )
+        );
+        $this->setModalidade(
+            Util::loadNode(
+                $element,
+                'modBC',
+                'Tag "modBC" do campo "Modalidade" não encontrada'
+            )
+        );
+        $this->setBase(
+            Util::loadNode(
+                $element,
+                'vBC',
+                'Tag "vBC" do campo "Base" não encontrada'
+            )
+        );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'pICMS',
+                'Tag "pICMS" do campo "Aliquota" não encontrada'
+            )
+        );
         return $element;
     }
 }

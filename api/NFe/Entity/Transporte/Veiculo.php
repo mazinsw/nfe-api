@@ -28,6 +28,7 @@
 namespace NFe\Entity\Transporte;
 
 use NFe\Common\Node;
+use NFe\Common\Util;
 
 class Veiculo implements Node
 {
@@ -121,10 +122,10 @@ class Veiculo implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'veicTransp':$name);
-        $element->appendChild($dom->createElement('placa', $this->getPlaca(true)));
-        $element->appendChild($dom->createElement('UF', $this->getUF(true)));
+        Util::appendNode($element, 'placa', $this->getPlaca(true));
+        Util::appendNode($element, 'UF', $this->getUF(true));
         if (!is_null($this->getRNTC())) {
-            $element->appendChild($dom->createElement('RNTC', $this->getRNTC(true)));
+            Util::appendNode($element, 'RNTC', $this->getRNTC(true));
         }
         return $element;
     }
@@ -139,26 +140,21 @@ class Veiculo implements Node
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('placa');
-        if ($_fields->length > 0) {
-            $placa = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "placa" do campo "Placa" não encontrada no Veiculo', 404);
-        }
-        $this->setPlaca($placa);
-        $_fields = $element->getElementsByTagName('UF');
-        if ($_fields->length > 0) {
-            $uf = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "UF" do campo "UF" não encontrada no Veiculo', 404);
-        }
-        $this->setUF($uf);
-        $_fields = $element->getElementsByTagName('RNTC');
-        $rntc = null;
-        if ($_fields->length > 0) {
-            $rntc = $_fields->item(0)->nodeValue;
-        }
-        $this->setRNTC($rntc);
+        $this->setPlaca(
+            Util::loadNode(
+                $element,
+                'placa',
+                'Tag "placa" do campo "Placa" não encontrada no Veiculo'
+            )
+        );
+        $this->setUF(
+            Util::loadNode(
+                $element,
+                'UF',
+                'Tag "UF" do campo "UF" não encontrada no Veiculo'
+            )
+        );
+        $this->setRNTC(Util::loadNode($element, 'RNTC'));
         return $element;
     }
 }

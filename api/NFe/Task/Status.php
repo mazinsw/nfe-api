@@ -213,12 +213,12 @@ class Status implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'Status':$name);
-        $element->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
-        $element->appendChild($dom->createElement('verAplic', $this->getVersao(true)));
-        $element->appendChild($dom->createElement('cStat', $this->getStatus(true)));
-        $element->appendChild($dom->createElement('xMotivo', $this->getMotivo(true)));
+        Util::appendNode($element, 'tpAmb', $this->getAmbiente(true));
+        Util::appendNode($element, 'verAplic', $this->getVersao(true));
+        Util::appendNode($element, 'cStat', $this->getStatus(true));
+        Util::appendNode($element, 'xMotivo', $this->getMotivo(true));
         if (!is_null($this->getUF())) {
-            $element->appendChild($dom->createElement('cUF', $this->getUF(true)));
+            Util::appendNode($element, 'cUF', $this->getUF(true));
         }
         return $element;
     }

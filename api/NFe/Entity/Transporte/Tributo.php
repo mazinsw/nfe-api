@@ -124,17 +124,17 @@ class Tributo extends Imposto
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'retTransp':$name);
-        $element->appendChild($dom->createElement('vServ', $this->getServico(true)));
-        $element->appendChild($dom->createElement('vBCRet', $this->getBase(true)));
-        $element->appendChild($dom->createElement('pICMSRet', $this->getAliquota(true)));
-        $element->appendChild($dom->createElement('vICMSRet', $this->getValor(true)));
-        $element->appendChild($dom->createElement('CFOP', $this->getCFOP(true)));
+        Util::appendNode($element, 'vServ', $this->getServico(true));
+        Util::appendNode($element, 'vBCRet', $this->getBase(true));
+        Util::appendNode($element, 'pICMSRet', $this->getAliquota(true));
+        Util::appendNode($element, 'vICMSRet', $this->getValor(true));
+        Util::appendNode($element, 'CFOP', $this->getCFOP(true));
         if (is_null($this->getMunicipio())) {
             return $element;
         }
         $municipio = $this->getMunicipio();
         $municipio->checkCodigos();
-        $element->appendChild($dom->createElement('cMunFG', $municipio->getCodigo(true)));
+        Util::appendNode($element, 'cMunFG', $municipio->getCodigo(true));
         return $element;
     }
 
@@ -149,34 +149,34 @@ class Tributo extends Imposto
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('vServ');
-        if ($_fields->length > 0) {
-            $servico = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vServ" do campo "Servico" não encontrada no Tributo', 404);
-        }
-        $this->setServico($servico);
-        $_fields = $element->getElementsByTagName('vBCRet');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBCRet" do campo "Base" não encontrada no Tributo', 404);
-        }
-        $this->setBase($base);
-        $_fields = $element->getElementsByTagName('pICMSRet');
-        if ($_fields->length > 0) {
-            $aliquota = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pICMSRet" do campo "Aliquota" não encontrada no Tributo', 404);
-        }
-        $this->setAliquota($aliquota);
-        $_fields = $element->getElementsByTagName('CFOP');
-        if ($_fields->length > 0) {
-            $cfop = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CFOP" do campo "CFOP" não encontrada no Tributo', 404);
-        }
-        $this->setCFOP($cfop);
+        $this->setServico(
+            Util::loadNode(
+                $element,
+                'vServ',
+                'Tag "vServ" do campo "Servico" não encontrada no Tributo'
+            )
+        );
+        $this->setBase(
+            Util::loadNode(
+                $element,
+                'vBCRet',
+                'Tag "vBCRet" do campo "Base" não encontrada no Tributo'
+            )
+        );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'pICMSRet',
+                'Tag "pICMSRet" do campo "Aliquota" não encontrada no Tributo'
+            )
+        );
+        $this->setCFOP(
+            Util::loadNode(
+                $element,
+                'CFOP',
+                'Tag "CFOP" do campo "CFOP" não encontrada no Tributo'
+            )
+        );
         $_fields = $element->getElementsByTagName('cMunFG');
         $municipio = null;
         if ($_fields->length > 0) {

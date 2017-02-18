@@ -36,10 +36,20 @@ use NFe\Entity\Imposto;
 class NFCe extends Nota
 {
 
+    /**
+     * Versão do QRCode
+     */
     const QRCODE_VERSAO = '100';
 
-    private $consulta_url;
+    /**
+     * Texto com o QR-Code impresso no DANFE NFC-e
+     */
+    private $qrcode_url;
 
+    /**
+     * Constroi uma instância de NFCe vazia
+     * @param  array $nfce Array contendo dados do NFCe
+     */
     public function __construct($nfce = array())
     {
         parent::__construct($nfce);
@@ -47,27 +57,62 @@ class NFCe extends Nota
         $this->setFormato(self::FORMATO_CONSUMIDOR);
     }
 
-    public function getConsultaURL($normalize = false)
+    /**
+     * Texto com o QR-Code impresso no DANFE NFC-e
+     * @param boolean $normalize informa se a qrcode_url deve estar no formato do XML
+     * @return mixed qrcode_url do NFCe
+     */
+    public function getQRCodeURL($normalize = false)
     {
         if (!$normalize) {
-            return $this->consulta_url;
+            return $this->qrcode_url;
         }
-        return $this->consulta_url;
+        return $this->qrcode_url;
     }
-
-    public function setConsultaURL($consulta_url)
+    
+    /**
+     * Altera o valor da QrcodeURL para o informado no parâmetro
+     * @param mixed $qrcode_url novo valor para QrcodeURL
+     * @return NFCe A própria instância da classe
+     */
+    public function setQRCodeURL($qrcode_url)
     {
-        $this->consulta_url = $consulta_url;
+        $this->qrcode_url = $qrcode_url;
         return $this;
     }
 
+    /**
+     * URL da página de consulta da nota fiscal
+     * @param boolean $normalize informa se a URL de consulta deve estar no formato do XML
+     * @return string URL de consulta da NFCe
+     */
+    public function getConsultaURL($normalize = false)
+    {
+        $estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
+        $db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
+        $info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), $this->getModelo(), $this->getAmbiente());
+        if (!isset($info['consulta'])) {
+            throw new \Exception('Não existe URL de consulta da nota para o estado "'.$estado->getUF().'"', 404);
+        }
+        return $info['consulta'];
+    }
+
+    /**
+     * Converte a instância da classe para um array de campos com valores
+     * @return array Array contendo todos os campos e valores da instância
+     */
     public function toArray()
     {
         $nfce = parent::toArray();
-        $nfce['consulta_url'] = $this->getConsultaURL();
+        $nfce['qrcode_url'] = $this->getQRCodeURL();
         return $nfce;
     }
 
+    /**
+     * Atribui os valores do array para a instância atual
+     * @param mixed $nfce Array ou instância de NFCe, para copiar os valores
+     * @return NFCe A própria instância da classe
+     */
     public function fromArray($nfce = array())
     {
         if ($nfce instanceof NFCe) {
@@ -76,10 +121,10 @@ class NFCe extends Nota
             return $this;
         }
         parent::fromArray($nfce);
-        if (isset($nfce['consulta_url'])) {
-            $this->setConsultaURL($nfce['consulta_url']);
+        if (!isset($nfce['qrcode_url'])) {
+            $this->setQRCodeURL(null);
         } else {
-            $this->setConsultaURL(null);
+            $this->setQRCodeURL($nfce['qrcode_url']);
         }
         return $this;
     }
@@ -123,13 +168,13 @@ class NFCe extends Nota
         $db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
         $params = $this->gerarQRCodeInfo($dom);
         $query = http_build_query($params);
-        $info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), 'nfce', $this->getAmbiente());
+        $info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), $this->getModelo(), $this->getAmbiente());
         if (!isset($info['qrcode'])) {
             throw new \Exception('Não existe URL de consulta de QRCode para o estado "'.$estado->getUF().'"', 404);
         }
         $url = $info['qrcode'];
         $url .= (strpos($url, '?') === false?'?':'&').$query;
-        $this->setConsultaURL($url);
+        $this->setQRCodeURL($url);
     }
 
     private function getNodeSuplementar(&$dom)
@@ -137,24 +182,30 @@ class NFCe extends Nota
         $this->checkQRCode($dom);
         $element = $dom->createElement('infNFeSupl');
         $qrcode = $dom->createElement('qrCode');
-        $data = $dom->createCDATASection($this->getConsultaURL(true));
+        $data = $dom->createCDATASection($this->getQRCodeURL(true));
         $qrcode->appendChild($data);
         $element->appendChild($qrcode);
         return $element;
     }
 
+    /**
+     * Carrega as informações do nó e preenche a instância da classe
+     * @param  DOMElement $element Nó do xml com todos as tags dos campos
+     * @param  string $name        Nome do nó que será carregado
+     * @return DOMElement          Instância do nó que foi carregado
+     */
     public function loadNode($element, $name = null)
     {
         $element = parent::loadNode($element, $name);
         $_fields = $element->getElementsByTagName('qrCode');
         $_sig_fields = $element->getElementsByTagName('Signature');
-        $consulta_url = null;
+        $qrcode_url = null;
         if ($_fields->length > 0) {
-            $consulta_url = $_fields->item(0)->nodeValue;
+            $qrcode_url = $_fields->item(0)->nodeValue;
         } elseif ($_sig_fields->length > 0) {
             throw new \Exception('Tag "qrCode" não encontrada', 404);
         }
-        $this->setConsultaURL($consulta_url);
+        $this->setQRCodeURL($qrcode_url);
         return $element;
     }
 

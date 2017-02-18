@@ -100,7 +100,7 @@ class Reducao extends Normal
     {
         $element = parent::getNode(is_null($name)?'ICMS20':$name);
         $dom = $element->ownerDocument;
-        $element->appendChild($dom->createElement('pRedBC', $this->getReducao(true)));
+        Util::appendNode($element, 'pRedBC', $this->getReducao(true));
         return $element;
     }
 
@@ -108,13 +108,13 @@ class Reducao extends Normal
     {
         $name = is_null($name)?'ICMS20':$name;
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('pRedBC');
-        if ($_fields->length > 0) {
-            $reducao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pRedBC" do campo "Reducao" não encontrada na Reducao', 404);
-        }
-        $this->setReducao($reducao);
+        $this->setReducao(
+            Util::loadNode(
+                $element,
+                'pRedBC',
+                'Tag "pRedBC" do campo "Reducao" não encontrada na Reducao'
+            )
+        );
         return $element;
     }
 }

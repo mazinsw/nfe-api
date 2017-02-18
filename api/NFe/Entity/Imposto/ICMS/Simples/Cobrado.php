@@ -99,8 +99,8 @@ class Cobrado extends Generico
         if (is_null($this->getValor())) {
             return $element;
         }
-        $element->appendChild($dom->createElement('vBCSTRet', $this->getBase(true)));
-        $element->appendChild($dom->createElement('vICMSSTRet', $this->getValor(true)));
+        Util::appendNode($element, 'vBCSTRet', $this->getBase(true));
+        Util::appendNode($element, 'vICMSSTRet', $this->getValor(true));
         return $element;
     }
 

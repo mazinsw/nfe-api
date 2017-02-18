@@ -125,15 +125,15 @@ class Diferido extends Reducao
         if (is_null($this->getDiferimento())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
             $element = $dom->createElement(is_null($name)?'ICMS51':$name);
-            $element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
-            $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
+            Util::appendNode($element, 'orig', $this->getOrigem(true));
+            Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
         $element = parent::getNode(is_null($name)?'ICMS51':$name);
         $dom = $element->ownerDocument;
-        $element->appendChild($dom->createElement('vICMSOp', $this->getOperacao(true)));
-        $element->appendChild($dom->createElement('pDif', $this->getDiferimento(true)));
-        $element->appendChild($dom->createElement('vICMSDif', $this->getDiferido(true)));
+        Util::appendNode($element, 'vICMSOp', $this->getOperacao(true));
+        Util::appendNode($element, 'pDif', $this->getDiferimento(true));
+        Util::appendNode($element, 'vICMSDif', $this->getDiferido(true));
         if (Util::isEqual(floatval($this->getReducao()), 0.0)) {
             $item = $element->getElementsByTagName('pRedBC')->item(0);
             $element->removeChild($item);
@@ -163,7 +163,7 @@ class Diferido extends Reducao
             $save_element = $element;
             $_fields = $element->getElementsByTagName('pRedBC');
             if ($_fields->length == 0) {
-                $element->appendChild($dom->createElement('pRedBC', '0.0000'));
+                Util::appendNode($element, 'pRedBC', '0.0000');
                 $node_added = true;
             }
             $element = parent::loadNode($element, $name);
@@ -175,20 +175,20 @@ class Diferido extends Reducao
             $this->setDiferimento($diferimento);
             return $element;
         }
-        $_fields = $element->getElementsByTagName('orig');
-        if ($_fields->length > 0) {
-            $origem = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "orig" do campo "Origem" não encontrada', 404);
-        }
-        $this->setOrigem($origem);
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
+        $this->setOrigem(
+            Util::loadNode(
+                $element,
+                'orig',
+                'Tag "orig" do campo "Origem" não encontrada'
+            )
+        );
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada'
+            )
+        );
         $this->setDiferimento(null);
         return $element;
     }

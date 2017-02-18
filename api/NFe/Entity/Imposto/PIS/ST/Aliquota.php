@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\PIS\ST;
 
+use NFe\Common\Util;
+
 /**
  * Este grupo só deve ser informado se o produto for sujeito a PIS por ST,
  * CST = 05, a informação deste grupo não desobriga a informação do grupo
@@ -76,20 +78,20 @@ class Aliquota extends \NFe\Entity\Imposto\PIS\Aliquota
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('vBC');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBC" do campo "Base" não encontrada', 404);
-        }
-        $this->setBase($base);
-        $_fields = $element->getElementsByTagName('pPIS');
-        if ($_fields->length > 0) {
-            $aliquota = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pPIS" do campo "Aliquota" não encontrada', 404);
-        }
-        $this->setAliquota($aliquota);
+        $this->setBase(
+            Util::loadNode(
+                $element,
+                'vBC',
+                'Tag "vBC" do campo "Base" não encontrada'
+            )
+        );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'pPIS',
+                'Tag "pPIS" do campo "Aliquota" não encontrada'
+            )
+        );
         return $element;
     }
 }

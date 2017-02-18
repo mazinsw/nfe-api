@@ -255,4 +255,24 @@ class Util
         }
         return ($ret <= $ext)? $presente: ($div - $ret);
     }
+
+    public static function appendNode($element, $name, $text)
+    {
+        $dom = $element->ownerDocument;
+        $element->appendChild($dom->createElement($name))
+                ->appendChild($dom->createTextNode($text));
+    }
+
+    public static function loadNode($element, $name, $exception = null)
+    {
+        $value = null;
+        $list = $element->getElementsByTagName($name);
+        if ($list->length > 0) {
+            $value = $list->item(0)->nodeValue;
+        } else if (!is_null($exception)) {
+            throw new \Exception($exception, 404);
+        }
+        return $value;
+    }
+
 }

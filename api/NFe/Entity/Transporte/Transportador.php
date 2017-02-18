@@ -27,6 +27,7 @@
  */
 namespace NFe\Entity\Transporte;
 
+use NFe\Common\Util;
 use NFe\Entity\Destinatario;
 
 /**
@@ -62,23 +63,23 @@ class Transportador extends Destinatario
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'transporta':$name);
         if (!is_null($this->getCNPJ())) {
-            $element->appendChild($dom->createElement('CNPJ', $this->getCNPJ(true)));
+            Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {
-            $element->appendChild($dom->createElement('CPF', $this->getCPF(true)));
+            Util::appendNode($element, 'CPF', $this->getCPF(true));
         }
         if (!is_null($this->getCNPJ())) {
-            $element->appendChild($dom->createElement('xNome', $this->getRazaoSocial(true)));
+            Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
         } else {
-            $element->appendChild($dom->createElement('xNome', $this->getNome(true)));
+            Util::appendNode($element, 'xNome', $this->getNome(true));
         }
         if (!is_null($this->getCNPJ())) {
-            $element->appendChild($dom->createElement('IE', $this->getIE(true)));
+            Util::appendNode($element, 'IE', $this->getIE(true));
         }
         if (!is_null($this->getEndereco())) {
             $endereco = $this->getEndereco();
-            $element->appendChild($dom->createElement('xEnder', $endereco->getDescricao(true)));
-            $element->appendChild($dom->createElement('xMun', $endereco->getMunicipio()->getNome(true)));
-            $element->appendChild($dom->createElement('UF', $endereco->getMunicipio()->getEstado()->getUF(true)));
+            Util::appendNode($element, 'xEnder', $endereco->getDescricao(true));
+            Util::appendNode($element, 'xMun', $endereco->getMunicipio()->getNome(true));
+            Util::appendNode($element, 'UF', $endereco->getMunicipio()->getEstado()->getUF(true));
         }
         return $element;
     }
@@ -124,13 +125,13 @@ class Transportador extends Destinatario
             $this->setNome($nome);
         }
         $ie = null;
-        $_fields = $element->getElementsByTagName('IE');
-        if ($_fields->length > 0) {
-            $ie = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "IE" do campo "IE" não encontrada', 404);
-        }
-        $this->setIE($ie);
+        $this->setIE(
+            Util::loadNode(
+                $element,
+                'IE',
+                'Tag "IE" do campo "IE" não encontrada'
+            )
+        );
         $this->setIM(null);
         $_fields = $element->getElementsByTagName('xEnder');
         if ($_fields->length == 0) {

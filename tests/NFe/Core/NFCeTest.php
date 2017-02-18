@@ -191,11 +191,11 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml');
-        $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
+        $xml_cmp = $dom_cmp->saveXML();
+        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
 
         // $dom->formatOutput = true;
-        // file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML($xml));
+        // file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
     }
 
     public function testNFCeLoadXML()
@@ -210,8 +210,8 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;
 
-        $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
+        $xml_cmp = $dom_cmp->saveXML();
+        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
     }
 
     public function testNFCeAssinadaXML()
@@ -224,31 +224,29 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml');
-        $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
+        $xml_cmp = $dom_cmp->saveXML();
+        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
 
         // $dom->formatOutput = true;
         // file_put_contents(
         //     dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml',
-        //     $dom->saveXML($xml)
+        //     $dom->saveXML()
         // );
     }
 
     public function testNFCeAssinadaLoadXML()
     {
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml');
+        $dom_cmp->load($xml_file);
 
         $nfce = new \NFe\Core\NFCe();
-        $nfce->loadNode($dom_cmp->documentElement);
+        $nfce->load($xml_file);
+        $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
 
-        $xml = $nfce->getNode();
-        $dom = $xml->ownerDocument;
-        $dom = $nfce->assinar($dom); // O carregamento (loadNode) não carrega assinatura
-
-        $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
+        $xml_cmp = $dom_cmp->saveXML();
+        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
     }
 
     public function testNFCeValidarXML()

@@ -28,6 +28,7 @@
 namespace NFe\Task;
 
 use NFe\Core\Nota;
+use NFe\Common\Util;
 
 /**
  * Protocolo de autorização da nota, é retornado pela autorização, recibo
@@ -141,18 +142,8 @@ class Protocolo extends Retorno
         $name = is_null($name)?'infProt':$name;
         $info = parent::loadNode($element, $name);
         $this->setChave($info->getElementsByTagName('chNFe')->item(0)->nodeValue);
-        $_fields = $info->getElementsByTagName('digVal');
-        $validacao = null;
-        if ($_fields->length > 0) {
-            $validacao = $_fields->item(0)->nodeValue;
-        }
-        $this->setValidacao($validacao);
-        $_fields = $info->getElementsByTagName('nProt');
-        $numero = null;
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        }
-        $this->setNumero($numero);
+        $this->setValidacao(Util::loadNode($info, 'digVal'));
+        $this->setNumero(Util::loadNode($info, 'nProt'));
         return $info;
     }
 

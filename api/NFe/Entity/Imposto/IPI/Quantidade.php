@@ -100,10 +100,10 @@ class Quantidade extends Imposto
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'IPITrib':$name);
-        $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
-        $element->appendChild($dom->createElement('qUnid', $this->getQuantidade(true)));
-        $element->appendChild($dom->createElement('vUnid', $this->getPreco(true)));
-        $element->appendChild($dom->createElement('vIPI', $this->getValor(true)));
+        Util::appendNode($element, 'CST', $this->getTributacao(true));
+        Util::appendNode($element, 'qUnid', $this->getQuantidade(true));
+        Util::appendNode($element, 'vUnid', $this->getPreco(true));
+        Util::appendNode($element, 'vIPI', $this->getValor(true));
         return $element;
     }
 
@@ -117,27 +117,27 @@ class Quantidade extends Imposto
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
-        $_fields = $element->getElementsByTagName('qUnid');
-        if ($_fields->length > 0) {
-            $quantidade = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "qUnid" do campo "Quantidade" não encontrada', 404);
-        }
-        $this->setQuantidade($quantidade);
-        $_fields = $element->getElementsByTagName('vUnid');
-        if ($_fields->length > 0) {
-            $preco = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vUnid" do campo "Preco" não encontrada', 404);
-        }
-        $this->setPreco($preco);
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada'
+            )
+        );
+        $this->setQuantidade(
+            Util::loadNode(
+                $element,
+                'qUnid',
+                'Tag "qUnid" do campo "Quantidade" não encontrada'
+            )
+        );
+        $this->setPreco(
+            Util::loadNode(
+                $element,
+                'vUnid',
+                'Tag "vUnid" do campo "Preco" não encontrada'
+            )
+        );
         return $element;
     }
 }

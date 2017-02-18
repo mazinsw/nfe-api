@@ -28,6 +28,7 @@
 namespace NFe\Entity;
 
 use NFe\Common\Node;
+use NFe\Common\Util;
 
 class Volume implements Node
 {
@@ -191,13 +192,13 @@ class Volume implements Node
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'vol':$name);
         if (!is_null($this->getQuantidade())) {
-            $element->appendChild($dom->createElement('qVol', $this->getQuantidade(true)));
+            Util::appendNode($element, 'qVol', $this->getQuantidade(true));
         }
         if (!is_null($this->getEspecie())) {
-            $element->appendChild($dom->createElement('esp', $this->getEspecie(true)));
+            Util::appendNode($element, 'esp', $this->getEspecie(true));
         }
         if (!is_null($this->getMarca())) {
-            $element->appendChild($dom->createElement('marca', $this->getMarca(true)));
+            Util::appendNode($element, 'marca', $this->getMarca(true));
         }
         $_numeracoes = $this->getNumeracoes();
         if (!empty($_numeracoes)) {
@@ -206,8 +207,8 @@ class Volume implements Node
         }
         if (!is_null($this->getPeso())) {
             $peso = $this->getPeso();
-            $element->appendChild($dom->createElement('pesoL', $peso->getLiquido(true)));
-            $element->appendChild($dom->createElement('pesoB', $peso->getBruto(true)));
+            Util::appendNode($element, 'pesoL', $peso->getLiquido(true));
+            Util::appendNode($element, 'pesoB', $peso->getBruto(true));
         }
         $_lacres = $this->getLacres();
         if (!empty($_lacres)) {
@@ -230,24 +231,9 @@ class Volume implements Node
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('qVol');
-        $quantidade = null;
-        if ($_fields->length > 0) {
-            $quantidade = $_fields->item(0)->nodeValue;
-        }
-        $this->setQuantidade($quantidade);
-        $_fields = $element->getElementsByTagName('esp');
-        $especie = null;
-        if ($_fields->length > 0) {
-            $especie = $_fields->item(0)->nodeValue;
-        }
-        $this->setEspecie($especie);
-        $_fields = $element->getElementsByTagName('marca');
-        $marca = null;
-        if ($_fields->length > 0) {
-            $marca = $_fields->item(0)->nodeValue;
-        }
-        $this->setMarca($marca);
+        $this->setQuantidade(Util::loadNode($element, 'qVol'));
+        $this->setEspecie(Util::loadNode($element, 'esp'));
+        $this->setMarca(Util::loadNode($element, 'marca'));
         $numeracoes = array();
         $_fields = $element->getElementsByTagName('nVol');
         if ($_fields->length > 0) {

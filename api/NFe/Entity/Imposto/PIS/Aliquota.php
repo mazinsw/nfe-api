@@ -27,6 +27,7 @@
  */
 namespace NFe\Entity\Imposto\PIS;
 
+use NFe\Common\Util;
 use NFe\Entity\Imposto;
 
 class Aliquota extends Imposto
@@ -79,10 +80,10 @@ class Aliquota extends Imposto
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'PISAliq':$name);
-        $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
-        $element->appendChild($dom->createElement('vBC', $this->getBase(true)));
-        $element->appendChild($dom->createElement('pPIS', $this->getAliquota(true)));
-        $element->appendChild($dom->createElement('vPIS', $this->getValor(true)));
+        Util::appendNode($element, 'CST', $this->getTributacao(true));
+        Util::appendNode($element, 'vBC', $this->getBase(true));
+        Util::appendNode($element, 'pPIS', $this->getAliquota(true));
+        Util::appendNode($element, 'vPIS', $this->getValor(true));
         return $element;
     }
 
@@ -96,27 +97,27 @@ class Aliquota extends Imposto
             }
             $element = $_fields->item(0);
         }
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
-        $_fields = $element->getElementsByTagName('vBC');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBC" do campo "Base" não encontrada', 404);
-        }
-        $this->setBase($base);
-        $_fields = $element->getElementsByTagName('pPIS');
-        if ($_fields->length > 0) {
-            $aliquota = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "pPIS" do campo "Aliquota" não encontrada', 404);
-        }
-        $this->setAliquota($aliquota);
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada'
+            )
+        );
+        $this->setBase(
+            Util::loadNode(
+                $element,
+                'vBC',
+                'Tag "vBC" do campo "Base" não encontrada'
+            )
+        );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'pPIS',
+                'Tag "pPIS" do campo "Aliquota" não encontrada'
+            )
+        );
         return $element;
     }
 }

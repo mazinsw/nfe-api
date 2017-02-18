@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity;
 
+use NFe\Common\Util;
+
 /**
  * Cliente pessoa física ou jurídica que está comprando os produtos e irá
  * receber a nota fiscal
@@ -188,27 +190,27 @@ class Destinatario extends Pessoa
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name)?'dest':$name);
         if (!is_null($this->getCNPJ())) {
-            $element->appendChild($dom->createElement('CNPJ', $this->getCNPJ(true)));
+            Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {
-            $element->appendChild($dom->createElement('CPF', $this->getCPF(true)));
+            Util::appendNode($element, 'CPF', $this->getCPF(true));
         }
         if (!is_null($this->getNome())) {
-            $element->appendChild($dom->createElement('xNome', $this->getNome(true)));
+            Util::appendNode($element, 'xNome', $this->getNome(true));
         }
         if (!is_null($this->getEndereco())) {
             $endereco = $this->getEndereco()->getNode('enderDest');
             $endereco = $dom->importNode($endereco, true);
             if (!is_null($this->getTelefone())) {
-                $endereco->appendChild($dom->createElement('fone', $this->getTelefone(true)));
+                Util::appendNode($endereco, 'fone', $this->getTelefone(true));
             }
             $element->appendChild($endereco);
         }
-        $element->appendChild($dom->createElement('indIEDest', $this->getIndicador(true)));
+        Util::appendNode($element, 'indIEDest', $this->getIndicador(true));
         if (!is_null($this->getCNPJ())) {
-            $element->appendChild($dom->createElement('IE', $this->getIE(true)));
+            Util::appendNode($element, 'IE', $this->getIE(true));
         }
         if (!is_null($this->getEmail())) {
-            $element->appendChild($dom->createElement('email', $this->getEmail(true)));
+            Util::appendNode($element, 'email', $this->getEmail(true));
         }
         return $element;
     }
@@ -231,13 +233,13 @@ class Destinatario extends Pessoa
             $email = $_fields->item(0)->nodeValue;
         }
         $this->setEmail($email);
-        $_fields = $element->getElementsByTagName('indIEDest');
-        if ($_fields->length > 0) {
-            $indicador = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "indIEDest" do campo "Indicador" não encontrada', 404);
-        }
-        $this->setIndicador($indicador);
+        $this->setIndicador(
+            Util::loadNode(
+                $element,
+                'indIEDest',
+                'Tag "indIEDest" do campo "Indicador" não encontrada'
+            )
+        );
         return $element;
     }
 }

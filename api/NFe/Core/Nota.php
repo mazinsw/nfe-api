@@ -1053,22 +1053,22 @@ abstract class Nota implements Node
         // Totais referentes ao ICMS
         $total = $this->getTotais();
         $icms = $dom->createElement('ICMSTot');
-        $icms->appendChild($dom->createElement('vBC', Util::toCurrency($total['base'])));
-        $icms->appendChild($dom->createElement('vICMS', Util::toCurrency($total['icms'])));
-        $icms->appendChild($dom->createElement('vICMSDeson', Util::toCurrency($total['desoneracao'])));
-        $icms->appendChild($dom->createElement('vBCST', Util::toCurrency($total['base.st'])));
-        $icms->appendChild($dom->createElement('vST', Util::toCurrency($total['icms.st'])));
-        $icms->appendChild($dom->createElement('vProd', Util::toCurrency($total['produtos'])));
-        $icms->appendChild($dom->createElement('vFrete', Util::toCurrency($total['frete'])));
-        $icms->appendChild($dom->createElement('vSeg', Util::toCurrency($total['seguro'])));
-        $icms->appendChild($dom->createElement('vDesc', Util::toCurrency($total['descontos'])));
-        $icms->appendChild($dom->createElement('vII', Util::toCurrency($total['ii'])));
-        $icms->appendChild($dom->createElement('vIPI', Util::toCurrency($total['ipi'])));
-        $icms->appendChild($dom->createElement('vPIS', Util::toCurrency($total['pis'])));
-        $icms->appendChild($dom->createElement('vCOFINS', Util::toCurrency($total['cofins'])));
-        $icms->appendChild($dom->createElement('vOutro', Util::toCurrency($total['outros'])));
-        $icms->appendChild($dom->createElement('vNF', Util::toCurrency($total['nota'])));
-        $icms->appendChild($dom->createElement('vTotTrib', Util::toCurrency($total['tributos'])));
+        Util::appendNode($icms, 'vBC', Util::toCurrency($total['base']));
+        Util::appendNode($icms, 'vICMS', Util::toCurrency($total['icms']));
+        Util::appendNode($icms, 'vICMSDeson', Util::toCurrency($total['desoneracao']));
+        Util::appendNode($icms, 'vBCST', Util::toCurrency($total['base.st']));
+        Util::appendNode($icms, 'vST', Util::toCurrency($total['icms.st']));
+        Util::appendNode($icms, 'vProd', Util::toCurrency($total['produtos']));
+        Util::appendNode($icms, 'vFrete', Util::toCurrency($total['frete']));
+        Util::appendNode($icms, 'vSeg', Util::toCurrency($total['seguro']));
+        Util::appendNode($icms, 'vDesc', Util::toCurrency($total['descontos']));
+        Util::appendNode($icms, 'vII', Util::toCurrency($total['ii']));
+        Util::appendNode($icms, 'vIPI', Util::toCurrency($total['ipi']));
+        Util::appendNode($icms, 'vPIS', Util::toCurrency($total['pis']));
+        Util::appendNode($icms, 'vCOFINS', Util::toCurrency($total['cofins']));
+        Util::appendNode($icms, 'vOutro', Util::toCurrency($total['outros']));
+        Util::appendNode($icms, 'vNF', Util::toCurrency($total['nota']));
+        Util::appendNode($icms, 'vTotTrib', Util::toCurrency($total['tributos']));
         $element->appendChild($icms);
 
         // TODO: Totais referentes ao ISSQN
@@ -1098,32 +1098,32 @@ abstract class Nota implements Node
         $municipio = $this->getEmitente()->getEndereco()->getMunicipio();
         $estado = $municipio->getEstado();
         $ident = $dom->createElement('ide');
-        $ident->appendChild($dom->createElement('cUF', $estado->getCodigo(true)));
-        $ident->appendChild($dom->createElement('cNF', $this->getCodigo(true)));
-        $ident->appendChild($dom->createElement('natOp', $this->getNatureza(true)));
-        $ident->appendChild($dom->createElement('indPag', $this->getIndicador(true)));
-        $ident->appendChild($dom->createElement('mod', $this->getModelo(true)));
-        $ident->appendChild($dom->createElement('serie', $this->getSerie(true)));
-        $ident->appendChild($dom->createElement('nNF', $this->getNumero(true)));
-        $ident->appendChild($dom->createElement('dhEmi', $this->getDataEmissao(true)));
-        $ident->appendChild($dom->createElement('tpNF', $this->getTipo(true)));
-        $ident->appendChild($dom->createElement('idDest', $this->getDestino(true)));
-        $ident->appendChild($dom->createElement('cMunFG', $municipio->getCodigo(true)));
-        $ident->appendChild($dom->createElement('tpImp', $this->getFormato(true)));
-        $ident->appendChild($dom->createElement('tpEmis', $this->getEmissao(true)));
-        $ident->appendChild($dom->createElement('cDV', $this->getDigitoVerificador(true)));
-        $ident->appendChild($dom->createElement('tpAmb', $this->getAmbiente(true)));
-        $ident->appendChild($dom->createElement('finNFe', $this->getFinalidade(true)));
-        $ident->appendChild($dom->createElement('indFinal', $this->getConsumidorFinal(true)));
-        $ident->appendChild($dom->createElement('indPres', $this->getPresenca(true)));
-        $ident->appendChild($dom->createElement('procEmi', 0)); // emissão de NF-e com aplicativo do contribuinte
-        $ident->appendChild($dom->createElement('verProc', self::APP_VERSAO));
+        Util::appendNode($ident, 'cUF', $estado->getCodigo(true));
+        Util::appendNode($ident, 'cNF', $this->getCodigo(true));
+        Util::appendNode($ident, 'natOp', $this->getNatureza(true));
+        Util::appendNode($ident, 'indPag', $this->getIndicador(true));
+        Util::appendNode($ident, 'mod', $this->getModelo(true));
+        Util::appendNode($ident, 'serie', $this->getSerie(true));
+        Util::appendNode($ident, 'nNF', $this->getNumero(true));
+        Util::appendNode($ident, 'dhEmi', $this->getDataEmissao(true));
+        Util::appendNode($ident, 'tpNF', $this->getTipo(true));
+        Util::appendNode($ident, 'idDest', $this->getDestino(true));
+        Util::appendNode($ident, 'cMunFG', $municipio->getCodigo(true));
+        Util::appendNode($ident, 'tpImp', $this->getFormato(true));
+        Util::appendNode($ident, 'tpEmis', $this->getEmissao(true));
+        Util::appendNode($ident, 'cDV', $this->getDigitoVerificador(true));
+        Util::appendNode($ident, 'tpAmb', $this->getAmbiente(true));
+        Util::appendNode($ident, 'finNFe', $this->getFinalidade(true));
+        Util::appendNode($ident, 'indFinal', $this->getConsumidorFinal(true));
+        Util::appendNode($ident, 'indPres', $this->getPresenca(true));
+        Util::appendNode($ident, 'procEmi', 0); // emissão de NF-e com aplicativo do contribuinte
+        Util::appendNode($ident, 'verProc', self::APP_VERSAO);
         if (!is_null($this->getDataMovimentacao())) {
-            $ident->appendChild($dom->createElement('dhSaiEnt', $this->getDataMovimentacao(true)));
+            Util::appendNode($ident, 'dhSaiEnt', $this->getDataMovimentacao(true));
         }
         if ($this->getEmissao() != self::EMISSAO_NORMAL) {
-            $ident->appendChild($dom->createElement('dhCont', $this->getDataContingencia(true)));
-            $ident->appendChild($dom->createElement('xJust', $this->getJustificativa(true)));
+            Util::appendNode($ident, 'dhCont', $this->getDataContingencia(true));
+            Util::appendNode($ident, 'xJust', $this->getJustificativa(true));
         }
         $info->appendChild($ident);
 
@@ -1228,69 +1228,69 @@ abstract class Nota implements Node
             throw new \Exception('Tag "cUF" do campo "Codigo IBGE da UF" não encontrada', 404);
         }
         $emitente->getEndereco()->getMunicipio()->getEstado()->setCodigo($codigo);
-        $_fields = $ident->getElementsByTagName('cNF');
-        if ($_fields->length > 0) {
-            $codigo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cNF" do campo "Codigo" não encontrada', 404);
-        }
-        $this->setCodigo($codigo);
-        $_fields = $ident->getElementsByTagName('natOp');
-        if ($_fields->length > 0) {
-            $natureza = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "natOp" do campo "Natureza" não encontrada', 404);
-        }
-        $this->setNatureza($natureza);
-        $_fields = $ident->getElementsByTagName('indPag');
-        if ($_fields->length > 0) {
-            $indicador = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "indPag" do campo "Indicador" não encontrada', 404);
-        }
-        $this->setIndicador($indicador);
-        $_fields = $ident->getElementsByTagName('mod');
-        if ($_fields->length > 0) {
-            $modelo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "mod" do campo "Modelo" não encontrada', 404);
-        }
-        $this->setModelo($modelo);
-        $_fields = $ident->getElementsByTagName('serie');
-        if ($_fields->length > 0) {
-            $serie = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "serie" do campo "Serie" não encontrada', 404);
-        }
-        $this->setSerie($serie);
-        $_fields = $ident->getElementsByTagName('nNF');
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "nNF" do campo "Numero" não encontrada', 404);
-        }
-        $this->setNumero($numero);
-        $_fields = $ident->getElementsByTagName('dhEmi');
-        if ($_fields->length > 0) {
-            $data_emissao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "dhEmi" do campo "DataEmissao" não encontrada', 404);
-        }
-        $this->setDataEmissao($data_emissao);
-        $_fields = $ident->getElementsByTagName('tpNF');
-        if ($_fields->length > 0) {
-            $tipo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "tpNF" do campo "Tipo" não encontrada', 404);
-        }
-        $this->setTipo($tipo);
-        $_fields = $ident->getElementsByTagName('idDest');
-        if ($_fields->length > 0) {
-            $destino = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "idDest" do campo "Destino" não encontrada', 404);
-        }
-        $this->setDestino($destino);
+        $this->setCodigo(
+            Util::loadNode(
+                $ident,
+                'cNF',
+                'Tag "cNF" do campo "Codigo" não encontrada'
+            )
+        );
+        $this->setNatureza(
+            Util::loadNode(
+                $ident,
+                'natOp',
+                'Tag "natOp" do campo "Natureza" não encontrada'
+            )
+        );
+        $this->setIndicador(
+            Util::loadNode(
+                $ident,
+                'indPag',
+                'Tag "indPag" do campo "Indicador" não encontrada'
+            )
+        );
+        $this->setModelo(
+            Util::loadNode(
+                $ident,
+                'mod',
+                'Tag "mod" do campo "Modelo" não encontrada'
+            )
+        );
+        $this->setSerie(
+            Util::loadNode(
+                $ident,
+                'serie',
+                'Tag "serie" do campo "Serie" não encontrada'
+            )
+        );
+        $this->setNumero(
+            Util::loadNode(
+                $ident,
+                'nNF',
+                'Tag "nNF" do campo "Numero" não encontrada'
+            )
+        );
+        $this->setDataEmissao(
+            Util::loadNode(
+                $ident,
+                'dhEmi',
+                'Tag "dhEmi" do campo "DataEmissao" não encontrada'
+            )
+        );
+        $this->setTipo(
+            Util::loadNode(
+                $ident,
+                'tpNF',
+                'Tag "tpNF" do campo "Tipo" não encontrada'
+            )
+        );
+        $this->setDestino(
+            Util::loadNode(
+                $ident,
+                'idDest',
+                'Tag "idDest" do campo "Destino" não encontrada'
+            )
+        );
         $_fields = $ident->getElementsByTagName('cMunFG');
         if ($_fields->length > 0) {
             $codigo = $_fields->item(0)->nodeValue;
@@ -1298,73 +1298,58 @@ abstract class Nota implements Node
             throw new \Exception('Tag "cMunFG" do campo "Codigo IBGE do município" não encontrada', 404);
         }
         $emitente->getEndereco()->getMunicipio()->setCodigo($codigo);
-        $_fields = $ident->getElementsByTagName('dhSaiEnt');
-        $data_movimentacao = null;
-        if ($_fields->length > 0) {
-            $data_movimentacao = $_fields->item(0)->nodeValue;
-        }
-        $this->setDataMovimentacao($data_movimentacao);
-        $_fields = $ident->getElementsByTagName('tpImp');
-        if ($_fields->length > 0) {
-            $formato = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "tpImp" do campo "Formato" não encontrada', 404);
-        }
-        $this->setFormato($formato);
-        $_fields = $ident->getElementsByTagName('tpEmis');
-        if ($_fields->length > 0) {
-            $emissao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "tpEmis" do campo "Emissao" não encontrada', 404);
-        }
-        $this->setEmissao($emissao);
-        $_fields = $ident->getElementsByTagName('cDV');
-        if ($_fields->length > 0) {
-            $digito_verificador = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cDV" do campo "DigitoVerificador" não encontrada', 404);
-        }
-        $this->setDigitoVerificador($digito_verificador);
-        $_fields = $ident->getElementsByTagName('tpAmb');
-        if ($_fields->length > 0) {
-            $ambiente = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "tpAmb" do campo "Ambiente" não encontrada', 404);
-        }
-        $this->setAmbiente($ambiente);
-        $_fields = $ident->getElementsByTagName('finNFe');
-        if ($_fields->length > 0) {
-            $finalidade = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "finNFe" do campo "Finalidade" não encontrada', 404);
-        }
-        $this->setFinalidade($finalidade);
-        $_fields = $ident->getElementsByTagName('indFinal');
-        if ($_fields->length > 0) {
-            $consumidor_final = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "indFinal" do campo "ConsumidorFinal" não encontrada', 404);
-        }
-        $this->setConsumidorFinal($consumidor_final);
-        $_fields = $ident->getElementsByTagName('indPres');
-        if ($_fields->length > 0) {
-            $presenca = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "indPres" do campo "Presenca" não encontrada', 404);
-        }
-        $this->setPresenca($presenca);
-        $_fields = $ident->getElementsByTagName('dhCont');
-        $data_contingencia = null;
-        if ($_fields->length > 0) {
-            $data_contingencia = $_fields->item(0)->nodeValue;
-        }
-        $this->setDataContingencia($data_contingencia);
-        $_fields = $ident->getElementsByTagName('xJust');
-        $justificativa = null;
-        if ($_fields->length > 0) {
-            $justificativa = $_fields->item(0)->nodeValue;
-        }
-        $this->setJustificativa($justificativa);
+        $this->setDataMovimentacao(Util::loadNode($ident, 'dhSaiEnt'));
+        $this->setFormato(
+            Util::loadNode(
+                $ident,
+                'tpImp',
+                'Tag "tpImp" do campo "Formato" não encontrada'
+            )
+        );
+        $this->setEmissao(
+            Util::loadNode(
+                $ident,
+                'tpEmis',
+                'Tag "tpEmis" do campo "Emissao" não encontrada'
+            )
+        );
+        $this->setDigitoVerificador(
+            Util::loadNode(
+                $ident,
+                'cDV',
+                'Tag "cDV" do campo "DigitoVerificador" não encontrada'
+            )
+        );
+        $this->setAmbiente(
+            Util::loadNode(
+                $ident,
+                'tpAmb',
+                'Tag "tpAmb" do campo "Ambiente" não encontrada'
+            )
+        );
+        $this->setFinalidade(
+            Util::loadNode(
+                $ident,
+                'finNFe',
+                'Tag "finNFe" do campo "Finalidade" não encontrada'
+            )
+        );
+        $this->setConsumidorFinal(
+            Util::loadNode(
+                $ident,
+                'indFinal',
+                'Tag "indFinal" do campo "ConsumidorFinal" não encontrada'
+            )
+        );
+        $this->setPresenca(
+            Util::loadNode(
+                $ident,
+                'indPres',
+                'Tag "indPres" do campo "Presenca" não encontrada'
+            )
+        );
+        $this->setDataContingencia(Util::loadNode($ident, 'dhCont'));
+        $this->setJustificativa(Util::loadNode($ident, 'xJust'));
 
         $_fields = $info->getElementsByTagName('emit');
         if ($_fields->length > 0) {
@@ -1412,6 +1397,22 @@ abstract class Nota implements Node
         }
         $this->setProtocolo($protocolo);
         return $element;
+    }
+
+    /**
+     * Carrega um arquivo XML e preenche a nota com as informações dele
+     * @param  string $filename caminho do arquivo
+     * @return DOMDocument      objeto do documento carregado
+     */
+    public function load($filename)
+    {
+        $dom = new \DOMDocument();
+        if (!file_exists($filename)) {
+            throw new \Exception('Arquivo XML "'.$filename.'" não encontrado', 404);
+        }
+        $dom->load($filename);
+        $this->loadNode($dom->documentElement);
+        return $dom;
     }
 
     /**

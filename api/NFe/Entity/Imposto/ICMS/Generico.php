@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\ICMS;
 
+use NFe\Common\Util;
+
 /**
  * Tributação pelo ICMS
  * 90 - Outras, estende de Normal
@@ -63,8 +65,8 @@ class Generico extends Mista
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
             $element = $dom->createElement(is_null($name)?'ICMS90':$name);
-            $element->appendChild($dom->createElement('orig', $this->getOrigem(true)));
-            $element->appendChild($dom->createElement('CST', $this->getTributacao(true)));
+            Util::appendNode($element, 'orig', $this->getOrigem(true));
+            Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
         $element = parent::getNode(is_null($name)?'ICMS90':$name);
@@ -88,20 +90,20 @@ class Generico extends Mista
             $element = parent::loadNode($element, $name);
             return $element;
         }
-        $_fields = $element->getElementsByTagName('orig');
-        if ($_fields->length > 0) {
-            $origem = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "orig" do campo "Origem" não encontrada', 404);
-        }
-        $this->setOrigem($origem);
-        $_fields = $element->getElementsByTagName('CST');
-        if ($_fields->length > 0) {
-            $tributacao = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "CST" do campo "Tributacao" não encontrada', 404);
-        }
-        $this->setTributacao($tributacao);
+        $this->setOrigem(
+            Util::loadNode(
+                $element,
+                'orig',
+                'Tag "orig" do campo "Origem" não encontrada'
+            )
+        );
+        $this->setTributacao(
+            Util::loadNode(
+                $element,
+                'CST',
+                'Tag "CST" do campo "Tributacao" não encontrada'
+            )
+        );
         return $element;
     }
 }

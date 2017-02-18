@@ -28,6 +28,7 @@
 namespace NFe\Entity;
 
 use NFe\Common\Node;
+use NFe\Common\Util;
 
 /**
  * Classe base para preenchimento de informações de pessoas físicas e
@@ -238,12 +239,7 @@ abstract class Pessoa implements Node
             throw new \Exception('Tag "IE" do campo "IE" não encontrada', 404);
         }
         $this->setIE($ie);
-        $_fields = $element->getElementsByTagName('IM');
-        $im = null;
-        if ($_fields->length > 0) {
-            $im = $_fields->item(0)->nodeValue;
-        }
-        $this->setIM($im);
+        $this->setIM(Util::loadNode($element, 'IM'));
         if ($this instanceof Emitente) {
             $tag_ender = 'enderEmit';
         } else {

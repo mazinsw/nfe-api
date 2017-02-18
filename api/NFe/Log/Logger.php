@@ -39,7 +39,6 @@ class Logger
     public function __construct($logger = array())
     {
         $this->fromArray($logger);
-        $this->setWriteFunction(array($this, 'writeLog'));
     }
 
     public static function getInstance()
@@ -65,7 +64,7 @@ class Logger
     }
 
     /**
-     * Altera a função que escreve os logs
+     * Altera a função que escreve os logs, informe null para restaurar o padrão
      * @param function $write_function nova função que será usada
      */
     public function setWriteFunction($write_function)
@@ -112,6 +111,8 @@ class Logger
     {
         if (!is_null($this->write_function)) {
             call_user_func_array($this->write_function, func_get_args());
+        } else {
+            $this->writeLog($type, $message);
         }
     }
 
