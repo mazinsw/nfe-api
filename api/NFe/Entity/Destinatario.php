@@ -206,7 +206,7 @@ class Destinatario extends Pessoa
             $element->appendChild($endereco);
         }
         Util::appendNode($element, 'indIEDest', $this->getIndicador(true));
-        if (!is_null($this->getCNPJ())) {
+        if (!is_null($this->getCNPJ()) && !is_null($this->getIE())) {
             Util::appendNode($element, 'IE', $this->getIE(true));
         }
         if (!is_null($this->getEmail())) {

@@ -159,8 +159,8 @@ class SEFAZ
                     try {
                         $retorno = $autorizacao->envia($nota, $dom);
                     } catch (\Exception $e) {
-                        $offline = $e instanceof \DomainException;
-                        if (!$offline) {
+                        $partial_response = $e instanceof \NFe\Exception\IncompleteRequestException;
+                        if ($partial_response) {
                             $evento->onNotaPendente($nota, $dom, $e);
                         }
                         if ($nota->getEmissao() == Nota::EMISSAO_CONTINGENCIA) {
@@ -172,7 +172,7 @@ class SEFAZ
                         $nota->setEmissao(Nota::EMISSAO_CONTINGENCIA);
                         $nota->setDataContingencia(time());
                         $nota->setJustificativa($msg);
-                        $evento->onNotaContingencia($nota, $offline, $e);
+                        $evento->onNotaContingencia($nota, !$partial_response, $e);
                         $envia = false;
                         continue;
                     }

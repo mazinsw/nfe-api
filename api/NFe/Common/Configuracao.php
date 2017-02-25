@@ -48,7 +48,7 @@ class Configuracao
     private $token_ibpt;
     private $tempo_limite;
     private $sincrono;
-    private $offline_start;
+    private $offline;
 
     public function __construct($configuracao = array())
     {
@@ -245,12 +245,12 @@ class Configuracao
     }
 
     /**
-     * Entra no modo offline e sai automaticamente após 3 minutos
+     * Informa se está operando offline
+     * @return mixed offline da Configuracao
      */
-    public function setOffline($offline_start)
+    public function getOffline()
     {
-        $this->offline_start = $offline_start;
-        return $this;
+        return $this->offline;
     }
 
     /**
@@ -258,7 +258,16 @@ class Configuracao
      */
     public function isOffline()
     {
-        return $this->offline_start + 180 > time();
+        return $this->offline + 180 > time();
+    }
+
+    /**
+     * Entra no modo offline e sai automaticamente após 3 minutos
+     */
+    public function setOffline($offline)
+    {
+        $this->offline = $offline;
+        return $this;
     }
 
     public function toArray()

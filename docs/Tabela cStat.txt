@@ -1,0 +1,459 @@
+Código|Descrição do Status
+100|Autorizado o uso da NF-e
+101|Cancelamento de NF-e homologado
+102|Inutilização de número homologado
+103|Lote recebido com sucesso
+104|Lote processado
+105|Lote em processamento
+106|Lote não localizado
+107|Serviço em Operação
+108|Serviço Paralisado Momentaneamente (curto prazo)
+109|Serviço Paralisado sem Previsão
+110|Uso Denegado
+111|Consulta cadastro com uma ocorrência
+112|Consulta cadastro com mais de uma ocorrência
+124|EPEC Autorizado
+128|Lote de Evento Processado
+135|Evento registrado e vinculado a NF-e
+136|Evento registrado, mas não vinculado a NF-e
+137|Nenhum documento localizado para o Destinatário
+138|Documento localizado para o Destinatário
+139|Pedido de Download processado
+140|Download disponibilizado
+142|Ambiente de Contingência EPEC bloqueado para o Emitente
+150|Autorizado o uso da NF-e, autorização fora de prazo
+151|Cancelamento de NF-e homologado fora de prazo
+201|Rejeição: Número máximo de numeração a inutilizar ultrapassou o limite
+202|Rejeição: Falha no reconhecimento da autoria ou integridade do arquivo digital
+203|Rejeição: Emissor não habilitado para emissão de NF-e
+204|Duplicidade de NF-e [nRec:999999999999999]
+205|NF-e está denegada na base de dados da SEFAZ [nRec:999999999999999]
+206|Rejeição: NF-e já está inutilizada na Base de dados da SEFAZ
+207|Rejeição: CNPJ do emitente inválido
+208|Rejeição: CNPJ do destinatário inválido
+209|Rejeição: IE do emitente inválida
+210|Rejeição: IE do destinatário inválida
+211|Rejeição: IE do substituto inválida
+212|Rejeição: Data de emissão NF-e posterior a data de recebimento
+213|Rejeição: CNPJ-Base do Emitente difere do CNPJ-Base do Certificado Digital
+214|Rejeição: Tamanho da mensagem excedeu o limite estabelecido
+215|Rejeição: Falha no schema XML
+216|Rejeição: Chave de Acesso difere da cadastrada
+217|Rejeição: NF-e não consta na base de dados da SEFAZ
+218|NF-e já está cancelada na base de dados da SEFAZ [nRec:999999999999999]
+219|Rejeição: Circulação da NF-e verificada
+220|Rejeição: Prazo de Cancelamento superior ao previsto na Legislação
+221|Rejeição: Confirmado o recebimento da NF-e pelo destinatário
+222|Rejeição: Protocolo de Autorização de Uso difere do cadastrado
+223|Rejeição: CNPJ do transmissor do lote difere do CNPJ do transmissor da consulta
+224|Rejeição: A faixa inicial é maior que a faixa final
+225|Rejeição: Falha no Schema XML do lote de NFe
+226|Rejeição: Código da UF do Emitente diverge da UF autorizadora
+227|Rejeição: Erro na Chave de Acesso – Campo Id – falta a literal NFe
+228|Rejeição: Data de Emissão muito atrasada
+229|Rejeição: IE do emitente não informada
+230|Rejeição: IE do emitente não cadastrada
+231|Rejeição: IE do emitente não vinculada ao CNPJ
+232|Rejeição: IE do destinatário não informada
+233|Rejeição: IE do destinatário não cadastrada
+234|Rejeição: IE do destinatário não vinculada ao CNPJ
+235|Rejeição: Inscrição SUFRAMA inválida
+236|Rejeição: Chave de Acesso com dígito verificador inválido
+237|Rejeição: CPF do destinatário inválido
+238|Rejeição: Cabeçalho – Versão do arquivo XML superior a Versão vigente
+239|Rejeição: Cabeçalho – Versão do arquivo XML não suportada
+240|Rejeição: Cancelamento/Inutilização – Irregularidade Fiscal do Emitente
+241|Rejeição: Um número da faixa já foi utilizado
+242|Rejeição: Cabeçalho – Falha no Schema XML
+243|Rejeição: XML Mal Formado
+244|Rejeição: CNPJ do Certificado Digital difere do CNPJ da Matriz e do CNPJ do Emitente
+245|Rejeição: CNPJ Emitente não cadastrado
+246|Rejeição: CNPJ Destinatário não cadastrado
+247|Rejeição: Sigla da UF do Emitente diverge da UF autorizadora
+248|Rejeição: UF do Recibo diverge da UF autorizadora
+249|Rejeição: UF da Chave de Acesso diverge da UF autorizadora
+250|Rejeição: UF diverge da UF autorizadora
+251|Rejeição: UF/Município destinatário não pertence a SUFRAMA
+252|Rejeição: Ambiente informado diverge do Ambiente de recebimento
+253|Rejeição: Digito Verificador da chave de acesso composta inválida
+254|Rejeição: NF-e complementar não possui NF referenciada
+255|Rejeição: NF-e complementar possui mais de uma NF referenciada
+256|Rejeição: Uma NF-e da faixa já está inutilizada na Base de dados da SEFAZ
+257|Rejeição: Solicitante não habilitado para emissão da NF-e
+258|Rejeição: CNPJ da consulta inválido
+259|Rejeição: CNPJ da consulta não cadastrado como contribuinte na UF
+260|Rejeição: IE da consulta inválida
+261|Rejeição: IE da consulta não cadastrada como contribuinte na UF
+262|Rejeição: UF não fornece consulta por CPF
+263|Rejeição: CPF da consulta inválido
+264|Rejeição: CPF da consulta não cadastrado como contribuinte na UF
+265|Rejeição: Sigla da UF da consulta difere da UF do Web Service
+266|Rejeição: Série utilizada não permitida no Web Service
+267|Rejeição: NF Complementar referencia uma NF-e inexistente
+268|Rejeição: NF Complementar referencia outra NF-e Complementar
+269|Rejeição: CNPJ Emitente da NF Complementar difere do CNPJ da NF Referenciada
+270|Rejeição: Código Município do Fato Gerador: dígito inválido
+271|Rejeição: Código Município do Fato Gerador: difere da UF do emitente
+272|Rejeição: Código Município do Emitente: dígito inválido
+273|Rejeição: Código Município do Emitente: difere da UF do emitente
+274|Rejeição: Código Município do Destinatário: dígito inválido
+275|Rejeição: Código Município do Destinatário: difere da UF do Destinatário
+276|Rejeição: Código Município do Local de Retirada: dígito inválido
+277|Rejeição: Código Município do Local de Retirada: difere da UF do Local de Retirada
+278|Rejeição: Código Município do Local de Entrega: dígito inválido
+279|Rejeição: Código Município do Local de Entrega: difere da UF do Local de Entrega
+280|Rejeição: Certificado Transmissor inválido
+281|Rejeição: Certificado Transmissor Data Validade
+282|Rejeição: Certificado Transmissor sem CNPJ
+283|Rejeição: Certificado Transmissor – erro Cadeia de Certificação
+284|Rejeição: Certificado Transmissor revogado
+285|Rejeição: Certificado Transmissor difere ICP-Brasil
+286|Rejeição: Certificado Transmissor erro no acesso a LCR
+287|Rejeição: Código Município do FG – ISSQN: dígito inválido
+288|Rejeição: Código Município do FG – Transporte: dígito inválido
+289|Rejeição: Código da UF informada diverge da UF solicitada
+290|Rejeição: Certificado Assinatura inválido
+291|Rejeição: Certificado Assinatura Data Validade
+292|Rejeição: Certificado Assinatura sem CNPJ
+293|Rejeição: Certificado Assinatura – erro Cadeia de Certificação
+294|Rejeição: Certificado Assinatura revogado
+295|Rejeição: Certificado Assinatura difere ICP-Brasil
+296|Rejeição: Certificado Assinatura erro no acesso a LCR
+297|Rejeição: Assinatura difere do calculado
+298|Rejeição: Assinatura difere do padrão do Sistema
+299|Rejeição: XML da área de cabeçalho com codificação diferente de UTF-8
+301|Uso Denegado: Irregularidade fiscal do emitente
+302|Rejeição: Irregularidade fiscal do destinatário
+303|Uso Denegado: Destinatário não habilitado a operar na UF
+304|Rejeição: Pedido de Cancelamento para NF-e com evento da Suframa
+321|Rejeição: NF-e de devolução de mercadoria não possui documento fiscal referenciado
+323|Rejeição: CNPJ autorizado para download inválido
+324|Rejeição: CNPJ do destinatário já autorizado para download
+325|Rejeição: CPF autorizado para download inválido
+326|Rejeição: CPF do destinatário já autorizado para download
+327|Rejeição: CFOP inválido para NF-e com finalidade de devolução de mercadoria
+328|Rejeição: CFOP de devolução de mercadoria para NF-e que não tem finalidade de devolução de mercadoria
+329|Rejeição: Número da DI /DSI inválido
+330|Rejeição: Informar o Valor da AFRMM na importação por via marítima
+331|Rejeição: Informar o CNPJ do adquirente ou do encomendante nesta forma de importação
+332|Rejeição: CNPJ do adquirente ou do encomendante da importação inválido
+333|Rejeição: Informar a UF do adquirente ou do encomendante nesta forma de importação
+334|Rejeição: Número do processo de drawback não informado na importação
+335|Rejeição: Número do processo de drawback na importação inválido
+336|Rejeição: Informado o grupo de exportação no item para CFOP que não é de exportação
+337|Rejeição: Não informado o grupo de exportação no item
+338|Rejeição: Número do processo de drawback não informado na exportação
+339|Rejeição: Número do processo de drawback na exportação inválido
+340|Rejeição: Não informado o grupo de exportação indireta no item
+341|Rejeição: Número do registro de exportação inválido
+342|Rejeição: Chave de Acesso informada na Exportação Indireta com DV inválido
+343|Rejeição: Modelo da NF-e informada na Exportação Indireta diferente de 55
+344|Rejeição: Duplicidade de NF-e informada na Exportação Indireta (Chave de Acesso informada mais de uma vez)
+345|Rejeição: Chave de Acesso informada na Exportação Indireta não consta como NF-e referenciada
+346|Rejeição: Somatório das quantidades informadas na Exportação Indireta não corresponde a quantidade total do item
+347|Rejeição: Descrição do Combustível diverge da descrição adotada pela ANP
+348|Rejeição: NFC-e com grupo RECOPI
+349|Rejeição: Número RECOPI não informado
+350|Rejeição: Número RECOPI inválido
+351|Rejeição: Valor do ICMS da Operação no CST=51 difere do produto BC e Alíquota
+352|Rejeição: Valor do ICMS Diferido no CST=51 difere do produto Valor ICMS Operação e percentual diferimento
+353|Rejeição: Valor do ICMS no CST=51 não corresponde a diferença do ICMS operação e ICMS diferido
+354|Rejeição: Informado grupo de devolução de tributos para NF-e que não tem finalidade de devolução de mercadoria
+355|Rejeição: Informar o local de saída do Pais no caso da exportação
+356|Rejeição: Informar o local de saída do Pais somente no caso da exportação
+357|Rejeição: Chave de Acesso do grupo de Exportação Indireta inexistente [nRef: xxx]
+358|Rejeição: Chave de Acesso do grupo de Exportação Indireta cancelada ou denegada [nRef: xxx]
+359|Rejeição: NF-e de venda a Órgão Público sem informar a Nota de Empenho
+360|Rejeição: NF-e com Nota de Empenho inválida para a UF.
+361|Rejeição: NF-e com Nota de Empenho inexistente na UF.
+362|Rejeição: Venda de combustível sem informação do Transportador
+364|Rejeição: Total do valor da dedução do ISS difere do somatório dos itens
+365|Rejeição: Total de outras retenções difere do somatório dos itens
+366|Rejeição: Total do desconto incondicionado ISS difere do somatório dos itens
+367|Rejeição: Total do desconto condicionado ISS difere do somatório dos itens
+368|Rejeição: Total de ISS retido difere do somatório dos itens
+369|Rejeição: Não informado o grupo avulsa na emissão pelo Fisco
+370|Rejeição: Nota Fiscal Avulsa com tipo de emissão inválido
+401|Rejeição: CPF do remetente inválido
+402|Rejeição: XML da área de dados com codificação diferente de UTF-8
+403|Rejeição: O grupo de informações da NF-e avulsa é de uso exclusivo do Fisco
+404|Rejeição: Uso de prefixo de namespace não permitido
+405|Rejeição: Código do país do emitente: dígito inválido
+406|Rejeição: Código do país do destinatário: dígito inválido
+407|Rejeição: O CPF só pode ser informado no campo emitente para a NF-e avulsa
+408|Rejeição: Evento não disponível para Autor pessoa física
+409|Rejeição: Campo cUF inexistente no elemento nfeCabecMsg do SOAP Header
+410|Rejeição: UF informada no campo cUF não é atendida pelo Web Service
+411|Rejeição: Campo versaoDados inexistente no elemento nfeCabecMsg do SOAP Header
+417|Rejeição: Total do ICMS superior ao valor limite estabelecido
+418|Rejeição: Total do ICMS ST superior ao valor limite estabelecido
+420|Rejeição: Cancelamento para NF-e já cancelada
+450|Rejeição: Modelo da NF-e diferente de 55
+451|Rejeição: Processo de emissão informado inválido
+452|Rejeição: Tipo Autorizador do Recibo diverge do Órgão Autorizador
+453|Rejeição: Ano de inutilização não pode ser superior ao Ano atual
+454|Rejeição: Ano de inutilização não pode ser inferior a 2006
+455|Rejeição: Órgão Autor do evento diferente da UF da Chave de Acesso
+461|Rejeição: Informado percentual de Gás Natural na mistura para produto diferente de GLP
+465|Rejeição: Número de Controle da FCI inexistente
+466|Rejeição: Evento com Tipo de Autor incompatível
+467|Rejeição: Dados da NF-e divergentes do EPEC
+468|Rejeição: NF-e com Tipo Emissão = 4, sem EPEC correspondente
+471|Rejeição: Informado NCM=00 indevidamente
+476|Rejeição: Código da UF diverge da UF da primeira NF-e do Lote
+477|Rejeição: Código do órgão diverge do órgão do primeiro evento do Lote
+478|Rejeição: Local da entrega não informado para faturamento direto de veículos novos
+484|Rejeição: Chave de Acesso com tipo de emissão diferente de 4 (posição 35 da Chave de Acesso)
+485|Rejeição: Duplicidade de numeração do EPEC (Modelo, CNPJ, Série e Número)
+489|Rejeição: CNPJ informado inválido (DV ou zeros)
+490|Rejeição: CPF informado inválido (DV ou zeros)
+491|Rejeição: O tpEvento informado inválido
+492|Rejeição: O verEvento informado inválido
+493|Rejeição: Evento não atende o Schema XML específico
+494|Rejeição: Chave de Acesso inexistente
+501|Rejeição: Pedido de Cancelamento intempestivo (NF-e autorizada a mais de 7 dias)
+502|Rejeição: Erro na Chave de Acesso – Campo Id não corresponde à concatenação dos campos correspondentes
+503|Rejeição: Série utilizada fora da faixa permitida no SCAN (900-999)
+504|Rejeição: Data de Entrada/Saída posterior ao permitido
+505|Rejeição: Data de Entrada/Saída anterior ao permitido
+506|Rejeição: Data de Saída menor que a Data de Emissão
+507|Rejeição: O CNPJ do destinatário/remetente não deve ser informado em operação com o exterior
+508|Rejeição: CNPJ do destinatário com conteúdo nulo só é válido em operação com exterior
+509|Rejeição: Informado código de município diferente de “9999999” para operação com o exterior
+510|Rejeição: Operação com Exterior e Código País destinatário é 1058 (Brasil) ou não informado
+511|Rejeição: Não é de Operação com Exterior e Código País destinatário difere de 1058 (Brasil)
+512|Rejeição: CNPJ do Local de Retirada inválido
+513|Rejeição: Código Município do Local de Retirada deve ser 9999999 para UF retirada = EX
+514|Rejeição: CNPJ do Local de Entrega inválido
+515|Rejeição: Código Município do Local de Entrega deve ser 9999999 para UF entrega = EX
+516|Rejeição: Falha no schema XML – inexiste a tag raiz esperada para a mensagem
+517|Rejeição: Falha no schema XML – inexiste atributo versao na tag raiz da mensagem
+518|Rejeição: CFOP de entrada para NF-e de saída
+519|Rejeição: CFOP de saída para NF-e de entrada
+520|Rejeição: CFOP de Operação com Exterior e UF destinatário difere de EX
+521|Rejeição: CFOP de Operação Estadual e UF do emitente difere da UF do destinatário para destinatário contribuinte do ICMS.
+522|Rejeição: CFOP de Operação Estadual e UF emitente difere da UF remetente para remetente contribuinte do ICMS.
+523|Rejeição: CFOP não é de Operação Estadual e UF emitente igual a UF destinatário.
+524|Rejeição: CFOP de Operação com Exterior e não informado NCM
+525|Rejeição: CFOP de Importação e não informado dados da DI
+527|Rejeição: Operação de Exportação com informação de ICMS incompatível
+528|Rejeição: Valor do ICMS difere do produto BC e Alíquota
+529|Rejeição: NCM de informação obrigatória para produto tributado pelo IPI
+530|Rejeição: Operação com tributação de ISSQN sem informar a Inscrição Municipal
+531|Rejeição: Total da BC ICMS difere do somatório dos itens
+532|Rejeição: Total do ICMS difere do somatório dos itens
+533|Rejeição: Total da BC ICMS-ST difere do somatório dos itens
+534|Rejeição: Total do ICMS-ST difere do somatório dos itens
+535|Rejeição: Total do Frete difere do somatório dos itens
+536|Rejeição: Total do Seguro difere do somatório dos itens
+537|Rejeição: Total do Desconto difere do somatório dos itens
+538|Rejeição: Total do IPI difere do somatório dos itens
+539|Duplicidade de NF-e com diferença na Chave de Acesso [chNFe: 99999999999999999999999999999999999999999999][nRec:999999999999999]
+540|Rejeição: CPF do Local de Retirada inválido
+541|Rejeição: CPF do Local de Entrega inválido
+542|Rejeição: CNPJ do Transportador inválido
+543|Rejeição: CPF do Transportador inválido
+544|Rejeição: IE do Transportador inválida
+545|Rejeição: Falha no schema XML – versão informada na versaoDados do SOAPHeader diverge da versão da mensagem
+546|Rejeição: Erro na Chave de Acesso – Campo Id – falta a literal NFe
+547|Rejeição: Dígito Verificador da Chave de Acesso da NF-e Referenciada inválido
+548|Rejeição: CNPJ da NF referenciada inválido.
+549|Rejeição: CNPJ da NF referenciada de produtor inválido.
+550|Rejeição: CPF da NF referenciada de produtor inválido.
+551|Rejeição: IE da NF referenciada de produtor inválido.
+552|Rejeição: Dígito Verificador da Chave de Acesso do CT-e Referenciado inválido
+553|Rejeição: Tipo autorizador do recibo diverge do Órgão Autorizador.
+554|Rejeição: Série difere da faixa 0-899
+555|Rejeição: Tipo autorizador do protocolo diverge do Órgão Autorizador.
+556|Rejeição: Justificativa de entrada em contingência não deve ser informada para tipo de emissão normal.
+557|Rejeição: A Justificativa de entrada em contingência deve ser informada.
+558|Rejeição: Data de entrada em contingência posterior a data de recebimento.
+559|Rejeição: UF do Transportador não informada
+560|Rejeição: CNPJ base do emitente difere do CNPJ base da primeira NF-e do lote recebido
+561|Rejeição: Mês de Emissão informado na Chave de Acesso difere do Mês de Emissão da NF-e
+562|Rejeição: Código Numérico informado na Chave de Acesso difere do Código Numérico da NF-e [chNFe:99999999999999999999999999999999999999999999]
+563|Rejeição: Já existe pedido de Inutilização com a mesma faixa de inutilização
+564|Rejeição: Total do Produto / Serviço difere do somatório dos itens
+565|Rejeição: Falha no schema XML – inexiste a tag raiz esperada para o lote de NF-e
+567|Rejeição: Falha no schema XML – versão informada na versaoDados do SOAPHeader diverge da versão do lote de NF-e
+568|Rejeição: Falha no schema XML – inexiste atributo versao na tag raiz do lote de NF-e
+569|Rejeição: Data de entrada em contingência muito atrasada
+570|Rejeição: Tipo de Emissão 3, 6 ou 7 só é válido nas contingências SCAN/SVC
+571|Rejeição: O tpEmis informado diferente de 3 para contingência SCAN
+572|Rejeição: Erro Atributo ID do evento não corresponde a concatenação dos campos (“ID” + tpEvento + chNFe + nSeqEvento)
+573|Rejeição: Duplicidade de Evento
+574|Rejeição: O autor do evento diverge do emissor da NF-e
+575|Rejeição: O autor do evento diverge do destinatário da NF-e
+576|Rejeição: O autor do evento não é um órgão autorizado a gerar o evento
+577|Rejeição: A data do evento não pode ser menor que a data de emissão da NF-e
+578|Rejeição: A data do evento não pode ser maior que a data do processamento
+579|Rejeição: A data do evento não pode ser menor que a data de autorização para NF-e não emitida em contingência
+580|Rejeição: O evento exige uma NF-e autorizada
+587|Rejeição: Usar somente o namespace padrão da NF-e
+588|Rejeição: Não é permitida a presença de caracteres de edição no início/fim da mensagem ou entre as tags da mensagem
+589|Rejeição: Número do NSU informado superior ao maior NSU da base de dados da SEFAZ
+590|Rejeição: Informado CST para emissor do Simples Nacional (CRT=1)
+591|Rejeição: Informado CSOSN para emissor que não é do Simples Nacional (CRT diferente de 1)
+592|Rejeição: A NF-e deve ter pelo menos um item de produto sujeito ao ICMS
+593|Rejeição: CNPJ-Base consultado difere do CNPJ-Base do Certificado Digital
+594|Rejeição: O número de sequencia do evento informado é maior que o permitido
+595|Rejeição: Obrigatória a informação da justificativa do evento.
+596|Rejeição: Evento apresentado fora do prazo: [prazo vigente]
+597|Rejeição: CFOP de Importação e não informado dados de IPI
+598|Rejeição: NF-e emitida em ambiente de homologação com Razão Social do destinatário diferente de NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO – SEM VALOR FISCAL
+599|Rejeição: CFOP de Importação e não informado dados de II
+601|Rejeição: Total do II difere do somatório dos itens
+602|Rejeição: Total do PIS difere do somatório dos itens sujeitos ao ICMS
+603|Rejeição: Total do COFINS difere do somatório dos itens sujeitos ao ICMS
+604|Rejeição: Total do vOutro difere do somatório dos itens
+605|Rejeição: Total do vISS difere do somatório do vProd dos itens sujeitos ao ISSQN
+606|Rejeição: Total do vBC do ISS difere do somatório dos itens
+607|Rejeição: Total do ISS difere do somatório dos itens
+608|Rejeição: Total do PIS difere do somatório dos itens sujeitos ao ISSQN
+609|Rejeição: Total do COFINS difere do somatório dos itens sujeitos ao ISSQN
+610|Rejeição: Total da NF difere do somatório dos Valores compõe o valor Total da NF.
+611|Rejeição: cEAN inválido
+612|Rejeição: cEANTrib inválido
+613|Rejeição: Chave de Acesso difere da existente em BD
+614|Rejeição: Chave de Acesso inválida (Código UF inválido)
+615|Rejeição: Chave de Acesso inválida (Ano menor que 06 ou Ano maior que Ano corrente)
+616|Rejeição: Chave de Acesso inválida (Mês menor que 1 ou Mês maior que 12)
+617|Rejeição: Chave de Acesso inválida (CNPJ zerado ou dígito inválido)
+618|Rejeição: Chave de Acesso inválida (modelo diferente de 55 e 65)
+619|Rejeição: Chave de Acesso inválida (número NF = 0)
+620|Rejeição: Chave de Acesso difere da existente em BD
+621|Rejeição: CPF Emitente não cadastrado
+622|Rejeição: IE emitente não vinculada ao CPF
+623|Rejeição: CPF Destinatário não cadastrado
+624|Rejeição: IE Destinatário não vinculada ao CPF
+625|Rejeição: Inscrição SUFRAMA deve ser informada na venda com isenção para ZFM
+626|Rejeição: CFOP de operação isenta para ZFM diferente do previsto
+627|Rejeição: O valor do ICMS desonerado deve ser informado
+628|Rejeição: Total da NF superior ao valor limite estabelecido pela SEFAZ [Limite]
+629|Rejeição: Valor do Produto difere do produto Valor Unitário de Comercialização e Quantidade Comercial
+630|Rejeição: Valor do Produto difere do produto Valor Unitário de Tributação e Quantidade Tributável
+631|Rejeição: CNPJ-Base do Destinatário difere do CNPJ-Base do Certificado Digital
+632|Rejeição: Solicitação fora de prazo, a NF-e não está mais disponível para download
+633|Rejeição: NF-e indisponível para download devido a ausência de Manifestação do Destinatário
+634|Rejeição: Destinatário da NF-e não tem o mesmo CNPJ raiz do solicitante do download
+635|Rejeição: NF-e com mesmo número e série já transmitida e aguardando processamento
+650|Rejeição: Evento de “Ciência da Emissão” para NF-e Cancelada ou Denegada
+651|Rejeição: Evento de “Desconhecimento da Operação” para NF-e Cancelada ou Denegada
+653|Rejeição: NF-e Cancelada, arquivo indisponível para download
+654|Rejeição: NF-e Denegada, arquivo indisponível para download
+655|Rejeição: Evento de Ciência da Emissão informado após a manifestação final do destinatário
+656|Rejeição: Consumo Indevido
+657|Rejeição: Código do Órgão diverge do órgão autorizador
+658|Rejeição: UF do destinatário da Chave de Acesso diverge da UF autorizadora
+660|Rejeição: CFOP de Combustível e não informado grupo de combustível da NF-e
+661|Rejeição: NF-e já existente para o número do EPEC informado
+662|Rejeição: Numeração do EPEC está inutilizada na Base de Dados da SEFAZ
+663|Rejeição: Alíquota do ICMS com valor superior a 4 por cento na operação de saída interestadual com produtos importados
+678|Rejeição: NF referenciada com UF diferente da NF-e complementar
+679|Rejeição: Modelo da NF-e referenciada diferente de 55
+680|Rejeição: Duplicidade de NF-e referenciada (Chave de Acesso referenciada mais de uma vez)
+681|Rejeição: Duplicidade de NF Modelo 1 referenciada (CNPJ, Modelo, Série e Número)
+682|Rejeição: Duplicidade de NF de Produtor referenciada (IE, Modelo, Série e Número)
+683|Rejeição: Modelo do CT-e referenciado diferente de 57
+684|Rejeição: Duplicidade de Cupom Fiscal referenciado (Modelo, Número de Ordem e COO)
+685|Rejeição: Total do Valor Aproximado dos Tributos difere do somatório dos itens
+686|Rejeição: NF Complementar referencia uma NF-e cancelada
+687|Rejeição: NF Complementar referencia uma NF-e denegada
+688|Rejeição: NF referenciada de Produtor com IE inexistente [nRef: xxx]
+689|Rejeição: NF referenciada de Produtor com IE não vinculada ao CNPJ/CPF informado [nRef: xxx]
+690|Rejeição: Pedido de Cancelamento para NF-e com CT-e
+691|Rejeição: Chave de Acesso da NF-e diverge da Chave de Acesso do EPEC
+700|Rejeição: Mensagem de Lote versão 3.xx. Enviar para o Web Service nfeAutorizacao
+701|Rejeição: NF-e não pode utilizar a versão 3.00
+702|Rejeição: NFC-e não é aceita pela UF do Emitente
+703|Rejeição: Data-Hora de Emissão posterior ao horário de recebimento
+704|Rejeição: NFC-e com Data-Hora de emissão atrasada
+705|Rejeição: NFC-e com data de entrada/saída
+706|Rejeição: NFC-e para operação de entrada
+707|Rejeição: NFC-e para operação interestadual ou com o exterior
+708|Rejeição: NFC-e não pode referenciar documento fiscal
+709|Rejeição: NFC-e com formato de DANFE inválido
+710|Rejeição: NF-e com formato de DANFE inválido
+711|Rejeição: NF-e com contingência off-line
+712|Rejeição: NFC-e com contingência off-line para a UF
+713|Rejeição: Tipo de Emissão diferente de 6 ou 7 para contingência da SVC acessada
+714|Rejeição: NFC-e com contingência DPEC inexistente
+715|Rejeição: NFC-e com finalidade inválida
+716|Rejeição: NFC-e em operação não destinada a consumidor final
+717|Rejeição: NFC-e em operação não presencial
+718|Rejeição: NFC-e não deve informar IE de Substituto Tributário
+719|Rejeição: NF-e sem a identificação do destinatário
+720|Rejeição: Na operação com Exterior deve ser informada tag idEstrangeiro
+721|Rejeição: Operação interestadual deve informar CNPJ ou CPF.
+723|Rejeição: Operação interna com idEstrangeiro informado deve ser para consumidor final
+724|Rejeição: NF-e sem o nome do destinatário
+725|Rejeição: NFC-e com CFOP inválido
+726|Rejeição: NF-e sem a informação de endereço do destinatário
+727|Rejeição: Operação com Exterior e UF diferente de EX
+728|Rejeição: NF-e sem informação da IE do destinatário
+729|Rejeição: NFC-e com informação da IE do destinatário
+730|Rejeição: NFC-e com Inscrição Suframa
+731|Rejeição: CFOP de operação com Exterior e idDest <> 3
+732|Rejeição: CFOP de operação interestadual e idDest <> 2
+733|Rejeição: CFOP de operação interna e idDest <> 1
+734|Rejeição: NFC-e com Unidade de Comercialização inválida
+735|Rejeição: NFC-e com Unidade de Tributação inválida
+736|Rejeição: NFC-e com grupo de Veículos novos
+737|Rejeição: NFC-e com grupo de Medicamentos
+738|Rejeição: NFC-e com grupo de Armamentos
+739|Rejeição: NFC-e com grupo de Combustível
+740|Rejeição: NFC-e com CST 51-Diferimento
+741|Rejeição: NFC-e com Partilha de ICMS entre UF
+742|Rejeição: NFC-e com grupo do IPI
+743|Rejeição: NFC-e com grupo do II
+745|Rejeição: NF-e sem grupo do PIS
+746|Rejeição: NFC-e com grupo do PIS-ST
+748|Rejeição: NF-e sem grupo da COFINS
+749|Rejeição: NFC-e com grupo da COFINS-ST
+750|Rejeição: NFC-e com valor total superior ao permitido para destinatário não identificado (Código) [Limite]
+751|Rejeição: NFC-e com valor total superior ao permitido para destinatário não identificado (Nome) [Limite]
+752|Rejeição: NFC-e com valor total superior ao permitido para destinatário não identificado (Endereço) [Limite]
+753|Rejeição: NFC-e com Frete
+754|Rejeição: NFC-e com dados do Transportador
+755|Rejeição: NFC-e com dados de Retenção do ICMS no Transporte
+756|Rejeição: NFC-e com dados do veículo de Transporte
+757|Rejeição: NFC-e com dados de Reboque do veículo de Transporte
+758|Rejeição: NFC-e com dados do Vagão de Transporte
+759|Rejeição: NFC-e com dados da Balsa de Transporte
+760|Rejeição: NFC-e com dados de cobrança (Fatura, Duplicata)
+762|Rejeição: NFC-e com dados de compras (Empenho, Pedido, Contrato)
+763|Rejeição: NFC-e com dados de aquisição de Cana
+764|Rejeição: Solicitada resposta síncrona para Lote com mais de uma NF-e (indSinc=1)
+765|Rejeição: Lote só poderá conter NF-e ou NFC-e
+766|Rejeição: NFC-e com CST 50-Suspensão
+767|Rejeição: NFC-e com somatório dos pagamentos diferente do total da Nota Fiscal
+768|Rejeição: NF-e não deve possuir o grupo de Formas de Pagamento
+769|Rejeição: A critério da UF NFC-e deve possuir o grupo de Formas de Pagamento
+770|Rejeição: NFC-e autorizada há mais de 24 horas.
+771|Rejeição: Operação Interestadual e UF de destino com EX
+772|Rejeição: Operação Interestadual e UF de destino igual à UF do emitente
+773|Rejeição: Operação Interna e UF de destino difere da UF do emitente
+774|Rejeição: NFC-e com indicador de item não participante do total
+775|Rejeição: Modelo da NFC-e diferente de 65
+776|Rejeição: Solicitada resposta síncrona para UF que não disponibiliza este atendimento (indSinc=1)
+777|Rejeição: Obrigatória a informação do NCM completo
+778|Rejeição: Informado NCM inexistente
+779|Rejeição: NFC-e com NCM incompatível
+780|Rejeição: Total da NFC-e superior ao valor limite estabelecido pela SEFAZ [Limite]
+781|Rejeição: Emissor não habilitado para emissão da NFC-e
+782|Rejeição: NFC-e não é autorizada pelo SCAN
+783|Rejeição: NFC-e não é autorizada pela SVC
+784|Rejeição: NFC-e não permite o evento de Carta de Correção
+785|Rejeição: NFC-e com entrega a domicílio não permitida pela UF
+786|Rejeição: NFC-e de entrega a domicílio sem dados do Transportador
+787|Rejeição: NFC-e de entrega a domicílio sem a identificação do destinatário
+788|Rejeição: NFC-e de entrega a domicílio sem o endereço do destinatário
+789|Rejeição: NFC-e para destinatário contribuinte de ICMS
+790|Rejeição: Operação com Exterior para destinatário Contribuinte de ICMS
+791|Rejeição: NF-e com indicação de destinatário isento de IE, com a informação da IE do destinatário
+792|Rejeição: Informada a IE do destinatário para operação com destinatário no Exterior
+793|Rejeição: Informado Capítulo do NCM inexistente
+794|Rejeição: NF-e com indicativo de NFC-e com entrega a domicílio
+795|Rejeição: Total do ICMS desonerado difere do somatório dos itens
+796|Rejeição: Empresa sem Chave de Segurança para o QR-Code
+999|Rejeição: Erro não catalogado (informar a mensagem de erro capturado no tratamento da exceção)

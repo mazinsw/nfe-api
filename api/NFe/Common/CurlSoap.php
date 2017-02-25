@@ -129,9 +129,9 @@ XML;
         if ($this->error) {
             $transfer = $this->getInfo(CURLINFO_PRETRANSFER_TIME);
             if ($transfer == 0) { // never started the transfer
-                throw new \DomainException($this->errorMessage, $this->errorCode);
+                throw new \NFe\Exception\NetworkException($this->errorMessage, $this->errorCode);
             }
-            throw new \Exception($this->errorMessage, $this->errorCode);
+            throw new \NFe\Exception\IncompleteRequestException($this->errorMessage, $this->errorCode);
         }
         return $this->response;
     }

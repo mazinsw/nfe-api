@@ -259,8 +259,9 @@ class Util
     public static function appendNode($element, $name, $text)
     {
         $dom = $element->ownerDocument;
-        $element->appendChild($dom->createElement($name))
-                ->appendChild($dom->createTextNode($text));
+        $node = $element->appendChild($dom->createElement($name));
+        $node->appendChild($dom->createTextNode($text));
+        return $node;
     }
 
     public static function loadNode($element, $name, $exception = null)
@@ -269,10 +270,9 @@ class Util
         $list = $element->getElementsByTagName($name);
         if ($list->length > 0) {
             $value = $list->item(0)->nodeValue;
-        } else if (!is_null($exception)) {
+        } elseif (!is_null($exception)) {
             throw new \Exception($exception, 404);
         }
         return $value;
     }
-
 }

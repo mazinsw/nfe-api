@@ -46,8 +46,19 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 abstract class Nota implements Node
 {
 
+    /**
+     * Versão da nota fiscal
+     */
     const VERSAO = '3.10';
+
+    /**
+     * Versão do aplicativo gerador da nota
+     */
     const APP_VERSAO = '1.0';
+
+    /**
+     * Portal da nota fiscal
+     */
     const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
     /**
@@ -125,38 +136,159 @@ abstract class Nota implements Node
     const PRESENCA_ENTREGA = 'entrega';
     const PRESENCA_OUTROS = 'outros';
 
+    /**
+     * Chave da nota fiscal
+     */
     private $id;
+    /**
+     * Número do Documento Fiscal
+     */
     private $numero;
+    /**
+     * Emitente da nota fiscal
+     */
     private $emitente;
+    /**
+     * Destinatário que receberá os produtos
+     */
     private $destinatario;
+    /**
+     * Produtos adicionados na nota
+     */
     private $produtos;
+    /**
+     * Informações de trasnporte da mercadoria
+     */
     private $transporte;
+    /**
+     * Pagamentos realizados
+     */
     private $pagamentos;
+    /**
+     * Data e Hora da saída ou de entrada da mercadoria / produto
+     */
     private $data_movimentacao;
+    /**
+     * Informar a data e hora de entrada em contingência
+     */
     private $data_contingencia;
+    /**
+     * Informar a Justificativa da entrada em contingência
+     */
     private $justificativa;
+    /**
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     */
     private $modelo;
+    /**
+     * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
+     */
     private $tipo;
+    /**
+     * Identificador de Local de destino da operação
+     * (1-Interna;2-Interestadual;3-Exterior)
+     */
     private $destino;
+    /**
+     * Descrição da Natureza da Operação
+     */
     private $natureza;
+    /**
+     * Código numérico que compõe a Chave de Acesso. Número aleatório gerado
+     * pelo emitente para cada NF-e.
+     */
     private $codigo;
+    /**
+     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
+     * prazo; 2 – outros.
+     */
     private $indicador;
+    /**
+     * Data e Hora de emissão do Documento Fiscal
+     */
     private $data_emissao;
+    /**
+     * Série do Documento Fiscal: série normal 0-889, Avulsa Fisco 890-899,
+     * SCAN 900-999
+     */
     private $serie;
+    /**
+     * Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe
+     * Paisagem;3-DANFe Simplificado;4-DANFe NFC-e;5-DANFe NFC-e em mensagem
+     * eletrônica)
+     */
     private $formato;
+    /**
+     * Forma de emissão da NF-e
+     */
     private $emissao;
+    /**
+     * Digito Verificador da Chave de Acesso da NF-e
+     */
     private $digito_verificador;
+    /**
+     * Identificação do Ambiente: 1 - Produção, 2 - Homologação
+     */
     private $ambiente;
+    /**
+     * Finalidade da emissão da NF-e: 1 - NFe normal, 2 - NFe complementar, 3 -
+     * NFe de ajuste, 4 - Devolução/Retorno
+     */
     private $finalidade;
+    /**
+     * Indica operação com consumidor final (0-Não;1-Consumidor Final)
+     */
     private $consumidor_final;
+    /**
+     * Indicador de presença do comprador no estabelecimento comercial no
+     * momento da oepração (0-Não se aplica, ex.: Nota Fiscal complementar ou
+     * de ajuste;1-Operação presencial;2-Não presencial, internet;3-Não
+     * presencial, teleatendimento;4-NFC-e entrega em domicílio;9-Não
+     * presencial, outros)
+     */
     private $presenca;
+    /**
+     * Valor estimado total de impostos federais, estaduais e municipais
+     */
+    private $tributos;
+    /**
+     * Informações adicionais de interesse do Fisco
+     */
+    private $adicionais;
+    /**
+     * Informações complementares de interesse do Contribuinte
+     */
+    private $complemento;
+    /**
+     * Campo de uso livre do contribuinte informar o nome do campo no atributo
+     * xCampo e o conteúdo do campo no xTexto
+     */
+    private $observacoes;
+    /**
+     * Campo de uso exclusivo do Fisco informar o nome do campo no atributo
+     * xCampo e o conteúdo do campo no xTexto
+     */
+    private $informacoes;
+    /**
+     * Protocolo de autorização da nota, informado apenas quando a nota for
+     * enviada e autorizada
+     */
     private $protocolo;
 
+    /**
+     * Constroi uma instância de Nota vazia
+     * @param  array $nota Array contendo dados da Nota
+     */
     public function __construct($nota = array())
     {
         $this->fromArray($nota);
     }
 
+    /**
+     * Chave da nota fiscal
+     * @param boolean $normalize informa se o id deve estar no formato do XML
+     * @return mixed id da Nota
+     */
     public function getID($normalize = false)
     {
         if (!$normalize) {
@@ -165,6 +297,11 @@ abstract class Nota implements Node
         return 'NFe'.$this->id;
     }
 
+    /**
+     * Altera o valor do ID para o informado no parâmetro
+     * @param mixed $id novo valor para ID
+     * @return Nota A própria instância da classe
+     */
     public function setID($id)
     {
         $this->id = $id;
@@ -173,6 +310,8 @@ abstract class Nota implements Node
 
     /**
      * Número do Documento Fiscal
+     * @param boolean $normalize informa se o numero deve estar no formato do XML
+     * @return mixed numero da Nota
      */
     public function getNumero($normalize = false)
     {
@@ -182,73 +321,133 @@ abstract class Nota implements Node
         return $this->numero;
     }
 
+    /**
+     * Altera o valor do Numero para o informado no parâmetro
+     * @param mixed $numero novo valor para Numero
+     * @return Nota A própria instância da classe
+     */
     public function setNumero($numero)
     {
         $this->numero = $numero;
         return $this;
     }
 
+    /**
+     * Emitente da nota fiscal
+     * @return mixed emitente da Nota
+     */
     public function getEmitente()
     {
         return $this->emitente;
     }
 
+    /**
+     * Altera o valor do Emitente para o informado no parâmetro
+     * @param mixed $emitente novo valor para Emitente
+     * @return Nota A própria instância da classe
+     */
     public function setEmitente($emitente)
     {
         $this->emitente = $emitente;
         return $this;
     }
 
+    /**
+     * Destinatário que receberá os produtos
+     * @return mixed destinatario da Nota
+     */
     public function getDestinatario()
     {
         return $this->destinatario;
     }
 
+    /**
+     * Altera o valor do Destinatario para o informado no parâmetro
+     * @param mixed $destinatario novo valor para Destinatario
+     * @return Nota A própria instância da classe
+     */
     public function setDestinatario($destinatario)
     {
         $this->destinatario = $destinatario;
         return $this;
     }
 
+    /**
+     * Produtos adicionados na nota
+     * @return mixed produtos da Nota
+     */
     public function getProdutos()
     {
         return $this->produtos;
     }
 
+    /**
+     * Altera o valor do Produtos para o informado no parâmetro
+     * @param mixed $produtos novo valor para Produtos
+     * @return Nota A própria instância da classe
+     */
     public function setProdutos($produtos)
     {
         $this->produtos = $produtos;
         return $this;
     }
 
+    /**
+     * Adiciona um(a) Produto para a lista de produto
+     * @param Produto $produto Instância do Produto que será adicionada
+     * @return Nota A própria instância da classe
+     */
     public function addProduto($produto)
     {
         $this->produtos[] = $produto;
         return $this;
     }
 
+    /**
+     * Informações de trasnporte da mercadoria
+     * @return mixed transporte da Nota
+     */
     public function getTransporte()
     {
         return $this->transporte;
     }
 
+    /**
+     * Altera o valor da Transporte para o informado no parâmetro
+     * @param mixed $transporte novo valor para Transporte
+     * @return Nota A própria instância da classe
+     */
     public function setTransporte($transporte)
     {
         $this->transporte = $transporte;
         return $this;
     }
 
+    /**
+     * Pagamentos realizados
+     * @return mixed pagamentos da Nota
+     */
     public function getPagamentos()
     {
         return $this->pagamentos;
     }
 
+    /**
+     * Altera o valor do Pagamentos para o informado no parâmetro
+     * @param mixed $pagamentos novo valor para Pagamentos
+     * @return Nota A própria instância da classe
+     */
     public function setPagamentos($pagamentos)
     {
         $this->pagamentos = $pagamentos;
         return $this;
     }
 
+    /**
+     * Adiciona um(a) Pagamento para a lista de pagamento
+     * @param Pagamento $pagamento Instância do Pagamento que será adicionada
+     * @return Nota A própria instância da classe
+     */
     public function addPagamento($pagamento)
     {
         $this->pagamentos[] = $pagamento;
@@ -257,6 +456,8 @@ abstract class Nota implements Node
 
     /**
      * Data e Hora da saída ou de entrada da mercadoria / produto
+     * @param boolean $normalize informa se a data_movimentacao deve estar no formato do XML
+     * @return mixed data_movimentacao da Nota
      */
     public function getDataMovimentacao($normalize = false)
     {
@@ -266,6 +467,11 @@ abstract class Nota implements Node
         return Util::toDateTime($this->data_movimentacao);
     }
 
+    /**
+     * Altera o valor da DataMovimentacao para o informado no parâmetro
+     * @param mixed $data_movimentacao novo valor para DataMovimentacao
+     * @return Nota A própria instância da classe
+     */
     public function setDataMovimentacao($data_movimentacao)
     {
         if (!is_null($data_movimentacao) && !is_numeric($data_movimentacao)) {
@@ -277,6 +483,8 @@ abstract class Nota implements Node
 
     /**
      * Informar a data e hora de entrada em contingência
+     * @param boolean $normalize informa se a data_contingencia deve estar no formato do XML
+     * @return mixed data_contingencia da Nota
      */
     public function getDataContingencia($normalize = false)
     {
@@ -286,6 +494,11 @@ abstract class Nota implements Node
         return Util::toDateTime($this->data_contingencia);
     }
 
+    /**
+     * Altera o valor da DataContingencia para o informado no parâmetro
+     * @param mixed $data_contingencia novo valor para DataContingencia
+     * @return Nota A própria instância da classe
+     */
     public function setDataContingencia($data_contingencia)
     {
         if (!is_null($data_contingencia) && !is_numeric($data_contingencia)) {
@@ -297,6 +510,8 @@ abstract class Nota implements Node
 
     /**
      * Informar a Justificativa da entrada em contingência
+     * @param boolean $normalize informa se a justificativa deve estar no formato do XML
+     * @return mixed justificativa da Nota
      */
     public function getJustificativa($normalize = false)
     {
@@ -306,6 +521,11 @@ abstract class Nota implements Node
         return $this->justificativa;
     }
 
+    /**
+     * Altera o valor da Justificativa para o informado no parâmetro
+     * @param mixed $justificativa novo valor para Justificativa
+     * @return Nota A própria instância da classe
+     */
     public function setJustificativa($justificativa)
     {
         $this->justificativa = $justificativa;
@@ -314,6 +534,8 @@ abstract class Nota implements Node
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * @return mixed modelo da Nota
      */
     public function getModelo($normalize = false)
     {
@@ -329,6 +551,11 @@ abstract class Nota implements Node
         return $this->modelo;
     }
 
+    /**
+     * Altera o valor do Modelo para o informado no parâmetro
+     * @param mixed $modelo novo valor para Modelo
+     * @return Nota A própria instância da classe
+     */
     public function setModelo($modelo)
     {
         switch ($modelo) {
@@ -345,6 +572,8 @@ abstract class Nota implements Node
 
     /**
      * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
+     * @param boolean $normalize informa se o tipo deve estar no formato do XML
+     * @return mixed tipo da Nota
      */
     public function getTipo($normalize = false)
     {
@@ -360,6 +589,11 @@ abstract class Nota implements Node
         return $this->tipo;
     }
 
+    /**
+     * Altera o valor do Tipo para o informado no parâmetro
+     * @param mixed $tipo novo valor para Tipo
+     * @return Nota A própria instância da classe
+     */
     public function setTipo($tipo)
     {
         switch ($tipo) {
@@ -377,6 +611,8 @@ abstract class Nota implements Node
     /**
      * Identificador de Local de destino da operação
      * (1-Interna;2-Interestadual;3-Exterior)
+     * @param boolean $normalize informa se o destino deve estar no formato do XML
+     * @return mixed destino da Nota
      */
     public function getDestino($normalize = false)
     {
@@ -394,6 +630,11 @@ abstract class Nota implements Node
         return $this->destino;
     }
 
+    /**
+     * Altera o valor do Destino para o informado no parâmetro
+     * @param mixed $destino novo valor para Destino
+     * @return Nota A própria instância da classe
+     */
     public function setDestino($destino)
     {
         switch ($destino) {
@@ -413,6 +654,8 @@ abstract class Nota implements Node
 
     /**
      * Descrição da Natureza da Operação
+     * @param boolean $normalize informa se a natureza deve estar no formato do XML
+     * @return mixed natureza da Nota
      */
     public function getNatureza($normalize = false)
     {
@@ -422,6 +665,11 @@ abstract class Nota implements Node
         return $this->natureza;
     }
 
+    /**
+     * Altera o valor da Natureza para o informado no parâmetro
+     * @param mixed $natureza novo valor para Natureza
+     * @return Nota A própria instância da classe
+     */
     public function setNatureza($natureza)
     {
         $this->natureza = $natureza;
@@ -431,6 +679,8 @@ abstract class Nota implements Node
     /**
      * Código numérico que compõe a Chave de Acesso. Número aleatório gerado
      * pelo emitente para cada NF-e.
+     * @param boolean $normalize informa se o codigo deve estar no formato do XML
+     * @return mixed codigo da Nota
      */
     public function getCodigo($normalize = false)
     {
@@ -440,6 +690,11 @@ abstract class Nota implements Node
         return Util::padDigit($this->codigo % 100000000, 8);
     }
 
+    /**
+     * Altera o valor do Codigo para o informado no parâmetro
+     * @param mixed $codigo novo valor para Codigo
+     * @return Nota A própria instância da classe
+     */
     public function setCodigo($codigo)
     {
         $this->codigo = $codigo;
@@ -449,6 +704,8 @@ abstract class Nota implements Node
     /**
      * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
      * prazo; 2 – outros.
+     * @param boolean $normalize informa se o indicador deve estar no formato do XML
+     * @return mixed indicador da Nota
      */
     public function getIndicador($normalize = false)
     {
@@ -466,6 +723,11 @@ abstract class Nota implements Node
         return $this->indicador;
     }
 
+    /**
+     * Altera o valor do Indicador para o informado no parâmetro
+     * @param mixed $indicador novo valor para Indicador
+     * @return Nota A própria instância da classe
+     */
     public function setIndicador($indicador)
     {
         switch ($indicador) {
@@ -485,6 +747,8 @@ abstract class Nota implements Node
 
     /**
      * Data e Hora de emissão do Documento Fiscal
+     * @param boolean $normalize informa se o data_emissao deve estar no formato do XML
+     * @return mixed data_emissao da Nota
      */
     public function getDataEmissao($normalize = false)
     {
@@ -494,6 +758,11 @@ abstract class Nota implements Node
         return Util::toDateTime($this->data_emissao);
     }
 
+    /**
+     * Altera o valor do DataEmissao para o informado no parâmetro
+     * @param mixed $data_emissao novo valor para DataEmissao
+     * @return Nota A própria instância da classe
+     */
     public function setDataEmissao($data_emissao)
     {
         if (!is_numeric($data_emissao)) {
@@ -506,6 +775,8 @@ abstract class Nota implements Node
     /**
      * Série do Documento Fiscal: série normal 0-889, Avulsa Fisco 890-899,
      * SCAN 900-999
+     * @param boolean $normalize informa se o serie deve estar no formato do XML
+     * @return mixed serie da Nota
      */
     public function getSerie($normalize = false)
     {
@@ -515,6 +786,11 @@ abstract class Nota implements Node
         return $this->serie;
     }
 
+    /**
+     * Altera o valor do Serie para o informado no parâmetro
+     * @param mixed $serie novo valor para Serie
+     * @return Nota A própria instância da classe
+     */
     public function setSerie($serie)
     {
         $this->serie = $serie;
@@ -525,6 +801,8 @@ abstract class Nota implements Node
      * Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe
      * Paisagem;3-DANFe Simplificado;4-DANFe NFC-e;5-DANFe NFC-e em mensagem
      * eletrônica)
+     * @param boolean $normalize informa se o formato deve estar no formato do XML
+     * @return mixed formato da Nota
      */
     public function getFormato($normalize = false)
     {
@@ -548,6 +826,11 @@ abstract class Nota implements Node
         return $this->formato;
     }
 
+    /**
+     * Altera o valor do Formato para o informado no parâmetro
+     * @param mixed $formato novo valor para Formato
+     * @return Nota A própria instância da classe
+     */
     public function setFormato($formato)
     {
         switch ($formato) {
@@ -576,6 +859,8 @@ abstract class Nota implements Node
 
     /**
      * Forma de emissão da NF-e
+     * @param boolean $normalize informa se o emissao deve estar no formato do XML
+     * @return mixed emissao da Nota
      */
     public function getEmissao($normalize = false)
     {
@@ -591,6 +876,11 @@ abstract class Nota implements Node
         return $this->emissao;
     }
 
+    /**
+     * Altera o valor do Emissao para o informado no parâmetro
+     * @param mixed $emissao novo valor para Emissao
+     * @return Nota A própria instância da classe
+     */
     public function setEmissao($emissao)
     {
         switch ($emissao) {
@@ -607,6 +897,8 @@ abstract class Nota implements Node
 
     /**
      * Digito Verificador da Chave de Acesso da NF-e
+     * @param boolean $normalize informa se o digito_verificador deve estar no formato do XML
+     * @return mixed digito_verificador da Nota
      */
     public function getDigitoVerificador($normalize = false)
     {
@@ -616,6 +908,11 @@ abstract class Nota implements Node
         return $this->digito_verificador;
     }
 
+    /**
+     * Altera o valor do DigitoVerificador para o informado no parâmetro
+     * @param mixed $digito_verificador novo valor para DigitoVerificador
+     * @return Nota A própria instância da classe
+     */
     public function setDigitoVerificador($digito_verificador)
     {
         $this->digito_verificador = $digito_verificador;
@@ -624,6 +921,8 @@ abstract class Nota implements Node
 
     /**
      * Identificação do Ambiente: 1 - Produção, 2 - Homologação
+     * @param boolean $normalize informa se o ambiente deve estar no formato do XML
+     * @return mixed ambiente da Nota
      */
     public function getAmbiente($normalize = false)
     {
@@ -639,6 +938,11 @@ abstract class Nota implements Node
         return $this->ambiente;
     }
 
+    /**
+     * Altera o valor do Ambiente para o informado no parâmetro
+     * @param mixed $ambiente novo valor para Ambiente
+     * @return Nota A própria instância da classe
+     */
     public function setAmbiente($ambiente)
     {
         switch ($ambiente) {
@@ -656,6 +960,8 @@ abstract class Nota implements Node
     /**
      * Finalidade da emissão da NF-e: 1 - NFe normal, 2 - NFe complementar, 3 -
      * NFe de ajuste, 4 - Devolução/Retorno
+     * @param boolean $normalize informa se a finalidade deve estar no formato do XML
+     * @return mixed finalidade da Nota
      */
     public function getFinalidade($normalize = false)
     {
@@ -675,6 +981,11 @@ abstract class Nota implements Node
         return $this->finalidade;
     }
 
+    /**
+     * Altera o valor da Finalidade para o informado no parâmetro
+     * @param mixed $finalidade novo valor para Finalidade
+     * @return Nota A própria instância da classe
+     */
     public function setFinalidade($finalidade)
     {
         switch ($finalidade) {
@@ -697,6 +1008,8 @@ abstract class Nota implements Node
 
     /**
      * Indica operação com consumidor final (0-Não;1-Consumidor Final)
+     * @param boolean $normalize informa se o consumidor_final deve estar no formato do XML
+     * @return mixed consumidor_final da Nota
      */
     public function getConsumidorFinal($normalize = false)
     {
@@ -714,12 +1027,18 @@ abstract class Nota implements Node
 
     /**
      * Indica operação com consumidor final (0-Não;1-Consumidor Final)
+     * @return boolean informa se o ConsumidorFinal está habilitado
      */
     public function isConsumidorFinal()
     {
         return $this->consumidor_final == 'Y';
     }
 
+    /**
+     * Altera o valor do ConsumidorFinal para o informado no parâmetro
+     * @param mixed $consumidor_final novo valor para ConsumidorFinal
+     * @return Nota A própria instância da classe
+     */
     public function setConsumidorFinal($consumidor_final)
     {
         if (!in_array($consumidor_final, array('N', 'Y'))) {
@@ -735,6 +1054,8 @@ abstract class Nota implements Node
      * de ajuste;1-Operação presencial;2-Não presencial, internet;3-Não
      * presencial, teleatendimento;4-NFC-e entrega em domicílio;9-Não
      * presencial, outros)
+     * @param boolean $normalize informa se a presenca deve estar no formato do XML
+     * @return mixed presenca da Nota
      */
     public function getPresenca($normalize = false)
     {
@@ -758,6 +1079,11 @@ abstract class Nota implements Node
         return $this->presenca;
     }
 
+    /**
+     * Altera o valor da Presenca para o informado no parâmetro
+     * @param mixed $presenca novo valor para Presenca
+     * @return Nota A própria instância da classe
+     */
     public function setPresenca($presenca)
     {
         switch ($presenca) {
@@ -781,6 +1107,145 @@ abstract class Nota implements Node
                 break;
         }
         $this->presenca = $presenca;
+        return $this;
+    }
+
+    /**
+     * Valor estimado total de impostos federais, estaduais e municipais
+     * @param boolean $normalize informa se o tributos deve estar no formato do XML
+     * @return mixed tributos da Nota
+     */
+    public function getTributos($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->tributos;
+        }
+        return Util::toCurrency($this->tributos);
+    }
+    
+    /**
+     * Altera o valor do Tributos para o informado no parâmetro
+     * @param mixed $tributos novo valor para Tributos
+     * @return Nota A própria instância da classe
+     */
+    public function setTributos($tributos)
+    {
+        if (trim($tributos) != '') {
+            $tributos = floatval($tributos);
+        }
+        $this->tributos = $tributos;
+        return $this;
+    }
+
+    /**
+     * Informações adicionais de interesse do Fisco
+     * @param boolean $normalize informa se a adicionais deve estar no formato do XML
+     * @return mixed adicionais da Nota
+     */
+    public function getAdicionais($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->adicionais;
+        }
+        return $this->adicionais;
+    }
+    
+    /**
+     * Altera o valor da Adicionais para o informado no parâmetro
+     * @param mixed $adicionais novo valor para Adicionais
+     * @return Nota A própria instância da classe
+     */
+    public function setAdicionais($adicionais)
+    {
+        $this->adicionais = $adicionais;
+        return $this;
+    }
+
+    /**
+     * Informações complementares de interesse do Contribuinte
+     * @param boolean $normalize informa se o complemento deve estar no formato do XML
+     * @return mixed complemento da Nota
+     */
+    public function getComplemento($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->complemento;
+        }
+        return $this->complemento;
+    }
+    
+    /**
+     * Altera o valor do Complemento para o informado no parâmetro
+     * @param mixed $complemento novo valor para Complemento
+     * @return Nota A própria instância da classe
+     */
+    public function setComplemento($complemento)
+    {
+        $this->complemento = $complemento;
+        return $this;
+    }
+
+    /**
+     * Campo de uso livre do contribuinte informar o nome do campo no atributo
+     * xCampo e o conteúdo do campo no xTexto
+     * @return mixed observacoes da Nota
+     */
+    public function getObservacoes()
+    {
+        return $this->observacoes;
+    }
+    
+    /**
+     * Altera o valor da Observacoes para o informado no parâmetro
+     * @param mixed $observacoes novo valor para Observacoes
+     * @return Nota A própria instância da classe
+     */
+    public function setObservacoes($observacoes)
+    {
+        $this->observacoes = $observacoes;
+        return $this;
+    }
+
+    /**
+     * Adiciona um(a) Observacao para a lista de observacao
+     * @param Observacao $observacao Instância da Observacao que será adicionada
+     * @return Nota A própria instância da classe
+     */
+    public function addObservacao($campo, $observacao)
+    {
+        $this->observacoes[] = array('campo' => $campo, 'valor' => $observacao);
+        return $this;
+    }
+
+    /**
+     * Campo de uso exclusivo do Fisco informar o nome do campo no atributo
+     * xCampo e o conteúdo do campo no xTexto
+     * @return mixed informacoes da Nota
+     */
+    public function getInformacoes()
+    {
+        return $this->informacoes;
+    }
+    
+    /**
+     * Altera o valor da Informacoes para o informado no parâmetro
+     * @param mixed $informacoes novo valor para Informacoes
+     * @return Nota A própria instância da classe
+     */
+    public function setInformacoes($informacoes)
+    {
+        $this->informacoes = $informacoes;
+        return $this;
+    }
+
+    /**
+     * Adiciona um(a) Informacao para a lista de informacao
+     * @param Informacao $informacao Instância da Informacao que será adicionada
+     * @return Nota A própria instância da classe
+     */
+    public function addInformacao($campo, $informacao)
+    {
+        $this->informacoes[] = array('campo' => $campo, 'valor' => $informacao);
         return $this;
     }
 
@@ -827,6 +1292,11 @@ abstract class Nota implements Node
         $nota['finalidade'] = $this->getFinalidade();
         $nota['consumidor_final'] = $this->getConsumidorFinal();
         $nota['presenca'] = $this->getPresenca();
+        $nota['tributos'] = $this->getTributos();
+        $nota['adicionais'] = $this->getAdicionais();
+        $nota['complemento'] = $this->getComplemento();
+        $nota['observacoes'] = $this->getObservacoes();
+        $nota['informacoes'] = $this->getInformacoes();
         $nota['protocolo'] = $this->getProtocolo();
         return $nota;
     }
@@ -963,6 +1433,31 @@ abstract class Nota implements Node
         } else {
             $this->setPresenca(null);
         }
+        if (!array_key_exists('tributos', $nota)) {
+            $this->setTributos(null);
+        } else {
+            $this->setTributos($nota['tributos']);
+        }
+        if (!array_key_exists('adicionais', $nota)) {
+            $this->setAdicionais(null);
+        } else {
+            $this->setAdicionais($nota['adicionais']);
+        }
+        if (!array_key_exists('complemento', $nota)) {
+            $this->setComplemento(null);
+        } else {
+            $this->setComplemento($nota['complemento']);
+        }
+        if (!array_key_exists('observacoes', $nota)) {
+            $this->setObservacoes(null);
+        } else {
+            $this->setObservacoes($nota['observacoes']);
+        }
+        if (!array_key_exists('informacoes', $nota)) {
+            $this->setInformacoes(null);
+        } else {
+            $this->setInformacoes($nota['informacoes']);
+        }
         if (isset($nota['protocolo'])) {
             $this->setProtocolo($nota['protocolo']);
         } else {
@@ -998,7 +1493,6 @@ abstract class Nota implements Node
         $total['frete'] = 0.00;
         $total['seguro'] = 0.00;
         $total['outros'] = 0.00;
-        $total['nota'] = 0.00;
         $total['tributos'] = 0.00;
         $total['icms'] = 0.00;
         $total['icms.st'] = 0.00;
@@ -1011,14 +1505,16 @@ abstract class Nota implements Node
         $total['desoneracao'] = 0.00;
         $_produtos = $this->getProdutos();
         foreach ($_produtos as $_produto) {
+            if (!$_produto->getMultiplicador()) {
+                continue;
+            }
             $imposto_info = $_produto->getImpostoInfo();
-            $total['produtos'] += $_produto->getPreco();
-            $total['descontos'] += $_produto->getDesconto();
-            $total['frete'] += $_produto->getFrete();
-            $total['seguro'] += $_produto->getSeguro();
-            $total['outros'] += $_produto->getDespesas();
-            $total['nota'] += $_produto->getContabilizado();
-            $total['tributos'] += $imposto_info['total'];
+            $total['produtos'] += round($_produto->getPreco(), 2);
+            $total['descontos'] += round($_produto->getDesconto(), 2);
+            $total['frete'] += round($_produto->getFrete(), 2);
+            $total['seguro'] += round($_produto->getSeguro(), 2);
+            $total['outros'] += round($_produto->getDespesas(), 2);
+            $total['tributos'] += round($imposto_info['total'], 2);
             $_impostos = $_produto->getImpostos();
             foreach ($_impostos as $_imposto) {
                 switch ($_imposto->getGrupo()) {
@@ -1026,15 +1522,15 @@ abstract class Nota implements Node
                         if (($_imposto instanceof \NFe\Entity\Imposto\ICMS\Cobranca) ||
                                 ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)) {
                             $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
-                            $total['base'] += $_imposto->getNormal()->getBase();
+                            $total['base'] += round($_imposto->getNormal()->getBase(), 2);
                         }
                         if (($_imposto instanceof \NFe\Entity\Imposto\ICMS\Parcial) ||
                                 ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Parcial)) {
-                            $total['icms.st'] += $_imposto->getValor();
-                            $total['base.st'] += $_imposto->getBase();
+                            $total['icms.st'] += round($_imposto->getValor(), 2);
+                            $total['base.st'] += round($_imposto->getBase(), 2);
                         } else {
                             $total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);
-                            $total['base'] += $_imposto->getBase();
+                            $total['base'] += round($_imposto->getBase(), 2);
                         }
                         break;
                     default:
@@ -1042,6 +1538,10 @@ abstract class Nota implements Node
                 }
             }
         }
+        $produtos = round($total['produtos'], 2) - round($total['descontos'], 2);
+        $servicos = round($total['frete'], 2) + round($total['seguro'], 2) + round($total['outros'], 2);
+        $impostos = round($total['ii'], 2) + round($total['ipi'], 2) + round($total['icms.st'], 2) - round($total['desoneracao'], 2);
+        $total['nota'] = $produtos + $servicos + $impostos;
         return $total;
     }
 
@@ -1070,6 +1570,7 @@ abstract class Nota implements Node
         Util::appendNode($icms, 'vNF', Util::toCurrency($total['nota']));
         Util::appendNode($icms, 'vTotTrib', Util::toCurrency($total['tributos']));
         $element->appendChild($icms);
+        $this->setTributos($total['tributos']);
 
         // TODO: Totais referentes ao ISSQN
 
@@ -1180,10 +1681,34 @@ abstract class Nota implements Node
             $pagamento = $dom->importNode($pagamento, true);
             $info->appendChild($pagamento);
         }
+        $info_adic = $dom->createElement('infAdic');
+        if (!is_null($this->getAdicionais())) {
+            Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
+        }
         // TODO: adicionar informações adicionais somente na NFC-e?
-        $adicional = $dom->createElement('infAdic');
-        Produto::addNodeInformacoes($tributos, $adicional, 'infCpl');
-        $info->appendChild($adicional);
+        $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
+        $this->setComplemento($_complemento);
+        if (!is_null($this->getObservacoes())) {
+            $_observacoes = $this->getObservacoes();
+            foreach ($_observacoes as $_observacao) {
+                $observacoes = Util::appendNode($info_adic, 'obsCont', $_observacao['valor']);
+                $campo = $dom->createAttribute('xCampo');
+                $campo->value = $_observacao['campo'];
+                $observacoes->appendChild($campo);
+                $info_adic->appendChild($observacoes);
+            }
+        }
+        if (!is_null($this->getInformacoes())) {
+            $_informacoes = $this->getInformacoes();
+            foreach ($_informacoes as $_informacao) {
+                $informacoes = Util::appendNode($info_adic, 'obsFisco', $_informacao['valor']);
+                $campo = $dom->createAttribute('xCampo');
+                $campo->value = $_informacao['campo'];
+                $informacoes->appendChild($campo);
+                $info_adic->appendChild($informacoes);
+            }
+        }
+        $info->appendChild($info_adic);
         // TODO: adicionar exportação
         // TODO: adicionar compra
         // TODO: adicionar cana
@@ -1388,6 +1913,35 @@ abstract class Nota implements Node
             $pagamentos[] = $pagamento;
         }
         $this->setPagamentos($pagamentos);
+        $tributos = null;
+        $_fields = $info->getElementsByTagName('total');
+        if ($_fields->length > 0) {
+            $total = $_fields->item(0);
+            $tributos = Util::loadNode($total, 'vTotTrib');
+        }
+        $this->setTributos($tributos);
+        $this->setAdicionais(Util::loadNode($info, 'infAdFisco'));
+        $this->setComplemento(Util::loadNode($info, 'infCpl'));
+        $observacoes = array();
+        $_items = $info->getElementsByTagName('obsCont'); // TODO: predictable tag name
+        foreach ($_items as $_item) {
+            $observacao = array(
+                'campo' => $_item->getAttribute('xCampo'),
+                'valor' => $_item->nodeValue
+            );
+            $observacoes[] = $observacao;
+        }
+        $this->setObservacoes($observacoes);
+        $informacoes = array();
+        $_items = $info->getElementsByTagName('obsFisco'); // TODO: predictable tag name
+        foreach ($_items as $_item) {
+            $informacao = array(
+                'campo' => $_item->getAttribute('xCampo'),
+                'valor' => $_item->nodeValue
+            );
+            $informacoes[] = $informacao;
+        }
+        $this->setInformacoes($informacoes);
 
         $_fields = $root->getElementsByTagName('protNFe');
         $protocolo = null;

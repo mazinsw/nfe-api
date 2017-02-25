@@ -425,7 +425,7 @@ class Envio
             $url = $url['url'];
         }
         if ($config->isOffline()) {
-            throw new \DomainException('Operação offline, sem conexão com a internet', 7);
+            throw new \NFe\Exception\NetworkException('Operação offline, sem conexão com a internet', 7);
         }
         $soap = new CurlSoap();
         $soap->setConnectTimeout(intval($config->getTempoLimite()));
@@ -437,7 +437,7 @@ class Envio
         try {
             $resp = $soap->send($url, $dob, $doh);
             return $resp;
-        } catch (\DomainException $e) {
+        } catch (\NFe\Exception\NetworkException $e) {
             $config->setOffline(time());
             throw $e;
         }

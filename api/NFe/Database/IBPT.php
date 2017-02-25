@@ -42,6 +42,16 @@ class IBPT
         $this->offline = false;
     }
 
+    public function isOffline()
+    {
+        return $this->offline;
+    }
+
+    public function setOffline($offline)
+    {
+        $this->offline = $offline;
+    }
+
     private function load($uf)
     {
         if (isset($this->tabela[$uf])) {
@@ -78,7 +88,7 @@ class IBPT
 
     private function getImpostoOnline($cnpj, $token, $ncm, $uf, $ex)
     {
-        if ($this->offline) {
+        if ($this->isOffline()) {
             return false;
         }
         $url = 'http://iws.ibpt.org.br/api/Produtos';
@@ -95,7 +105,7 @@ class IBPT
         $data = $curl->get($params);
         if ($curl->error) {
             Logger::warning('IBPT.getImpostoOnline('.$curl->errorCode.') - '.$curl->errorMessage);
-            $this->offline = true;
+            $this->setOffline(true);
             return false;
         }
         $o = array(

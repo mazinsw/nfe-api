@@ -93,6 +93,14 @@ class Retorno extends Status
         return in_array($this->getStatus(), array('110', '301', '302', '303'));
     }
 
+    /**
+     * Informa se a nota da consulta não foi autorizada ou se não existe
+     */
+    public function isInexistente()
+    {
+        return $this->getStatus() == '217';
+    }
+
     public function toArray()
     {
         $retorno = parent::toArray();

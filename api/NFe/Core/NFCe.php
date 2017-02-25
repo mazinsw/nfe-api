@@ -90,7 +90,12 @@ class NFCe extends Nota
     {
         $estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
         $db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
-        $info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), $this->getModelo(), $this->getAmbiente());
+        $info = $db->getInformacaoServico(
+            $this->getEmissao(),
+            $estado->getUF(),
+            $this->getModelo(),
+            $this->getAmbiente()
+        );
         if (!isset($info['consulta'])) {
             throw new \Exception('Não existe URL de consulta da nota para o estado "'.$estado->getUF().'"', 404);
         }
@@ -168,7 +173,12 @@ class NFCe extends Nota
         $db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
         $params = $this->gerarQRCodeInfo($dom);
         $query = http_build_query($params);
-        $info = $db->getInformacaoServico($this->getEmissao(), $estado->getUF(), $this->getModelo(), $this->getAmbiente());
+        $info = $db->getInformacaoServico(
+            $this->getEmissao(),
+            $estado->getUF(),
+            $this->getModelo(),
+            $this->getAmbiente()
+        );
         if (!isset($info['qrcode'])) {
             throw new \Exception('Não existe URL de consulta de QRCode para o estado "'.$estado->getUF().'"', 404);
         }

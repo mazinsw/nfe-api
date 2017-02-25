@@ -501,7 +501,7 @@ class Produto implements Node
         if (!$normalize) {
             return $this->getPreco() / $this->getQuantidade();
         }
-        return Util::toCurrency($this->getPrecoUnitario());
+        return Util::toCurrency($this->getPrecoUnitario(), 10);
     }
 
     /**
@@ -512,7 +512,7 @@ class Produto implements Node
         if (!$normalize) {
             return $this->getPreco() / $this->getTributada();
         }
-        return Util::toCurrency($this->getPrecoTributavel());
+        return Util::toCurrency($this->getPrecoTributavel(), 10);
     }
 
     public function getBase($normalize = false)
@@ -521,14 +521,6 @@ class Produto implements Node
             return $this->getPreco() - $this->getDesconto();
         }
         return Util::toCurrency($this->getBase());
-    }
-
-    public function getContabilizado($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->getBase() * $this->getMultiplicador();
-        }
-        return Util::toCurrency($this->getContabilizado());
     }
 
     public function getImpostoInfo()
@@ -727,7 +719,7 @@ class Produto implements Node
             $detalhes[] = sprintf($formato, Util::toMoney($tributos[$tipo]));
         }
         if (count($detalhes) == 0) {
-            return;
+            return null;
         }
         $dom = $element->ownerDocument;
         $fonte = 'Fonte: '.$tributos['info']['fonte'].' '.$tributos['info']['chave'];
@@ -738,6 +730,7 @@ class Produto implements Node
         $texto = 'Trib. aprox.: '.implode(', ', $detalhes).$ultimo.'. '.$fonte;
         $info = $dom->createElement(is_null($name)?'infAdProd':$name, $texto);
         $element->appendChild($info);
+        return $texto;
     }
 
     public function getNode($name = null)
@@ -769,16 +762,16 @@ class Produto implements Node
         Util::appendNode($produto, 'uTrib', $this->getUnidade(true));
         Util::appendNode($produto, 'qTrib', $this->getTributada(true));
         Util::appendNode($produto, 'vUnTrib', $this->getPrecoTributavel(true));
-        if (!is_null($this->getFrete())) {
+        if (Util::isGreater($this->getFrete(), 0.00)) {
             Util::appendNode($produto, 'vFrete', $this->getFrete(true));
         }
-        if (!is_null($this->getSeguro())) {
+        if (Util::isGreater($this->getSeguro(), 0.00)) {
             Util::appendNode($produto, 'vSeg', $this->getSeguro(true));
         }
-        if (!is_null($this->getDesconto())) {
+        if (Util::isGreater($this->getDesconto(), 0.00)) {
             Util::appendNode($produto, 'vDesc', $this->getDesconto(true));
         }
-        if (!is_null($this->getDespesas())) {
+        if (Util::isGreater($this->getDespesas(), 0.00)) {
             Util::appendNode($produto, 'vOutro', $this->getDespesas(true));
         }
         Util::appendNode($produto, 'indTot', $this->getMultiplicador(true));

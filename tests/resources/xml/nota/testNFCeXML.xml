@@ -71,12 +71,12 @@
         <CFOP>5405</CFOP>
         <uCom>UN</uCom>
         <qCom>1.0000</qCom>
-        <vUnCom>4.99</vUnCom>
+        <vUnCom>4.9900000000</vUnCom>
         <vProd>4.99</vProd>
-        <cEANTrib/>
+        <cEANTrib></cEANTrib>
         <uTrib>UN</uTrib>
         <qTrib>1.0000</qTrib>
-        <vUnTrib>4.99</vUnTrib>
+        <vUnTrib>4.9900000000</vUnTrib>
         <indTot>1</indTot>
         <nItemPed>1</nItemPed>
       </prod>
@@ -119,12 +119,12 @@
         <CFOP>5405</CFOP>
         <uCom>UN</uCom>
         <qCom>2.0000</qCom>
-        <vUnCom>4.50</vUnCom>
+        <vUnCom>4.5000000000</vUnCom>
         <vProd>9.00</vProd>
-        <cEANTrib/>
+        <cEANTrib></cEANTrib>
         <uTrib>UN</uTrib>
         <qTrib>2.0000</qTrib>
-        <vUnTrib>4.50</vUnTrib>
+        <vUnTrib>4.5000000000</vUnTrib>
         <vDesc>2.20</vDesc>
         <indTot>1</indTot>
         <nItemPed>2</nItemPed>
