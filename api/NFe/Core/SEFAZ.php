@@ -83,11 +83,24 @@ class SEFAZ
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $sefaz = array();
-        $sefaz['notas'] = $this->getNotas();
-        $sefaz['configuracao'] = $this->getConfiguracao();
+        if ($recursive) {
+            $notas = array();
+            $_notas = $this->getNotas();
+            foreach ($_notas as $_nota) {
+                $notas[] = $_nota->toArray($recursive);
+            }
+            $sefaz['notas'] = $notas;
+        } else {
+            $sefaz['notas'] = $this->getNotas();
+        }
+        if (!is_null($this->getConfiguracao()) && $recursive) {
+            $sefaz['configuracao'] = $this->getConfiguracao()->toArray($recursive);
+        } else {
+            $sefaz['configuracao'] = $this->getConfiguracao();
+        }
         return $sefaz;
     }
 

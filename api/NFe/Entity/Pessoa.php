@@ -153,14 +153,18 @@ abstract class Pessoa implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $pessoa = array();
         $pessoa['razao_social'] = $this->getRazaoSocial();
         $pessoa['cnpj'] = $this->getCNPJ();
         $pessoa['ie'] = $this->getIE();
         $pessoa['im'] = $this->getIM();
-        $pessoa['endereco'] = $this->getEndereco();
+        if (!is_null($this->getEndereco()) && $recursive) {
+            $pessoa['endereco'] = $this->getEndereco()->toArray($recursive);
+        } else {
+            $pessoa['endereco'] = $this->getEndereco();
+        }
         $pessoa['telefone'] = $this->getTelefone();
         return $pessoa;
     }

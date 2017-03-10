@@ -44,9 +44,9 @@ class Mista extends Cobranca
         $this->setNormal(new Reducao());
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $mista = parent::toArray();
+        $mista = parent::toArray($recursive);
         return $mista;
     }
 

@@ -77,7 +77,7 @@ class Peso
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $peso = array();
         $peso['liquido'] = $this->getLiquido();

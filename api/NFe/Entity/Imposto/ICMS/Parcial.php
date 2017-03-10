@@ -134,9 +134,9 @@ class Parcial extends Base
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $parcial = parent::toArray();
+        $parcial = parent::toArray($recursive);
         $parcial['modalidade'] = $this->getModalidade();
         $parcial['margem'] = $this->getMargem();
         $parcial['reducao'] = $this->getReducao();

@@ -99,9 +99,9 @@ class II extends Imposto
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $ii = parent::toArray();
+        $ii = parent::toArray($recursive);
         $ii['despesas'] = $this->getDespesas();
         $ii['valor'] = $this->getValor();
         $ii['iof'] = $this->getIOF();

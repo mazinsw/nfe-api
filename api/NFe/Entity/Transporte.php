@@ -222,17 +222,42 @@ class Transporte implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $transporte = array();
         $transporte['frete'] = $this->getFrete();
-        $transporte['transportador'] = $this->getTransportador();
-        $transporte['retencao'] = $this->getRetencao();
-        $transporte['veiculo'] = $this->getVeiculo();
-        $transporte['reboque'] = $this->getReboque();
+        if (!is_null($this->getTransportador()) && $recursive) {
+            $transporte['transportador'] = $this->getTransportador()->toArray($recursive);
+        } else {
+            $transporte['transportador'] = $this->getTransportador();
+        }
+        if (!is_null($this->getRetencao()) && $recursive) {
+            $transporte['retencao'] = $this->getRetencao()->toArray($recursive);
+        } else {
+            $transporte['retencao'] = $this->getRetencao();
+        }
+        if (!is_null($this->getVeiculo()) && $recursive) {
+            $transporte['veiculo'] = $this->getVeiculo()->toArray($recursive);
+        } else {
+            $transporte['veiculo'] = $this->getVeiculo();
+        }
+        if (!is_null($this->getReboque()) && $recursive) {
+            $transporte['reboque'] = $this->getReboque()->toArray($recursive);
+        } else {
+            $transporte['reboque'] = $this->getReboque();
+        }
         $transporte['vagao'] = $this->getVagao();
         $transporte['balsa'] = $this->getBalsa();
-        $transporte['volumes'] = $this->getVolumes();
+        if ($recursive) {
+            $volumes = array();
+            $_volumes = $this->getVolumes();
+            foreach ($_volumes as $_volume) {
+                $volumes[] = $_volume->toArray($recursive);
+            }
+            $transporte['volumes'] = $volumes;
+        } else {
+            $transporte['volumes'] = $this->getVolumes();
+        }
         return $transporte;
     }
 

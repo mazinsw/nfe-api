@@ -223,9 +223,9 @@ class Inutilizacao extends Retorno
         return $this->getStatus() == '102';
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $inutilizacao = parent::toArray();
+        $inutilizacao = parent::toArray($recursive);
         $inutilizacao['id'] = $this->getID();
         $inutilizacao['ano'] = $this->getAno();
         $inutilizacao['cnpj'] = $this->getCNPJ();

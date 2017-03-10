@@ -96,9 +96,9 @@ class Emitente extends Pessoa
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $emitente = parent::toArray();
+        $emitente = parent::toArray($recursive);
         $emitente['fantasia'] = $this->getFantasia();
         $emitente['regime'] = $this->getRegime();
         return $emitente;

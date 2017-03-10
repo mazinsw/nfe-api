@@ -44,9 +44,9 @@ class Substituto extends Cobrado
         $this->setNormal(new Cobrado());
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $substituto = parent::toArray();
+        $substituto = parent::toArray($recursive);
         return $substituto;
     }
 

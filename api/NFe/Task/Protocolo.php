@@ -102,9 +102,9 @@ class Protocolo extends Retorno
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $protocolo = parent::toArray();
+        $protocolo = parent::toArray($recursive);
         $protocolo['chave'] = $this->getChave();
         $protocolo['validacao'] = $this->getValidacao();
         $protocolo['numero'] = $this->getNumero();

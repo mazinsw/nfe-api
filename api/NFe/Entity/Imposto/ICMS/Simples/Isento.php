@@ -52,9 +52,9 @@ class Isento extends Generico
         return Util::toCurrency($this->getBase());
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $isento = parent::toArray();
+        $isento = parent::toArray($recursive);
         return $isento;
     }
 

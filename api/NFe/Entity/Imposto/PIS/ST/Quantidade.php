@@ -41,9 +41,9 @@ class Quantidade extends \NFe\Entity\Imposto\PIS\Quantidade
         $this->setGrupo(self::GRUPO_PISST);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $quantidade = parent::toArray();
+        $quantidade = parent::toArray($recursive);
         return $quantidade;
     }
 

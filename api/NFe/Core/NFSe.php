@@ -38,9 +38,9 @@ abstract class NFSe extends Nota
         parent::__construct($nfse);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $nfse = parent::toArray();
+        $nfse = parent::toArray($recursive);
         return $nfse;
     }
 

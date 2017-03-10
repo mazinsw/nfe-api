@@ -285,7 +285,7 @@ class Pagamento implements Node
         return in_array($this->getForma(), array(self::FORMA_CREDITO, self::FORMA_DEBITO));
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $pagamento = array();
         $pagamento['forma'] = $this->getForma();

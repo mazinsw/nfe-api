@@ -460,9 +460,9 @@ class Ajuste extends Configuracao implements Evento
         echo 'Falha no processamento da tarefa: '.$exception->getMessage().'<br>';
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $ajuste = parent::toArray();
+        $ajuste = parent::toArray($recursive);
         $ajuste['pasta_xml_base'] = $this->getPastaXmlBase();
         $ajuste['pasta_xml_inutilizado'] = $this->getPastaXmlInutilizado();
         $ajuste['pasta_xml_cancelado'] = $this->getPastaXmlCancelado();

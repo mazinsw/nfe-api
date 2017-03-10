@@ -56,9 +56,9 @@ class Aliquota extends Imposto
         return parent::getTributacao($normalize);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $pis = parent::toArray();
+        $pis = parent::toArray($recursive);
         return $pis;
     }
 

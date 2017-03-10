@@ -72,7 +72,7 @@ class Pais
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $pais = array();
         $pais['codigo'] = $this->getCodigo();

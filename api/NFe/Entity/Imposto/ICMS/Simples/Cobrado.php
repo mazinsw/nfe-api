@@ -69,9 +69,9 @@ class Cobrado extends Generico
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $cobrado = parent::toArray();
+        $cobrado = parent::toArray($recursive);
         $cobrado['valor'] = $this->getValor();
         return $cobrado;
     }

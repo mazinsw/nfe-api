@@ -144,9 +144,9 @@ class Destinatario extends Pessoa
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $destinatario = parent::toArray();
+        $destinatario = parent::toArray($recursive);
         $destinatario['nome'] = $this->getNome();
         $destinatario['cpf'] = $this->getCPF();
         $destinatario['email'] = $this->getEmail();

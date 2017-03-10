@@ -36,49 +36,15 @@ use NFe\Entity\Imposto;
 class Isento extends Imposto
 {
 
-    private $tributacao;
-
     public function __construct($isento = array())
     {
         parent::__construct($isento);
         $this->setGrupo(self::GRUPO_IPI);
     }
 
-    /**
-     * Código da Situação Tributária do IPI:
-     * 01-Entrada tributada com alíquota
-     * zero
-     * 02-Entrada isenta
-     * 03-Entrada não-tributada
-     * 04-Entrada
-     * imune
-     * 05-Entrada com suspensão
-     * 51-Saída tributada com alíquota
-     * zero
-     * 52-Saída isenta
-     * 53-Saída não-tributada
-     * 54-Saída imune
-     * 55-Saída com
-     * suspensão
-     */
-    public function getTributacao($normalize = false)
+    public function toArray($recursive = false)
     {
-        if (!$normalize) {
-            return $this->tributacao;
-        }
-        return $this->tributacao;
-    }
-
-    public function setTributacao($tributacao)
-    {
-        $this->tributacao = $tributacao;
-        return $this;
-    }
-
-    public function toArray()
-    {
-        $isento = parent::toArray();
-        $isento['tributacao'] = $this->getTributacao();
+        $isento = parent::toArray($recursive);
         return $isento;
     }
 
@@ -90,10 +56,8 @@ class Isento extends Imposto
             return $this;
         }
         parent::fromArray($isento);
-        if (!isset($isento['tributacao']) || is_null($isento['tributacao'])) {
+        if (is_null($this->getTributacao())) {
             $this->setTributacao('01');
-        } else {
-            $this->setTributacao($isento['tributacao']);
         }
         return $this;
     }

@@ -99,9 +99,9 @@ class Situacao extends Retorno
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $situacao = parent::toArray();
+        $situacao = parent::toArray($recursive);
         $situacao['chave'] = $this->getChave();
         $situacao['modelo'] = $this->getModelo();
         return $situacao;

@@ -166,15 +166,19 @@ class IPI extends Imposto
         return Util::toCurrency($this->getValor());
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $ipi = parent::toArray();
+        $ipi = parent::toArray($recursive);
         $ipi['classe'] = $this->getClasse();
         $ipi['cnpj'] = $this->getCNPJ();
         $ipi['selo'] = $this->getSelo();
         $ipi['quantidade'] = $this->getQuantidade();
         $ipi['enquadramento'] = $this->getEnquadramento();
-        $ipi['tributo'] = $this->getTributo();
+        if (!is_null($this->getTributo()) && $recursive) {
+            $ipi['tributo'] = $this->getTributo()->toArray($recursive);
+        } else {
+            $ipi['tributo'] = $this->getTributo();
+        }
         return $ipi;
     }
 

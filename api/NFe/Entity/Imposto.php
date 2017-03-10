@@ -221,7 +221,7 @@ abstract class Imposto implements Node
         return $this->getValor($normalize);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $imposto = array();
         $imposto['tipo'] = $this->getTipo();

@@ -81,9 +81,9 @@ abstract class Base extends Imposto
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $base = parent::toArray();
+        $base = parent::toArray($recursive);
         $base['origem'] = $this->getOrigem();
         return $base;
     }

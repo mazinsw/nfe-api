@@ -71,9 +71,9 @@ class Normal extends Base
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $normal = parent::toArray();
+        $normal = parent::toArray($recursive);
         $normal['modalidade'] = $this->getModalidade();
         return $normal;
     }

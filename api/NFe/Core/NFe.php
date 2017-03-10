@@ -39,9 +39,9 @@ abstract class NFe extends Nota
         $this->setModelo(self::MODELO_NFE);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $nfe = parent::toArray();
+        $nfe = parent::toArray($recursive);
         return $nfe;
     }
 

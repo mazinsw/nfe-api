@@ -85,12 +85,16 @@ class Tributo extends Imposto
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $tributo = parent::toArray();
+        $tributo = parent::toArray($recursive);
         $tributo['servico'] = $this->getServico();
         $tributo['cfop'] = $this->getCFOP();
-        $tributo['municipio'] = $this->getMunicipio();
+        if (!is_null($this->getMunicipio()) && $recursive) {
+            $tributo['municipio'] = $this->getMunicipio()->toArray($recursive);
+        } else {
+            $tributo['municipio'] = $this->getMunicipio();
+        }
         return $tributo;
     }
 

@@ -168,12 +168,20 @@ class Endereco implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $endereco = array();
-        $endereco['pais'] = $this->getPais();
+        if (!is_null($this->getPais()) && $recursive) {
+            $endereco['pais'] = $this->getPais()->toArray($recursive);
+        } else {
+            $endereco['pais'] = $this->getPais();
+        }
         $endereco['cep'] = $this->getCEP();
-        $endereco['municipio'] = $this->getMunicipio();
+        if (!is_null($this->getMunicipio()) && $recursive) {
+            $endereco['municipio'] = $this->getMunicipio()->toArray($recursive);
+        } else {
+            $endereco['municipio'] = $this->getMunicipio();
+        }
         $endereco['bairro'] = $this->getBairro();
         $endereco['logradouro'] = $this->getLogradouro();
         $endereco['numero'] = $this->getNumero();

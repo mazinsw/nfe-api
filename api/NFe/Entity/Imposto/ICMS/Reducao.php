@@ -73,9 +73,9 @@ class Reducao extends Normal
         return ($this->getBase() * (100.0 - $this->getReducao())) / 100.0;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $reducao = parent::toArray();
+        $reducao = parent::toArray($recursive);
         $reducao['reducao'] = $this->getReducao();
         return $reducao;
     }

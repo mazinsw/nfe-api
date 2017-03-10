@@ -41,7 +41,7 @@ class Retorno extends Status
 
     public function getDataRecebimento($normalize = false)
     {
-        if (!$normalize) {
+        if (!$normalize || is_null($this->data_recebimento)) {
             return $this->data_recebimento;
         }
         return Util::toDateTime($this->data_recebimento);
@@ -101,10 +101,10 @@ class Retorno extends Status
         return $this->getStatus() == '217';
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $retorno = parent::toArray();
-        $retorno['data_recebimento'] = $this->getDataRecebimento();
+        $retorno = parent::toArray($recursive);
+        $retorno['data_recebimento'] = $this->getDataRecebimento($recursive);
         return $retorno;
     }
 

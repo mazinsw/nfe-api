@@ -225,9 +225,9 @@ class Estatico extends Banco
         return $array;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $estatico = parent::toArray();
+        $estatico = parent::toArray($recursive);
         $estatico['ibpt'] = $this->getIBPT();
         return $estatico;
     }

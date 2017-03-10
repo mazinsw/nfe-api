@@ -41,9 +41,9 @@ class Transportador extends Destinatario
         parent::__construct($transportador);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $transportador = parent::toArray();
+        $transportador = parent::toArray($recursive);
         return $transportador;
     }
 

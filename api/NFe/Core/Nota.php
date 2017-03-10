@@ -30,6 +30,7 @@ namespace NFe\Core;
 use NFe\Common\Util;
 use NFe\Common\Node;
 use NFe\Task\Protocolo;
+use NFe\Entity\Total;
 use NFe\Entity\Imposto;
 use NFe\Entity\Produto;
 use NFe\Entity\Emitente;
@@ -248,17 +249,13 @@ abstract class Nota implements Node
      */
     private $presenca;
     /**
-     * Valor estimado total de impostos federais, estaduais e municipais
+     * Dados dos totais da NF-e
      */
-    private $tributos;
+    private $total;
     /**
      * Informações adicionais de interesse do Fisco
      */
     private $adicionais;
-    /**
-     * Informações complementares de interesse do Contribuinte
-     */
-    private $complemento;
     /**
      * Campo de uso livre do contribuinte informar o nome do campo no atributo
      * xCampo e o conteúdo do campo no xTexto
@@ -461,7 +458,7 @@ abstract class Nota implements Node
      */
     public function getDataMovimentacao($normalize = false)
     {
-        if (!$normalize) {
+        if (!$normalize || is_null($this->data_movimentacao)) {
             return $this->data_movimentacao;
         }
         return Util::toDateTime($this->data_movimentacao);
@@ -488,7 +485,7 @@ abstract class Nota implements Node
      */
     public function getDataContingencia($normalize = false)
     {
-        if (!$normalize) {
+        if (!$normalize || is_null($this->data_contingencia)) {
             return $this->data_contingencia;
         }
         return Util::toDateTime($this->data_contingencia);
@@ -1111,29 +1108,22 @@ abstract class Nota implements Node
     }
 
     /**
-     * Valor estimado total de impostos federais, estaduais e municipais
-     * @param boolean $normalize informa se o tributos deve estar no formato do XML
-     * @return mixed tributos da Nota
+     * Dados dos totais da NF-e
+     * @return mixed total da Nota
      */
-    public function getTributos($normalize = false)
+    public function getTotal()
     {
-        if (!$normalize) {
-            return $this->tributos;
-        }
-        return Util::toCurrency($this->tributos);
+        return $this->total;
     }
     
     /**
-     * Altera o valor do Tributos para o informado no parâmetro
-     * @param mixed $tributos novo valor para Tributos
+     * Altera o valor do Total para o informado no parâmetro
+     * @param mixed $total novo valor para Total
      * @return Nota A própria instância da classe
      */
-    public function setTributos($tributos)
+    public function setTotal($total)
     {
-        if (trim($tributos) != '') {
-            $tributos = floatval($tributos);
-        }
-        $this->tributos = $tributos;
+        $this->total = $total;
         return $this;
     }
 
@@ -1158,30 +1148,6 @@ abstract class Nota implements Node
     public function setAdicionais($adicionais)
     {
         $this->adicionais = $adicionais;
-        return $this;
-    }
-
-    /**
-     * Informações complementares de interesse do Contribuinte
-     * @param boolean $normalize informa se o complemento deve estar no formato do XML
-     * @return mixed complemento da Nota
-     */
-    public function getComplemento($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->complemento;
-        }
-        return $this->complemento;
-    }
-    
-    /**
-     * Altera o valor do Complemento para o informado no parâmetro
-     * @param mixed $complemento novo valor para Complemento
-     * @return Nota A própria instância da classe
-     */
-    public function setComplemento($complemento)
-    {
-        $this->complemento = $complemento;
         return $this;
     }
 
@@ -1264,18 +1230,48 @@ abstract class Nota implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $nota = array();
         $nota['id'] = $this->getID();
         $nota['numero'] = $this->getNumero();
-        $nota['emitente'] = $this->getEmitente();
-        $nota['destinatario'] = $this->getDestinatario();
-        $nota['produtos'] = $this->getProdutos();
-        $nota['transporte'] = $this->getTransporte();
-        $nota['pagamentos'] = $this->getPagamentos();
-        $nota['data_movimentacao'] = $this->getDataMovimentacao();
-        $nota['data_contingencia'] = $this->getDataContingencia();
+        if (!is_null($this->getEmitente()) && $recursive) {
+            $nota['emitente'] = $this->getEmitente()->toArray($recursive);
+        } else {
+            $nota['emitente'] = $this->getEmitente();
+        }
+        if (!is_null($this->getDestinatario()) && $recursive) {
+            $nota['destinatario'] = $this->getDestinatario()->toArray($recursive);
+        } else {
+            $nota['destinatario'] = $this->getDestinatario();
+        }
+        if ($recursive) {
+            $produtos = array();
+            $_produtos = $this->getProdutos();
+            foreach ($_produtos as $_produto) {
+                $produtos[] = $_produto->toArray($recursive);
+            }
+            $nota['produtos'] = $produtos;
+        } else {
+            $nota['produtos'] = $this->getProdutos();
+        }
+        if (!is_null($this->getTransporte()) && $recursive) {
+            $nota['transporte'] = $this->getTransporte()->toArray($recursive);
+        } else {
+            $nota['transporte'] = $this->getTransporte();
+        }
+        if ($recursive) {
+            $pagamentos = array();
+            $_pagamentos = $this->getPagamentos();
+            foreach ($_pagamentos as $_pagamento) {
+                $pagamentos[] = $_pagamento->toArray($recursive);
+            }
+            $nota['pagamentos'] = $pagamentos;
+        } else {
+            $nota['pagamentos'] = $this->getPagamentos();
+        }
+        $nota['data_movimentacao'] = $this->getDataMovimentacao($recursive);
+        $nota['data_contingencia'] = $this->getDataContingencia($recursive);
         $nota['justificativa'] = $this->getJustificativa();
         $nota['modelo'] = $this->getModelo();
         $nota['tipo'] = $this->getTipo();
@@ -1283,7 +1279,7 @@ abstract class Nota implements Node
         $nota['natureza'] = $this->getNatureza();
         $nota['codigo'] = $this->getCodigo();
         $nota['indicador'] = $this->getIndicador();
-        $nota['data_emissao'] = $this->getDataEmissao();
+        $nota['data_emissao'] = $this->getDataEmissao($recursive);
         $nota['serie'] = $this->getSerie();
         $nota['formato'] = $this->getFormato();
         $nota['emissao'] = $this->getEmissao();
@@ -1292,12 +1288,19 @@ abstract class Nota implements Node
         $nota['finalidade'] = $this->getFinalidade();
         $nota['consumidor_final'] = $this->getConsumidorFinal();
         $nota['presenca'] = $this->getPresenca();
-        $nota['tributos'] = $this->getTributos();
+        if (!is_null($this->getTotal()) && $recursive) {
+            $nota['total'] = $this->getTotal()->toArray($recursive);
+        } else {
+            $nota['total'] = $this->getTotal();
+        }
         $nota['adicionais'] = $this->getAdicionais();
-        $nota['complemento'] = $this->getComplemento();
         $nota['observacoes'] = $this->getObservacoes();
         $nota['informacoes'] = $this->getInformacoes();
-        $nota['protocolo'] = $this->getProtocolo();
+        if (!is_null($this->getProtocolo()) && $recursive) {
+            $nota['protocolo'] = $this->getProtocolo()->toArray($recursive);
+        } else {
+            $nota['protocolo'] = $this->getProtocolo();
+        }
         return $nota;
     }
 
@@ -1433,20 +1436,15 @@ abstract class Nota implements Node
         } else {
             $this->setPresenca(null);
         }
-        if (!array_key_exists('tributos', $nota)) {
-            $this->setTributos(null);
+        if (!isset($nota['total'])) {
+            $this->setTotal(new Total());
         } else {
-            $this->setTributos($nota['tributos']);
+            $this->setTotal($nota['total']);
         }
         if (!array_key_exists('adicionais', $nota)) {
             $this->setAdicionais(null);
         } else {
             $this->setAdicionais($nota['adicionais']);
-        }
-        if (!array_key_exists('complemento', $nota)) {
-            $this->setComplemento(null);
-        } else {
-            $this->setComplemento($nota['complemento']);
         }
         if (!array_key_exists('observacoes', $nota)) {
             $this->setObservacoes(null);
@@ -1489,10 +1487,10 @@ abstract class Nota implements Node
     {
         $total = array();
         $total['produtos'] = 0.00;
-        $total['descontos'] = 0.00;
+        $total['desconto'] = 0.00;
         $total['frete'] = 0.00;
         $total['seguro'] = 0.00;
-        $total['outros'] = 0.00;
+        $total['despesas'] = 0.00;
         $total['tributos'] = 0.00;
         $total['icms'] = 0.00;
         $total['icms.st'] = 0.00;
@@ -1510,10 +1508,10 @@ abstract class Nota implements Node
             }
             $imposto_info = $_produto->getImpostoInfo();
             $total['produtos'] += round($_produto->getPreco(), 2);
-            $total['descontos'] += round($_produto->getDesconto(), 2);
+            $total['desconto'] += round($_produto->getDesconto(), 2);
             $total['frete'] += round($_produto->getFrete(), 2);
             $total['seguro'] += round($_produto->getSeguro(), 2);
-            $total['outros'] += round($_produto->getDespesas(), 2);
+            $total['despesas'] += round($_produto->getDespesas(), 2);
             $total['tributos'] += round($imposto_info['total'], 2);
             $_impostos = $_produto->getImpostos();
             foreach ($_impostos as $_imposto) {
@@ -1538,8 +1536,8 @@ abstract class Nota implements Node
                 }
             }
         }
-        $produtos = round($total['produtos'], 2) - round($total['descontos'], 2);
-        $servicos = round($total['frete'], 2) + round($total['seguro'], 2) + round($total['outros'], 2);
+        $produtos = round($total['produtos'], 2) - round($total['desconto'], 2);
+        $servicos = round($total['frete'], 2) + round($total['seguro'], 2) + round($total['despesas'], 2);
         $impostos = round($total['ii'], 2) + round($total['ipi'], 2) + round($total['icms.st'], 2) - round($total['desoneracao'], 2);
         $total['nota'] = $produtos + $servicos + $impostos;
         return $total;
@@ -1561,16 +1559,17 @@ abstract class Nota implements Node
         Util::appendNode($icms, 'vProd', Util::toCurrency($total['produtos']));
         Util::appendNode($icms, 'vFrete', Util::toCurrency($total['frete']));
         Util::appendNode($icms, 'vSeg', Util::toCurrency($total['seguro']));
-        Util::appendNode($icms, 'vDesc', Util::toCurrency($total['descontos']));
+        Util::appendNode($icms, 'vDesc', Util::toCurrency($total['desconto']));
         Util::appendNode($icms, 'vII', Util::toCurrency($total['ii']));
         Util::appendNode($icms, 'vIPI', Util::toCurrency($total['ipi']));
         Util::appendNode($icms, 'vPIS', Util::toCurrency($total['pis']));
         Util::appendNode($icms, 'vCOFINS', Util::toCurrency($total['cofins']));
-        Util::appendNode($icms, 'vOutro', Util::toCurrency($total['outros']));
+        Util::appendNode($icms, 'vOutro', Util::toCurrency($total['despesas']));
         Util::appendNode($icms, 'vNF', Util::toCurrency($total['nota']));
         Util::appendNode($icms, 'vTotTrib', Util::toCurrency($total['tributos']));
         $element->appendChild($icms);
-        $this->setTributos($total['tributos']);
+        $this->setTotal(new Total($total));
+        $this->getTotal()->setProdutos($total['produtos']);
 
         // TODO: Totais referentes ao ISSQN
 
@@ -1687,7 +1686,7 @@ abstract class Nota implements Node
         }
         // TODO: adicionar informações adicionais somente na NFC-e?
         $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
-        $this->setComplemento($_complemento);
+        $this->getTotal()->setComplemento($_complemento);
         if (!is_null($this->getObservacoes())) {
             $_observacoes = $this->getObservacoes();
             foreach ($_observacoes as $_observacao) {
@@ -1913,15 +1912,16 @@ abstract class Nota implements Node
             $pagamentos[] = $pagamento;
         }
         $this->setPagamentos($pagamentos);
-        $tributos = null;
         $_fields = $info->getElementsByTagName('total');
         if ($_fields->length > 0) {
-            $total = $_fields->item(0);
-            $tributos = Util::loadNode($total, 'vTotTrib');
+            $total = new Total();
+            $total->loadNode($_fields->item(0), 'total');
+            $total->setComplemento(Util::loadNode($info, 'infCpl'));
+        } else {
+            throw new \Exception('Tag "total" do objeto "Total" não encontrada na Nota', 404);
         }
-        $this->setTributos($tributos);
+        $this->setTotal($total);
         $this->setAdicionais(Util::loadNode($info, 'infAdFisco'));
-        $this->setComplemento(Util::loadNode($info, 'infCpl'));
         $observacoes = array();
         $_items = $info->getElementsByTagName('obsCont'); // TODO: predictable tag name
         foreach ($_items as $_item) {

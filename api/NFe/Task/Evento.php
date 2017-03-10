@@ -336,9 +336,9 @@ class Evento extends Retorno
         return in_array($this->getStatus(), array('135', '155'));
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $evento = parent::toArray();
+        $evento = parent::toArray($recursive);
         $evento['id'] = $this->getID();
         $evento['orgao'] = $this->getOrgao();
         $evento['identificador'] = $this->getIdentificador();

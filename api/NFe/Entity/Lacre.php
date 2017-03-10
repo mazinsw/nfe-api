@@ -61,7 +61,7 @@ class Lacre implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $lacre = array();
         $lacre['numero'] = $this->getNumero();

@@ -79,9 +79,9 @@ class Quantidade extends Imposto
         return Util::toCurrency($this->getValor());
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $quantidade = parent::toArray();
+        $quantidade = parent::toArray($recursive);
         return $quantidade;
     }
 

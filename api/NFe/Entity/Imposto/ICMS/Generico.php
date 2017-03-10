@@ -43,9 +43,9 @@ class Generico extends Mista
         $this->getNormal()->setTributacao('90');
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $generico = parent::toArray();
+        $generico = parent::toArray($recursive);
         return $generico;
     }
 

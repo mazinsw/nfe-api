@@ -65,9 +65,9 @@ class Quantidade extends Imposto
         return Util::toCurrency($valor);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $pis = parent::toArray();
+        $pis = parent::toArray($recursive);
         return $pis;
     }
 

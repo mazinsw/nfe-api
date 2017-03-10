@@ -110,10 +110,14 @@ class Municipio
         ));
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $municipio = array();
-        $municipio['estado'] = $this->getEstado();
+        if (!is_null($this->getEstado()) && $recursive) {
+            $municipio['estado'] = $this->getEstado()->toArray($recursive);
+        } else {
+            $municipio['estado'] = $this->getEstado();
+        }
         $municipio['codigo'] = $this->getCodigo();
         $municipio['nome'] = $this->getNome();
         return $municipio;

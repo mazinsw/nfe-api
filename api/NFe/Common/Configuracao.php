@@ -248,9 +248,12 @@ class Configuracao
      * Informa se está operando offline
      * @return mixed offline da Configuracao
      */
-    public function getOffline()
+    public function getOffline($normalize = false)
     {
-        return $this->offline;
+        if (!$normalize || is_null($this->offline)) {
+            return $this->offline;
+        }
+        return Util::toDateTime($this->getOffline());
     }
 
     /**
@@ -266,11 +269,14 @@ class Configuracao
      */
     public function setOffline($offline)
     {
+        if (!is_null($offline) && !is_numeric($offline)) {
+            $offline = strtotime($offline);
+        }
         $this->offline = $offline;
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $configuracao = array();
         $configuracao['banco'] = $this->getBanco();
@@ -283,6 +289,7 @@ class Configuracao
         $configuracao['token_ibpt'] = $this->getTokenIBPT();
         $configuracao['tempo_limite'] = $this->getTempoLimite();
         $configuracao['sincrono'] = $this->getSincrono();
+        $configuracao['offline'] = $this->getOffline($recursive);
         return $configuracao;
     }
 

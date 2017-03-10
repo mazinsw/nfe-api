@@ -46,8 +46,6 @@ class Aliquota extends Imposto
     const TRIBUTACAO_TRIBUTADA = 'tributada';
     const TRIBUTACAO_SAIDA = 'saida';
 
-    private $tributacao;
-
     public function __construct($aliquota = array())
     {
         parent::__construct($aliquota);
@@ -61,13 +59,15 @@ class Aliquota extends Imposto
      * 49 - Outras entradas
      * 50-Saída tributada
      * 99-Outras saídas
+     * @param boolean $normalize informa se a tributacao deve estar no formato do XML
+     * @return mixed tributacao da Aliquota
      */
     public function getTributacao($normalize = false)
     {
         if (!$normalize) {
-            return $this->tributacao;
+            return parent::getTributacao($normalize);
         }
-        switch ($this->tributacao) {
+        switch (parent::getTributacao()) {
             case self::TRIBUTACAO_CREDITO:
                 return '00';
             case self::TRIBUTACAO_ENTRADA:
@@ -77,19 +77,36 @@ class Aliquota extends Imposto
             case self::TRIBUTACAO_SAIDA:
                 return '99';
         }
-        return $this->tributacao;
+        return parent::getTributacao($normalize);
     }
-
+    
+    /**
+     * Altera o valor da Tributacao para o informado no parâmetro
+     * @param mixed $tributacao novo valor para Tributacao
+     * @return Aliquota A própria instância da classe
+     */
     public function setTributacao($tributacao)
     {
-        $this->tributacao = $tributacao;
-        return $this;
+        switch ($tributacao) {
+            case '00':
+                $tributacao = self::TRIBUTACAO_CREDITO;
+                break;
+            case '49':
+                $tributacao = self::TRIBUTACAO_ENTRADA;
+                break;
+            case '50':
+                $tributacao = self::TRIBUTACAO_TRIBUTADA;
+                break;
+            case '99':
+                $tributacao = self::TRIBUTACAO_SAIDA;
+                break;
+        }
+        return parent::setTributacao($tributacao);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $aliquota = parent::toArray();
-        $aliquota['tributacao'] = $this->getTributacao();
+        $aliquota = parent::toArray($recursive);
         return $aliquota;
     }
 
@@ -101,10 +118,8 @@ class Aliquota extends Imposto
             return $this;
         }
         parent::fromArray($aliquota);
-        if (!isset($aliquota['tributacao']) || is_null($aliquota['tributacao'])) {
+        if (is_null($this->getTributacao())) {
             $this->setTributacao(self::TRIBUTACAO_TRIBUTADA);
-        } else {
-            $this->setTributacao($aliquota['tributacao']);
         }
         return $this;
     }

@@ -42,6 +42,16 @@ class Aliquota extends Imposto
         $this->setGrupo(self::GRUPO_COFINS);
     }
 
+    /**
+     * Código de Situação Tributária do COFINS.
+     * 01 – Operação Tributável -
+     * Base de Cálculo = Valor da Operação Alíquota Normal (Cumulativo/Não
+     * Cumulativo);
+     * 02 - Operação Tributável - Base de Calculo = Valor da
+     * Operação (Alíquota Diferenciada);
+     * @param boolean $normalize informa se a tributacao deve estar no formato do XML
+     * @return mixed tributacao da Aliquota
+     */
     public function getTributacao($normalize = false)
     {
         if (!$normalize) {
@@ -56,6 +66,11 @@ class Aliquota extends Imposto
         return parent::getTributacao($normalize);
     }
 
+    /**
+     * Altera o valor da Tributacao para o informado no parâmetro
+     * @param mixed $tributacao novo valor para Tributacao
+     * @return Aliquota A própria instância da classe
+     */
     public function setTributacao($tributacao)
     {
         switch ($tributacao) {
@@ -69,9 +84,9 @@ class Aliquota extends Imposto
         return parent::setTributacao($tributacao);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $cofins = parent::toArray();
+        $cofins = parent::toArray($recursive);
         return $cofins;
     }
 

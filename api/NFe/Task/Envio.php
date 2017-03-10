@@ -303,7 +303,7 @@ class Envio
      * Converte a instância da classe para um array de campos com valores
      * @return array Array contendo todos os campos e valores da instância
      */
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $envio = array();
         $envio['servico'] = $this->getServico();

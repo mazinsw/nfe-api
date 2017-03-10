@@ -41,9 +41,9 @@ class Quantidade extends \NFe\Entity\Imposto\COFINS\Quantidade
         $this->setGrupo(self::GRUPO_COFINSST);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $quantidade = parent::toArray();
+        $quantidade = parent::toArray($recursive);
         return $quantidade;
     }
 

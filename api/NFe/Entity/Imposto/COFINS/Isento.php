@@ -73,6 +73,8 @@ class Isento extends Imposto
      * 08 - Operação Sem Incidência da contribuição;
      * 09 -
      * Operação com suspensão da contribuição;
+     * @param boolean $normalize informa se a tributacao deve estar no formato do XML
+     * @return mixed tributacao do Isento
      */
     public function getTributacao($normalize = false)
     {
@@ -95,10 +97,40 @@ class Isento extends Imposto
         }
         return parent::getTributacao($normalize);
     }
-
-    public function toArray()
+    
+    /**
+     * Altera o valor da Tributacao para o informado no parâmetro
+     * @param mixed $tributacao novo valor para Tributacao
+     * @return Isento A própria instância da classe
+     */
+    public function setTributacao($tributacao)
     {
-        $cofins = parent::toArray();
+        switch ($tributacao) {
+            case '04':
+                $tributacao = self::TRIBUTACAO_MONOFASICA;
+                break;
+            case '05':
+                $tributacao = self::TRIBUTACAO_ST;
+                break;
+            case '06':
+                $tributacao = self::TRIBUTACAO_ZERO;
+                break;
+            case '07':
+                $tributacao = self::TRIBUTACAO_ISENTA;
+                break;
+            case '08':
+                $tributacao = self::TRIBUTACAO_INCIDENCIA;
+                break;
+            case '09':
+                $tributacao = self::TRIBUTACAO_SUSPENSAO;
+                break;
+        }
+        return parent::setTributacao($tributacao);
+    }
+
+    public function toArray($recursive = false)
+    {
+        $cofins = parent::toArray($recursive);
         return $cofins;
     }
 

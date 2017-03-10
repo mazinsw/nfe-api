@@ -163,7 +163,7 @@ class Status implements Node
         return substr(Util::padText(number_format(microtime(true)*1000000, 0, '', ''), 15), 0, 15);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $status = array();
         $status['ambiente'] = $this->getAmbiente();

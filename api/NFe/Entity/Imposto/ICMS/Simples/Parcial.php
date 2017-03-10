@@ -42,9 +42,9 @@ class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
         $this->setTributacao('202');
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $parcial = parent::toArray();
+        $parcial = parent::toArray($recursive);
         return $parcial;
     }
 

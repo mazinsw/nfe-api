@@ -84,7 +84,7 @@ class Veiculo implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $veiculo = array();
         $veiculo['placa'] = $this->getPlaca();

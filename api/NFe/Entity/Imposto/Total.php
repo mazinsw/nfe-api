@@ -37,9 +37,9 @@ class Total extends Imposto
         parent::__construct($total);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $total = parent::toArray();
+        $total = parent::toArray($recursive);
         return $total;
     }
 

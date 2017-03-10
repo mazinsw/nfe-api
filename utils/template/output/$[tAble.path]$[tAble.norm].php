@@ -101,7 +101,7 @@ $[field.end]
 $[field.if(searchable)]
         return $this->$[field.unix];
 $[field.else]
-        if (!$normalize) {
+        if (!$normalize$[field.if(datetime)] || is_null($this->$[field.unix])$[field.end]) {
             return $this->$[field.unix];
         }
 $[field.if(currency)]
@@ -200,15 +200,36 @@ $[field.end]
      * Converte a instância da classe para um array de campos com valores
      * @return array Array contendo todos os campos e valores da instância
      */
-    public function toArray()
+    public function toArray($recursive = false)
     {
 $[table.if(inherited)]
-        $$[table.unix] = parent::toArray();
+        $$[table.unix] = parent::toArray($recursive);
 $[table.else]
         $$[table.unix] = array();
 $[table.end]
 $[field.each(all)]
+$[field.if(descriptor)]
+        if (!is_null($this->get$[fIeld.norm]()) && $recursive) {
+            $$[table.unix]['$[field]'] = $this->get$[fIeld.norm]()->toArray($recursive);
+        } else {
+            $$[table.unix]['$[field]'] = $this->get$[fIeld.norm]();
+        }
+$[field.else.if(searchable)]
+        if ($recursive) {
+            $$[field.unix] = array();
+            $_$[field.unix] = $this->get$[fIeld.norm]();
+            foreach ($_$[field.unix] as $_$[field.unix.plural]) {
+                $$[field.unix][] = $_$[field.unix.plural]->toArray($recursive);
+            }
+            $$[table.unix]['$[field]'] = $$[field.unix];
+        } else {
+            $$[table.unix]['$[field]'] = $this->get$[fIeld.norm]();
+        }
+$[field.else.if(datetime)]
+        $$[table.unix]['$[field]'] = $this->get$[fIeld.norm]($recursive);
+$[field.else]
         $$[table.unix]['$[field]'] = $this->get$[fIeld.norm]();
+$[field.end]
 $[field.end]
         return $$[table.unix];
     }

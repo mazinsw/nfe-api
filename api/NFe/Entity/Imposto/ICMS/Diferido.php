@@ -97,9 +97,9 @@ class Diferido extends Reducao
         return Util::toCurrency($this->getValor());
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $diferido = parent::toArray();
+        $diferido = parent::toArray($recursive);
         $diferido['diferimento'] = $this->getDiferimento();
         return $diferido;
     }

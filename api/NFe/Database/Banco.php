@@ -77,7 +77,7 @@ abstract class Banco
      */
     abstract public function getInformacaoServico($emissao, $uf, $modelo = null, $ambiente = null);
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $banco = array();
         return $banco;

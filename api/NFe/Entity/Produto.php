@@ -35,7 +35,7 @@ use NFe\Common\Util;
  * Produto ou serviço que está sendo vendido ou prestado e será adicionado
  * na nota fiscal
  */
-class Produto implements Node
+class Produto extends Total
 {
 
     /**
@@ -55,14 +55,9 @@ class Produto implements Node
     private $descricao;
     private $unidade;
     private $multiplicador;
-    private $preco;
     private $quantidade;
     private $tributada;
     private $peso;
-    private $desconto;
-    private $seguro;
-    private $frete;
-    private $despesas;
     private $excecao;
     private $cfop;
     private $ncm;
@@ -256,19 +251,17 @@ class Produto implements Node
      */
     public function getPreco($normalize = false)
     {
-        if (!$normalize) {
-            return $this->preco;
-        }
-        return Util::toCurrency($this->preco);
+        return parent::getProdutos($normalize);
     }
 
+    /**
+     * Altera o preço total do produto para o informado no parâmetro
+     * @param mixed $preco novo preço para o Produto
+     * @return Produto A própria instância da classe
+     */
     public function setPreco($preco)
     {
-        if (trim($preco) != '') {
-            $preco = floatval($preco);
-        }
-        $this->preco = $preco;
-        return $this;
+        return parent::setProdutos($preco);
     }
 
     /**
@@ -320,89 +313,6 @@ class Produto implements Node
     public function setPeso($peso)
     {
         $this->peso = $peso;
-        return $this;
-    }
-
-    /**
-     * Valor do Desconto
-     */
-    public function getDesconto($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->desconto;
-        }
-        return Util::toCurrency($this->desconto);
-    }
-
-    public function setDesconto($desconto)
-    {
-        if (trim($desconto) != '') {
-            $desconto = floatval($desconto);
-        }
-        $this->desconto = $desconto;
-        return $this;
-    }
-
-    /**
-     * informar o valor do Seguro, o Seguro deve ser rateado entre os itens de
-     * produto
-     */
-    public function getSeguro($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->seguro;
-        }
-        return Util::toCurrency($this->seguro);
-    }
-
-    public function setSeguro($seguro)
-    {
-        if (trim($seguro) != '') {
-            $seguro = floatval($seguro);
-        }
-        $this->seguro = $seguro;
-        return $this;
-    }
-
-    /**
-     * informar o valor do Frete, o Frete deve ser rateado entre os itens de
-     * produto.
-     */
-    public function getFrete($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->frete;
-        }
-        return Util::toCurrency($this->frete);
-    }
-
-    public function setFrete($frete)
-    {
-        if (trim($frete) != '') {
-            $frete = floatval($frete);
-        }
-        $this->frete = $frete;
-        return $this;
-    }
-
-    /**
-     * informar o valor de outras despesas acessórias do item de produto ou
-     * serviço
-     */
-    public function getDespesas($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->despesas;
-        }
-        return Util::toCurrency($this->despesas);
-    }
-
-    public function setDespesas($despesas)
-    {
-        if (trim($despesas) != '') {
-            $despesas = floatval($despesas);
-        }
-        $this->despesas = $despesas;
         return $this;
     }
 
@@ -558,9 +468,10 @@ class Produto implements Node
         return $info;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $produto = array();
+        $produto = parent::toArray($recursive);
+        unset($produto['produtos']);
         $produto['item'] = $this->getItem();
         $produto['pedido'] = $this->getPedido();
         $produto['codigo'] = $this->getCodigo();
@@ -572,16 +483,25 @@ class Produto implements Node
         $produto['preco'] = $this->getPreco();
         $produto['quantidade'] = $this->getQuantidade();
         $produto['tributada'] = $this->getTributada();
-        $produto['peso'] = $this->getPeso();
-        $produto['desconto'] = $this->getDesconto();
-        $produto['seguro'] = $this->getSeguro();
-        $produto['frete'] = $this->getFrete();
-        $produto['despesas'] = $this->getDespesas();
+        if (!is_null($this->getPeso()) && $recursive) {
+            $produto['peso'] = $this->getPeso()->toArray($recursive);
+        } else {
+            $produto['peso'] = $this->getPeso();
+        }
         $produto['excecao'] = $this->getExcecao();
         $produto['cfop'] = $this->getCFOP();
         $produto['ncm'] = $this->getNCM();
         $produto['cest'] = $this->getCEST();
-        $produto['impostos'] = $this->getImpostos();
+        if ($recursive) {
+            $impostos = array();
+            $_impostos = $this->getImpostos();
+            foreach ($_impostos as $_imposto) {
+                $impostos[] = $_imposto->toArray($recursive);
+            }
+            $produto['impostos'] = $impostos;
+        } else {
+            $produto['impostos'] = $this->getImpostos();
+        }
         return $produto;
     }
 
@@ -592,6 +512,7 @@ class Produto implements Node
         } elseif (!is_array($produto)) {
             return $this;
         }
+        parent::fromArray($produto);
         if (isset($produto['item'])) {
             $this->setItem($produto['item']);
         } else {
@@ -651,26 +572,6 @@ class Produto implements Node
             $this->setPeso(new Peso());
         } else {
             $this->setPeso($produto['peso']);
-        }
-        if (isset($produto['desconto'])) {
-            $this->setDesconto($produto['desconto']);
-        } else {
-            $this->setDesconto(null);
-        }
-        if (isset($produto['seguro'])) {
-            $this->setSeguro($produto['seguro']);
-        } else {
-            $this->setSeguro(null);
-        }
-        if (isset($produto['frete'])) {
-            $this->setFrete($produto['frete']);
-        } else {
-            $this->setFrete(null);
-        }
-        if (isset($produto['despesas'])) {
-            $this->setDespesas($produto['despesas']);
-        } else {
-            $this->setDespesas(null);
         }
         if (isset($produto['excecao'])) {
             $this->setExcecao($produto['excecao']);
@@ -794,6 +695,7 @@ class Produto implements Node
             $grupos[$_imposto->getGrupo(true)][] = $_imposto;
         }
         $imposto_info = $this->getImpostoInfo();
+        $this->setTributos($imposto_info['total']);
         $imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_info['total']));
         $imposto->appendChild($imp_total);
         foreach ($grupos as $tag => $_grupo) {
@@ -807,7 +709,8 @@ class Produto implements Node
         }
         $element->appendChild($imposto);
         // TODO: verificar se é obrigatório a informação adicional abaixo
-        self::addNodeInformacoes($imposto_info, $element);
+        $complemento = self::addNodeInformacoes($imposto_info, $element);
+        $this->setComplemento($complemento);
         return $element;
     }
 
@@ -822,11 +725,7 @@ class Produto implements Node
             $element = $_fields->item(0);
         }
         $root = $element;
-        $_fields = $element->getElementsByTagName('prod');
-        if ($_fields->length == 0) {
-            throw new \Exception('Tag "prod" do Produto não encontrada', 404);
-        }
-        $element = $_fields->item(0);
+        $element = parent::loadNode($element, $name);
         $this->setItem(Util::loadNode($element, 'nItemPed'));
         $this->setPedido(Util::loadNode($element, 'xPed'));
         $this->setCodigo(
@@ -871,13 +770,6 @@ class Produto implements Node
                 'Tag "indTot" do campo "Multiplicador" não encontrada no Produto'
             )
         );
-        $this->setPreco(
-            Util::loadNode(
-                $element,
-                'vProd',
-                'Tag "vProd" do campo "Preco" não encontrada no Produto'
-            )
-        );
         $this->setQuantidade(
             Util::loadNode(
                 $element,
@@ -892,10 +784,6 @@ class Produto implements Node
                 'Tag "qTrib" do campo "Tributada" não encontrada no Produto'
             )
         );
-        $this->setDesconto(Util::loadNode($element, 'vDesc'));
-        $this->setSeguro(Util::loadNode($element, 'vSeg'));
-        $this->setFrete(Util::loadNode($element, 'vFrete'));
-        $this->setDespesas(Util::loadNode($element, 'vOutro'));
         $this->setExcecao(Util::loadNode($element, 'EXTIPI'));
         $this->setCFOP(
             Util::loadNode(
@@ -917,7 +805,9 @@ class Produto implements Node
         if ($_fields->length == 0) {
             throw new \Exception('Tag "imposto" da lista de "Impostos" não encontrada no Produto', 404);
         }
-        $_items = $_fields->item(0)->childNodes;
+        $imposto_node = $_fields->item(0);
+        $this->setTributos(Util::loadNode($imposto_node, 'vTotTrib'));
+        $_items = $imposto_node->childNodes;
         $total = new \NFe\Entity\Imposto\Total();
         foreach ($_items as $_item) {
             if (!$_item->hasChildNodes() || $_item->nodeType !== XML_ELEMENT_NODE) {
@@ -937,6 +827,7 @@ class Produto implements Node
             }
         }
         $this->setImpostos($impostos);
+        $this->setComplemento(Util::loadNode($root, 'infAdProd'));
         return $element;
     }
 }

@@ -136,15 +136,31 @@ class Tarefa
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $tarefa = array();
         $tarefa['id'] = $this->getID();
         $tarefa['acao'] = $this->getAcao();
-        $tarefa['nota'] = $this->getNota();
-        $tarefa['documento'] = $this->getDocumento();
-        $tarefa['agente'] = $this->getAgente();
-        $tarefa['resposta'] = $this->getResposta();
+        if (!is_null($this->getNota()) && $recursive) {
+            $tarefa['nota'] = $this->getNota()->toArray($recursive);
+        } else {
+            $tarefa['nota'] = $this->getNota();
+        }
+        if (!is_null($this->getDocumento()) && $recursive) {
+            $tarefa['documento'] = $this->getDocumento()->saveXML();
+        } else {
+            $tarefa['documento'] = $this->getDocumento();
+        }
+        if (!is_null($this->getAgente()) && $recursive) {
+            $tarefa['agente'] = $this->getAgente()->toArray($recursive);
+        } else {
+            $tarefa['agente'] = $this->getAgente();
+        }
+        if (!is_null($this->getResposta()) && $recursive) {
+            $tarefa['resposta'] = $this->getResposta()->toArray($recursive);
+        } else {
+            $tarefa['resposta'] = $this->getResposta();
+        }
         return $tarefa;
     }
 

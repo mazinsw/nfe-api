@@ -41,9 +41,9 @@ class Normal extends \NFe\Entity\Imposto\ICMS\Normal
         $this->setTributacao('101');
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $normal = parent::toArray();
+        $normal = parent::toArray($recursive);
         return $normal;
     }
 

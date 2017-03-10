@@ -154,9 +154,9 @@ class Recibo extends Retorno
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $recibo = parent::toArray();
+        $recibo = parent::toArray($recursive);
         $recibo['numero'] = $this->getNumero();
         $recibo['tempo_medio'] = $this->getTempoMedio();
         $recibo['codigo'] = $this->getCodigo();

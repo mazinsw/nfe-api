@@ -73,7 +73,7 @@ class Logger
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $logger = array();
         $logger['directory'] = $this->getDirectory();

@@ -101,7 +101,7 @@ class Estado
         $this->setCodigo($db->getCodigoEstado($this->getUF()));
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $estado = array();
         $estado['codigo'] = $this->getCodigo();

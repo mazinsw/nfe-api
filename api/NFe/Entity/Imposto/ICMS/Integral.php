@@ -40,9 +40,9 @@ class Integral extends Normal
         $this->setTributacao('00');
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $integral = parent::toArray();
+        $integral = parent::toArray($recursive);
         return $integral;
     }
 

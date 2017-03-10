@@ -43,9 +43,9 @@ class Aliquota extends \NFe\Entity\Imposto\PIS\Aliquota
         $this->setGrupo(self::GRUPO_PISST);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $aliquota = parent::toArray();
+        $aliquota = parent::toArray($recursive);
         return $aliquota;
     }
 

@@ -84,9 +84,9 @@ class Partilha extends Mista
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $partilha = parent::toArray();
+        $partilha = parent::toArray($recursive);
         $partilha['operacao'] = $this->getOperacao();
         $partilha['uf'] = $this->getUF();
         return $partilha;

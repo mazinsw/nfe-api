@@ -56,9 +56,9 @@ class Generico extends Imposto
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $generico = parent::toArray();
+        $generico = parent::toArray($recursive);
         $generico['valor'] = $this->getValor();
         return $generico;
     }

@@ -43,9 +43,9 @@ class Generico extends Cobranca
         $this->getNormal()->setTributacao('900');
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $generico = parent::toArray();
+        $generico = parent::toArray($recursive);
         return $generico;
     }
 

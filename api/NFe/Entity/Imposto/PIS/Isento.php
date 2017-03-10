@@ -88,10 +88,37 @@ class Isento extends Imposto
         }
         return parent::getTributacao($normalize);
     }
-
-    public function toArray()
+    
+    /**
+     * Altera o valor da Tributacao para o informado no parâmetro
+     * @param mixed $tributacao novo valor para Tributacao
+     * @return Isento A própria instância da classe
+     */
+    public function setTributacao($tributacao)
     {
-        $pis = parent::toArray();
+        switch ($tributacao) {
+            case '04':
+                $tributacao = self::TRIBUTACAO_MONOFASICA;
+                break;
+            case '06':
+                $tributacao = self::TRIBUTACAO_ZERO;
+                break;
+            case '07':
+                $tributacao = self::TRIBUTACAO_ISENTA;
+                break;
+            case '08':
+                $tributacao = self::TRIBUTACAO_INCIDENCIA;
+                break;
+            case '09':
+                $tributacao = self::TRIBUTACAO_SUSPENSAO;
+                break;
+        }
+        return parent::setTributacao($tributacao);
+    }
+
+    public function toArray($recursive = false)
+    {
+        $pis = parent::toArray($recursive);
         return $pis;
     }
 

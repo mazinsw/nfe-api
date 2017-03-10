@@ -39,9 +39,9 @@ class Autorizacao extends Retorno
         parent::__construct($autorizacao);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $autorizacao = parent::toArray();
+        $autorizacao = parent::toArray($recursive);
         return $autorizacao;
     }
 

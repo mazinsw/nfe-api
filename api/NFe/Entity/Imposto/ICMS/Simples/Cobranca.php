@@ -75,10 +75,14 @@ class Cobranca extends Parcial
         return $this->getNormal()->getValor($normalize);
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $cobranca = parent::toArray();
-        $cobranca['normal'] = $this->getNormal();
+        $cobranca = parent::toArray($recursive);
+        if (!is_null($this->getNormal()) && $recursive) {
+            $cobranca['normal'] = $this->getNormal()->toArray($recursive);
+        } else {
+            $cobranca['normal'] = $this->getNormal();
+        }
         return $cobranca;
     }
 

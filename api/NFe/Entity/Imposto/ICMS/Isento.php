@@ -168,9 +168,9 @@ class Isento extends Generico
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        $isento = parent::toArray();
+        $isento = parent::toArray($recursive);
         $isento['desoneracao'] = $this->getDesoneracao();
         $isento['motivo'] = $this->getMotivo();
         return $isento;

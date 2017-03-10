@@ -135,15 +135,28 @@ class Volume implements Node
         return $this;
     }
 
-    public function toArray()
+    public function toArray($recursive = false)
     {
         $volume = array();
         $volume['quantidade'] = $this->getQuantidade();
         $volume['especie'] = $this->getEspecie();
         $volume['marca'] = $this->getMarca();
         $volume['numeracoes'] = $this->getNumeracoes();
-        $volume['peso'] = $this->getPeso();
-        $volume['lacres'] = $this->getLacres();
+        if (!is_null($this->getPeso()) && $recursive) {
+            $volume['peso'] = $this->getPeso()->toArray($recursive);
+        } else {
+            $volume['peso'] = $this->getPeso();
+        }
+        if ($recursive) {
+            $lacres = array();
+            $_lacres = $this->getLacres();
+            foreach ($_lacres as $_lacre) {
+                $lacres[] = $_lacre->toArray($recursive);
+            }
+            $volume['lacres'] = $lacres;
+        } else {
+            $volume['lacres'] = $this->getLacres();
+        }
         return $volume;
     }
 
