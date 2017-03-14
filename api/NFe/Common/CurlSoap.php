@@ -61,7 +61,7 @@ XML;
         parent::__construct($base_url);
         $this->setHeader('Content-Type', 'application/soap+xml; charset=utf-8');
         $this->setOpt(CURLOPT_SSL_VERIFYPEER, false);
-        $this->setOpt(CURLOPT_SSLVERSION, 1);
+        $this->setOpt(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
         $this->setConnectTimeout(4);
         $this->setTimeout(6);
         $this->setXmlDecoder(function ($response) {

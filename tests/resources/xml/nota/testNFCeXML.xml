@@ -195,6 +195,15 @@
     </pag>
     <infAdic>
       <infCpl>Trib. aprox.: R$ 0,73 Federal e R$ 2,12 Estadual. Fonte: IBPT W7m9E1</infCpl>
+      <obsCont xCampo="Vendedor">
+        <xTexto>Fulano de Tal</xTexto>
+      </obsCont>
+      <obsCont xCampo="Local">
+        <xTexto>Mesa 02</xTexto>
+      </obsCont>
+      <obsFisco xCampo="RegimeEspecial">
+        <xTexto>123456</xTexto>
+      </obsFisco>
     </infAdic>
   </infNFe>
 </NFe>

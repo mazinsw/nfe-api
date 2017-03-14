@@ -1538,7 +1538,8 @@ abstract class Nota implements Node
         }
         $produtos = round($total['produtos'], 2) - round($total['desconto'], 2);
         $servicos = round($total['frete'], 2) + round($total['seguro'], 2) + round($total['despesas'], 2);
-        $impostos = round($total['ii'], 2) + round($total['ipi'], 2) + round($total['icms.st'], 2) - round($total['desoneracao'], 2);
+        $impostos = round($total['ii'], 2) + round($total['ipi'], 2) + round($total['icms.st'], 2);
+        $impostos = $impostos - round($total['desoneracao'], 2);
         $total['nota'] = $produtos + $servicos + $impostos;
         return $total;
     }
@@ -1690,20 +1691,22 @@ abstract class Nota implements Node
         if (!is_null($this->getObservacoes())) {
             $_observacoes = $this->getObservacoes();
             foreach ($_observacoes as $_observacao) {
-                $observacoes = Util::appendNode($info_adic, 'obsCont', $_observacao['valor']);
+                $observacoes = $dom->createElement('obsCont');
                 $campo = $dom->createAttribute('xCampo');
                 $campo->value = $_observacao['campo'];
                 $observacoes->appendChild($campo);
+                Util::appendNode($observacoes, 'xTexto', $_observacao['valor']);
                 $info_adic->appendChild($observacoes);
             }
         }
         if (!is_null($this->getInformacoes())) {
             $_informacoes = $this->getInformacoes();
             foreach ($_informacoes as $_informacao) {
-                $informacoes = Util::appendNode($info_adic, 'obsFisco', $_informacao['valor']);
+                $informacoes = $dom->createElement('obsFisco');
                 $campo = $dom->createAttribute('xCampo');
                 $campo->value = $_informacao['campo'];
                 $informacoes->appendChild($campo);
+                Util::appendNode($informacoes, 'xTexto', $_informacao['valor']);
                 $info_adic->appendChild($informacoes);
             }
         }
@@ -1927,7 +1930,11 @@ abstract class Nota implements Node
         foreach ($_items as $_item) {
             $observacao = array(
                 'campo' => $_item->getAttribute('xCampo'),
-                'valor' => $_item->nodeValue
+                'valor' => Util::loadNode(
+                    $_item,
+                    'xTexto',
+                    'Tag "xTexto" do campo "Observação" não encontrada'
+                )
             );
             $observacoes[] = $observacao;
         }
@@ -1937,7 +1944,11 @@ abstract class Nota implements Node
         foreach ($_items as $_item) {
             $informacao = array(
                 'campo' => $_item->getAttribute('xCampo'),
-                'valor' => $_item->nodeValue
+                'valor' => Util::loadNode(
+                    $_item,
+                    'xTexto',
+                    'Tag "xTexto" do campo "Informação" não encontrada'
+                )
             );
             $informacoes[] = $informacao;
         }

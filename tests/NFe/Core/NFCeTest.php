@@ -21,6 +21,9 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $nfce->setNumero('81');
         $nfce->setDataEmissao(strtotime('2016-09-16T21:36:03-03:00'));
         $nfce->setPresenca(\NFe\Core\Nota::PRESENCA_PRESENCIAL);
+        $nfce->addObservacao('Vendedor', 'Fulano de Tal');
+        $nfce->addObservacao('Local', 'Mesa 02');
+        $nfce->addInformacao('RegimeEspecial', '123456');
 
         /* Emitente */
         $emitente = new \NFe\Entity\Emitente();
