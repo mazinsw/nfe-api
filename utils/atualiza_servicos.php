@@ -121,7 +121,10 @@ function converteServicos($array)
 			$servicos = array();
 			foreach ($versao as $servico) {
 				$key = $service_map[$servico['servico']];
-				$servicos[$key] = $servico['url'];
+				$servicos[$key] = array(
+					'url' => $servico['url'],
+					'servico' => $servico['servico'],
+				);
 			}
 			/* adiciona serviços não existentes na versão 3.10 */
 			$versao = $estado['versoes']['2.00'];
@@ -132,6 +135,7 @@ function converteServicos($array)
 						continue;
 					$servicos[$key] = array(
 						'url' => $servico['url'],
+						'servico' => $servico['servico'],
 						'versao' => '2.00',
 					);
 				}
@@ -145,6 +149,7 @@ function converteServicos($array)
 						continue;
 					$servicos[$key] = array(
 						'url' => $servico['url'],
+						'servico' => $servico['servico'],
 						'versao' => '1.00',
 					);
 				}

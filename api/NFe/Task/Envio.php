@@ -97,29 +97,33 @@ class Envio
         if (!$normalize) {
             return $this->servico;
         }
+        $url = $this->getServiceInfo();
+        if (is_array($url) && isset($url['servico'])) {
+            return Nota::PORTAL.'/wsdl/'.$url['servico'];
+        }
         switch ($this->servico) {
             case self::SERVICO_INUTILIZACAO:
-                return Nota::PORTAL.'/wsdl/NFeInutilizacao';
+                return Nota::PORTAL.'/wsdl/NfeInutilizacao';
             case self::SERVICO_PROTOCOLO:
                 return Nota::PORTAL.'/wsdl/NFeConsulta';
             case self::SERVICO_STATUS:
-                return Nota::PORTAL.'/wsdl/NFeStatusServico';
+                return Nota::PORTAL.'/wsdl/NfeStatusServico';
             case self::SERVICO_CADASTRO:
-                return Nota::PORTAL.'/wsdl/CadConsultaCadastro';
+                return Nota::PORTAL.'/wsdl/NfeConsultaCadastro';
             case self::SERVICO_AUTORIZACAO:
                 return Nota::PORTAL.'/wsdl/NFeAutorizacao';
             case self::SERVICO_RETORNO:
                 return Nota::PORTAL.'/wsdl/NFeRetAutorizacao';
             case self::SERVICO_RECEPCAO:
-                return Nota::PORTAL.'/wsdl/NFeRecepcao';
+                return Nota::PORTAL.'/wsdl/NfeRecepcao';
             case self::SERVICO_CONFIRMACAO:
-                return Nota::PORTAL.'/wsdl/NFeRetRecepcao';
+                return Nota::PORTAL.'/wsdl/NfeRetRecepcao';
             case self::SERVICO_EVENTO:
                 return Nota::PORTAL.'/wsdl/RecepcaoEvento';
             case self::SERVICO_DESTINADAS:
-                return Nota::PORTAL.'/wsdl/NFeConsultaDest';
+                return Nota::PORTAL.'/wsdl/NfeConsultaDest';
             case self::SERVICO_DOWNLOAD:
-                return Nota::PORTAL.'/wsdl/NFeDownloadNF';
+                return Nota::PORTAL.'/wsdl/NfeDownloadNF';
             case self::SERVICO_DISTRIBUICAO:
                 return Nota::PORTAL.'/wsdl/NFeDistribuicaoDFe';
         }
@@ -279,6 +283,19 @@ class Envio
      */
     public function getVersao()
     {
+        $url = $this->getServiceInfo();
+        if (is_array($url) && isset($url['versao'])) {
+            return $url['versao'];
+        }
+        return Nota::VERSAO;
+    }
+
+    /**
+     * Devolve um array com as informações de serviço (URL, Versão, Serviço)
+     * @return array Informações de serviço
+     */
+    private function getServiceInfo()
+    {
         $config = SEFAZ::getInstance()->getConfiguracao();
         $db = $config->getBanco();
         $estado = $config->getEmitente()->getEndereco()->getMunicipio()->getEstado();
@@ -292,11 +309,7 @@ class Envio
             throw new \Exception('O serviço "'.$this->getServico().
                 '" não está disponível para o estado "'.$estado->getUF().'"', 404);
         }
-        $url = $info[$this->getServico()];
-        if (is_array($url)) {
-            return $url['versao'];
-        }
-        return Nota::VERSAO;
+        return $info[$this->getServico()];
     }
 
     /**
@@ -408,19 +421,7 @@ class Envio
     public function envia()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
-        $db = $config->getBanco();
-        $estado = $config->getEmitente()->getEndereco()->getMunicipio()->getEstado();
-        $info = $db->getInformacaoServico(
-            $this->getEmissao(),
-            $estado->getUF(),
-            $this->getModelo(),
-            $this->getAmbiente()
-        );
-        if (!isset($info[$this->getServico()])) {
-            throw new \Exception('O serviço "'.$this->getServico().
-                '" não está disponível para o estado "'.$estado->getUF().'"', 404);
-        }
-        $url = $info[$this->getServico()];
+        $url = $this->getServiceInfo();
         if (is_array($url)) {
             $url = $url['url'];
         }

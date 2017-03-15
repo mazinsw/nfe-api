@@ -61,7 +61,7 @@ XML;
         parent::__construct($base_url);
         $this->setHeader('Content-Type', 'application/soap+xml; charset=utf-8');
         $this->setOpt(CURLOPT_SSL_VERIFYPEER, false);
-        $this->setOpt(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+        $this->setOpt(CURLOPT_SSLVERSION, 1);
         $this->setConnectTimeout(4);
         $this->setTimeout(6);
         $this->setXmlDecoder(function ($response) {
@@ -126,13 +126,19 @@ XML;
         $data = str_replace('<soap12:Header/>', '<soap12:Header>'.$header.'</soap12:Header>', $envelope);
         $data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $data);
         $this->post($url, $data);
-        if ($this->error) {
-            $transfer = $this->getInfo(CURLINFO_PRETRANSFER_TIME);
-            if ($transfer == 0) { // never started the transfer
-                throw new \NFe\Exception\NetworkException($this->errorMessage, $this->errorCode);
-            }
-            throw new \NFe\Exception\IncompleteRequestException($this->errorMessage, $this->errorCode);
+        if (!$this->error) {
+            return $this->response;
         }
-        return $this->response;
+        if (!empty($this->rawResponse) && ($this->response instanceof \DOMDocument)) {
+            $text = $this->response->getElementsByTagName('Text');
+            if ($text->length == 1) {
+                throw new \Exception($text->item(0)->nodeValue, $this->errorCode);
+            }
+        }
+        $transfer = $this->getInfo(CURLINFO_PRETRANSFER_TIME);
+        if ($transfer == 0) { // never started the transfer
+            throw new \NFe\Exception\NetworkException($this->errorMessage, $this->errorCode);
+        }
+        throw new \NFe\Exception\IncompleteRequestException($this->errorMessage, $this->errorCode);
     }
 }

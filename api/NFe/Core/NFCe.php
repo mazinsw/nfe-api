@@ -99,7 +99,11 @@ class NFCe extends Nota
         if (!isset($info['consulta'])) {
             throw new \Exception('Não existe URL de consulta da nota para o estado "'.$estado->getUF().'"', 404);
         }
-        return $info['consulta'];
+        $url = $info['consulta'];
+        if (is_array($url)) {
+            $url = $url['url'];
+        }
+        return $url;
     }
 
     /**
@@ -183,6 +187,9 @@ class NFCe extends Nota
             throw new \Exception('Não existe URL de consulta de QRCode para o estado "'.$estado->getUF().'"', 404);
         }
         $url = $info['qrcode'];
+        if (is_array($url)) {
+            $url = $url['url'];
+        }
         $url .= (strpos($url, '?') === false?'?':'&').$query;
         $this->setQRCodeURL($url);
     }
