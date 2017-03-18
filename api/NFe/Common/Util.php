@@ -256,10 +256,14 @@ class Util
         return ($ret <= $ext)? $presente: ($div - $ret);
     }
 
-    public static function appendNode($element, $name, $text)
+    public static function appendNode($element, $name, $text, $before = null)
     {
         $dom = $element->ownerDocument;
-        $node = $element->appendChild($dom->createElement($name));
+        if (is_null($before)) {
+            $node = $element->appendChild($dom->createElement($name));
+        } else {
+            $node = $element->insertBefore($dom->createElement($name), $before);
+        }
         $node->appendChild($dom->createTextNode($text));
         return $node;
     }
@@ -274,5 +278,23 @@ class Util
             throw new \Exception($exception, 404);
         }
         return $value;
+    }
+
+    public static function nodeExists($element, $name)
+    {
+        $list = $element->getElementsByTagName($name);
+        return $list->length > 0;
+    }
+
+    public static function findNode($element, $name, $exception = null)
+    {
+        $list = $element->getElementsByTagName($name);
+        if ($list->length == 0) {
+            if (is_null($exception)) {
+                $exception = 'Node "'.$name.'" not found on element "'.$element->nodeName.'"';
+            }
+            throw new \Exception($exception, 404);
+        }
+        return $list->item(0);
     }
 }

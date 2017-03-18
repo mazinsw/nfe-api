@@ -215,8 +215,7 @@ class Volume implements Node
         }
         $_numeracoes = $this->getNumeracoes();
         if (!empty($_numeracoes)) {
-            $numeracoes = $dom->createElement('nVol', implode(', ', $_numeracoes));
-            $element->appendChild($numeracoes);
+            Util::appendNode($element, 'nVol', implode(', ', $_numeracoes));
         }
         if (!is_null($this->getPeso())) {
             $peso = $this->getPeso();
@@ -237,7 +236,7 @@ class Volume implements Node
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'vol':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
@@ -248,21 +247,16 @@ class Volume implements Node
         $this->setEspecie(Util::loadNode($element, 'esp'));
         $this->setMarca(Util::loadNode($element, 'marca'));
         $numeracoes = array();
-        $_fields = $element->getElementsByTagName('nVol');
-        if ($_fields->length > 0) {
-            $volumes = $_fields->item(0)->nodeValue;
-            if ($volumes != '') {
-                $numeracoes = explode(', ', $volumes);
-            }
+        $volumes = Util::loadNode($element, 'nVol');
+        if (trim($volumes) != '') {
+            $numeracoes = explode(', ', $volumes);
         }
         $this->setNumeracoes($numeracoes);
-        $peso = null;
-        $_fields_l = $element->getElementsByTagName('pesoL');
-        $_fields_b = $element->getElementsByTagName('pesoB');
-        if ($_fields_l->length > 0 && $_fields_b->length > 0) {
-            $peso = new Peso();
-            $peso->setLiquido($_fields_l->item(0)->nodeValue);
-            $peso->setBruto($_fields_b->item(0)->nodeValue);
+        $peso = new Peso();
+        $peso->setLiquido(Util::loadNode($element, 'pesoL'));
+        $peso->setBruto(Util::loadNode($element, 'pesoB'));
+        if (is_null($peso->getLiquido()) || is_null($peso->getBruto())) {
+            $peso = null;
         }
         $this->setPeso($peso);
         $lacres = array();

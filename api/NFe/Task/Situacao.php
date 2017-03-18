@@ -182,12 +182,7 @@ class Situacao extends Retorno
     {
         $name = is_null($name)?'retConsSitNFe':$name;
         $element = parent::loadNode($element, $name);
-        $chave = null;
-        $_fields = $element->getElementsByTagName('chNFe');
-        if ($_fields->length > 0) {
-            $chave = $_fields->item(0)->nodeValue;
-        }
-        $this->setChave($chave);
+        $this->setChave(Util::loadNode($element, 'chNFe'));
         return $element;
     }
 

@@ -140,11 +140,17 @@ class Protocolo extends Retorno
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'infProt':$name;
-        $info = parent::loadNode($element, $name);
-        $this->setChave($info->getElementsByTagName('chNFe')->item(0)->nodeValue);
-        $this->setValidacao(Util::loadNode($info, 'digVal'));
-        $this->setNumero(Util::loadNode($info, 'nProt'));
-        return $info;
+        $element = parent::loadNode($element, $name);
+        $this->setChave(
+            Util::loadNode(
+                $element,
+                'chNFe',
+                'Tag "chNFe" não encontrada no Protocolo'
+            )
+        );
+        $this->setValidacao(Util::loadNode($element, 'digVal'));
+        $this->setNumero(Util::loadNode($element, 'nProt'));
+        return $element;
     }
 
     public function getNode($name = null)
@@ -164,15 +170,15 @@ class Protocolo extends Retorno
         $info->appendChild($id);
 
         $status = $info->getElementsByTagName('cStat')->item(0);
-        $info->insertBefore($dom->createElement('nProt', $this->getNumero(true)), $status);
-        $info->insertBefore($dom->createElement('digVal', $this->getValidacao(true)), $status);
+        Util::appendNode($info, 'nProt', $this->getNumero(true), $status);
+        Util::appendNode($info, 'digVal', $this->getValidacao(true), $status);
         $nodes = $info->getElementsByTagName('dhRecbto');
         if ($nodes->length > 0) {
             $recebimento = $nodes->item(0);
         } else {
             $recebimento = $status;
         }
-        $info->insertBefore($dom->createElement('chNFe', $this->getChave(true)), $recebimento);
+        Util::appendNode($info, 'chNFe', $this->getChave(true), $recebimento);
         $element->appendChild($info);
         return $element;
     }

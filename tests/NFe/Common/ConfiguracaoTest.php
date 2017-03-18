@@ -7,7 +7,7 @@ class ConfiguracaoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = \NFe\Core\SEFAZ::getInstance()->getConfiguracao();
+        $this->config = \NFe\Core\SEFAZ::getInstance(true)->getConfiguracao();
     }
 
     public function testObjetos()

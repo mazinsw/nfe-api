@@ -74,20 +74,20 @@ class Substituto extends Cobrado
     {
         $name = is_null($name)?'ICMSST':$name;
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('vBCSTDest');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vBCSTDest" do campo "Normal.Base" não encontrada no Substituto', 404);
-        }
-        $this->getNormal()->setBase($base);
-        $_fields = $element->getElementsByTagName('vICMSSTDest');
-        if ($_fields->length > 0) {
-            $valor = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "vICMSSTDest" do campo "Normal.Valor" não encontrada no Substituto', 404);
-        }
-        $this->getNormal()->setValor($valor);
+        $this->getNormal()->setBase(
+            Util::loadNode(
+                $element,
+                'vBCSTDest',
+                'Tag "vBCSTDest" do campo "Normal.Base" não encontrada no Substituto'
+            )
+        );
+        $this->getNormal()->setValor(
+            Util::loadNode(
+                $element,
+                'vICMSSTDest',
+                'Tag "vICMSSTDest" do campo "Normal.Valor" não encontrada no Substituto'
+            )
+        );
         return $element;
     }
 }

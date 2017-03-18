@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeCabecMsg xmlns="http://www.portalfiscal.inf.br/nfe">
+			<cUF>41</cUF>
+			<versaoDados>3.10</versaoDados>
+		</nfeCabecMsg>
+	</env:Header>
+	<env:Body xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeAutorizacaoLoteResult xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao3">
+			<retEnviNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
+				<tpAmb>2</tpAmb>
+				<verAplic>PR-v3_4_0</verAplic>
+				<cStat>103</cStat>
+				<xMotivo>Lote recebido com sucesso</xMotivo>
+				<cUF>41</cUF>
+				<dhRecbto>2017-03-16T13:48:53-03:00</dhRecbto>
+				<infRec>
+					<nRec>411000002566435</nRec>
+					<tMed>1</tMed>
+				</infRec>
+			</retEnviNFe>
+		</nfeAutorizacaoLoteResult>
+	</env:Body>
+</env:Envelope>

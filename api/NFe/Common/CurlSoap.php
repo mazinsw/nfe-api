@@ -48,6 +48,7 @@ XML;
 
     private $certificate;
     private $private_key;
+    private static $post_fn;
 
     /**
      * Construct
@@ -72,6 +73,11 @@ XML;
             }
             return $response;
         });
+    }
+
+    public static function setPostFunction($post_fn)
+    {
+        return self::$post_fn = $post_fn;
     }
 
     public function setCertificate($certificate)
@@ -125,7 +131,11 @@ XML;
         $envelope = $dom->saveXML();
         $data = str_replace('<soap12:Header/>', '<soap12:Header>'.$header.'</soap12:Header>', $envelope);
         $data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $data);
-        $this->post($url, $data);
+        if (is_null(self::$post_fn)) {
+            $this->post($url, $data);
+        } else {
+            call_user_func_array(self::$post_fn, array($this, $url, $data));
+        }
         if (!$this->error) {
             return $this->response;
         }

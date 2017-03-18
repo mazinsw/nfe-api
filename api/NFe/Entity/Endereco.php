@@ -264,7 +264,7 @@ class Endereco implements Node
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'enderEmit':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
@@ -293,27 +293,27 @@ class Endereco implements Node
                 'Tag "xBairro" do campo "Bairro" não encontrada'
             )
         );
-        $_fields = $element->getElementsByTagName('cMun');
-        if ($_fields->length > 0) {
-            $codigo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cMun" do objeto "Municipio" não encontrada', 404);
-        }
-        $this->getMunicipio()->setCodigo($codigo);
-        $_fields = $element->getElementsByTagName('xMun');
-        if ($_fields->length > 0) {
-            $nome = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "xMun" do objeto "Municipio" não encontrada', 404);
-        }
-        $this->getMunicipio()->setNome($nome);
-        $_fields = $element->getElementsByTagName('UF');
-        if ($_fields->length > 0) {
-            $uf = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "UF" do campo "UF" não encontrada', 404);
-        }
-        $this->getMunicipio()->getEstado()->setUF($uf);
+        $this->getMunicipio()->setCodigo(
+            Util::loadNode(
+                $element,
+                'cMun',
+                'Tag "cMun" do objeto "Municipio" não encontrada'
+            )
+        );
+        $this->getMunicipio()->setNome(
+            Util::loadNode(
+                $element,
+                'xMun',
+                'Tag "xMun" do objeto "Municipio" não encontrada'
+            )
+        );
+        $this->getMunicipio()->getEstado()->setUF(
+            Util::loadNode(
+                $element,
+                'UF',
+                'Tag "UF" do objeto "Estado" não encontrada'
+            )
+        );
         $this->setCEP(
             Util::loadNode(
                 $element,
@@ -321,20 +321,20 @@ class Endereco implements Node
                 'Tag "CEP" do campo "CEP" não encontrada'
             )
         );
-        $_fields = $element->getElementsByTagName('cPais');
-        if ($_fields->length > 0) {
-            $codigo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cPais" do objeto "Pais" não encontrada', 404);
-        }
-        $this->getPais()->setCodigo($codigo);
-        $_fields = $element->getElementsByTagName('xPais');
-        if ($_fields->length > 0) {
-            $nome = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "xPais" do objeto "Pais" não encontrada', 404);
-        }
-        $this->getPais()->setNome($nome);
+        $this->getPais()->setCodigo(
+            Util::loadNode(
+                $element,
+                'cPais',
+                'Tag "cPais" do objeto "Pais" não encontrada'
+            )
+        );
+        $this->getPais()->setNome(
+            Util::loadNode(
+                $element,
+                'xPais',
+                'Tag "xPais" do objeto "Pais" não encontrada'
+            )
+        );
         return $element;
     }
 }

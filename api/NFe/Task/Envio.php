@@ -101,33 +101,7 @@ class Envio
         if (is_array($url) && isset($url['servico'])) {
             return Nota::PORTAL.'/wsdl/'.$url['servico'];
         }
-        switch ($this->servico) {
-            case self::SERVICO_INUTILIZACAO:
-                return Nota::PORTAL.'/wsdl/NfeInutilizacao';
-            case self::SERVICO_PROTOCOLO:
-                return Nota::PORTAL.'/wsdl/NFeConsulta';
-            case self::SERVICO_STATUS:
-                return Nota::PORTAL.'/wsdl/NfeStatusServico';
-            case self::SERVICO_CADASTRO:
-                return Nota::PORTAL.'/wsdl/NfeConsultaCadastro';
-            case self::SERVICO_AUTORIZACAO:
-                return Nota::PORTAL.'/wsdl/NFeAutorizacao';
-            case self::SERVICO_RETORNO:
-                return Nota::PORTAL.'/wsdl/NFeRetAutorizacao';
-            case self::SERVICO_RECEPCAO:
-                return Nota::PORTAL.'/wsdl/NfeRecepcao';
-            case self::SERVICO_CONFIRMACAO:
-                return Nota::PORTAL.'/wsdl/NfeRetRecepcao';
-            case self::SERVICO_EVENTO:
-                return Nota::PORTAL.'/wsdl/RecepcaoEvento';
-            case self::SERVICO_DESTINADAS:
-                return Nota::PORTAL.'/wsdl/NfeConsultaDest';
-            case self::SERVICO_DOWNLOAD:
-                return Nota::PORTAL.'/wsdl/NfeDownloadNF';
-            case self::SERVICO_DISTRIBUICAO:
-                return Nota::PORTAL.'/wsdl/NFeDistribuicaoDFe';
-        }
-        return $this->servico;
+        throw new \Exception('A ação do serviço "'.$this->getServico().'" não foi configurada', 404);
     }
 
     /**

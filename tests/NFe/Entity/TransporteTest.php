@@ -8,7 +8,7 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance();
+        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
         $this->resource_path = dirname(dirname(__DIR__)) . '/resources';
     }
 
@@ -245,11 +245,7 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
 
         $transporte = new \NFe\Entity\Transporte();
         $this->setExpectedException('\Exception');
-        try {
-            $transporte->loadNode($dom_cmp->documentElement);
-        } catch (Exception $e) {
-            $this->setExpectedException(null);
-        }
+        $transporte->loadNode($dom_cmp->documentElement);
     }
 
     public function testTransporteInvalidLoadXML()
@@ -260,10 +256,6 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
 
         $transporte = new \NFe\Entity\Transporte();
         $this->setExpectedException('\Exception');
-        try {
-            $transporte->loadNode($dom_cmp->documentElement);
-        } catch (Exception $e) {
-            $this->setExpectedException(null);
-        }
+        $transporte->loadNode($dom_cmp->documentElement);
     }
 }

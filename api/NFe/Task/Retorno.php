@@ -49,6 +49,9 @@ class Retorno extends Status
 
     public function setDataRecebimento($data_recebimento)
     {
+        if (!is_null($data_recebimento) && !is_numeric($data_recebimento)) {
+            $data_recebimento = strtotime($data_recebimento);
+        }
         $this->data_recebimento = $data_recebimento;
         return $this;
     }
@@ -130,7 +133,7 @@ class Retorno extends Status
         $dom = $element->ownerDocument;
         $status = $element->getElementsByTagName('cStat')->item(0);
         if (!is_null($this->getDataRecebimento())) {
-            $element->insertBefore($dom->createElement('dhRecbto', $this->getDataRecebimento(true)), $status);
+            Util::appendNode($element, 'dhRecbto', $this->getDataRecebimento(true), $status);
         }
         return $element;
     }
@@ -139,12 +142,7 @@ class Retorno extends Status
     {
         $name = is_null($name)?'Retorno':$name;
         $retorno = parent::loadNode($element, $name);
-        $nodes = $retorno->getElementsByTagName('dhRecbto');
-        $data_recebimento = null;
-        if ($nodes->length > 0) {
-            $data_recebimento = strtotime($nodes->item(0)->nodeValue);
-        }
-        $this->setDataRecebimento($data_recebimento);
+        $this->setDataRecebimento(Util::loadNode($retorno, 'dhRecbto'));
         return $retorno;
     }
 }

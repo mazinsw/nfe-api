@@ -79,10 +79,6 @@ class VolumeTest extends \PHPUnit_Framework_TestCase
 
         $volume = new \NFe\Entity\Volume();
         $this->setExpectedException('\Exception');
-        try {
-            $element = $volume->loadNode($dom_cmp->documentElement);
-        } catch (Exception $e) {
-            $this->setExpectedException(null);
-        }
+        $element = $volume->loadNode($dom_cmp->documentElement);
     }
 }

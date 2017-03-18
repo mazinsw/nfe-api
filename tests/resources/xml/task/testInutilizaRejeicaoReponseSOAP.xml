@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeCabecMsg xmlns="http://www.portalfiscal.inf.br/nfe">
+			<cUF>41</cUF>
+			<versaoDados>3.10</versaoDados>
+		</nfeCabecMsg>
+	</env:Header>
+	<env:Body xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeInutilizacaoNFResult xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao3">
+			<retInutNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
+				<infInut>
+					<tpAmb>2</tpAmb>
+					<verAplic>PR-v3_4_0</verAplic>
+					<cStat>241</cStat>
+					<xMotivo>Um numero da faixa ja foi utilizado</xMotivo>
+					<cUF>41</cUF>
+					<dhRecbto>2017-03-16T14:28:17-03:00</dhRecbto>
+				</infInut>
+			</retInutNFe>
+		</nfeInutilizacaoNFResult>
+	</env:Body>
+</env:Envelope>

@@ -394,7 +394,7 @@ abstract class Imposto implements Node
     public static function loadImposto($element, $grupo = null)
     {
         $quantitativo = false;
-        switch ($element->tagName) {
+        switch ($element->nodeName) {
             /* Grupo COFINSST */
             case 'COFINSST':
                 $_fields = $element->getElementsByTagName('pCOFINS');
@@ -411,11 +411,11 @@ abstract class Imposto implements Node
                 $quantitativo = $_fields->length == 0;
                 break;
         }
-        $imposto = self::criaPeloNome($element->tagName, $quantitativo);
+        $imposto = self::criaPeloNome($element->nodeName, $quantitativo);
         if ($imposto === false) {
             return false;
         }
-        $imposto->loadNode($element, $element->tagName);
+        $imposto->loadNode($element, $element->nodeName);
         return $imposto;
     }
 }

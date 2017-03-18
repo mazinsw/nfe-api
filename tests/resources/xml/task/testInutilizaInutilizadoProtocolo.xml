@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<retInutNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
+  <infInut>
+    <tpAmb>2</tpAmb>
+    <verAplic>PR-v3_4_0</verAplic>
+    <cStat>102</cStat>
+    <xMotivo>Inutilizacao de numero homologado</xMotivo>
+    <cUF>41</cUF>
+    <ano>17</ano>
+    <CNPJ>08380787000176</CNPJ>
+    <mod>65</mod>
+    <serie>1</serie>
+    <nNFIni>250</nNFIni>
+    <nNFFin>250</nNFFin>
+    <dhRecbto>2017-03-16T17:09:39+00:00</dhRecbto>
+    <nProt>141170000156683</nProt>
+  </infInut>
+</retInutNFe>

@@ -83,11 +83,13 @@ class Mista extends Cobranca
         if (!is_null($this->getNormal()->getBase())) {
             return $element;
         }
-        $_fields = $element->getElementsByTagName('vICMSST');
-        if ($_fields->length == 0) {
-            throw new \Exception('Tag "vICMSST" do campo "Normal.Valor" não encontrada na Mista', 404);
-        }
-        $valor = floatval($_fields->item(0)->nodeValue);
+        $valor = floatval(
+            Util::loadNode(
+                $element,
+                'vICMSST',
+                'Tag "vICMSST" do campo "Normal.Valor" não encontrada na Mista'
+            )
+        );
         $diferenca = $this->getValor() - $valor;
         $base = $diferenca * 100.0 / $this->getNormal()->getAliquota();
         $this->getNormal()->setBase($base);

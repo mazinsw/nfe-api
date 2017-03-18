@@ -320,7 +320,7 @@ $[field.end]
 $[table.if(inherited)]
         $element = parent::loadNode($element, $name);
 $[table.else]
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" d$[table.gender] $[tAble.norm] não encontrada', 404);

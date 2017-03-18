@@ -30,13 +30,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\BadMethodCallException');
         \NFe\Log\Logger::erro('Error Test');
-        $this->setExpectedException(null);
     }
 
     public function testUndefinedMethod()
     {
         $this->setExpectedException('\BadMethodCallException');
         \NFe\Log\Logger::getInstance()->erro('Error Test');
-        $this->setExpectedException(null);
     }
 }

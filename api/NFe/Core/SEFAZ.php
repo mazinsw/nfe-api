@@ -47,9 +47,9 @@ class SEFAZ
         $this->fromArray($sefaz);
     }
 
-    public static function getInstance()
+    public static function getInstance($new = false)
     {
-        if (is_null(self::$instance)) {
+        if (is_null(self::$instance) || $new) {
             self::$instance = new self();
         }
         return self::$instance;

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeCabecMsg xmlns="http://www.portalfiscal.inf.br/nfe">
+			<cUF>41</cUF>
+			<versaoDados>3.10</versaoDados>
+		</nfeCabecMsg>
+	</env:Header>
+	<env:Body xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeInutilizacaoNFResult xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeInutilizacao3">
+			<retInutNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
+				<infInut>
+					<tpAmb>2</tpAmb>
+					<verAplic>PR-v3_4_0</verAplic>
+					<cStat>102</cStat>
+					<xMotivo>Inutilizacao de numero homologado</xMotivo>
+					<cUF>41</cUF>
+					<ano>17</ano>
+					<CNPJ>08380787000176</CNPJ>
+					<mod>65</mod>
+					<serie>1</serie>
+					<nNFIni>250</nNFIni>
+					<nNFFin>250</nNFFin>
+					<dhRecbto>2017-03-16T14:09:39-03:00</dhRecbto>
+					<nProt>141170000156683</nProt>
+				</infInut>
+			</retInutNFe>
+		</nfeInutilizacaoNFResult>
+	</env:Body>
+</env:Envelope>

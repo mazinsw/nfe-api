@@ -7,7 +7,22 @@ class EnderecoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance();
+        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+    }
+
+    public static function createEndereco()
+    {
+        $endereco = new \NFe\Entity\Endereco();
+        $endereco->setCEP('01122500');
+        $endereco->getMunicipio()
+                 ->setNome('Paranavaí')
+                 ->getEstado()
+                 ->setUF('PR');
+        $endereco->setBairro('Centro');
+        $endereco->setLogradouro('Rua Paranavaí');
+        $endereco->setNumero('123');
+        $endereco->setComplemento('Loteamento Paranavaí');
+        return $endereco;
     }
 
     public function testEnderecoXML()

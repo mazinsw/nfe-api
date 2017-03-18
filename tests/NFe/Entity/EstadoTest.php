@@ -7,7 +7,7 @@ class EstadoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance();
+        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
     }
 
     public function testEstado()

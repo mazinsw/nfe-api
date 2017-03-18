@@ -146,7 +146,7 @@ class Tributo extends Imposto
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'retTransp':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" do Tributo não encontrada', 404);
@@ -181,11 +181,11 @@ class Tributo extends Imposto
                 'Tag "CFOP" do campo "CFOP" não encontrada no Tributo'
             )
         );
-        $_fields = $element->getElementsByTagName('cMunFG');
         $municipio = null;
-        if ($_fields->length > 0) {
+        $codigo = Util::loadNode($element, 'cMunFG');
+        if (!is_null($codigo)) {
             $municipio = new Municipio();
-            $municipio->setCodigo($_fields->item(0)->nodeValue);
+            $municipio->setCodigo($codigo);
         }
         $this->setMunicipio($municipio);
         return $element;

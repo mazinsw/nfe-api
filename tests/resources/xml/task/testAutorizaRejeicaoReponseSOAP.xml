@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeCabecMsg xmlns="http://www.portalfiscal.inf.br/nfe">
+			<cUF>41</cUF>
+			<versaoDados>3.10</versaoDados>
+		</nfeCabecMsg>
+	</env:Header>
+	<env:Body xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeAutorizacaoLoteResult xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao3">
+			<retEnviNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
+				<tpAmb>2</tpAmb>
+				<verAplic>PR-v3_4_0</verAplic>
+				<cStat>785</cStat>
+				<xMotivo>NFC-e com entrega a domicilio nao permitida pela UF. Entrega a domicilio permitida apenas no territorio do Parana.</xMotivo>
+				<cUF>41</cUF>
+				<dhRecbto>2017-03-16T12:01:27-03:00</dhRecbto>
+			</retEnviNFe>
+		</nfeAutorizacaoLoteResult>
+	</env:Body>
+</env:Envelope>

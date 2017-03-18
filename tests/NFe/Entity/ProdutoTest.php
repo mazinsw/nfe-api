@@ -5,7 +5,7 @@ class ProdutoTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        $sefaz = \NFe\Core\SEFAZ::getInstance();
+        $sefaz = \NFe\Core\SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()->getEmitente()->getEndereco()
                          ->getMunicipio()->getEstado()->setUF('PR');
     }

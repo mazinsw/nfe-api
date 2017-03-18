@@ -142,11 +142,11 @@ class NFCe extends Nota
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
         $totais = $this->getTotais();
-        $digest = $dom->getElementsByTagName('DigestValue')->item(0);
-        // if($this->getEmissao() == self::EMISSAO_NORMAL)
-            $dig_val = $digest->nodeValue;
-        // else
-        // 	$dig_val = base64_encode(sha1($dom->saveXML(), true));
+        // if ($this->getEmissao() == self::EMISSAO_NORMAL) {
+            $dig_val = Util::loadNode($dom, 'DigestValue', 'Tag "DigestValue" não encontrada na NFCe');
+        // } else {
+        //     $dig_val = base64_encode(sha1($dom->saveXML(), true));
+        // }
         $params = array(
             'chNFe' => $this->getID(),
             'nVersao' => self::QRCODE_VERSAO,
@@ -214,13 +214,9 @@ class NFCe extends Nota
     public function loadNode($element, $name = null)
     {
         $element = parent::loadNode($element, $name);
-        $_fields = $element->getElementsByTagName('qrCode');
-        $_sig_fields = $element->getElementsByTagName('Signature');
-        $qrcode_url = null;
-        if ($_fields->length > 0) {
-            $qrcode_url = $_fields->item(0)->nodeValue;
-        } elseif ($_sig_fields->length > 0) {
-            throw new \Exception('Tag "qrCode" não encontrada', 404);
+        $qrcode_url = Util::loadNode($element, 'qrCode');
+        if (Util::nodeExists($element, 'Signature') && is_null($qrcode_url)) {
+            throw new \Exception('Tag "qrCode" não encontrada na NFCe', 404);
         }
         $this->setQRCodeURL($qrcode_url);
         return $element;

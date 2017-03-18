@@ -622,15 +622,13 @@ class Produto extends Total
         if (count($detalhes) == 0) {
             return null;
         }
-        $dom = $element->ownerDocument;
         $fonte = 'Fonte: '.$tributos['info']['fonte'].' '.$tributos['info']['chave'];
         $ultimo = '';
         if (count($detalhes) > 1) {
             $ultimo = ' e '.array_pop($detalhes);
         }
         $texto = 'Trib. aprox.: '.implode(', ', $detalhes).$ultimo.'. '.$fonte;
-        $info = $dom->createElement(is_null($name)?'infAdProd':$name, $texto);
-        $element->appendChild($info);
+        Util::appendNode($element, is_null($name)?'infAdProd':$name, $texto);
         return $texto;
     }
 
@@ -696,8 +694,7 @@ class Produto extends Total
         }
         $imposto_info = $this->getImpostoInfo();
         $this->setTributos($imposto_info['total']);
-        $imp_total = $dom->createElement('vTotTrib', Util::toCurrency($imposto_info['total']));
-        $imposto->appendChild($imp_total);
+        Util::appendNode($imposto, 'vTotTrib', Util::toCurrency($imposto_info['total']));
         foreach ($grupos as $tag => $_grupo) {
             $grupo = $dom->createElement($tag);
             foreach ($_grupo as $_imposto) {
@@ -717,7 +714,7 @@ class Produto extends Total
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'det':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" do Produto não encontrada', 404);
@@ -813,7 +810,7 @@ class Produto extends Total
             if (!$_item->hasChildNodes() || $_item->nodeType !== XML_ELEMENT_NODE) {
                 continue;
             }
-            $total->setGrupo($_item->tagName);
+            $total->setGrupo($_item->nodeName);
             foreach ($_item->childNodes as $_subitem) {
                 if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
                     continue;

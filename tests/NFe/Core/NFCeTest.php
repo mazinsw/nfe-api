@@ -7,10 +7,7 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance();
-        $this->sefaz->getConfiguracao()
-            ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
-            ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
+        $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
     }
 
     private function createNFCe()
@@ -185,36 +182,99 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         return $nfce;
     }
 
+    public static function loadNFCeXML()
+    {
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml';
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+        return $dom_cmp;
+    }
+
+    public static function loadNFCeXMLAssinado()
+    {
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml';
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+        return $dom_cmp;
+    }
+
+    public static function loadNFCeXMLAutorizado()
+    {
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+        return $dom_cmp;
+    }
+
+    public static function loadNFCeAssinada()
+    {
+        $dom_cmp = self::loadNFCeXMLAssinado();
+
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml';
+        $nfce = new \NFe\Core\NFCe();
+        $nfce->load($xml_file);
+
+        $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
+        return array(
+            'nota' => $nfce,
+            'dom' => $dom,
+            'cmp' => $dom_cmp
+        );
+    }
+
+    public static function loadNFCeValidada()
+    {
+        $data = self::loadNFCeAssinada();
+        $nfce = $data['nota'];
+        $dom = $data['dom'];
+        $dom_cmp = $data['cmp'];
+
+        $dom = $nfce->validar($dom);
+        return array(
+            'nota' => $nfce,
+            'dom' => $dom,
+            'cmp' => $dom_cmp
+        );
+    }
+
+    public static function loadNFCeAutorizada()
+    {
+        $dom_cmp = self::loadNFCeXMLAutorizado();
+
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
+        $nfce = new \NFe\Core\NFCe();
+        $nfce->load($xml_file);
+
+        $protocolo = $nfce->getProtocolo();
+        $protocolo->fromArray($protocolo);
+        $protocolo->fromArray($protocolo->toArray());
+        $protocolo->fromArray(null);
+        $nfce->setProtocolo(null);
+        $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
+        $dom = $nfce->validar($dom);
+        $nfce->setProtocolo($protocolo);
+        $dom = $nfce->addProtocolo($dom);
+        return array(
+            'nota' => $nfce,
+            'dom' => $dom,
+            'cmp' => $dom_cmp
+        );
+    }
+
     public function testNFCeXML()
     {
         $nfce = $this->createNFCe();
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;
 
-        $dom_cmp = new \DOMDocument();
-        $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml');
-        $xml_cmp = $dom_cmp->saveXML();
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
+        $dom_cmp = self::loadNFCeXML();
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
 
         // $dom->formatOutput = true;
         // file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
-    }
-
-    public function testNFCeLoadXML()
-    {
-        $dom_cmp = new \DOMDocument();
-        $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml');
-
-        $nfce = new \NFe\Core\NFCe();
-        $nfce->loadNode($dom_cmp->documentElement);
-
-        $xml = $nfce->getNode();
-        $dom = $xml->ownerDocument;
-
-        $xml_cmp = $dom_cmp->saveXML();
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
     }
 
     public function testNFCeAssinadaXML()
@@ -224,11 +284,8 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom = $xml->ownerDocument;
         $dom = $nfce->assinar($dom);
 
-        $dom_cmp = new \DOMDocument();
-        $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml');
-        $xml_cmp = $dom_cmp->saveXML();
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
+        $dom_cmp = self::loadNFCeXMLAssinado();
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
 
         // $dom->formatOutput = true;
         // file_put_contents(
@@ -237,33 +294,39 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         // );
     }
 
-    public function testNFCeAssinadaLoadXML()
-    {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml';
-        $dom_cmp = new \DOMDocument();
-        $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load($xml_file);
-
-        $nfce = new \NFe\Core\NFCe();
-        $nfce->load($xml_file);
-        $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
-
-        $xml_cmp = $dom_cmp->saveXML();
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
-    }
-
     public function testNFCeValidarXML()
     {
-        $dom_cmp = new \DOMDocument();
-        $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml');
+        self::loadNFCeValidada();
+    }
+
+    public function testNFCeLoadXML()
+    {
+        $dom_cmp = self::loadNFCeXML();
 
         $nfce = new \NFe\Core\NFCe();
-        $nfce->loadNode($dom_cmp->documentElement);
+        $nfce->loadNode($dom_cmp);
 
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;
-        $dom = $nfce->assinar($dom); // O carregamento (loadNode) não carrega assinatura
-        $dom = $nfce->validar($dom);
+
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
+
+    public function testNFCeAssinadaLoadXML()
+    {
+        $data = self::loadNFCeAssinada();
+        $dom = $data['dom'];
+        $dom_cmp = $data['cmp'];
+
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
+
+    public function testNFCeAutorizadoLoadXML()
+    {
+        $data = self::loadNFCeAutorizada();
+        $dom = $data['dom'];
+        $dom_cmp = $data['cmp'];
+
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
     }
 }

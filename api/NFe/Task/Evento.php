@@ -518,9 +518,9 @@ class Evento extends Retorno
             $info->insertBefore($node, $chave);
         }
         $status = $info->getElementsByTagName('cStat')->item(0);
-        $info->insertBefore($dom->createElement('cOrgao', $this->getOrgao(true)), $status);
+        Util::appendNode($info, 'cOrgao', $this->getOrgao(true), $status);
         $sequencia = $info->getElementsByTagName('nSeqEvento')->item(0);
-        $info->insertBefore($dom->createElement('xEvento', $this->getDescricao(true)), $sequencia);
+        Util::appendNode($info, 'xEvento', $this->getDescricao(true), $sequencia);
         if (!is_null($this->getIdentificador())) {
             if ($this->isCNPJ()) {
                 Util::appendNode($info, 'CNPJDest', $this->getIdentificador(true));
@@ -550,34 +550,16 @@ class Evento extends Retorno
         if ($name == 'retEnvEvento') {
             return $element;
         }
-        $this->setChave(
-            Util::loadNode(
-                $element,
-                'chNFe',
-                'Tag "chNFe" do campo "Chave" não encontrada'
-            )
-        );
-        $this->setTipo(
-            Util::loadNode(
-                $element,
-                'tpEvento',
-                'Tag "tpEvento" do campo "Tipo" não encontrada'
-            )
-        );
-        $this->setDescricao(
-            Util::loadNode(
-                $element,
-                'xEvento',
-                'Tag "xEvento" do campo "Descricao" não encontrada'
-            )
-        );
-        $this->setSequencia(
-            Util::loadNode(
-                $element,
-                'nSeqEvento',
-                'Tag "nSeqEvento" do campo "Sequencia" não encontrada'
-            )
-        );
+        $this->setChave(Util::loadNode($element, 'chNFe'));
+        $this->setTipo(Util::loadNode($element, 'tpEvento'));
+        $this->setDescricao(Util::loadNode($element, 'xEvento'));
+        $this->setSequencia(Util::loadNode($element, 'nSeqEvento'));
+        if ($element->getElementsByTagName('CNPJDest')->length > 0) {
+            $this->setIdentificador(Util::loadNode($element, 'CNPJDest'));
+        } else {
+            $this->setIdentificador(Util::loadNode($element, 'CPFDest'));
+        }
+        $this->setEmail(Util::loadNode($element, 'emailDest'));
         $this->setData(
             Util::loadNode(
                 $element,
@@ -585,27 +567,7 @@ class Evento extends Retorno
                 'Tag "dhRegEvento" do campo "Data" não encontrada'
             )
         );
-        $identificador = null;
-        $_fields = $element->getElementsByTagName('CNPJDest');
-        if ($_fields->length == 0) {
-            $_fields = $element->getElementsByTagName('CPFDest');
-        }
-        if ($_fields->length > 0) {
-            $identificador = $_fields->item(0)->nodeValue;
-        }
-        $this->setIdentificador($identificador);
-        $email = null;
-        $_fields = $element->getElementsByTagName('emailDest');
-        if ($_fields->length > 0) {
-            $email = $_fields->item(0)->nodeValue;
-        }
-        $this->setEmail($email);
-        $numero = null;
-        $_fields = $element->getElementsByTagName('nProt');
-        if ($_fields->length > 0) {
-            $numero = $_fields->item(0)->nodeValue;
-        }
-        $this->setNumero($numero);
+        $this->setNumero(Util::loadNode($element, 'nProt'));
         return $element;
     }
 

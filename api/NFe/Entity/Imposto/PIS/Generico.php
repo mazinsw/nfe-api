@@ -91,7 +91,7 @@ class Generico extends Imposto
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'PISOutr':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);

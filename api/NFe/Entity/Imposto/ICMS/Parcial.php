@@ -187,7 +187,7 @@ class Parcial extends Base
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'IMCS30':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" do ICMS Parcial não encontrada', 404);

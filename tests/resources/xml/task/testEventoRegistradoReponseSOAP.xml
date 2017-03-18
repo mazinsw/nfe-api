@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeCabecMsg xmlns="http://www.portalfiscal.inf.br/nfe">
+			<cUF>41</cUF>
+			<versaoDados>1.00</versaoDados>
+		</nfeCabecMsg>
+	</env:Header>
+	<env:Body xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeRecepcaoEventoResult xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/RecepcaoEvento">
+			<retEnvEvento xmlns="http://www.portalfiscal.inf.br/nfe" versao="1.00">
+				<idLote>148975389355245</idLote>
+				<tpAmb>2</tpAmb>
+				<verAplic>PR-v3_4_0</verAplic>
+				<cOrgao>41</cOrgao>
+				<cStat>128</cStat>
+				<xMotivo>Lote de Evento Processado</xMotivo>
+				<retEvento versao="1.00">
+					<infEvento>
+						<tpAmb>2</tpAmb>
+						<verAplic>PR-v3_4_0</verAplic>
+						<cOrgao>41</cOrgao>
+						<cStat>135</cStat>
+						<xMotivo>Evento registrado e vinculado a NF-e</xMotivo>
+						<chNFe>41160908380787000176650010000000811778821925</chNFe>
+						<tpEvento>110111</tpEvento>
+						<xEvento>Cancelamento</xEvento>
+						<nSeqEvento>1</nSeqEvento>
+						<dhRegEvento>2017-03-17T09:31:37-03:00</dhRegEvento>
+						<nProt>141170000157615</nProt>
+					</infEvento>
+				</retEvento>
+			</retEnvEvento>
+		</nfeRecepcaoEventoResult>
+	</env:Body>
+</env:Envelope>

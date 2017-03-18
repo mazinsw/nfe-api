@@ -94,7 +94,7 @@ class Cobrado extends Generico
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'ICMS60':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);

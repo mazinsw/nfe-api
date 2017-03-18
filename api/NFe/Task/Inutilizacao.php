@@ -378,55 +378,13 @@ class Inutilizacao extends Retorno
         if (!$this->isInutilizado()) {
             return $element;
         }
-        $this->setAno(
-            Util::loadNode(
-                $element,
-                'ano',
-                'Tag "ano" do campo "Ano" não encontrada'
-            )
-        );
-        $this->setCNPJ(
-            Util::loadNode(
-                $element,
-                'CNPJ',
-                'Tag "CNPJ" do campo "CNPJ" não encontrada'
-            )
-        );
-        $this->setModelo(
-            Util::loadNode(
-                $element,
-                'mod',
-                'Tag "mod" do campo "Modelo" não encontrada'
-            )
-        );
-        $this->setSerie(
-            Util::loadNode(
-                $element,
-                'serie',
-                'Tag "serie" do campo "Serie" não encontrada'
-            )
-        );
-        $this->setInicio(
-            Util::loadNode(
-                $element,
-                'nNFIni',
-                'Tag "nNFIni" do campo "Inicio" não encontrada'
-            )
-        );
-        $this->setFinal(
-            Util::loadNode(
-                $element,
-                'nNFFin',
-                'Tag "nNFFin" do campo "Final" não encontrada'
-            )
-        );
-        $this->setNumero(
-            Util::loadNode(
-                $element,
-                'nProt',
-                'Tag "nProt" do campo "Numero" não encontrada'
-            )
-        );
+        $this->setAno(Util::loadNode($element, 'ano'));
+        $this->setCNPJ(Util::loadNode($element, 'CNPJ'));
+        $this->setModelo(Util::loadNode($element, 'mod'));
+        $this->setSerie(Util::loadNode($element, 'serie'));
+        $this->setInicio(Util::loadNode($element, 'nNFIni'));
+        $this->setFinal(Util::loadNode($element, 'nNFFin'));
+        $this->setNumero(Util::loadNode($element, 'nProt'));
         return $element;
     }
 

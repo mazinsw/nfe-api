@@ -226,21 +226,42 @@ class Status implements Node
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'Status':$name;
-        $nodes = $element->getElementsByTagName($name);
-        if ($nodes->length == 0) {
-            throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+        if ($element->nodeName != $name) {
+            $_fields = $element->getElementsByTagName($name);
+            if ($_fields->length == 0) {
+                throw new \Exception('Tag "'.$name.'" do Status não encontrada', 404);
+            }
+            $element = $_fields->item(0);
         }
-        $status = $nodes->item(0);
-        $this->setAmbiente($status->getElementsByTagName('tpAmb')->item(0)->nodeValue);
-        $this->setVersao($status->getElementsByTagName('verAplic')->item(0)->nodeValue);
-        $this->setStatus($status->getElementsByTagName('cStat')->item(0)->nodeValue);
-        $this->setMotivo($status->getElementsByTagName('xMotivo')->item(0)->nodeValue);
-        $nodes = $status->getElementsByTagName('cUF');
-        $uf = null;
-        if ($nodes->length > 0) {
-            $uf = $nodes->item(0)->nodeValue;
-        }
-        $this->setUF($uf);
-        return $status;
+        $this->setAmbiente(
+            Util::loadNode(
+                $element,
+                'tpAmb',
+                'Tag "tpAmb" não encontrada no Status'
+            )
+        );
+        $this->setVersao(
+            Util::loadNode(
+                $element,
+                'verAplic',
+                'Tag "verAplic" não encontrada no Status'
+            )
+        );
+        $this->setStatus(
+            Util::loadNode(
+                $element,
+                'cStat',
+                'Tag "cStat" não encontrada no Status'
+            )
+        );
+        $this->setMotivo(
+            Util::loadNode(
+                $element,
+                'xMotivo',
+                'Tag "xMotivo" não encontrada no Status'
+            )
+        );
+        $this->setUF(Util::loadNode($element, 'cUF'));
+        return $element;
     }
 }

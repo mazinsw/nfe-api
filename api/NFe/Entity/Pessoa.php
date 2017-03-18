@@ -212,34 +212,25 @@ abstract class Pessoa implements Node
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'emit':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }
-        $razao_social = null;
-        $_fields = $element->getElementsByTagName('xNome');
-        if ($_fields->length > 0) {
-            $razao_social = $_fields->item(0)->nodeValue;
-        } elseif ($this instanceof Emitente) {
+        $razao_social = Util::loadNode($element, 'xNome');
+        if (is_null($razao_social) && $this instanceof Emitente) {
             throw new \Exception('Tag "xNome" do campo "RazaoSocial" não encontrada', 404);
         }
         $this->setRazaoSocial($razao_social);
-        $cnpj = null;
-        $_fields = $element->getElementsByTagName('CNPJ');
-        if ($_fields->length > 0) {
-            $cnpj = $_fields->item(0)->nodeValue;
-        } elseif ($this instanceof Emitente) {
+        $cnpj = Util::loadNode($element, 'CNPJ');
+        if (is_null($cnpj) && $this instanceof Emitente) {
             throw new \Exception('Tag "CNPJ" do campo "CNPJ" não encontrada', 404);
         }
         $this->setCNPJ($cnpj);
-        $ie = null;
-        $_fields = $element->getElementsByTagName('IE');
-        if ($_fields->length > 0) {
-            $ie = $_fields->item(0)->nodeValue;
-        } elseif ($this instanceof Emitente) {
+        $ie = Util::loadNode($element, 'IE');
+        if (is_null($ie) && $this instanceof Emitente) {
             throw new \Exception('Tag "IE" do campo "IE" não encontrada', 404);
         }
         $this->setIE($ie);
@@ -260,11 +251,7 @@ abstract class Pessoa implements Node
         $this->setEndereco($endereco);
         $telefone = null;
         if ($_fields->length > 0) {
-            $ender = $_fields->item(0);
-            $_fields = $ender->getElementsByTagName('fone');
-        }
-        if ($_fields->length > 0) {
-            $telefone = $_fields->item(0)->nodeValue;
+            $telefone = Util::loadNode($_fields->item(0), 'fone');
         }
         $this->setTelefone($telefone);
         return $element;

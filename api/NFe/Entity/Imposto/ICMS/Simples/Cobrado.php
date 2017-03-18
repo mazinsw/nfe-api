@@ -108,18 +108,8 @@ class Cobrado extends Generico
     {
         $name = is_null($name)?'ICMSSN500':$name;
         $element = parent::loadNode($element, $name);
-        $base = null;
-        $_fields = $element->getElementsByTagName('vBCSTRet');
-        if ($_fields->length > 0) {
-            $base = $_fields->item(0)->nodeValue;
-        }
-        $this->setBase($base);
-        $valor = null;
-        $_fields = $element->getElementsByTagName('vICMSSTRet');
-        if ($_fields->length > 0) {
-            $valor = $_fields->item(0)->nodeValue;
-        }
-        $this->setValor($valor);
+        $this->setBase(Util::loadNode($element, 'vBCSTRet'));
+        $this->setValor(Util::loadNode($element, 'vICMSSTRet'));
         return $element;
     }
 }

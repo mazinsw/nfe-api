@@ -87,44 +87,37 @@ class Transportador extends Destinatario
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'transporta':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }
-        $cnpj = null;
-        $cpf = null;
-        $_fields = $element->getElementsByTagName('CNPJ');
-        if ($_fields->length == 0) {
-            $_fields = $element->getElementsByTagName('CPF');
-        }
-        if ($_fields->length > 0) {
-            if ($_fields->item(0)->tagName == 'CNPJ') {
-                $cnpj = $_fields->item(0)->nodeValue;
-            } else {
-                $cpf = $_fields->item(0)->nodeValue;
-            }
-        } else {
-            throw new \Exception('Tag "CNPJ ou CPF" do campo "CNPJ ou CPF" não encontrada', 404);
+        $cnpj = Util::loadNode($element, 'CNPJ');
+        $cpf = Util::loadNode($element, 'CPF');
+        if (is_null($cnpj) && is_null($cpf)) {
+            throw new \Exception('Tag "CNPJ" ou "CPF" não encontrada no Transportador', 404);
         }
         $this->setCNPJ($cnpj);
         $this->setCPF($cpf);
-        $_fields = $element->getElementsByTagName('xNome');
-        if ($_fields->length > 0) {
-            $nome = $_fields->item(0)->nodeValue;
-        } elseif (!is_null($this->getCNPJ())) {
-            throw new \Exception('Tag "xNome" do campo "RazaoSocial" não encontrada', 404);
-        } else {
-            throw new \Exception('Tag "xNome" do campo "Nome" não encontrada', 404);
-        }
         if (!is_null($this->getCNPJ())) {
-            $this->setRazaoSocial($nome);
+            $this->setRazaoSocial(
+                Util::loadNode(
+                    $element,
+                    'xNome',
+                    'Tag "xNome" do campo "RazaoSocial" não encontrada'
+                )
+            );
         } else {
-            $this->setNome($nome);
+            $this->setNome(
+                Util::loadNode(
+                    $element,
+                    'xNome',
+                    'Tag "xNome" do campo "Nome" não encontrada'
+                )
+            );
         }
-        $ie = null;
         $this->setIE(
             Util::loadNode(
                 $element,
@@ -133,27 +126,27 @@ class Transportador extends Destinatario
             )
         );
         $this->setIM(null);
-        $_fields = $element->getElementsByTagName('xEnder');
-        if ($_fields->length == 0) {
+        $descricao = Util::loadNode($element, 'xEnder');
+        if (is_null($descricao)) {
             $this->setEndereco(null);
             return $element;
         }
         $endereco = new \NFe\Entity\Endereco();
-        $endereco->parseDescricao($_fields->item(0)->nodeValue);
-        $_fields = $element->getElementsByTagName('xMun');
-        if ($_fields->length > 0) {
-            $nome_municipio = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "xMun" do nome do município não encontrada', 404);
-        }
-        $endereco->getMunicipio()->setNome($nome_municipio);
-        $_fields = $element->getElementsByTagName('UF');
-        if ($_fields->length > 0) {
-            $uf_estado = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "UF" da UF do estado não encontrada', 404);
-        }
-        $endereco->getMunicipio()->getEstado()->setUF($uf_estado);
+        $endereco->parseDescricao($descricao);
+        $endereco->getMunicipio()->setNome(
+            Util::loadNode(
+                $element,
+                'xMun',
+                'Tag "xMun" do nome do município não encontrada'
+            )
+        );
+        $endereco->getMunicipio()->getEstado()->setUF(
+            Util::loadNode(
+                $element,
+                'UF',
+                'Tag "UF" da UF do estado não encontrada'
+            )
+        );
         $this->setEndereco($endereco);
         return $element;
     }

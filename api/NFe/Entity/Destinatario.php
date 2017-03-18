@@ -219,25 +219,17 @@ class Destinatario extends Pessoa
     {
         $name = is_null($name)?'dest':$name;
         $element = parent::loadNode($element, $name);
-        $cpf = null;
-        $_fields = $element->getElementsByTagName('CPF');
-        if ($_fields->length > 0) {
-            $cpf = $_fields->item(0)->nodeValue;
-        } elseif (is_null($this->getCNPJ())) {
-            throw new \Exception('Tag "CPF" do campo "CPF" não encontrada', 404);
+        $cpf = Util::loadNode($element, 'CPF');
+        if (is_null($cpf) && is_null($this->getCNPJ())) {
+            throw new \Exception('Tag "CPF" não encontrada no Destinatario', 404);
         }
         $this->setCPF($cpf);
-        $email = null;
-        $_fields = $element->getElementsByTagName('email');
-        if ($_fields->length > 0) {
-            $email = $_fields->item(0)->nodeValue;
-        }
-        $this->setEmail($email);
+        $this->setEmail(Util::loadNode($element, 'email'));
         $this->setIndicador(
             Util::loadNode(
                 $element,
                 'indIEDest',
-                'Tag "indIEDest" do campo "Indicador" não encontrada'
+                'Tag "indIEDest" não encontrada no Destinatario'
             )
         );
         return $element;

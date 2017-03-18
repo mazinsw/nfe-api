@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+	<env:Header xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeCabecMsg xmlns="http://www.portalfiscal.inf.br/nfe">
+			<cUF>41</cUF>
+			<versaoDados>3.10</versaoDados>
+		</nfeCabecMsg>
+	</env:Header>
+	<env:Body xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+		<nfeRetAutorizacaoResult xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeRetAutorizacao3">
+			<retConsReciNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
+				<tpAmb>2</tpAmb>
+				<verAplic>PR-v3_4_0</verAplic>
+				<nRec>411000002567074</nRec>
+				<cStat>104</cStat>
+				<xMotivo>Lote processado</xMotivo>
+				<cUF>41</cUF>
+				<dhRecbto>2017-03-17T10:00:34-03:00</dhRecbto>
+				<protNFe versao="3.10">
+					<infProt>
+						<tpAmb>2</tpAmb>
+						<verAplic>PR-v3_4_0</verAplic>
+						<chNFe>41160908380787000176650010000000811778821925</chNFe>
+						<dhRecbto>2017-03-17T10:00:33-03:00</dhRecbto>
+						<digVal>LJIVkncxMaxj1NSwMvkRnMmNCIo=</digVal>
+						<cStat>785</cStat>
+						<xMotivo>NFC-e com entrega a domicilio nao permitida pela UF Entrega a domicilio permitida apenas no territorio do Parana.</xMotivo>
+					</infProt>
+				</protNFe>
+			</retConsReciNFe>
+		</nfeRetAutorizacaoResult>
+	</env:Body>
+</env:Envelope>

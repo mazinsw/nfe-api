@@ -7,7 +7,23 @@ class EmitenteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance();
+        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+    }
+    
+    public static function createEmitente()
+    {
+        $emitente = new \NFe\Entity\Emitente();
+        $emitente->setRazaoSocial('Empresa LTDA');
+        $emitente->setFantasia('Minha Empresa');
+        $emitente->setCNPJ('08380787000176');
+        $emitente->setTelefone('11955886644');
+        $emitente->setIE('123456789');
+        $emitente->setIM('98765');
+        $emitente->setRegime(\NFe\Entity\Emitente::REGIME_SIMPLES);
+
+        $endereco = EnderecoTest::createEndereco();
+        $emitente->setEndereco($endereco);
+        return $emitente;
     }
 
     public function testEmitenteXML()

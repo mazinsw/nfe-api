@@ -1723,7 +1723,7 @@ abstract class Nota implements Node
     {
         $root = $element;
         $name = is_null($name)?'NFe':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
@@ -1748,13 +1748,13 @@ abstract class Nota implements Node
             throw new \Exception('Tag "ide" não encontrada', 404);
         }
         $emitente = new Emitente();
-        $_fields = $ident->getElementsByTagName('cUF');
-        if ($_fields->length > 0) {
-            $codigo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cUF" do campo "Codigo IBGE da UF" não encontrada', 404);
-        }
-        $emitente->getEndereco()->getMunicipio()->getEstado()->setCodigo($codigo);
+        $emitente->getEndereco()->getMunicipio()->getEstado()->setCodigo(
+            Util::loadNode(
+                $ident,
+                'cUF',
+                'Tag "cUF" do campo "Codigo IBGE da UF" não encontrada'
+            )
+        );
         $this->setCodigo(
             Util::loadNode(
                 $ident,
@@ -1818,13 +1818,13 @@ abstract class Nota implements Node
                 'Tag "idDest" do campo "Destino" não encontrada'
             )
         );
-        $_fields = $ident->getElementsByTagName('cMunFG');
-        if ($_fields->length > 0) {
-            $codigo = $_fields->item(0)->nodeValue;
-        } else {
-            throw new \Exception('Tag "cMunFG" do campo "Codigo IBGE do município" não encontrada', 404);
-        }
-        $emitente->getEndereco()->getMunicipio()->setCodigo($codigo);
+        $emitente->getEndereco()->getMunicipio()->setCodigo(
+            Util::loadNode(
+                $ident,
+                'cMunFG',
+                'Tag "cMunFG" do campo "Codigo IBGE do município" não encontrada'
+            )
+        );
         $this->setDataMovimentacao(Util::loadNode($ident, 'dhSaiEnt'));
         $this->setFormato(
             Util::loadNode(

@@ -77,7 +77,7 @@ class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'IMCSSN202':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);

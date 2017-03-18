@@ -7,7 +7,7 @@ class BancoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $sefaz = \NFe\Core\SEFAZ::getInstance();
+        $sefaz = \NFe\Core\SEFAZ::getInstance(true);
         $this->banco = $sefaz->getConfiguracao()->getBanco();
     }
 
@@ -48,14 +48,12 @@ class BancoTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\Exception');
         $codigo = $this->banco->getCodigoMunicipio('Paranavaí', 'SP');
-        $this->setExpectedException(null);
     }
 
     public function testCodigoMunicipioEstadoInvalido()
     {
         $this->setExpectedException('\Exception');
         $codigo = $this->banco->getCodigoMunicipio('Inválido', 'ZZ');
-        $this->setExpectedException(null);
     }
 
     public function testCodigoEstado()
@@ -71,7 +69,6 @@ class BancoTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\Exception');
         $codigo = $this->banco->getCodigoEstado('ZZ');
-        $this->setExpectedException(null);
     }
 
     public function testCodigoOrgao()
@@ -87,7 +84,6 @@ class BancoTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\Exception');
         $codigo = $this->banco->getCodigoOrgao('ZZ');
-        $this->setExpectedException(null);
     }
 
 
@@ -178,28 +174,24 @@ class BancoTest extends \PHPUnit_Framework_TestCase
         // estado inválido
         $this->setExpectedException('\Exception');
         $data = $this->banco->getInformacaoServico('9', 'ZZ');
-        $this->setExpectedException(null);
     }
 
     public function testInformacaoServicoEmissaoInvalida()
     {
         $this->setExpectedException('\Exception');
         $data = $this->banco->getInformacaoServico('10', 'PI');
-        $this->setExpectedException(null);
     }
 
     public function testInformacaoServicoModeloInvalido()
     {
         $this->setExpectedException('\Exception');
         $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'PI', 'nfse');
-        $this->setExpectedException(null);
     }
 
     public function testInformacaoServicoAmbienteInvalido()
     {
         $this->setExpectedException('\Exception');
         $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'PI', 'nfe', 'teste');
-        $this->setExpectedException(null);
     }
 
     public function testNotasTarefas()

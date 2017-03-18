@@ -72,7 +72,7 @@ class Normal extends \NFe\Entity\Imposto\ICMS\Normal
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'ICMSSN101':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
@@ -100,11 +100,13 @@ class Normal extends \NFe\Entity\Imposto\ICMS\Normal
                 'Tag "pCredSN" do campo "Aliquota" não encontrada'
             )
         );
-        $_fields = $element->getElementsByTagName('vCredICMSSN');
-        if ($_fields->length == 0) {
-            throw new \Exception('Tag "vCredICMSSN" do campo "Valor" não encontrada', 404);
-        }
-        $valor = $_fields->item(0)->nodeValue;
+        $valor = floatval(
+            Util::loadNode(
+                $element,
+                'vCredICMSSN',
+                'Tag "vCredICMSSN" do campo "Valor" não encontrada'
+            )
+        );
         $this->setBase($valor * 100.0 / $this->getAliquota());
         return $element;
     }

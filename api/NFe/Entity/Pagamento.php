@@ -362,7 +362,7 @@ class Pagamento implements Node
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'pag':$name;
-        if ($element->tagName != $name) {
+        if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
@@ -383,33 +383,19 @@ class Pagamento implements Node
                 'Tag "vPag" do campo "Valor" não encontrada'
             )
         );
-        $integrado = null;
-        $_fields = $element->getElementsByTagName('tpIntegra');
-        if ($_fields->length > 0) {
-            $integrado = $_fields->item(0)->nodeValue;
-        } elseif ($this->isCartao()) {
+        $integrado = Util::loadNode($element, 'tpIntegra');
+        if (is_null($integrado) && $this->isCartao()) {
             throw new \Exception('Tag "tpIntegra" do campo "Integrado" não encontrada', 404);
         }
         $this->setIntegrado($integrado);
-        $credenciadora = null;
-        $_fields = $element->getElementsByTagName('CNPJ');
-        if ($_fields->length > 0) {
-            $credenciadora = $_fields->item(0)->nodeValue;
-        }
-        $this->setCredenciadora($credenciadora);
-        $autorizacao = null;
-        $_fields = $element->getElementsByTagName('cAut');
-        if ($_fields->length > 0) {
-            $autorizacao = $_fields->item(0)->nodeValue;
-        } elseif ($this->isCartao() && is_numeric($this->getCredenciadora())) {
+        $this->setCredenciadora(Util::loadNode($element, 'CNPJ'));
+        $autorizacao = Util::loadNode($element, 'cAut');
+        if (is_null($autorizacao) && $this->isCartao() && is_numeric($this->getCredenciadora())) {
             throw new \Exception('Tag "cAut" do campo "Autorizacao" não encontrada', 404);
         }
         $this->setAutorizacao($autorizacao);
-        $bandeira = null;
-        $_fields = $element->getElementsByTagName('tBand');
-        if ($_fields->length > 0) {
-            $bandeira = $_fields->item(0)->nodeValue;
-        } elseif ($this->isCartao() && is_numeric($this->getCredenciadora())) {
+        $bandeira = Util::loadNode($element, 'tBand');
+        if (is_null($bandeira) && $this->isCartao() && is_numeric($this->getCredenciadora())) {
             throw new \Exception('Tag "tBand" do campo "Bandeira" não encontrada', 404);
         }
         $this->setBandeira($bandeira);

@@ -252,7 +252,7 @@ class Recibo extends Retorno
     public function loadNode($element, $name = null)
     {
         $name = is_null($name)?'retConsReciNFe':$name;
-        if ($name == 'infRec') {
+        if ($name == self::INFO_TAGNAME) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
                 throw new \Exception('Tag "'.$name.'" não encontrada', 404);
