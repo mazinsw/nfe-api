@@ -32,6 +32,17 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function canceladoPostFunction($soap_curl, $url, $data)
+    {
+        \NFe\Common\CurlSoapTest::assertPostFunction(
+            $this,
+            $soap_curl,
+            $data,
+            'task/testSituacaoSOAP.xml',
+            'task/testSituacaoCanceladoReponseSOAP.xml'
+        );
+    }
+
     public function testSituacaoAutorizado()
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
@@ -67,6 +78,37 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         \NFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\NFe\\Task\\Situacao', $retorno);
         $this->assertEquals('785', $retorno->getStatus());
+    }
+
+    public function testSituacaoCancelado()
+    {
+        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $nota = $data['nota'];
+        \NFe\Common\CurlSoap::setPostFunction(array($this, 'canceladoPostFunction'));
+        try {
+            $situacao = new Situacao();
+            $retorno = $situacao->consulta($nota);
+        } catch (Exception $e) {
+            \NFe\Common\CurlSoap::setPostFunction(null);
+            throw $e;
+        }
+        \NFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertTrue($situacao->isCancelado());
+        $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
+        // TODO: carregar assinatura do XML para evitar usar outro certificado
+        $dom = $retorno->assinar();
+        $dom = $retorno->validar($dom);
+        // $dom = $retorno->getNode()->ownerDocument; // descomentar essa linha quando implementar
+        // TODO: Fim do problema de assinatura
+        $dom = $retorno->addInformacao($dom);
+        $dom_cmp = EventoTest::loadEventoRegistradoXML();
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+
+        // $dom->formatOutput = true;
+        // file_put_contents(
+        //     dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
+        //     $dom->saveXML()
+        // );
     }
 
     public function testSituacaoInvalida()

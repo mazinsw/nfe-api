@@ -40,6 +40,8 @@ class Evento extends Retorno
     const VERSAO = '1.00';
 
     const TIPO_CANCELAMENTO = '110111';
+    const TAG_RETORNO = 'retEvento';
+    const TAG_RETORNO_ENVIO = 'retEnvEvento';
 
     private $id;
     private $orgao;
@@ -491,10 +493,128 @@ class Evento extends Retorno
         return $element;
     }
 
+    public function loadNode($element, $name = null)
+    {
+        $root = $element;
+        $element = Util::findNode($element, 'evento');
+        $name = is_null($name)?'infEvento':$name;
+        $element = Util::findNode($element, $name);
+        $this->setOrgao(
+            Util::loadNode(
+                $element,
+                'cOrgao',
+                'Tag "cOrgao" não encontrada no Evento'
+            )
+        );
+        $this->setAmbiente(
+            Util::loadNode(
+                $element,
+                'tpAmb',
+                'Tag "tpAmb" não encontrada no Evento'
+            )
+        );
+        if (Util::nodeExists($element, 'CNPJ')) {
+            $this->setIdentificador(
+                Util::loadNode(
+                    $element,
+                    'CNPJ',
+                    'Tag "CNPJ" não encontrada no Evento'
+                )
+            );
+        } else {
+            $this->setIdentificador(
+                Util::loadNode(
+                    $element,
+                    'CPF',
+                    'Tag "CPF" não encontrada no Evento'
+                )
+            );
+        }
+        $this->setChave(
+            Util::loadNode(
+                $element,
+                'chNFe',
+                'Tag "chNFe" não encontrada no Evento'
+            )
+        );
+        $this->setData(
+            Util::loadNode(
+                $element,
+                'dhEvento',
+                'Tag "dhEvento" não encontrada no Evento'
+            )
+        );
+        $this->setTipo(
+            Util::loadNode(
+                $element,
+                'tpEvento',
+                'Tag "tpEvento" não encontrada no Evento'
+            )
+        );
+        $this->setSequencia(
+            Util::loadNode(
+                $element,
+                'nSeqEvento',
+                'Tag "nSeqEvento" não encontrada no Evento'
+            )
+        );
+
+        $detalhes = Util::findNode($element, 'detEvento');
+        $this->setDescricao(
+            Util::loadNode(
+                $detalhes,
+                'descEvento',
+                'Tag "descEvento" não encontrada no Evento'
+            )
+        );
+        $this->setNumero(
+            Util::loadNode(
+                $detalhes,
+                'nProt',
+                'Tag "nProt" não encontrada no Evento'
+            )
+        );
+        $this->setJustificativa(
+            Util::loadNode(
+                $detalhes,
+                'xJust',
+                'Tag "xJust" não encontrada no Evento'
+            )
+        );
+        $informacao = null;
+        if (Util::nodeExists($root, 'procEventoNFe')) {
+            $informacao = $this->loadResponse($root);
+        }
+        $this->setInformacao($informacao);
+        return $element;
+    }
+
+    public function loadResponse($resp)
+    {
+        $retorno = new Evento();
+        $retorno->loadReturnNode($resp);
+        $this->setInformacao($retorno);
+        return $retorno;
+    }
+
+    public function loadStatusNode($element, $name = null)
+    {
+        $name = is_null($name)?self::TAG_RETORNO_ENVIO:$name;
+        $element = parent::loadNode($element, $name);
+        $this->setOrgao(
+            Util::loadNode(
+                $element,
+                'cOrgao',
+                'Tag "cOrgao" do campo "Orgao" não encontrada'
+            )
+        );
+        return $element;
+    }
+
     public function getReturnNode()
     {
         $outros = parent::getNode('infEvento');
-        $element = $this->getNode('retEvento');
+        $element = $this->getNode(self::TAG_RETORNO);
         $dom = $element->ownerDocument;
         $element->removeAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns');
         $info = $dom->getElementsByTagName('infEvento')->item(0);
@@ -536,8 +656,9 @@ class Evento extends Retorno
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadReturnNode($element, $name = null)
     {
+        $element = Util::findNode($element, Evento::TAG_RETORNO);
         $name = is_null($name)?'infEvento':$name;
         $element = parent::loadNode($element, $name);
         $this->setOrgao(
@@ -547,9 +668,6 @@ class Evento extends Retorno
                 'Tag "cOrgao" do campo "Orgao" não encontrada'
             )
         );
-        if ($name == 'retEnvEvento') {
-            return $element;
-        }
         $this->setChave(Util::loadNode($element, 'chNFe'));
         $this->setTipo(Util::loadNode($element, 'tpEvento'));
         $this->setDescricao(Util::loadNode($element, 'xEvento'));
@@ -601,14 +719,11 @@ class Evento extends Retorno
         $envio->setEmissao(Nota::EMISSAO_NORMAL);
         $envio->setConteudo($this->getConteudo($dom));
         $resp = $envio->envia();
-        $this->loadNode($resp, 'retEnvEvento');
+        $this->loadStatusNode($resp);
         if (!$this->isProcessado()) {
             throw new \Exception($this->getMotivo(), $this->getStatus());
         }
-        $retorno = new Evento();
-        $retorno->loadNode($resp);
-        $this->setInformacao($retorno);
-        return $retorno;
+        return $this->loadResponse($resp);
     }
 
     /**

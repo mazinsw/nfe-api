@@ -37,6 +37,8 @@ class Situacao extends Retorno
     private $chave;
     private $modelo;
 
+    const TAG_RETORNO = 'retConsSitNFe';
+
     public function __construct($situacao = array())
     {
         parent::__construct($situacao);
@@ -142,6 +144,11 @@ class Situacao extends Retorno
             $protocolo = new Protocolo();
             $protocolo->loadNode($resp);
             return $protocolo;
+        } elseif ($this->isCancelado()) {
+            $evento = new Evento();
+            $evento->loadStatusNode($resp, self::TAG_RETORNO);
+            $evento->loadNode($resp);
+            return $evento;
         }
         return $this;
     }
@@ -180,7 +187,7 @@ class Situacao extends Retorno
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'retConsSitNFe':$name;
+        $name = is_null($name)?self::TAG_RETORNO:$name;
         $element = parent::loadNode($element, $name);
         $this->setChave(Util::loadNode($element, 'chNFe'));
         return $element;

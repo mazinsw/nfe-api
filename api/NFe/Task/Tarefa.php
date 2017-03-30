@@ -320,6 +320,17 @@ class Tarefa
             $agente->setAmbiente($nota->getAmbiente());
             $agente->setModelo($nota->getModelo());
         }
-        return $this->getAgente()->consulta($this->getNota());
+        $retorno = $agente->consulta($this->getNota());
+        if ($agente->isCancelado()) {
+            // TODO: carregar assinatura do XML para evitar usar outro certificado
+            $dom = $retorno->assinar();
+            $dom = $retorno->validar($dom);
+            // $dom = $retorno->getNode()->ownerDocument; // descomentar essa linha quando implementar
+            // TODO: Fim do problema de assinatura
+            $dom = $retorno->addInformacao($dom);
+            $this->setDocumento($dom);
+            $retorno = $retorno->getInformacao();
+        }
+        return $retorno;
     }
 }

@@ -1877,13 +1877,14 @@ abstract class Nota implements Node
         );
         $this->setDataContingencia(Util::loadNode($ident, 'dhCont'));
         $this->setJustificativa(Util::loadNode($ident, 'xJust'));
-
-        $_fields = $info->getElementsByTagName('emit');
-        if ($_fields->length > 0) {
-            $emitente->loadNode($_fields->item(0), 'emit');
-        } else {
-            throw new \Exception('Tag "emit" do objeto "Emitente" não encontrada', 404);
-        }
+        $emitente->loadNode(
+            Util::findNode(
+                $info,
+                'emit',
+                'Tag "emit" do objeto "Emitente" não encontrada'
+            ),
+            'emit'
+        );
         $this->setEmitente($emitente);
         $_fields = $info->getElementsByTagName('dest');
         $destinatario = null;
@@ -1926,7 +1927,7 @@ abstract class Nota implements Node
         $this->setTotal($total);
         $this->setAdicionais(Util::loadNode($info, 'infAdFisco'));
         $observacoes = array();
-        $_items = $info->getElementsByTagName('obsCont'); // TODO: predictable tag name
+        $_items = $info->getElementsByTagName('obsCont');
         foreach ($_items as $_item) {
             $observacao = array(
                 'campo' => $_item->getAttribute('xCampo'),
@@ -1940,7 +1941,7 @@ abstract class Nota implements Node
         }
         $this->setObservacoes($observacoes);
         $informacoes = array();
-        $_items = $info->getElementsByTagName('obsFisco'); // TODO: predictable tag name
+        $_items = $info->getElementsByTagName('obsFisco');
         foreach ($_items as $_item) {
             $informacao = array(
                 'campo' => $_item->getAttribute('xCampo'),

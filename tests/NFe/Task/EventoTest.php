@@ -26,6 +26,15 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         return $evento;
     }
 
+    public static function loadEventoRegistradoXML()
+    {
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
+        $dom = new \DOMDocument();
+        $dom->preserveWhiteSpace = false;
+        $dom->load($xml_file);
+        return $dom;
+    }
+
     public function registradoPostFunction($soap_curl, $url, $data)
     {
         \NFe\Common\CurlSoapTest::assertPostFunction(
@@ -72,11 +81,7 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
 
-
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
-        $dom_cmp = new \DOMDocument();
-        $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load($xml_file);
+        $dom_cmp = self::loadEventoRegistradoXML();
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
         
         // $dom->formatOutput = true;

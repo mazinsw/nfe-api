@@ -32,6 +32,17 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function canceladoPostFunction($soap_curl, $url, $data)
+    {
+        \NFe\Common\CurlSoapTest::assertPostFunction(
+            $this,
+            $soap_curl,
+            $data,
+            'task/testSituacaoSOAP.xml',
+            'task/testSituacaoCanceladoReponseSOAP.xml'
+        );
+    }
+
     public function reciboPostFunction($soap_curl, $url, $data)
     {
         \NFe\Common\CurlSoapTest::assertPostFunction(
@@ -142,6 +153,37 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\NFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
+    }
+
+    public function testTarefaConsultaSituacaoCancelado()
+    {
+        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $nota = $data['nota'];
+        $tarefa = new Tarefa();
+        $tarefa->setAcao(Tarefa::ACAO_CONSULTAR);
+        $tarefa->setNota($nota);
+
+        \NFe\Common\CurlSoap::setPostFunction(array($this, 'canceladoPostFunction'));
+        try {
+            $retorno = $tarefa->executa();
+        } catch (Exception $e) {
+            \NFe\Common\CurlSoap::setPostFunction(null);
+            throw $e;
+        }
+        \NFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
+        $this->assertEquals('135', $retorno->getStatus());
+        $this->assertTrue($retorno->isCancelado());
+        $dom = $tarefa->getDocumento();
+
+        $dom_cmp = EventoTest::loadEventoRegistradoXML();
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+
+        // $dom->formatOutput = true;
+        // file_put_contents(
+        //     dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
+        //     $dom->saveXML()
+        // );
     }
 
     public function testTarefaConsultaRecibo()

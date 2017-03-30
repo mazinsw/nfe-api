@@ -283,11 +283,14 @@ class Util
     public static function nodeExists($element, $name)
     {
         $list = $element->getElementsByTagName($name);
-        return $list->length > 0;
+        return ($list->length > 0) || ($element->nodeName == $name);
     }
 
     public static function findNode($element, $name, $exception = null)
     {
+        if ($element->nodeName == $name) {
+            return $element;
+        }
         $list = $element->getElementsByTagName($name);
         if ($list->length == 0) {
             if (is_null($exception)) {
