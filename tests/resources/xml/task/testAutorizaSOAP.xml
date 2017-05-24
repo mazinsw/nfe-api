@@ -9,7 +9,7 @@
   <soap12:Body>
     <nfeDadosMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao3">
       <enviNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="3.10">
-        <idLote>148967172613932</idLote>
+        <idLote>149564182399665</idLote>
         <indSinc>1</indSinc>
         <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
           <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="3.10">
@@ -93,7 +93,7 @@
                 <nItemPed>1</nItemPed>
               </prod>
               <imposto>
-                <vTotTrib>1.21</vTotTrib>
+                <vTotTrib>1.67</vTotTrib>
                 <ICMS>
                   <ICMS60>
                     <orig>0</orig>
@@ -119,7 +119,7 @@
                   </COFINSAliq>
                 </COFINS>
               </imposto>
-              <infAdProd>Trib. aprox.: R$ 0,31 Federal e R$ 0,90 Estadual. Fonte: IBPT W7m9E1</infAdProd>
+              <infAdProd>Trib. aprox.: R$ 0,77 Federal e R$ 0,90 Estadual. Fonte: IBPT H4T2P7</infAdProd>
             </det>
             <det nItem="2">
               <prod>
@@ -142,7 +142,7 @@
                 <nItemPed>2</nItemPed>
               </prod>
               <imposto>
-                <vTotTrib>1.64</vTotTrib>
+                <vTotTrib>2.27</vTotTrib>
                 <ICMS>
                   <ICMS60>
                     <orig>0</orig>
@@ -168,7 +168,7 @@
                   </COFINSAliq>
                 </COFINS>
               </imposto>
-              <infAdProd>Trib. aprox.: R$ 0,42 Federal e R$ 1,22 Estadual. Fonte: IBPT W7m9E1</infAdProd>
+              <infAdProd>Trib. aprox.: R$ 1,05 Federal e R$ 1,22 Estadual. Fonte: IBPT H4T2P7</infAdProd>
             </det>
             <total>
               <ICMSTot>
@@ -187,7 +187,7 @@
                 <vCOFINS>0.35</vCOFINS>
                 <vOutro>0.00</vOutro>
                 <vNF>11.79</vNF>
-                <vTotTrib>2.85</vTotTrib>
+                <vTotTrib>3.94</vTotTrib>
               </ICMSTot>
             </total>
             <transp>
@@ -206,7 +206,7 @@
               <vPag>9.49</vPag>
             </pag>
             <infAdic>
-              <infCpl>Trib. aprox.: R$ 0,73 Federal e R$ 2,12 Estadual. Fonte: IBPT W7m9E1</infCpl>
+              <infCpl>Trib. aprox.: R$ 1,82 Federal e R$ 2,12 Estadual. Fonte: IBPT H4T2P7</infCpl>
               <obsCont xCampo="Vendedor">
                 <xTexto>Fulano de Tal</xTexto>
               </obsCont>
@@ -219,7 +219,7 @@
             </infAdic>
           </infNFe>
           <infNFeSupl>
-            <qrCode><![CDATA[http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41160908380787000176650010000000811778821925&nVersao=100&tpAmb=2&cDest=12345678912&dhEmi=323031362d30392d31375430303a33363a30332b30303a3030&vNF=11.79&vICMS=0.00&digVal=6877455952416f762b444248636b7763655653455a392f6a53344d3d&cIdToken=000000&cHashQRCode=220e31de4dc74d8481357209a64994ffd3ce01cf]]></qrCode>
+            <qrCode><![CDATA[http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41160908380787000176650010000000811778821925&nVersao=100&tpAmb=2&cDest=12345678912&dhEmi=323031362d30392d31375430303a33363a30332b30303a3030&vNF=11.79&vICMS=0.00&digVal=65626a337a3132684266436432694c6479374149592b37785831773d&cIdToken=000000&cHashQRCode=b8cc2dc3a30def0560954e103a3d76518f214868]]></qrCode>
           </infNFeSupl>
           <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
             <SignedInfo>
@@ -231,10 +231,10 @@
                   <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
                 </Transforms>
                 <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-                <DigestValue>hwEYRAov+DBHckwceVSEZ9/jS4M=</DigestValue>
+                <DigestValue>ebj3z12hBfCd2iLdy7AIY+7xX1w=</DigestValue>
               </Reference>
             </SignedInfo>
-            <SignatureValue>FvFnVC02S9pa9OGgGN3NXLZcUFnIeXZ57JKGRdbi5I+GNhFoF/w8gNLogCP38wo6U0WeVmEel14wHIZK0uoyzPSGW07ZL4ktD7HnwVJXfyVxfEOOOWkGy3rDUyR23YqSqKZkIcrFiSXncSqCQS55aILlSZixJoZoLGHFQTsbDLI=</SignatureValue>
+            <SignatureValue>UP9Ikt3VTKj/T4uBn3r7diRVc3rQRJMmVu76zDs6cf7thnkwT4UFo4FhnhVtDGBVxOKPDdh1Bq6sAPzpZraGV6Hg7rbUnupZeVAiHk3hopaCEFQpZfLSF/cZ2xw/UdzHojugaBUjllCg+49hlLBD2EtUZlt+BD6E4xlXVgQsjBU=</SignatureValue>
             <KeyInfo>
               <X509Data>
                 <X509Certificate>MIIEqzCCA5OgAwIBAgIDMTg4MA0GCSqGSIb3DQEBBQUAMIGSMQswCQYDVQQGEwJCUjELMAkGA1UECBMCUlMxFTATBgNVBAcTDFBvcnRvIEFsZWdyZTEdMBsGA1UEChMUVGVzdGUgUHJvamV0byBORmUgUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMSEwHwYDVQQDExhORmUgLSBBQyBJbnRlcm1lZGlhcmlhIDEwHhcNMDkwNTIyMTcwNzAzWhcNMTAxMDAyMTcwNzAzWjCBnjELMAkGA1UECBMCUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMR0wGwYDVQQKExRUZXN0ZSBQcm9qZXRvIE5GZSBSUzEVMBMGA1UEBxMMUE9SVE8gQUxFR1JFMQswCQYDVQQGEwJCUjEtMCsGA1UEAxMkTkZlIC0gQXNzb2NpYWNhbyBORi1lOjk5OTk5MDkwOTEwMjcwMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx1O/e1Q+xh+wCoxa4pr/5aEFt2dEX9iBJyYu/2a78emtorZKbWeyK435SRTbHxHSjqe1sWtIhXBaFa2dHiukT1WJyoAcXwB1GtxjT2VVESQGtRiujMa+opus6dufJJl7RslAjqN/ZPxcBXaezt0nHvnUB/uB1K8WT9G7ES0V17wIDAQABo4IBfjCCAXowIgYDVR0jAQEABBgwFoAUPT5TqhNWAm+ZpcVsvB7malDBjEQwDwYDVR0TAQH/BAUwAwEBADAPBgNVHQ8BAf8EBQMDAOAAMAwGA1UdIAEBAAQCMAAwgawGA1UdEQEBAASBoTCBnqA4BgVgTAEDBKAvBC0yMjA4MTk3Nzk5OTk5OTk5OTk5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDCgEgYFYEwBAwKgCQQHREZULU5GZaAZBgVgTAEDA6AQBA45OTk5OTA5MDkxMDI3MKAXBgVgTAEDB6AOBAwwMDAwMDAwMDAwMDCBGmRmdC1uZmVAcHJvY2VyZ3MucnMuZ292LmJyMCAGA1UdJQEB/wQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDBTBgNVHR8BAQAESTBHMEWgQ6BBhj9odHRwOi8vbmZlY2VydGlmaWNhZG8uc2VmYXoucnMuZ292LmJyL0xDUi9BQ0ludGVybWVkaWFyaWEzOC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAJFytXuiS02eJO0iMQr/Hi+Ox7/vYiPewiDL7s5EwO8A9jKx9G2Baz0KEjcdaeZk9a2NzDEgX9zboPxhw0RkWahVCP2xvRFWswDIa2WRUT/LHTEuTeKCJ0iF/um/kYM8PmWxPsDWzvsCCRp146lc0lz9LGm5ruPVYPZ/7DAoimUk3bdCMW/rzkVYg7iitxHrhklxH7YWQHUwbcqPt7Jv0RJxclc1MhQlV2eM2MO1iIlk8Eti86dRrJVoicR1bwc6/YDqDp4PFONTi1ddewRu6elGS74AzCcNYRSVTINYiZLpBZO0uivrnTEnsFguVnNtWb9MAHGt3tkR0gAVs6S0fm8=</X509Certificate>

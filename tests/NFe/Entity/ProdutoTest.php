@@ -44,17 +44,15 @@ class ProdutoTest extends \PHPUnit_Framework_TestCase
         $xml = $produto->getNode();
         $dom = $xml->ownerDocument;
 
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml');
+        $dom_cmp->load($xml_file);
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
 
         // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
+        // file_put_contents($xml_file, $dom->saveXML($xml));
     }
 
     public function testProdutoLoadXML()

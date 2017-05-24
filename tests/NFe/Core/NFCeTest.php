@@ -328,5 +328,11 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp = $data['cmp'];
 
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+        
+        // $dom->formatOutput = true;
+        // file_put_contents(
+        //     dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml',
+        //     $dom->saveXML()
+        // );
     }
 }
