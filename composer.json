@@ -19,13 +19,13 @@
         "ext-openssl": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8",
-        "scrutinizer/ocular": "^1.1",
-        "squizlabs/php_codesniffer": "2.8",
+        "phpunit/phpunit": ">=4.8",
+        "scrutinizer/ocular": ">=1.1",
+        "squizlabs/php_codesniffer": ">=2.8",
         "pdepend/pdepend" : "@stable",
         "phpmd/phpmd" : "@stable",
         "sebastian/phpcpd": "*",
-        "phpdocumentor/phpdocumentor": "2.9",
+        "phpdocumentor/phpdocumentor": ">=2.9",
         "phploc/phploc": "*"
     },
     "autoload": {

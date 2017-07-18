@@ -628,7 +628,7 @@
 				"base": "SVAN"
 			},
 			"nfce": {
-				"base": "SVAN",
+				"base": "SVRS",
 				"producao": {
 					"qrcode": "http://www.nfce.sefaz.ma.gov.br/portal/consultarNFCe.jsp",
 					"consulta": "http://www.nfce.sefaz.ma.gov.br/portal/consultaNFe.do"
@@ -1028,67 +1028,12 @@
 				}
 			},
 			"nfce": {
+				"base": "SVRS",
 				"producao": {
-					"inutilizacao": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/NfeInutilizacao2",
-						"servico": "NfeInutilizacao2"
-					},
-					"protocolo": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/NfeConsulta2",
-						"servico": "NfeConsulta2"
-					},
-					"status": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/NfeStatusServico2",
-						"servico": "NfeStatusServico2"
-					},
-					"cadastro": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2",
-						"servico": "CadConsultaCadastro2"
-					},
-					"autorizacao": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao",
-						"servico": "NfeAutorizacao"
-					},
-					"retorno": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao",
-						"servico": "NfeRetAutorizacao"
-					},
-					"evento": {
-						"url": "https://nfce.sefaz.pe.gov.br/nfe-service/services/RecepcaoEvento",
-						"servico": "RecepcaoEvento"
-					},
 					"qrcode": "http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe",
 					"consulta": "http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe"
 				},
 				"homologacao": {
-					"inutilizacao": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/NfeInutilizacao2",
-						"servico": "NfeInutilizacao2"
-					},
-					"protocolo": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/NfeConsulta2",
-						"servico": "NfeConsulta2"
-					},
-					"status": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/NfeStatusServico2",
-						"servico": "NfeStatusServico2"
-					},
-					"cadastro": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro2",
-						"servico": "CadConsultaCadastro2"
-					},
-					"autorizacao": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/NfeAutorizacao",
-						"servico": "NfeAutorizacao"
-					},
-					"retorno": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/NfeRetAutorizacao",
-						"servico": "NfeRetAutorizacao"
-					},
-					"evento": {
-						"url": "https://nfcehomolog.sefaz.pe.gov.br/nfe-service/services/RecepcaoEvento",
-						"servico": "RecepcaoEvento"
-					},
 					"qrcode": "http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe",
 					"consulta": "http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe"
 				}
@@ -1813,6 +1758,8 @@
 			"nfce": {
 				"base": "SVRS",
 				"producao": {
+					"qrcode": "http://app.sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx",
+					"consulta": "http://app.sefaz.es.gov.br/ConsultaNFCe"
 				},
 				"homologacao": {
 					"qrcode": "http://homologacao.sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx",
@@ -1937,7 +1884,15 @@
 				"base": "SVRS"
 			},
 			"nfce": {
-				"base": "SVRS"
+				"base": "SVRS",
+				"producao": {
+					"qrcode": "http://apps.sefaz.to.gov.br/portal-nfce/qrcodeNFCe",
+					"consulta": "http://apps.sefaz.to.gov.br/portal-nfce/consultarNFCe.jsf"
+				},
+				"homologacao": {
+					"qrcode": "http://apps.sefaz.to.gov.br/portal-nfcehomologacao/qrcodeNFCe",
+					"consulta": "http://apps.sefaz.to.gov.br/portal-nfce-homologacao/consultarNFCe.jsf"
+				}
 			}
 		}
 	},

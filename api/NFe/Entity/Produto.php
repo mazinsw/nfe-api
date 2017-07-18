@@ -455,8 +455,13 @@ class Produto extends Total
             $config->getTokenIBPT()
         );
         if ($aliquota === false) {
-            throw new \Exception('Não foi possível obter o tributo aproximado do produto "'.
-                $this->getDescricao().'" e item '.$this->getItem(), 404);
+            throw new \Exception(
+                vsprint(
+                    'NCM inválido no item %d - "%s"',
+                    array($this->getItem(), $this->getDescricao())
+                ),
+                404
+            );
         }
         foreach ($tipos as $tipo) {
             $imposto->setAliquota($aliquota[$tipo]);

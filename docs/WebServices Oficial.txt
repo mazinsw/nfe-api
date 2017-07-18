@@ -1,0 +1,31 @@
+Atualizado em 18-07-2017
+
+NFC-e:
+
+AC - SVRS: http://www.sefaznet.ac.gov.br/sefazonline/servlet/enderecows
+AL - RS: http://www.sefaz.al.gov.br/nfe/webservices.php
+AM - http://portalnfce.sefaz.am.gov.br/desenvolvedor/documentacao-tecnica/
+AP - SVRS: https://www.sefaz.ap.gov.br/nota-fiscal-do-consumidor-eletronica/201-nfc-e
+BA - SVRS: https://www.sefaz.ba.gov.br/especiais/aviso_novos_cte.html
+CE - ?
+DF - SVRS: http://www.fazenda.df.gov.br/area.cfm?id_area=1115
+ES - ?
+GO - http://www.nfce.go.gov.br/post/ver/215366/quais-sao-os-web-services-da-nfc-e
+MA - ?
+MG - Não tem NFC-e
+MS - http://www.nfce.ms.gov.br/urls-webservices/
+MT - https://www.sefaz.mt.gov.br/portal/nfce/?pg=cGdJbmZvcm1hY2Fv
+PA - SVRS: http://nfce.sefa.pa.gov.br/index.php/desenvolvedor
+PB - SVRS: https://www.receita.pb.gov.br/ser/images/docs/downloads/NFC-e/Web_Services_NFCe.pdf
+PE - SVRS: https://www.sefaz.pe.gov.br/Servicos/Nota-Fiscal-de-Consumidor-Eletronica/Paginas/Webservices-Producao-e-Homologacao.aspx
+PI - SVRS: http://www.sefaz.pi.gov.br/index.php/informacoes/imprensa/noticias/noticias-em-destaque/-novos-ambientes-de-autorizacao-de-documentos-na-receita-estadual-do-rs
+PR - http://www.sped.fazenda.pr.gov.br/modules/conteudo/conteudo.php?conteudo=97
+RJ - SVRS: http://www.fazenda.rj.gov.br/sefaz/content/conn/UCMServer/path/Contribution%20Folders/site_fazenda/informacao/sistemaseletronicos/nfe/Mudan%C3%A7a%20de%20URLs%20SVRS%20vers%C3%A3o%203.10.htm
+RN - SVRS: http://www.set.rn.gov.br/contentProducao/aplicacao/set_v2/nfce/gerados/relacao_de_webservices.asp
+RO - ?: http://www.nfce.sefin.ro.gov.br/docTecnica.jsp
+RR - SVRS: https://www.sefaz.rr.gov.br/nfce_site/download/roteiro_tecnico_nfce.pdf
+RS - https://www.sefaz.rs.gov.br/Site/MontaDuvidas.aspx?al=l_rel_end_ws_nfce
+SC - ?
+SE - SVRS: http://www.nfce.se.gov.br/portal/portalNoticias.jsp?jsp=barra-menu/documentos/tabelaEnderecoWebService.htm
+SP - http://www.nfce.fazenda.sp.gov.br/NFCePortal/Paginas/URLWebServices.aspx
+TO - ?

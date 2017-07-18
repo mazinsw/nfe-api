@@ -107,7 +107,7 @@
           </COFINSAliq>
         </COFINS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 0,77 Federal e R$ 0,90 Estadual. Fonte: IBPT H4T2P7</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 0,77 Federal e R$ 0,90 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infAdProd>
     </det>
     <det nItem="2">
       <prod>
@@ -156,7 +156,7 @@
           </COFINSAliq>
         </COFINS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 1,05 Federal e R$ 1,22 Estadual. Fonte: IBPT H4T2P7</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 1,05 Federal e R$ 1,22 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infAdProd>
     </det>
     <total>
       <ICMSTot>
@@ -194,7 +194,7 @@
       <vPag>9.49</vPag>
     </pag>
     <infAdic>
-      <infCpl>Trib. aprox.: R$ 1,82 Federal e R$ 2,12 Estadual. Fonte: IBPT H4T2P7</infCpl>
+      <infCpl>Trib. aprox.: R$ 1,82 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infCpl>
       <obsCont xCampo="Vendedor">
         <xTexto>Fulano de Tal</xTexto>
       </obsCont>

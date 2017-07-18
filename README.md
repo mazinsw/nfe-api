@@ -109,11 +109,11 @@ O código foi implementado e testado com PHP 5.6, verifique sua versão do PHP e
 ## Licença
 Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.
 
-[ico-version]: https://img.shields.io/packagist/v/mazinsw/nfe-api.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/mazinsw/nfe-api/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/mazinsw/nfe-api.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/mazinsw/nfe-api.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/mazinsw/nfe-api.svg?style=flat-square
+[ico-version]: https://poser.pugx.org/mazinsw/nfe-api/version
+[ico-travis]: https://api.travis-ci.org/mazinsw/nfe-api.svg
+[ico-scrutinizer]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/coverage.png
+[ico-code-quality]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/quality-score.png
+[ico-downloads]: https://poser.pugx.org/mazinsw/nfe-api/d/total.svg
 
 [link-packagist]: https://packagist.org/packages/mazinsw/nfe-api
 [link-travis]: https://travis-ci.org/mazinsw/nfe-api
