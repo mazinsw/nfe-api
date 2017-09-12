@@ -1721,6 +1721,9 @@ abstract class Nota implements Node
 
     public function loadNode($element, $name = null)
     {
+        if (is_null($element)) {
+            throw new \Exception("Nota com XML mal formado ou vazio", 500);
+        }
         $root = $element;
         $name = is_null($name)?'NFe':$name;
         if ($element->nodeName != $name) {
