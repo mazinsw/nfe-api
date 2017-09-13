@@ -26,11 +26,13 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         $node = \NFe\Common\Util::findNode($dom, 'idLote');
         $node_cmp->nodeValue = $node->nodeValue;
 
+        if (\NFe\Core\NFCeTest::UPDATE_XML) {
+            $dom->formatOutput = true;
+            file_put_contents($xml_file, $dom->saveXML());
+        }
+
         $xml_cmp = $dom_cmp->saveXML();
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
-
-        // $dom->formatOutput = true;
-        // file_put_contents($xml_file, $dom->saveXML());
         
         $xml_resp_file = dirname(dirname(__DIR__)).'/resources/xml/task/'.$resp_name;
         $dom_resp = new \DOMDocument();

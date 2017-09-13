@@ -81,7 +81,7 @@
         <nItemPed>1</nItemPed>
       </prod>
       <imposto>
-        <vTotTrib>1.67</vTotTrib>
+        <vTotTrib>1.65</vTotTrib>
         <ICMS>
           <ICMS60>
             <orig>0</orig>
@@ -107,7 +107,7 @@
           </COFINSAliq>
         </COFINS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 0,77 Federal e R$ 0,90 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 0,75 Federal e R$ 0,90 Estadual. Fonte: IBPT/empresometro.com.br S3A6R4</infAdProd>
     </det>
     <det nItem="2">
       <prod>
@@ -130,7 +130,7 @@
         <nItemPed>2</nItemPed>
       </prod>
       <imposto>
-        <vTotTrib>2.27</vTotTrib>
+        <vTotTrib>2.24</vTotTrib>
         <ICMS>
           <ICMS60>
             <orig>0</orig>
@@ -156,7 +156,7 @@
           </COFINSAliq>
         </COFINS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 1,05 Federal e R$ 1,22 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 1,02 Federal e R$ 1,22 Estadual. Fonte: IBPT/empresometro.com.br S3A6R4</infAdProd>
     </det>
     <total>
       <ICMSTot>
@@ -175,7 +175,7 @@
         <vCOFINS>0.35</vCOFINS>
         <vOutro>0.00</vOutro>
         <vNF>11.79</vNF>
-        <vTotTrib>3.94</vTotTrib>
+        <vTotTrib>3.89</vTotTrib>
       </ICMSTot>
     </total>
     <transp>
@@ -194,7 +194,7 @@
       <vPag>9.49</vPag>
     </pag>
     <infAdic>
-      <infCpl>Trib. aprox.: R$ 1,82 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infCpl>
+      <infCpl>Trib. aprox.: R$ 1,77 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br S3A6R4</infCpl>
       <obsCont xCampo="Vendedor">
         <xTexto>Fulano de Tal</xTexto>
       </obsCont>

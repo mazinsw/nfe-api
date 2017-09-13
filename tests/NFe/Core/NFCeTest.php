@@ -4,6 +4,7 @@ namespace NFe\Core;
 class NFCeTest extends \PHPUnit_Framework_TestCase
 {
     private $sefaz;
+    const UPDATE_XML = false;
 
     protected function setUp()
     {
@@ -270,11 +271,13 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;
 
+        if (self::UPDATE_XML) {
+            $dom->formatOutput = true;
+            file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
+        }
+
         $dom_cmp = self::loadNFCeXML();
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
-
-        // $dom->formatOutput = true;
-        // file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
     }
 
     public function testNFCeAssinadaXML()
@@ -284,14 +287,16 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom = $xml->ownerDocument;
         $dom = $nfce->assinar($dom);
 
+        if (self::UPDATE_XML) {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml',
+                $dom->saveXML()
+            );
+        }
+
         $dom_cmp = self::loadNFCeXMLAssinado();
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml',
-        //     $dom->saveXML()
-        // );
     }
 
     public function testNFCeValidarXML()
@@ -326,13 +331,15 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $data = self::loadNFCeAutorizada();
         $dom = $data['dom'];
         $dom_cmp = $data['cmp'];
+        
+        if (self::UPDATE_XML) {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml',
+                $dom->saveXML()
+            );
+        }
 
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
-        
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml',
-        //     $dom->saveXML()
-        // );
     }
 }

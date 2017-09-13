@@ -23,7 +23,7 @@
     <nItemPed>1</nItemPed>
   </prod>
   <imposto>
-    <vTotTrib>1.43</vTotTrib>
+    <vTotTrib>1.42</vTotTrib>
     <ICMS>
       <ICMSSN500>
         <orig>0</orig>
@@ -31,5 +31,5 @@
       </ICMSSN500>
     </ICMS>
   </imposto>
-  <infAdProd>Trib. aprox.: R$ 0,66 Federal e R$ 0,77 Estadual. Fonte: IBPT/empresometro.com.br M2L5P8</infAdProd>
+  <infAdProd>Trib. aprox.: R$ 0,65 Federal e R$ 0,77 Estadual. Fonte: IBPT/empresometro.com.br S3A6R4</infAdProd>
 </det>
