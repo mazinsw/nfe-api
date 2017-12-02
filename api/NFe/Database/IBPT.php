@@ -77,10 +77,10 @@ class IBPT
             return false;
         }
         $key = $ncm.'.'.sprintf('%02s', $ex);
-        $o = $data['estados'][$uf][$key];
-        if (is_null($o)) {
+        if (!isset($data['estados'][$uf][$key])) {
             return false;
         }
+        $o = $data['estados'][$uf][$key];
         $o['info'] = $data['info'];
         $o['info']['origem'] = 'Tabela offline';
         return $o;

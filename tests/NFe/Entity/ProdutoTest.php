@@ -72,4 +72,18 @@ class ProdutoTest extends \PHPUnit_Framework_TestCase
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
+
+    public function testNCMInexistente()
+    {
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml');
+
+        $produto = new \NFe\Entity\Produto();
+        $produto->loadNode($dom_cmp->documentElement);
+        $produto->setNCM('00000000');
+
+        $this->setExpectedException('\Exception');
+        $produto->getImpostoInfo();
+    }
 }

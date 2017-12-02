@@ -456,9 +456,9 @@ class Produto extends Total
         );
         if ($aliquota === false) {
             throw new \Exception(
-                vsprint(
+                sprintf(
                     'NCM inválido no item %d - "%s"',
-                    array($this->getItem(), $this->getDescricao())
+                    $this->getItem(), $this->getDescricao()
                 ),
                 404
             );
