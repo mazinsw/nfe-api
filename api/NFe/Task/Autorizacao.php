@@ -100,6 +100,10 @@ class Autorizacao extends Retorno
             $recibo->setModelo($nota->getModelo());
             $recibo->loadNode($resp, Recibo::INFO_TAGNAME);
             return $recibo;
+        } elseif ($this->isParalisado()) {
+            $config = SEFAZ::getInstance()->getConfiguracao();
+            $config->setOffline(time());
+            throw new \NFe\Exception\NetworkException('Serviço paralisado ou em manutenção', $this->getStatus());
         }
         return $this;
     }

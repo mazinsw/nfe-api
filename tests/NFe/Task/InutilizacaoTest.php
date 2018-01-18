@@ -19,7 +19,7 @@ class InutilizacaoTest extends \PHPUnit_Framework_TestCase
         $inutilizacao->setCNPJ(\NFe\Core\SEFAZ::getInstance()
             ->getConfiguracao()->getEmitente()->getCNPJ());
         $inutilizacao->setAmbiente(\NFe\Core\Nota::AMBIENTE_HOMOLOGACAO);
-        $inutilizacao->setAno(date('Y'));
+        $inutilizacao->setAno(2017);
         $inutilizacao->setModelo(65);
         $inutilizacao->setSerie(1);
         $inutilizacao->setInicio(81);

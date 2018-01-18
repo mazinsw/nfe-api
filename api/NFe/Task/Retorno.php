@@ -104,6 +104,14 @@ class Retorno extends Status
         return $this->getStatus() == '217';
     }
 
+    /**
+     * Informa se os serviços da SEFAZ estão paralisados ou em manutenção
+     */
+    public function isParalisado()
+    {
+        return in_array($this->getStatus(), array('108', '109'));
+    }
+
     public function toArray($recursive = false)
     {
         $retorno = parent::toArray($recursive);

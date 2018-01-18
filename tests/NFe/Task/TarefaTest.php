@@ -70,9 +70,15 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $nota->setJustificativa('TESTE DO SISTEMA');
+
+        $inutilizacao = new Inutilizacao();
+        $inutilizacao->setAno(2017);
+        $inutilizacao->setJustificativa($nota->getJustificativa());
+
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_INUTILIZAR);
         $tarefa->setNota($nota);
+        $tarefa->setAgente($inutilizacao);
 
         \NFe\Common\CurlSoap::setPostFunction(array($this, 'inutilizadoPostFunction'));
         try {
