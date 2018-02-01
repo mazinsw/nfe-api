@@ -43,6 +43,7 @@ class Configuracao
     private $chave_privada;
     private $arquivo_chave_publica;
     private $arquivo_chave_privada;
+    private $expiracao;
     private $token;
     private $csc;
     private $token_ibpt;
@@ -108,6 +109,7 @@ class Configuracao
     public function setChavePublica($chave_publica)
     {
         $this->chave_publica = $chave_publica;
+        $this->carregaChavePublica();
         return $this;
     }
 
@@ -157,6 +159,20 @@ class Configuracao
         if (file_exists($arquivo_chave_privada)) {
             $this->setChavePrivada(file_get_contents($arquivo_chave_privada));
         }
+        return $this;
+    }
+
+    /**
+     * Data de expiração do certificado em timestamp
+     */
+    public function getExpiracao()
+    {
+        return $this->expiracao;
+    }
+
+    private function setExpiracao($expiracao)
+    {
+        $this->expiracao = $expiracao;
         return $this;
     }
 
@@ -284,6 +300,7 @@ class Configuracao
         $configuracao['evento'] = $this->getEvento();
         $configuracao['arquivo_chave_publica'] = $this->getArquivoChavePublica();
         $configuracao['arquivo_chave_privada'] = $this->getArquivoChavePrivada();
+        $configuracao['expiracao'] = $this->getExpiracao();
         $configuracao['token'] = $this->getToken();
         $configuracao['csc'] = $this->getCSC();
         $configuracao['token_ibpt'] = $this->getTokenIBPT();
@@ -361,5 +378,28 @@ class Configuracao
             $this->setSincrono($configuracao['sincrono']);
         }
         return $this;
+    }
+
+    private function carregaChavePublica()
+    {
+        if (is_null($this->getChavePublica())) {
+            $this->setExpiracao(null);
+        } else {
+            $cert = openssl_x509_read($this->getChavePublica());
+            $cert_data = openssl_x509_parse($cert);
+            $this->setExpiracao($cert_data['validTo_time_t']);
+        }
+    }
+
+    public function verificaValidadeCertificado()
+    {
+        if (getenv('APP_ENV') == 'testing') {
+            return;
+        }
+        if (is_null($this->getExpiracao())) {
+            throw new \Exception('A data de expiração do certificado não foi informada', 401);
+        } else if ($this->getExpiracao() < time()) {
+            throw new \Exception('O certificado digital expirou', 500);
+        }
     }
 }

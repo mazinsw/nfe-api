@@ -17,6 +17,7 @@
     </filter>
     <php>
         <ini name="date.timezone" value="UTC"/>
+        <env name="APP_ENV" value="testing"/>
     </php>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>

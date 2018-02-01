@@ -402,6 +402,7 @@ class Envio
         if ($config->isOffline()) {
             throw new \NFe\Exception\NetworkException('Operação offline, sem conexão com a internet', 7);
         }
+        $config->verificaValidadeCertificado();
         $soap = new CurlSoap();
         $soap->setConnectTimeout(intval($config->getTempoLimite()));
         $soap->setTimeout(ceil($config->getTempoLimite() * 1.5));

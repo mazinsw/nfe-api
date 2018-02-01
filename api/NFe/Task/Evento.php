@@ -770,6 +770,7 @@ class Evento extends Retorno
             $dom = $xml->ownerDocument;
         }
         $config = SEFAZ::getInstance()->getConfiguracao();
+        $config->verificaValidadeCertificado();
 
         $adapter = new XmlseclibsAdapter();
         $adapter->setPrivateKey($config->getChavePrivada());

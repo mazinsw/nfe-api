@@ -24,4 +24,12 @@ class ConfiguracaoTest extends \PHPUnit_Framework_TestCase
         $emitente = $this->config->getEmitente();
         $this->assertNotNull($emitente);
     }
+
+    public function testDataExpiracao()
+    {
+        $this->config
+            ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
+            ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
+        $this->assertEquals('2010-10-02', date('Y-m-d', $this->config->getExpiracao()));
+    }
 }
