@@ -268,6 +268,14 @@ class Util
         return $node;
     }
 
+    public static function addAttribute($element, $name, $text)
+    {
+        $dom = $element->ownerDocument;
+        $node = $element->appendChild($dom->createAttribute($name));
+        $node->appendChild($dom->createTextNode($text));
+        return $node;
+    }
+
     public static function loadNode($element, $name, $exception = null)
     {
         $value = null;

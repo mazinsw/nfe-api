@@ -1692,9 +1692,7 @@ abstract class Nota implements Node
             $_observacoes = $this->getObservacoes();
             foreach ($_observacoes as $_observacao) {
                 $observacoes = $dom->createElement('obsCont');
-                $campo = $dom->createAttribute('xCampo');
-                $campo->value = $_observacao['campo'];
-                $observacoes->appendChild($campo);
+                Util::addAttribute($observacoes, 'xCampo', $_observacao['campo']);
                 Util::appendNode($observacoes, 'xTexto', $_observacao['valor']);
                 $info_adic->appendChild($observacoes);
             }
@@ -1703,9 +1701,7 @@ abstract class Nota implements Node
             $_informacoes = $this->getInformacoes();
             foreach ($_informacoes as $_informacao) {
                 $informacoes = $dom->createElement('obsFisco');
-                $campo = $dom->createAttribute('xCampo');
-                $campo->value = $_informacao['campo'];
-                $informacoes->appendChild($campo);
+                Util::addAttribute($informacoes, 'xCampo', $_informacao['campo']);
                 Util::appendNode($informacoes, 'xTexto', $_informacao['valor']);
                 $info_adic->appendChild($informacoes);
             }
