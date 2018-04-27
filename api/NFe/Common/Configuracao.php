@@ -398,7 +398,7 @@ class Configuracao
         }
         if (is_null($this->getExpiracao())) {
             throw new \Exception('A data de expiração do certificado não foi informada', 401);
-        } else if ($this->getExpiracao() < time()) {
+        } elseif ($this->getExpiracao() < time()) {
             throw new \Exception('O certificado digital expirou', 500);
         }
     }

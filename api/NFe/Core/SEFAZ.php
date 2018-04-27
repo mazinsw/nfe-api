@@ -232,8 +232,8 @@ class SEFAZ
     }
 
     /* Consulta se as notas existem e cancela ou inutiliza seus números
-	 * Também processa pedido de inutilização e cancelamento de notas 
-	 */
+     * Também processa pedido de inutilização e cancelamento de notas
+     */
     public function executa($tarefas)
     {
         $i = 0;
@@ -268,9 +268,9 @@ class SEFAZ
     }
 
     /* *
-	 * Inutiliza um intervalo de números de notas fiscais e insere o resultado no
-	 * próprio objeto de inutilização
-	 */
+     * Inutiliza um intervalo de números de notas fiscais e insere o resultado no
+     * próprio objeto de inutilização
+     */
     public function inutiliza($inutilizacao)
     {
         $tarefa = new Tarefa();
@@ -309,8 +309,8 @@ class SEFAZ
             Logger::error('SEFAZ.processa[pendentes]('.$e->getCode().') - '.$e->getMessage());
         }
         /* Consulta se as notas existem e cancela ou inutiliza seus números
-		 * Também processa pedido de inutilização e cancelamento de notas 
-		 */
+         * Também processa pedido de inutilização e cancelamento de notas
+         */
         try {
             $db = $this->getConfiguracao()->getBanco();
             $tarefas = $db->getNotasTarefas();

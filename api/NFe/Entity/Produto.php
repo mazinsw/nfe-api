@@ -458,7 +458,8 @@ class Produto extends Total
             throw new \Exception(
                 sprintf(
                     'NCM inválido no item %d - "%s"',
-                    $this->getItem(), $this->getDescricao()
+                    $this->getItem(),
+                    $this->getDescricao()
                 ),
                 404
             );
@@ -650,7 +651,7 @@ class Produto extends Total
         Util::appendNode($produto, 'cEAN', $this->getCodigoBarras(true));
         Util::appendNode($produto, 'xProd', $this->getDescricao(true));
         Util::appendNode($produto, 'NCM', $this->getNCM(true));
-//		Util::appendNode($produto, 'NVE', $this->getNVE(true));
+//      Util::appendNode($produto, 'NVE', $this->getNVE(true));
         if (!is_null($this->getCEST())) {
             Util::appendNode($produto, 'CEST', $this->getCEST(true));
         }
@@ -679,13 +680,13 @@ class Produto extends Total
             Util::appendNode($produto, 'vOutro', $this->getDespesas(true));
         }
         Util::appendNode($produto, 'indTot', $this->getMultiplicador(true));
-//		Util::appendNode($produto, 'DI', $this->getImportacoes(true));
-//		Util::appendNode($produto, 'detExport', $this->getDetalhes(true));
+//      Util::appendNode($produto, 'DI', $this->getImportacoes(true));
+//      Util::appendNode($produto, 'detExport', $this->getDetalhes(true));
         if (!is_null($this->getPedido())) {
             Util::appendNode($produto, 'xPed', $this->getPedido(true));
         }
         Util::appendNode($produto, 'nItemPed', $this->getItem(true));
-//		Util::appendNode($produto, 'nFCI', $this->getControle(true));
+//      Util::appendNode($produto, 'nFCI', $this->getControle(true));
         $element->appendChild($produto);
 
         $imposto = $dom->createElement('imposto');
