@@ -75,6 +75,18 @@ XML;
         });
     }
 
+    private function reparseResponse()
+    {
+        if (isset($this->responseHeaders['Content-Type'])) {
+            $xmlPattern = '~^application/soap\+xml~i';
+            if (preg_match($xmlPattern, $this->responseHeaders['Content-Type'])) {
+                if ($this->xmlDecoder) {
+                    $this->response = call_user_func($this->xmlDecoder, $this->rawResponse);
+                }
+            }
+        }
+    }
+
     public static function setPostFunction($post_fn)
     {
         return self::$post_fn = $post_fn;
@@ -133,6 +145,7 @@ XML;
         $data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $data);
         if (is_null(self::$post_fn)) {
             $this->post($url, $data);
+            $this->reparseResponse();
         } else {
             call_user_func_array(self::$post_fn, array($this, $url, $data));
         }

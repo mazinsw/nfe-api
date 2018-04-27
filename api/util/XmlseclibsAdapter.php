@@ -17,6 +17,8 @@ use UnexpectedValueException;
  */
 class XmlseclibsAdapter implements AdapterInterface
 {
+    const BASE_TEMPLATE = '<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><SignatureMethod/></SignedInfo></Signature>';
+
     /**
      * Private key.
      *
@@ -193,7 +195,12 @@ class XmlseclibsAdapter implements AdapterInterface
      */
     protected function createXmlSecurityDSig()
     {
-        return new XMLSecurityDSig(''); // no preffix
+        $result = new XMLSecurityDSig(''); // no preffix
+
+        $sigdoc = new DOMDocument();
+        $sigdoc->loadXML(self::BASE_TEMPLATE);
+        $result->sigNode = $sigdoc->documentElement;
+        return $result;
     }
 
     /**
