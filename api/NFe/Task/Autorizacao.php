@@ -30,6 +30,7 @@ namespace NFe\Task;
 use NFe\Core\Nota;
 use NFe\Core\SEFAZ;
 use NFe\Common\Util;
+use NFe\Exception\ValidationException;
 
 class Autorizacao extends Retorno
 {
@@ -80,12 +81,14 @@ class Autorizacao extends Retorno
 
     public function envia($nota, $dom)
     {
+        $xmlContent = $this->getConteudo($dom);
+        $domLote = $this->validar($xmlContent);
         $envio = new Envio();
         $envio->setServico(Envio::SERVICO_AUTORIZACAO);
         $envio->setAmbiente($nota->getAmbiente());
         $envio->setModelo($nota->getModelo());
         $envio->setEmissao($nota->getEmissao());
-        $envio->setConteudo($this->getConteudo($dom));
+        $envio->setConteudo($domLote);
         $resp = $envio->envia();
         $this->loadNode($resp);
         if ($this->isProcessado()) {
@@ -113,5 +116,33 @@ class Autorizacao extends Retorno
         $tag = is_null($name)?'retEnviNFe':$name;
         $element = parent::loadNode($element, $tag);
         return $element;
+    }
+
+    /**
+     * Valida o XML em lote
+     */
+    public function validar($xmlContent)
+    {
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->loadXML($xmlContent);
+        $xsd_path = dirname(__DIR__) . '/Core/schema';
+        $xsd_file = $xsd_path . '/enviNFe_v3.10.xsd';
+        if (!file_exists($xsd_file)) {
+            throw new \Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+        }
+        // Enable user error handling
+        $save = libxml_use_internal_errors(true);
+        if ($dom->schemaValidate($xsd_file)) {
+            libxml_use_internal_errors($save);
+            return $dom;
+        }
+        $msg = array();
+        $errors = libxml_get_errors();
+        foreach ($errors as $error) {
+            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($save);
+        throw new ValidationException($msg);
     }
 }

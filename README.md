@@ -13,6 +13,7 @@
 - Código bem estruturado e bem reaproveitado que permite a fácil manutenção
 - Estrutura de suporte para vários modelos de notas
 - Fácil configuração e usabilidade
+- Testes e cobertura de código que garantem melhor estabilidade
 
 ## Motivo do projeto
 As biliotecas de código aberto encontradas até o momento (2016) não fornecem uma estrutura sólida e de fácil utilização/manutenção, dessa forma surgiu a necessidade de criar uma bilioteca capaz de gerar notas fiscais em diversos modelos e que seja de fácil utilização 
@@ -22,16 +23,22 @@ A ideia é criar uma bilioteca em que as entidades da nota sejam implementadas e
 
 ## Instalação
 
-Clone o repositório com `git clone https://github.com/mazinsw/nfe-api.git` ou [baixe a última versão](https://github.com/mazinsw/nfe-api/archive/master.zip).
+Você precisará do [Composer][link-composer] para instalar essa biblioteca.
 
 Execute o comando abaixo na pasta do projeto
 
 ```sh
-composer install
+composer require mazinsw/nfe-api
 ```
 
 ## Exemplo básico de geração de nota fiscal
 ```php
+<?php
+
+use NFe\Core\NFCe;
+use NFe\Entity\Emitente;
+/* outras declarações use */
+
 $nfce = new NFCe();
 $nfce->setCodigo('123456');
 $nfce->setSerie('1');
@@ -93,19 +100,19 @@ $sefaz->addNota($nfce)
 ```
 
 ## Expansão do projeto
-Como o projeto é grande, precisamos da colaboração de desenvolvedores para melhoria do projeto, para isso envie suas implementações para o E-mail: desenvolvimento@mzsw.com.br ou faça um Pull request
+Como o projeto é grande, precisamos da colaboração de desenvolvedores para melhoria do projeto, para isso envie suas implementações por meio de um Pull request
 
 ## Solução de problemas
 O código foi implementado e testado com PHP 5.6, verifique sua versão do PHP em caso de falhas na execução
 
 ## Dependências
-- PHP 5.3 ou superior
+- PHP 5.6 ou superior
 - Extensão openssl para assinatura da nota
 - Extensão curl para envio da nota
 
 ## Limitações
-- Apenas para o modelo NFC-e foi implementado a geração da nota, mas ainda não foi testado
- 
+- Apenas para o modelo NFC-e foi implementado e testado
+
 ## Licença
 Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.
 
@@ -120,3 +127,4 @@ Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.
 [link-scrutinizer]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/mazinsw/nfe-api
 [link-downloads]: https://packagist.org/packages/mazinsw/nfe-api
+[link-composer]: https://getcomposer.org
