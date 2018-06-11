@@ -302,7 +302,11 @@ class Transporte implements Node
         } else {
             $this->setFrete($transporte['frete']);
         }
-        $this->setTransportador(new Transportador(isset($transporte['transportador']) ? $transporte['transportador'] : []));
+        $this->setTransportador(
+            new Transportador(
+                isset($transporte['transportador']) ? $transporte['transportador'] : []
+            )
+        );
         $this->setRetencao(new Tributo(isset($transporte['retencao']) ? $transporte['retencao'] : []));
         $this->setVeiculo(new Veiculo(isset($transporte['veiculo']) ? $transporte['veiculo'] : []));
         $this->setReboque(new Veiculo(isset($transporte['reboque']) ? $transporte['reboque'] : []));

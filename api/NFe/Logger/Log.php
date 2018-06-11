@@ -29,28 +29,28 @@ namespace NFe\Logger;
 
 /**
  * Salva mensagens de erro, depuração entre outros
- * 
+ *
  * @author Francimar Alves <mazinsw@gmail.com>
  */
 class Log
 {
     /**
      * Pasta onde será salvo os arquivos de log
-     * 
+     *
      * @var string
      */
     private $directory;
 
     /**
      * Processador de log
-     * 
+     *
      * @var \Monolog\Logger
      */
     private $logger;
 
     /**
      * Instância salva para uso estático
-     * 
+     *
      * @var Log
      */
     private static $instance;
