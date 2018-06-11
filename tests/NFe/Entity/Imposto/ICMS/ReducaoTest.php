@@ -12,8 +12,8 @@ class ReducaoTest extends \PHPUnit_Framework_TestCase
 
     public function testReducaoXML()
     {
-        $icms_reducao = new \NFe\Entity\Imposto\ICMS\Reducao();
-        $icms_reducao->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+        $icms_reducao = new Reducao();
+        $icms_reducao->setModalidade(Normal::MODALIDADE_OPERACAO);
         $icms_reducao->setBase(90.00);
         $icms_reducao->setAliquota(18.0);
         $icms_reducao->setReducao(10.0);
@@ -24,17 +24,19 @@ class ReducaoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_reducao->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testReducaoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testReducaoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testReducaoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testReducaoLoadXML()
@@ -43,8 +45,8 @@ class ReducaoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testReducaoXML.xml');
 
-        $icms_reducao = new \NFe\Entity\Imposto\ICMS\Reducao();
-        $icms_reducao->loadNode($dom_cmp->documentElement);
+        $icms_reducao = Reducao::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(Reducao::class, $icms_reducao);
 
         $xml = $icms_reducao->getNode();
         $dom = $xml->ownerDocument;

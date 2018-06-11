@@ -12,13 +12,13 @@ class PartilhaTest extends \PHPUnit_Framework_TestCase
 
     public function testPartilhaXML()
     {
-        $icms_partilha = new \NFe\Entity\Imposto\ICMS\Partilha();
-        $icms_partilha->getNormal()->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+        $icms_partilha = new Partilha();
+        $icms_partilha->getNormal()->setModalidade(Normal::MODALIDADE_OPERACAO);
         $icms_partilha->getNormal()->setBase(90.00);
         $icms_partilha->getNormal()->setReducao(10.00);
         $icms_partilha->getNormal()->setAliquota(18.00);
 
-        $icms_partilha->setModalidade(\NFe\Entity\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
+        $icms_partilha->setModalidade(Parcial::MODALIDADE_AGREGADO);
         $icms_partilha->setBase(162.00);
         $icms_partilha->setMargem(100.00);
         $icms_partilha->setReducao(10.00);
@@ -32,17 +32,19 @@ class PartilhaTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_partilha->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testPartilhaXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testPartilhaXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testPartilhaXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testPartilhaLoadXML()
@@ -51,8 +53,8 @@ class PartilhaTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testPartilhaXML.xml');
 
-        $icms_partilha = new \NFe\Entity\Imposto\ICMS\Partilha();
-        $icms_partilha->loadNode($dom_cmp->documentElement);
+        $icms_partilha = Partilha::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(Partilha::class, $icms_partilha);
 
         $xml = $icms_partilha->getNode();
         $dom = $xml->ownerDocument;

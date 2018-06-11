@@ -37,11 +37,9 @@ use NFe\Common\Util;
 class Substituto extends Cobrado
 {
 
-    public function __construct($substituto = array())
+    public function __construct($substituto = [])
     {
         parent::__construct($substituto);
-        $this->setTributacao('41');
-        $this->setNormal(new Cobrado());
     }
 
     public function toArray($recursive = false)
@@ -50,7 +48,7 @@ class Substituto extends Cobrado
         return $substituto;
     }
 
-    public function fromArray($substituto = array())
+    public function fromArray($substituto = [])
     {
         if ($substituto instanceof Substituto) {
             $substituto = $substituto->toArray();
@@ -58,6 +56,10 @@ class Substituto extends Cobrado
             return $this;
         }
         parent::fromArray($substituto);
+        $this->setNormal(new Cobrado(isset($substituto['normal']) ? $substituto['normal'] : []));
+        if (!isset($substituto['tributacao'])) {
+            $this->setTributacao('41');
+        }
         return $this;
     }
 

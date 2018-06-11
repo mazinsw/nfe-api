@@ -50,7 +50,7 @@ class Isento extends Imposto
     const TRIBUTACAO_INCIDENCIA = 'incidencia';
     const TRIBUTACAO_SUSPENSAO = 'suspensao';
 
-    public function __construct($pis = array())
+    public function __construct($pis = [])
     {
         parent::__construct($pis);
         $this->setGrupo(self::GRUPO_PIS);
@@ -122,7 +122,7 @@ class Isento extends Imposto
         return $pis;
     }
 
-    public function fromArray($pis = array())
+    public function fromArray($pis = [])
     {
         if ($pis instanceof Isento) {
             $pis = $pis->toArray();

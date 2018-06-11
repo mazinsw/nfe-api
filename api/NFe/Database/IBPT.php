@@ -28,7 +28,7 @@
 namespace NFe\Database;
 
 use Curl\Curl;
-use NFe\Log\Logger;
+use NFe\Logger\Log;
 
 class IBPT
 {
@@ -38,7 +38,7 @@ class IBPT
 
     public function __construct()
     {
-        $this->tabela = array();
+        $this->tabela = [];
         $this->offline = false;
     }
 
@@ -92,41 +92,41 @@ class IBPT
             return false;
         }
         $url = 'http://iws.ibpt.org.br/api/Produtos';
-        $params = array(
+        $params = [
             'token' => $token,
             'cnpj' => $cnpj,
             'codigo' => $ncm,
             'uf' => $uf,
             'ex' => intval($ex)
-        );
+        ];
         $curl = new Curl($url);
         $curl->setConnectTimeout(2);
         $curl->setTimeout(3);
         $data = $curl->get($params);
         if ($curl->error) {
-            Logger::warning('IBPT.getImpostoOnline('.$curl->errorCode.') - '.$curl->errorMessage);
+            Log::warning('IBPT.getImpostoOnline('.$curl->errorCode.') - '.$curl->errorMessage);
             $this->setOffline(true);
             return false;
         }
-        $o = array(
+        $o = [
             'importado' => $data->Importado,
             'nacional' => $data->Nacional,
             'estadual' => $data->Estadual,
             'municipal' => $data->Municipal,
             'tipo' => $data->Tipo
-        );
+        ];
         $vigenciainicio = date_create_from_format('d/m/Y', $data->VigenciaInicio);
         $vigenciafim = date_create_from_format('d/m/Y', $data->VigenciaFim);
-        $info = array(
+        $info = [
             'origem' => 'API IBPT',
             'fonte' => $data->Fonte,
             'versao' => $data->Versao,
             'chave' => $data->Chave,
-            'vigencia' => array(
+            'vigencia' => [
                 'inicio' => date_format($vigenciainicio, 'Y-m-d'),
                 'fim' => date_format($vigenciafim, 'Y-m-d')
-            )
-        );
+            ]
+        ];
         $o['info'] = $info;
         return $o;
     }

@@ -41,7 +41,7 @@ class Protocolo extends Retorno
     private $validacao;
     private $numero;
 
-    public function __construct($protocolo = array())
+    public function __construct($protocolo = [])
     {
         parent::__construct($protocolo);
     }
@@ -111,7 +111,7 @@ class Protocolo extends Retorno
         return $protocolo;
     }
 
-    public function fromArray($protocolo = array())
+    public function fromArray($protocolo = [])
     {
         if ($protocolo instanceof Protocolo) {
             $protocolo = $protocolo->toArray();

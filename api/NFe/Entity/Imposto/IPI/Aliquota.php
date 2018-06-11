@@ -46,7 +46,7 @@ class Aliquota extends Imposto
     const TRIBUTACAO_TRIBUTADA = 'tributada';
     const TRIBUTACAO_SAIDA = 'saida';
 
-    public function __construct($aliquota = array())
+    public function __construct($aliquota = [])
     {
         parent::__construct($aliquota);
         $this->setGrupo(self::GRUPO_IPI);
@@ -110,7 +110,7 @@ class Aliquota extends Imposto
         return $aliquota;
     }
 
-    public function fromArray($aliquota = array())
+    public function fromArray($aliquota = [])
     {
         if ($aliquota instanceof Aliquota) {
             $aliquota = $aliquota->toArray();

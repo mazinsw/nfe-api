@@ -36,7 +36,7 @@ class Aliquota extends Imposto
     const TRIBUTACAO_NORMAL = 'normal';
     const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
 
-    public function __construct($cofins = array())
+    public function __construct($cofins = [])
     {
         parent::__construct($cofins);
         $this->setGrupo(self::GRUPO_COFINS);
@@ -90,7 +90,7 @@ class Aliquota extends Imposto
         return $cofins;
     }
 
-    public function fromArray($cofins = array())
+    public function fromArray($cofins = [])
     {
         if ($cofins instanceof Aliquota) {
             $cofins = $cofins->toArray();

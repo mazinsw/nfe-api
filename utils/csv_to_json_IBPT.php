@@ -5,7 +5,7 @@ function csv_to_array($filename='', $delimiter=',')
         return FALSE;
 
     $header = NULL;
-    $data = array();
+    $data = [];
     if (($handle = fopen($filename, 'r')) !== FALSE)
     {
         while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
@@ -34,31 +34,31 @@ foreach ($it as $filename) {
 	$first = current($csv);
 	$vigenciainicio = date_create_from_format('d/m/Y', $first['vigenciainicio']);
 	$vigenciafim = date_create_from_format('d/m/Y', $first['vigenciafim']);
-	$info = array(
+	$info = [
 		'fonte' => $first['fonte'],
 		'versao' => $first['versao'],
 		'chave' => $first['chave'],
-		'vigencia' => array(
+		'vigencia' => [
 			'inicio' => date_format($vigenciainicio, 'Y-m-d'),
 			'fim' => date_format($vigenciafim, 'Y-m-d')
-		)
-	);
-	$items = array();
+		]
+	];
+	$items = [];
 	foreach ($csv as $row) {
-		$o = array(
+		$o = [
 			'importado' => floatval($row['importadosfederal']),
 			'nacional' => floatval($row['nacionalfederal']),
 			'estadual' => floatval($row['estadual']),
 			'municipal' => floatval($row['municipal']),
 			'tipo' => $row['tipo']
-		);
+		];
 		$key = $row['codigo'].'.'.sprintf('%02s', $row['ex']);
 		$items[$key] = $o;
 	}
-	$data = array(
+	$data = [
 		'info' => $info,
-		'estados' => array($uf => $items)
-	);
+		'estados' => [$uf => $items]
+	];
 	$data = json_encode($data);
 	$outfile = $dest_folder.'/'.$uf.'.json';
 	echo 'Writing '.$outfile."\n";

@@ -19,9 +19,9 @@ class VolumeTest extends \PHPUnit_Framework_TestCase
         $volume->getPeso()
             ->setLiquido(15.0)
             ->setBruto(21.0);
-        $volume->addLacre(new \NFe\Entity\Lacre(array('numero' => 123456)));
-        $volume->addLacre(new \NFe\Entity\Lacre(array('numero' => 123457)));
-        $volume->addLacre(new \NFe\Entity\Lacre(array('numero' => 123458)));
+        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123456]));
+        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123457]));
+        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123458]));
         $volume->fromArray($volume);
         $volume->fromArray($volume->toArray());
         $volume->fromArray(null);
@@ -29,14 +29,19 @@ class VolumeTest extends \PHPUnit_Framework_TestCase
         $xml = $volume->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeXML.xml', $dom->saveXML($xml));
     }
 
     public function testVolumeLoadXML()

@@ -34,7 +34,7 @@ class Retorno extends Status
 
     private $data_recebimento;
 
-    public function __construct($retorno = array())
+    public function __construct($retorno = [])
     {
         parent::__construct($retorno);
     }
@@ -61,7 +61,7 @@ class Retorno extends Status
      */
     public function isAutorizado()
     {
-        return in_array($this->getStatus(), array('100', '150'));
+        return in_array($this->getStatus(), ['100', '150']);
     }
 
     /**
@@ -69,7 +69,7 @@ class Retorno extends Status
      */
     public function isCancelado()
     {
-        return in_array($this->getStatus(), array('101', '151'));
+        return in_array($this->getStatus(), ['101', '151']);
     }
 
     /**
@@ -85,7 +85,7 @@ class Retorno extends Status
      */
     public function isRecebido()
     {
-        return in_array($this->getStatus(), array('103', '105'));
+        return in_array($this->getStatus(), ['103', '105']);
     }
 
     /**
@@ -93,7 +93,7 @@ class Retorno extends Status
      */
     public function isDenegada()
     {
-        return in_array($this->getStatus(), array('110', '301', '302', '303'));
+        return in_array($this->getStatus(), ['110', '301', '302', '303']);
     }
 
     /**
@@ -109,7 +109,7 @@ class Retorno extends Status
      */
     public function isParalisado()
     {
-        return in_array($this->getStatus(), array('108', '109'));
+        return in_array($this->getStatus(), ['108', '109']);
     }
 
     public function toArray($recursive = false)
@@ -119,7 +119,7 @@ class Retorno extends Status
         return $retorno;
     }
 
-    public function fromArray($retorno = array())
+    public function fromArray($retorno = [])
     {
         if ($retorno instanceof Retorno) {
             $retorno = $retorno->toArray();

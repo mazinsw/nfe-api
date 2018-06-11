@@ -47,7 +47,7 @@ class Emitente extends Pessoa
     private $fantasia;
     private $regime;
 
-    public function __construct($emitente = array())
+    public function __construct($emitente = [])
     {
         parent::__construct($emitente);
     }
@@ -104,7 +104,7 @@ class Emitente extends Pessoa
         return $emitente;
     }
 
-    public function fromArray($emitente = array())
+    public function fromArray($emitente = [])
     {
         if ($emitente instanceof Emitente) {
             $emitente = $emitente->toArray();
@@ -120,7 +120,7 @@ class Emitente extends Pessoa
         } else {
             $this->setFantasia(null);
         }
-        if (!isset($emitente['regime']) || is_null($emitente['regime'])) {
+        if (!isset($emitente['regime'])) {
             $this->setRegime(self::REGIME_SIMPLES);
         } else {
             $this->setRegime($emitente['regime']);

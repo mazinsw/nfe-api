@@ -41,15 +41,22 @@ class Transporte implements Node
 
     /**
      * Modalidade do frete
-     * 0- Por conta do emitente;
-     * 1- Por conta do
-     * destinatário/remetente;
-     * 2- Por conta de terceiros;
-     * 9- Sem frete (v2.0)
+     * 0- Contratação do Frete por conta do Remetente
+     * (CIF);
+     * 1- Contratação do Frete por conta do destinatário/remetente
+     * (FOB);
+     * 2- Contratação do Frete por conta de terceiros;
+     * 3- Transporte
+     * próprio por conta do remetente;
+     * 4- Transporte próprio por conta do
+     * destinatário;
+     * 9- Sem Ocorrência de transporte.
      */
-    const FRETE_EMITENTE = 'emitente';
+    const FRETE_REMETENTE = 'remetente';
     const FRETE_DESTINATARIO = 'destinatario';
     const FRETE_TERCEIROS = 'terceiros';
+    const FRETE_PROPRIOREMETENTE = 'proprio_remetente';
+    const FRETE_PROPRIODESTINATARIO = 'proprio_destinatario';
     const FRETE_NENHUM = 'nenhum';
 
     private $frete;
@@ -61,18 +68,25 @@ class Transporte implements Node
     private $balsa;
     private $volumes;
 
-    public function __construct($transporte = array())
+    public function __construct($transporte = [])
     {
         $this->fromArray($transporte);
     }
 
     /**
      * Modalidade do frete
-     * 0- Por conta do emitente;
-     * 1- Por conta do
-     * destinatário/remetente;
-     * 2- Por conta de terceiros;
-     * 9- Sem frete (v2.0)
+     * 0- Contratação do Frete por conta do Remetente
+     * (CIF);
+     * 1- Contratação do Frete por conta do destinatário/remetente
+     * (FOB);
+     * 2- Contratação do Frete por conta de terceiros;
+     * 3- Transporte
+     * próprio por conta do remetente;
+     * 4- Transporte próprio por conta do
+     * destinatário;
+     * 9- Sem Ocorrência de transporte.
+     * @param boolean $normalize informa se o frete deve estar no formato do XML
+     * @return mixed frete da Transporte
      */
     public function getFrete($normalize = false)
     {
@@ -80,29 +94,44 @@ class Transporte implements Node
             return $this->frete;
         }
         switch ($this->frete) {
-            case self::FRETE_EMITENTE:
+            case self::FRETE_REMETENTE:
                 return '0';
             case self::FRETE_DESTINATARIO:
                 return '1';
             case self::FRETE_TERCEIROS:
                 return '2';
+            case self::FRETE_PROPRIOREMETENTE:
+                return '3';
+            case self::FRETE_PROPRIODESTINATARIO:
+                return '4';
             case self::FRETE_NENHUM:
                 return '9';
         }
         return $this->frete;
     }
-
+    
+    /**
+     * Altera o valor do Frete para o informado no parâmetro
+     * @param mixed $frete novo valor para Frete
+     * @return Transporte A própria instância da classe
+     */
     public function setFrete($frete)
     {
         switch ($frete) {
             case '0':
-                $frete = self::FRETE_EMITENTE;
+                $frete = self::FRETE_REMETENTE;
                 break;
             case '1':
                 $frete = self::FRETE_DESTINATARIO;
                 break;
             case '2':
                 $frete = self::FRETE_TERCEIROS;
+                break;
+            case '3':
+                $frete = self::FRETE_PROPRIOREMETENTE;
+                break;
+            case '4':
+                $frete = self::FRETE_PROPRIODESTINATARIO;
                 break;
             case '9':
                 $frete = self::FRETE_NENHUM;
@@ -224,7 +253,7 @@ class Transporte implements Node
 
     public function toArray($recursive = false)
     {
-        $transporte = array();
+        $transporte = [];
         $transporte['frete'] = $this->getFrete();
         if (!is_null($this->getTransportador()) && $recursive) {
             $transporte['transportador'] = $this->getTransportador()->toArray($recursive);
@@ -249,7 +278,7 @@ class Transporte implements Node
         $transporte['vagao'] = $this->getVagao();
         $transporte['balsa'] = $this->getBalsa();
         if ($recursive) {
-            $volumes = array();
+            $volumes = [];
             $_volumes = $this->getVolumes();
             foreach ($_volumes as $_volume) {
                 $volumes[] = $_volume->toArray($recursive);
@@ -261,38 +290,22 @@ class Transporte implements Node
         return $transporte;
     }
 
-    public function fromArray($transporte = array())
+    public function fromArray($transporte = [])
     {
         if ($transporte instanceof Transporte) {
             $transporte = $transporte->toArray();
         } elseif (!is_array($transporte)) {
             return $this;
         }
-        if (!isset($transporte['frete']) || is_null($transporte['frete'])) {
+        if (!isset($transporte['frete'])) {
             $this->setFrete(self::FRETE_NENHUM);
         } else {
             $this->setFrete($transporte['frete']);
         }
-        if (!isset($transporte['transportador']) || is_null($transporte['transportador'])) {
-            $this->setTransportador(new Transportador());
-        } else {
-            $this->setTransportador($transporte['transportador']);
-        }
-        if (!isset($transporte['retencao']) || is_null($transporte['retencao'])) {
-            $this->setRetencao(new Tributo());
-        } else {
-            $this->setRetencao($transporte['retencao']);
-        }
-        if (!isset($transporte['veiculo']) || is_null($transporte['veiculo'])) {
-            $this->setVeiculo(new Veiculo());
-        } else {
-            $this->setVeiculo($transporte['veiculo']);
-        }
-        if (!isset($transporte['reboque']) || is_null($transporte['reboque'])) {
-            $this->setReboque(new Veiculo());
-        } else {
-            $this->setReboque($transporte['reboque']);
-        }
+        $this->setTransportador(new Transportador(isset($transporte['transportador']) ? $transporte['transportador'] : []));
+        $this->setRetencao(new Tributo(isset($transporte['retencao']) ? $transporte['retencao'] : []));
+        $this->setVeiculo(new Veiculo(isset($transporte['veiculo']) ? $transporte['veiculo'] : []));
+        $this->setReboque(new Veiculo(isset($transporte['reboque']) ? $transporte['reboque'] : []));
         if (isset($transporte['vagao'])) {
             $this->setVagao($transporte['vagao']);
         } else {
@@ -303,8 +316,8 @@ class Transporte implements Node
         } else {
             $this->setBalsa(null);
         }
-        if (!isset($transporte['volumes']) || is_null($transporte['volumes'])) {
-            $this->setVolumes(array());
+        if (!isset($transporte['volumes'])) {
+            $this->setVolumes([]);
         } else {
             $this->setVolumes($transporte['volumes']);
         }
@@ -403,7 +416,7 @@ class Transporte implements Node
         $this->setReboque($reboque);
         $this->setVagao(Util::loadNode($element, 'vagao'));
         $this->setBalsa(Util::loadNode($element, 'balsa'));
-        $volumes = array();
+        $volumes = [];
         $_fields = $element->getElementsByTagName('vol');
         foreach ($_fields as $_item) {
             $volume = new Volume();

@@ -40,17 +40,19 @@ class DestinatarioTest extends \PHPUnit_Framework_TestCase
         $xml = $destinatario->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioFisicoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioFisicoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioFisicoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testDestinatarioFisicoLoadXML()
@@ -99,17 +101,19 @@ class DestinatarioTest extends \PHPUnit_Framework_TestCase
         $xml = $destinatario->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testDestinatarioJuridicoLoadXML()
@@ -141,17 +145,19 @@ class DestinatarioTest extends \PHPUnit_Framework_TestCase
         $xml = $destinatario->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testDestinatarioCPFnaNotaLoadXML()

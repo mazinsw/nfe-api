@@ -45,7 +45,7 @@ class ProdutoTest extends \PHPUnit_Framework_TestCase
         $dom = $xml->ownerDocument;
         $xml_file = dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml';
 
-        if (\NFe\Core\NFCeTest::UPDATE_XML) {
+        if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents($xml_file, $dom->saveXML($xml));
         }

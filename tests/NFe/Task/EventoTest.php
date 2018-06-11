@@ -1,6 +1,8 @@
 <?php
 namespace NFe\Task;
 
+use NFe\Core\Nota;
+
 class EventoTest extends \PHPUnit_Framework_TestCase
 {
     private $sefaz;
@@ -21,7 +23,7 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         $evento->setAmbiente($nota->getAmbiente());
         $evento->setModelo($nota->getModelo());
         $evento->setIdentificador($nota->getEmitente()->getCNPJ());
-        $evento->setNumero('141170000157615');
+        $evento->setNumero('141170000157685');
         $evento->setChave($nota->getID());
         return $evento;
     }
@@ -61,12 +63,11 @@ class EventoTest extends \PHPUnit_Framework_TestCase
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'registradoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'registradoPostFunction']);
         try {
             $evento = self::createEvento($nota);
             $dom = $evento->getNode()->ownerDocument;
             $dom = $evento->assinar($dom);
-            $dom = $evento->validar($dom);
             $retorno = $evento->envia($dom);
             $evento->fromArray($evento);
             $evento->fromArray(null);
@@ -80,19 +81,22 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
+        
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
+            file_put_contents($xml_file, $dom->saveXML());
+        }
 
         $dom_cmp = self::loadEventoRegistradoXML();
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
-        
-        // $dom->formatOutput = true;
-        // file_put_contents($xml_file, $dom->saveXML());
     }
 
     public function testEventoRejeitado()
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'rejeitadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
             $evento = self::createEvento($nota);
             $dom = $evento->getNode()->ownerDocument;
@@ -106,6 +110,22 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         \NFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
         $this->assertEquals('573', $retorno->getStatus());
+    }
+
+    public function testNormalization()
+    {
+        $evento = new Evento();
+        $evento->setEmail('email@email.com');
+        $evento->setModelo('65');
+        $this->assertEquals(Nota::MODELO_NFCE, $evento->getModelo());
+        $this->assertEquals('65', $evento->getModelo(true));
+        $evento->setModelo('55');
+        $this->assertEquals(Nota::MODELO_NFE, $evento->getModelo());
+        $this->assertEquals('55', $evento->getModelo(true));
+        $evento->setModelo('50');
+        $this->assertEquals('50', $evento->getModelo(true));
+        $evento->fromArray($evento);
+        $this->assertEquals('email@email.com', $evento->getEmail(true));
     }
 
     public function testEventoInvalido()

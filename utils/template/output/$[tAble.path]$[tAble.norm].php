@@ -75,7 +75,7 @@ $[field.end]
      * Constroi uma instância de $[tAble.norm] vazia
      * @param  array $$[table.unix] Array contendo dados d$[table.gender] $[tAble.norm]
      */
-    public function __construct($$[table.unix] = array())
+    public function __construct($$[table.unix] = [])
     {
 $[table.if(inherited)]
         parent::__construct($$[table.unix]);
@@ -173,8 +173,8 @@ $[field.else.if(datetime)]
             $$[field.unix] = strtotime($$[field.unix]);
         }
 $[field.else.if(boolean)]
-        if ($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]!in_array($$[field.unix], array('N', 'Y'))) {
-            $$[field.unix] = $$[field.unix]?'Y':'N';
+        if ($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]is_bool($$[field.unix])) {
+            $$[field.unix] = $$[field.unix] ? 'Y': 'N';
         }
 $[field.end]
         $this->$[field.unix] = $$[field.unix];
@@ -205,7 +205,7 @@ $[field.end]
 $[table.if(inherited)]
         $$[table.unix] = parent::toArray($recursive);
 $[table.else]
-        $$[table.unix] = array();
+        $$[table.unix] = [];
 $[table.end]
 $[field.each(all)]
 $[field.if(descriptor)]
@@ -216,7 +216,7 @@ $[field.if(descriptor)]
         }
 $[field.else.if(searchable)]
         if ($recursive) {
-            $$[field.unix] = array();
+            $$[field.unix] = [];
             $_$[field.unix] = $this->get$[fIeld.norm]();
             foreach ($_$[field.unix] as $_$[field.unix.plural]) {
                 $$[field.unix][] = $_$[field.unix.plural]->toArray($recursive);
@@ -239,7 +239,7 @@ $[field.end]
      * @param mixed $$[table.unix] Array ou instância de $[tAble.norm], para copiar os valores
      * @return $[tAble.norm] A própria instância da classe
      */
-    public function fromArray($$[table.unix] = array())
+    public function fromArray($$[table.unix] = [])
     {
         if ($$[table.unix] instanceof $[tAble.norm]) {
             $$[table.unix] = $$[table.unix]->toArray();
@@ -350,7 +350,7 @@ $[field.else]
 $[field.end]
         $this->set$[fIeld.norm]($$[field.unix]);
 $[field.else.if(searchable)]
-        $$[field.unix] = array();
+        $$[field.unix] = [];
         $_fields = $element->getElementsByTagName('$[fIeld.norm.plural]'); // TODO: predictable tag name
         if ($_fields->length > 0) {
             $_items = $_fields->item(0)->getElementsByTagName('$[fIeld.style]');

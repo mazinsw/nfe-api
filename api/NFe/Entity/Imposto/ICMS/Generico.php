@@ -36,11 +36,9 @@ use NFe\Common\Util;
 class Generico extends Mista
 {
 
-    public function __construct($generico = array())
+    public function __construct($generico = [])
     {
         parent::__construct($generico);
-        $this->setTributacao('90');
-        $this->getNormal()->setTributacao('90');
     }
 
     public function toArray($recursive = false)
@@ -49,7 +47,7 @@ class Generico extends Mista
         return $generico;
     }
 
-    public function fromArray($generico = array())
+    public function fromArray($generico = [])
     {
         if ($generico instanceof Generico) {
             $generico = $generico->toArray();
@@ -57,6 +55,10 @@ class Generico extends Mista
             return $this;
         }
         parent::fromArray($generico);
+        if (!isset($generico['tributacao'])) {
+            $this->setTributacao('90');
+        }
+        $this->getNormal()->setTributacao('90');
         return $this;
     }
 

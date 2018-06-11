@@ -30,7 +30,7 @@ namespace NFe\Database;
 abstract class Banco
 {
 
-    public function __construct($banco = array())
+    public function __construct($banco = [])
     {
         $this->fromArray($banco);
     }
@@ -79,11 +79,11 @@ abstract class Banco
 
     public function toArray($recursive = false)
     {
-        $banco = array();
+        $banco = [];
         return $banco;
     }
 
-    public function fromArray($banco = array())
+    public function fromArray($banco = [])
     {
         if ($banco instanceof Banco) {
             $banco = $banco->toArray();

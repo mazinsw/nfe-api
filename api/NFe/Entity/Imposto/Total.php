@@ -32,7 +32,7 @@ use NFe\Entity\Imposto;
 class Total extends Imposto
 {
 
-    public function __construct($total = array())
+    public function __construct($total = [])
     {
         parent::__construct($total);
     }
@@ -43,7 +43,7 @@ class Total extends Imposto
         return $total;
     }
 
-    public function fromArray($total = array())
+    public function fromArray($total = [])
     {
         if ($total instanceof Total) {
             $total = $total->toArray();

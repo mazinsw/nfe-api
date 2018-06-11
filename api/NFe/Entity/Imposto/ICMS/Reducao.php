@@ -39,10 +39,9 @@ class Reducao extends Normal
 
     private $reducao;
 
-    public function __construct($reducao = array())
+    public function __construct($reducao = [])
     {
         parent::__construct($reducao);
-        $this->setTributacao('20');
     }
 
     public function getReducao($normalize = false)
@@ -80,7 +79,7 @@ class Reducao extends Normal
         return $reducao;
     }
 
-    public function fromArray($reducao = array())
+    public function fromArray($reducao = [])
     {
         if ($reducao instanceof Reducao) {
             $reducao = $reducao->toArray();
@@ -92,6 +91,9 @@ class Reducao extends Normal
             $this->setReducao($reducao['reducao']);
         } else {
             $this->setReducao(null);
+        }
+        if (!isset($reducao['tributacao'])) {
+            $this->setTributacao('20');
         }
         return $this;
     }

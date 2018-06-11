@@ -35,10 +35,9 @@ use NFe\Common\Util;
 class Isento extends Generico
 {
 
-    public function __construct($isento = array())
+    public function __construct($isento = [])
     {
         parent::__construct($isento);
-        $this->setTributacao('102');
     }
 
     /**
@@ -58,7 +57,7 @@ class Isento extends Generico
         return $isento;
     }
 
-    public function fromArray($isento = array())
+    public function fromArray($isento = [])
     {
         if ($isento instanceof Isento) {
             $isento = $isento->toArray();
@@ -66,6 +65,9 @@ class Isento extends Generico
             return $this;
         }
         parent::fromArray($isento);
+        if (!isset($isento['tributacao'])) {
+            $this->setTributacao('102');
+        }
         return $this;
     }
 

@@ -41,7 +41,7 @@ class Tributo extends Imposto
     private $cfop;
     private $municipio;
 
-    public function __construct($tributo = array())
+    public function __construct($tributo = [])
     {
         parent::__construct($tributo);
     }
@@ -98,7 +98,7 @@ class Tributo extends Imposto
         return $tributo;
     }
 
-    public function fromArray($tributo = array())
+    public function fromArray($tributo = [])
     {
         if ($tributo instanceof Tributo) {
             $tributo = $tributo->toArray();
@@ -116,11 +116,7 @@ class Tributo extends Imposto
         } else {
             $this->setCFOP(null);
         }
-        if (!isset($tributo['municipio']) || is_null($tributo['municipio'])) {
-            $this->setMunicipio(new Municipio());
-        } else {
-            $this->setMunicipio($tributo['municipio']);
-        }
+        $this->setMunicipio(new Municipio(isset($tributo['municipio']) ? $tributo['municipio'] : []));
         return $this;
     }
 

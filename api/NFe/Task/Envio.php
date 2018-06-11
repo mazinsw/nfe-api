@@ -82,7 +82,7 @@ class Envio
      * Constroi uma instância de Envio vazia
      * @param  array $envio Array contendo dados do Envio
      */
-    public function __construct($envio = array())
+    public function __construct($envio = [])
     {
         $this->fromArray($envio);
     }
@@ -292,7 +292,7 @@ class Envio
      */
     public function toArray($recursive = false)
     {
-        $envio = array();
+        $envio = [];
         $envio['servico'] = $this->getServico();
         $envio['ambiente'] = $this->getAmbiente();
         $envio['modelo'] = $this->getModelo();
@@ -306,7 +306,7 @@ class Envio
      * @param mixed $envio Array ou instância de Envio, para copiar os valores
      * @return Envio A própria instância da classe
      */
-    public function fromArray($envio = array())
+    public function fromArray($envio = [])
     {
         if ($envio instanceof Envio) {
             $envio = $envio->toArray();
@@ -339,24 +339,6 @@ class Envio
             $this->setConteudo(null);
         }
         return $this;
-    }
-
-    /**
-     * Obtém o nó do cabeçalho da requisição SOAP
-     * @return DOMDocument Cabeçalho para adicionar na requisição
-     */
-    private function getNodeHeader()
-    {
-        $config = SEFAZ::getInstance()->getConfiguracao();
-        $estado = $config->getEmitente()->getEndereco()->getMunicipio()->getEstado();
-        $estado->checkCodigos();
-        $doh = new \DOMDocument('1.0', 'UTF-8');
-        $element = $doh->createElement('nfeCabecMsg');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', $this->getServico(true));
-        Util::appendNode($element, 'cUF', $estado->getCodigo(true));
-        Util::appendNode($element, 'versaoDados', $this->getVersao());
-        $doh->appendChild($element);
-        return $doh;
     }
 
     /**
@@ -408,11 +390,10 @@ class Envio
         $soap->setTimeout(ceil($config->getTempoLimite() * 1.5));
         $soap->setCertificate($config->getArquivoChavePublica());
         $soap->setPrivateKey($config->getArquivoChavePrivada());
-        $doh = $this->getNodeHeader();
-        $dob = $this->getNode();
+        $dom = $this->getNode();
         try {
-            $resp = $soap->send($url, $dob, $doh);
-            return $resp;
+            $response = $soap->send($url, $dom);
+            return $response;
         } catch (\NFe\Exception\NetworkException $e) {
             $config->setOffline(time());
             throw $e;

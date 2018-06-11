@@ -33,7 +33,7 @@ class Pais
     private $codigo;
     private $nome;
 
-    public function __construct($pais = array())
+    public function __construct($pais = [])
     {
         $this->fromArray($pais);
     }
@@ -74,13 +74,13 @@ class Pais
 
     public function toArray($recursive = false)
     {
-        $pais = array();
+        $pais = [];
         $pais['codigo'] = $this->getCodigo();
         $pais['nome'] = $this->getNome();
         return $pais;
     }
 
-    public function fromArray($pais = array())
+    public function fromArray($pais = [])
     {
         if ($pais instanceof Pais) {
             $pais = $pais->toArray();

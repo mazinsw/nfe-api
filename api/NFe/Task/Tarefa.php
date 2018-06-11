@@ -44,7 +44,7 @@ class Tarefa
     private $agente;
     private $resposta;
 
-    public function __construct($tarefa = array())
+    public function __construct($tarefa = [])
     {
         $this->fromArray($tarefa);
     }
@@ -138,7 +138,7 @@ class Tarefa
 
     public function toArray($recursive = false)
     {
-        $tarefa = array();
+        $tarefa = [];
         $tarefa['id'] = $this->getID();
         $tarefa['acao'] = $this->getAcao();
         if (!is_null($this->getNota()) && $recursive) {
@@ -164,7 +164,7 @@ class Tarefa
         return $tarefa;
     }
 
-    public function fromArray($tarefa = array())
+    public function fromArray($tarefa = [])
     {
         if ($tarefa instanceof Tarefa) {
             $tarefa = $tarefa->toArray();
@@ -260,7 +260,6 @@ class Tarefa
         }
         $dom = $evento->getNode()->ownerDocument;
         $dom = $evento->assinar($dom);
-        $dom = $evento->validar($dom);
         $retorno = $evento->envia($dom);
         if ($retorno->isCancelado()) {
             $dom = $evento->addInformacao($dom);
@@ -296,7 +295,6 @@ class Tarefa
         }
         $dom = $inutilizacao->getNode()->ownerDocument;
         $dom = $inutilizacao->assinar($dom);
-        $dom = $inutilizacao->validar($dom);
         $dom = $inutilizacao->envia($dom);
         $this->setDocumento($dom);
         return $inutilizacao;

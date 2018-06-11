@@ -14,7 +14,7 @@ class AliquotaTest extends \PHPUnit_Framework_TestCase
     {
         // Exemplo para Alíquota ad valorem
         $ipi = new \NFe\Entity\Imposto\IPI();
-        $ipi_aliquota = new \NFe\Entity\Imposto\IPI\Aliquota();
+        $ipi_aliquota = new Aliquota();
         $ipi_aliquota->setBase(1000.00);
         $ipi_aliquota->setAliquota(7.00);
         $ipi_aliquota->fromArray($ipi_aliquota);
@@ -28,17 +28,19 @@ class AliquotaTest extends \PHPUnit_Framework_TestCase
         $xml = $ipi->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/ipi/testAliquotaXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/ipi/testAliquotaXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/ipi/testAliquotaXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testAliquotaLoadXML()
@@ -47,8 +49,8 @@ class AliquotaTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/ipi/testAliquotaXML.xml');
 
-        $ipi = new \NFe\Entity\Imposto\IPI();
-        $ipi->loadNode($dom_cmp->documentElement);
+        $ipi = \NFe\Entity\Imposto\IPI::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(\NFe\Entity\Imposto\IPI::class, $ipi);
 
         $xml = $ipi->getNode();
         $dom = $xml->ownerDocument;

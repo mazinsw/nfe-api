@@ -63,7 +63,7 @@ abstract class Imposto implements Node
     private $aliquota;
     private $base;
 
-    public function __construct($imposto = array())
+    public function __construct($imposto = [])
     {
         $this->fromArray($imposto);
     }
@@ -196,6 +196,11 @@ abstract class Imposto implements Node
         return Util::toCurrency($this->base);
     }
 
+    /**
+     * Altera o valor do Base para o informado no parâmetro
+     * @param mixed $base novo valor para Base
+     * @return Imposto A própria instância da classe
+     */
     public function setBase($base)
     {
         $this->base = $base;
@@ -223,7 +228,7 @@ abstract class Imposto implements Node
 
     public function toArray($recursive = false)
     {
-        $imposto = array();
+        $imposto = [];
         $imposto['tipo'] = $this->getTipo();
         $imposto['grupo'] = $this->getGrupo();
         $imposto['tributacao'] = $this->getTributacao();
@@ -233,7 +238,7 @@ abstract class Imposto implements Node
         return $imposto;
     }
 
-    public function fromArray($imposto = array())
+    public function fromArray($imposto = [])
     {
         if ($imposto instanceof Imposto) {
             $imposto = $imposto->toArray();
@@ -314,7 +319,7 @@ abstract class Imposto implements Node
             case 'ICMS70':
                 $imposto = new Imposto\ICMS\Mista();
                 break;
-            case 'IMCS30':
+            case 'ICMS30':
                 $imposto = new Imposto\ICMS\Parcial();
                 break;
             case 'ICMSPart':
@@ -342,7 +347,7 @@ abstract class Imposto implements Node
             case 'ICMSSN101':
                 $imposto = new Imposto\ICMS\Simples\Normal();
                 break;
-            case 'IMCSSN202':
+            case 'ICMSSN202':
                 $imposto = new Imposto\ICMS\Simples\Parcial();
                 break;
             /* Grupo IPI */
@@ -391,7 +396,7 @@ abstract class Imposto implements Node
         return $imposto;
     }
 
-    public static function loadImposto($element, $grupo = null)
+    public static function loadImposto($element)
     {
         $quantitativo = false;
         switch ($element->nodeName) {

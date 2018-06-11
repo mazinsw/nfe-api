@@ -308,4 +308,19 @@ class Util
         }
         return $list->item(0);
     }
+
+    public static function mergeNodes($element, $other)
+    {
+        $dom = $element->ownerDocument;
+        foreach ($other->childNodes as $node) {
+            $node = $dom->importNode($node, true);
+            $list = $element->getElementsByTagName($node->nodeName);
+            if ($list->length == 1) {
+                $element->replaceChild($node, $list->item(0));
+            } else {
+                $element->appendChild($node);
+            }
+        }
+        return $element;
+    }
 }

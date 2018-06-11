@@ -33,11 +33,9 @@ use NFe\Entity\Imposto;
 class Quantidade extends Imposto
 {
 
-    public function __construct($pis = array())
+    public function __construct($pis = [])
     {
         parent::__construct($pis);
-        $this->setGrupo(self::GRUPO_PIS);
-        $this->setTributacao('03');
     }
 
     public function getQuantidade($normalize = false)
@@ -71,7 +69,7 @@ class Quantidade extends Imposto
         return $pis;
     }
 
-    public function fromArray($pis = array())
+    public function fromArray($pis = [])
     {
         if ($pis instanceof Quantidade) {
             $pis = $pis->toArray();
@@ -79,6 +77,10 @@ class Quantidade extends Imposto
             return $this;
         }
         parent::fromArray($pis);
+        $this->setGrupo(self::GRUPO_PIS);
+        if (!isset($pis['tributacao'])) {
+            $this->setTributacao('03');
+        }
         return $this;
     }
 

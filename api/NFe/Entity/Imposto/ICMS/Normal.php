@@ -28,6 +28,7 @@
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Common\Util;
+use NFe\Entity\Imposto\Fundo\Base as Fundo;
 
 /**
  * Classe base do ICMS normal, estende de ICMS\Base
@@ -42,7 +43,7 @@ class Normal extends Base
 
     private $modalidade;
 
-    public function __construct($normal = array())
+    public function __construct($normal = [])
     {
         parent::__construct($normal);
     }
@@ -78,7 +79,7 @@ class Normal extends Base
         return $normal;
     }
 
-    public function fromArray($normal = array())
+    public function fromArray($normal = [])
     {
         if ($normal instanceof Normal) {
             $normal = $normal->toArray();
@@ -91,26 +92,29 @@ class Normal extends Base
         } else {
             $this->setModalidade(null);
         }
+        if (!isset($normal['fundo']) || !($this->getFundo() instanceof Fundo)) {
+            $this->setFundo(new Fundo());
+        }
         return $this;
     }
 
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'IMCS':$name);
+        $element = $dom->createElement(is_null($name)?'ICMS':$name);
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'modBC', $this->getModalidade(true));
         Util::appendNode($element, 'vBC', $this->getBase(true));
         Util::appendNode($element, 'pICMS', $this->getAliquota(true));
         Util::appendNode($element, 'vICMS', $this->getValor(true));
-        return $element;
+        return $this->exportFundo($element);
     }
 
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'IMCS':$name;
+        $name = is_null($name)?'ICMS':$name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
@@ -153,6 +157,7 @@ class Normal extends Base
                 'Tag "pICMS" do campo "Aliquota" não encontrada'
             )
         );
+        $this->importFundo($element);
         return $element;
     }
 }

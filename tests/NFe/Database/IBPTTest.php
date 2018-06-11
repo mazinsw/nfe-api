@@ -1,6 +1,8 @@
 <?php
 namespace NFe\Database;
 
+use \NFe\Logger\Log;
+
 class IBPTTest extends \PHPUnit_Framework_TestCase
 {
     private $ibpt;
@@ -8,10 +10,12 @@ class IBPTTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->ibpt = new \NFe\Database\IBPT();
-        \NFe\Log\Logger::getInstance()->setWriteFunction(
-            function ($type, $message) {
-            }
-        );
+        Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
+    }
+
+    protected function tearDown()
+    {
+        Log::getInstance()->setHandler(null);
     }
 
     public function testAliquota()

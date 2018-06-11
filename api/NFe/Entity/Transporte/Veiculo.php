@@ -37,7 +37,7 @@ class Veiculo implements Node
     private $uf;
     private $rntc;
 
-    public function __construct($veiculo = array())
+    public function __construct($veiculo = [])
     {
         $this->fromArray($veiculo);
     }
@@ -86,14 +86,14 @@ class Veiculo implements Node
 
     public function toArray($recursive = false)
     {
-        $veiculo = array();
+        $veiculo = [];
         $veiculo['placa'] = $this->getPlaca();
         $veiculo['uf'] = $this->getUF();
         $veiculo['rntc'] = $this->getRNTC();
         return $veiculo;
     }
 
-    public function fromArray($veiculo = array())
+    public function fromArray($veiculo = [])
     {
         if ($veiculo instanceof Veiculo) {
             $veiculo = $veiculo->toArray();

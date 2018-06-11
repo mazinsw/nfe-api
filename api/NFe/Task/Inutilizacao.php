@@ -47,7 +47,7 @@ class Inutilizacao extends Retorno
     private $justificativa;
     private $numero;
 
-    public function __construct($inutilizacao = array())
+    public function __construct($inutilizacao = [])
     {
         parent::__construct($inutilizacao);
     }
@@ -238,7 +238,7 @@ class Inutilizacao extends Retorno
         return $inutilizacao;
     }
 
-    public function fromArray($inutilizacao = array())
+    public function fromArray($inutilizacao = [])
     {
         if ($inutilizacao instanceof Inutilizacao) {
             $inutilizacao = $inutilizacao->toArray();
@@ -347,8 +347,8 @@ class Inutilizacao extends Retorno
         $dom = $element->ownerDocument;
         $info = $dom->getElementsByTagName('infInut')->item(0);
         $info->removeAttribute('Id');
-        $removeTags = array('tpAmb', 'xServ', 'xJust');
-        foreach ($removeTags as $key) {
+        $remove_tags = ['tpAmb', 'xServ', 'xJust'];
+        foreach ($remove_tags as $key) {
             $node = $info->getElementsByTagName($key)->item(0);
             $info->removeChild($node);
         }
@@ -395,6 +395,8 @@ class Inutilizacao extends Retorno
         $envio->setAmbiente($this->getAmbiente());
         $envio->setModelo($this->getModelo());
         $envio->setEmissao(Nota::EMISSAO_NORMAL);
+        $this->setVersao($envio->getVersao());
+        $dom = $this->validar($dom);
         $envio->setConteudo($dom);
         $resp = $envio->envia();
         $this->loadNode($resp);
@@ -432,9 +434,9 @@ class Inutilizacao extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/inutNFe_v3.10.xsd';
+        $xsd_file = $xsd_path . '/inutNFe_v'.$this->getVersao().'.xsd';
         if (!file_exists($xsd_file)) {
-            throw new \Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
         // Enable user error handling
         $save = libxml_use_internal_errors(true);
@@ -442,7 +444,7 @@ class Inutilizacao extends Retorno
             libxml_use_internal_errors($save);
             return $dom;
         }
-        $msg = array();
+        $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
             $msg[] = 'Não foi possível validar o XML: '.$error->message;

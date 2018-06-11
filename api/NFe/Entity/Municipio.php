@@ -39,7 +39,7 @@ class Municipio
     private $codigo;
     private $nome;
 
-    public function __construct($municipio = array())
+    public function __construct($municipio = [])
     {
         $this->fromArray($municipio);
     }
@@ -112,7 +112,7 @@ class Municipio
 
     public function toArray($recursive = false)
     {
-        $municipio = array();
+        $municipio = [];
         if (!is_null($this->getEstado()) && $recursive) {
             $municipio['estado'] = $this->getEstado()->toArray($recursive);
         } else {
@@ -123,18 +123,14 @@ class Municipio
         return $municipio;
     }
 
-    public function fromArray($municipio = array())
+    public function fromArray($municipio = [])
     {
         if ($municipio instanceof Municipio) {
             $municipio = $municipio->toArray();
         } elseif (!is_array($municipio)) {
             return $this;
         }
-        if (!isset($municipio['estado']) || is_null($municipio['estado'])) {
-            $this->setEstado(new Estado());
-        } else {
-            $this->setEstado($municipio['estado']);
-        }
+        $this->setEstado(new Estado(isset($municipio['estado']) ? $municipio['estado'] : []));
         if (isset($municipio['codigo'])) {
             $this->setCodigo($municipio['codigo']);
         } else {

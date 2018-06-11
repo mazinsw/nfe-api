@@ -32,6 +32,12 @@ use NFe\Common\Util;
 
 class Pagamento implements Node
 {
+    /**
+     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
+     * prazo.
+     */
+    const INDICADOR_AVISTA = 'avista';
+    const INDICADOR_APRAZO = 'aprazo';
 
     /**
      * Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão
@@ -59,6 +65,11 @@ class Pagamento implements Node
     const BANDEIRA_SOROCRED = 'sorocred';
     const BANDEIRA_OUTROS = 'outros';
 
+    /**
+     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
+     * prazo.
+     */
+    private $indicador;
     private $forma;
     private $valor;
     private $integrado;
@@ -66,9 +77,48 @@ class Pagamento implements Node
     private $autorizacao;
     private $bandeira;
 
-    public function __construct($pagamento = array())
+    public function __construct($pagamento = [])
     {
         $this->fromArray($pagamento);
+    }
+
+    /**
+     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
+     * prazo.
+     * @param boolean $normalize informa se o indicador deve estar no formato do XML
+     * @return mixed indicador da Nota
+     */
+    public function getIndicador($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->indicador;
+        }
+        switch ($this->indicador) {
+            case self::INDICADOR_AVISTA:
+                return '0';
+            case self::INDICADOR_APRAZO:
+                return '1';
+        }
+        return $this->indicador;
+    }
+
+    /**
+     * Altera o valor do Indicador para o informado no parâmetro
+     * @param mixed $indicador novo valor para Indicador
+     * @return Nota A própria instância da classe
+     */
+    public function setIndicador($indicador)
+    {
+        switch ($indicador) {
+            case '0':
+                $indicador = self::INDICADOR_AVISTA;
+                break;
+            case '1':
+                $indicador = self::INDICADOR_APRAZO;
+                break;
+        }
+        $this->indicador = $indicador;
+        return $this;
     }
 
     /**
@@ -189,10 +239,10 @@ class Pagamento implements Node
 
     public function setIntegrado($integrado)
     {
-        if (!in_array($integrado, array('N', 'Y'))) {
-            $integrado = $integrado == '1'?'Y':'N';
+        if (is_bool($integrado)) {
+            $integrado = $integrado ? 'Y': 'N';
         }
-        $this->integrado = $integrado;
+        $this->integrado = in_array($integrado, ['Y', '1']) ? 'Y' : 'N';
         return $this;
     }
 
@@ -282,12 +332,13 @@ class Pagamento implements Node
      */
     public function isCartao()
     {
-        return in_array($this->getForma(), array(self::FORMA_CREDITO, self::FORMA_DEBITO));
+        return in_array($this->getForma(), [self::FORMA_CREDITO, self::FORMA_DEBITO]);
     }
 
     public function toArray($recursive = false)
     {
-        $pagamento = array();
+        $pagamento = [];
+        $pagamento['indicador'] = $this->getIndicador();
         $pagamento['forma'] = $this->getForma();
         $pagamento['valor'] = $this->getValor();
         $pagamento['integrado'] = $this->getIntegrado();
@@ -297,12 +348,17 @@ class Pagamento implements Node
         return $pagamento;
     }
 
-    public function fromArray($pagamento = array())
+    public function fromArray($pagamento = [])
     {
         if ($pagamento instanceof Pagamento) {
             $pagamento = $pagamento->toArray();
         } elseif (!is_array($pagamento)) {
             return $this;
+        }
+        if (isset($pagamento['indicador'])) {
+            $this->setIndicador($pagamento['indicador']);
+        } else {
+            $this->setIndicador(null);
         }
         if (isset($pagamento['forma'])) {
             $this->setForma($pagamento['forma']);
@@ -314,7 +370,7 @@ class Pagamento implements Node
         } else {
             $this->setValor(null);
         }
-        if (!isset($pagamento['integrado']) || is_null($pagamento['integrado'])) {
+        if (!isset($pagamento['integrado'])) {
             $this->setIntegrado('N');
         } else {
             $this->setIntegrado($pagamento['integrado']);
@@ -340,7 +396,17 @@ class Pagamento implements Node
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'pag':$name);
+        if ($this->getValor() < 0) {
+            $element = $dom->createElement(is_null($name)?'vTroco':$name);
+            $this->setValor(-$this->getValor());
+            $element->appendChild($dom->createTextNode($this->getValor(true)));
+            $this->setValor(-$this->getValor());
+            return $element;
+        }
+        $element = $dom->createElement(is_null($name)?'detPag':$name);
+        if (!is_null($this->getIndicador())) {
+            Util::appendNode($element, 'indPag', $this->getIndicador(true));
+        }
         Util::appendNode($element, 'tPag', $this->getForma(true));
         Util::appendNode($element, 'vPag', $this->getValor(true));
         if (!$this->isCartao()) {
@@ -361,7 +427,17 @@ class Pagamento implements Node
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'pag':$name;
+        $name = is_null($name)?'detPag':$name;
+        if ($name == 'vTroco') {
+            $this->setValor(
+                '-'.Util::loadNode(
+                    $element,
+                    'vTroco',
+                    'Tag "vTroco" do campo "Valor" não encontrada'
+                )
+            );
+            return $element;
+        }
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
@@ -369,6 +445,12 @@ class Pagamento implements Node
             }
             $element = $_fields->item(0);
         }
+        $this->setIndicador(
+            Util::loadNode(
+                $element,
+                'indPag'
+            )
+        );
         $this->setForma(
             Util::loadNode(
                 $element,

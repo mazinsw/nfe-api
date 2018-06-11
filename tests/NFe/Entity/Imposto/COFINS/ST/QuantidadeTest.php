@@ -12,7 +12,7 @@ class QuantidadeTest extends \PHPUnit_Framework_TestCase
 
     public function testQuantidadeXML()
     {
-        $cofins_quantidade = new \NFe\Entity\Imposto\COFINS\ST\Quantidade();
+        $cofins_quantidade = new Quantidade();
         $cofins_quantidade->setQuantidade(1000);
         $cofins_quantidade->setAliquota(0.0076);
         $cofins_quantidade->fromArray($cofins_quantidade);
@@ -22,17 +22,19 @@ class QuantidadeTest extends \PHPUnit_Framework_TestCase
         $xml = $cofins_quantidade->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/cofins/st/testQuantidadeXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/cofins/st/testQuantidadeXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/cofins/st/testQuantidadeXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testQuantidadeLoadXML()
@@ -41,8 +43,8 @@ class QuantidadeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/cofins/st/testQuantidadeXML.xml');
 
-        $cofins_quantidade = new \NFe\Entity\Imposto\COFINS\ST\Quantidade();
-        $cofins_quantidade->loadNode($dom_cmp->documentElement);
+        $cofins_quantidade = Quantidade::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(Quantidade::class, $cofins_quantidade);
 
         $xml = $cofins_quantidade->getNode();
         $dom = $xml->ownerDocument;

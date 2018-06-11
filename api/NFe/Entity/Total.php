@@ -72,7 +72,7 @@ class Total implements Node
      * Constroi uma instância de Total vazia
      * @param  array $total Array contendo dados do Total
      */
-    public function __construct($total = array())
+    public function __construct($total = [])
     {
         $this->fromArray($total);
     }
@@ -272,7 +272,7 @@ class Total implements Node
      */
     public function toArray($recursive = false)
     {
-        $total = array();
+        $total = [];
         $total['produtos'] = $this->getProdutos();
         $total['desconto'] = $this->getDesconto();
         $total['seguro'] = $this->getSeguro();
@@ -288,7 +288,7 @@ class Total implements Node
      * @param mixed $total Array ou instância de Total, para copiar os valores
      * @return Total A própria instância da classe
      */
-    public function fromArray($total = array())
+    public function fromArray($total = [])
     {
         if ($total instanceof Total) {
             $total = $total->toArray();

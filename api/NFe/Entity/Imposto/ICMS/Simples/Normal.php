@@ -35,10 +35,9 @@ use NFe\Common\Util;
 class Normal extends \NFe\Entity\Imposto\ICMS\Normal
 {
 
-    public function __construct($normal = array())
+    public function __construct($normal = [])
     {
         parent::__construct($normal);
-        $this->setTributacao('101');
     }
 
     public function toArray($recursive = false)
@@ -47,7 +46,7 @@ class Normal extends \NFe\Entity\Imposto\ICMS\Normal
         return $normal;
     }
 
-    public function fromArray($normal = array())
+    public function fromArray($normal = [])
     {
         if ($normal instanceof Normal) {
             $normal = $normal->toArray();
@@ -55,6 +54,9 @@ class Normal extends \NFe\Entity\Imposto\ICMS\Normal
             return $this;
         }
         parent::fromArray($normal);
+        if (!isset($normal['tributacao'])) {
+            $this->setTributacao('101');
+        }
         return $this;
     }
 

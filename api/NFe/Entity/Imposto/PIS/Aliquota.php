@@ -36,7 +36,7 @@ class Aliquota extends Imposto
     const TRIBUTACAO_NORMAL = 'normal';
     const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
 
-    public function __construct($pis = array())
+    public function __construct($pis = [])
     {
         parent::__construct($pis);
         $this->setGrupo(self::GRUPO_PIS);
@@ -62,7 +62,7 @@ class Aliquota extends Imposto
         return $pis;
     }
 
-    public function fromArray($pis = array())
+    public function fromArray($pis = [])
     {
         if ($pis instanceof Aliquota) {
             $pis = $pis->toArray();

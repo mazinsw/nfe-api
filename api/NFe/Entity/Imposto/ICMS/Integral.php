@@ -27,6 +27,8 @@
  */
 namespace NFe\Entity\Imposto\ICMS;
 
+use NFe\Common\Util;
+
 /**
  * Tributação pelo ICMS
  * 00 - Tributada integralmente, estende de Normal
@@ -34,10 +36,39 @@ namespace NFe\Entity\Imposto\ICMS;
 class Integral extends Normal
 {
 
-    public function __construct($integral = array())
+    public function __construct($integral = [])
     {
         parent::__construct($integral);
-        $this->setTributacao('00');
+    }
+    
+    /**
+     * Altera o valor do Fundo para o informado no parâmetro
+     * interceptando a alteração do fundo para aplicar a base integral
+     * @param mixed $fundo novo valor para Fundo
+     * @return Base A própria instância da classe
+     */
+    public function setFundo($fundo)
+    {
+        parent::setFundo($fundo);
+        if (!is_null($this->getFundo())) {
+            $this->getFundo()->setBase($this->getBase());
+        }
+        return $this;
+    }
+
+    /**
+     * Altera o valor do Base para o informado no parâmetro
+     * interceptando a alteração do base para aplicar a base integral no fundo
+     * @param mixed $base novo valor para Base
+     * @return Imposto A própria instância da classe
+     */
+    public function setBase($base)
+    {
+        parent::setBase($base);
+        if (!is_null($this->getFundo())) {
+            $this->getFundo()->setBase($this->getBase());
+        }
+        return $this;
     }
 
     public function toArray($recursive = false)
@@ -46,7 +77,7 @@ class Integral extends Normal
         return $integral;
     }
 
-    public function fromArray($integral = array())
+    public function fromArray($integral = [])
     {
         if ($integral instanceof Integral) {
             $integral = $integral->toArray();
@@ -54,12 +85,19 @@ class Integral extends Normal
             return $this;
         }
         parent::fromArray($integral);
+        if (!isset($integral['tributacao'])) {
+            $this->setTributacao('00');
+        }
         return $this;
     }
 
     public function getNode($name = null)
     {
         $element = parent::getNode(is_null($name)?'ICMS00':$name);
+        if (Util::nodeExists($element, 'vBCFCP')) {
+            $node = Util::findNode($element, 'vBCFCP');
+            $node->parentNode->removeChild($node);
+        }
         return $element;
     }
 

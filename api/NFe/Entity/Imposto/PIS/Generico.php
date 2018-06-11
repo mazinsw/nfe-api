@@ -35,11 +35,9 @@ class Generico extends Imposto
 
     private $valor;
 
-    public function __construct($generico = array())
+    public function __construct($generico = [])
     {
         parent::__construct($generico);
-        $this->setGrupo(self::GRUPO_PIS);
-        $this->setTributacao('99');
     }
 
     public function getValor($normalize = false)
@@ -63,7 +61,7 @@ class Generico extends Imposto
         return $generico;
     }
 
-    public function fromArray($generico = array())
+    public function fromArray($generico = [])
     {
         if ($generico instanceof Generico) {
             $generico = $generico->toArray();
@@ -75,6 +73,10 @@ class Generico extends Imposto
             $this->setValor($generico['valor']);
         } else {
             $this->setValor(null);
+        }
+        $this->setGrupo(self::GRUPO_PIS);
+        if (!isset($generico['tributacao'])) {
+            $this->setTributacao('99');
         }
         return $this;
     }

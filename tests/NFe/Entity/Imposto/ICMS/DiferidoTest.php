@@ -20,17 +20,19 @@ class DiferidoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_diferido->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testDiferidoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testDiferidoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testDiferidoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testDiferidoLoadXML()
@@ -39,8 +41,8 @@ class DiferidoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testDiferidoXML.xml');
 
-        $icms_diferido = new \NFe\Entity\Imposto\ICMS\Diferido();
-        $icms_diferido->loadNode($dom_cmp->documentElement);
+        $icms_diferido = Diferido::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(Diferido::class, $icms_diferido);
 
         $xml = $icms_diferido->getNode();
         $dom = $xml->ownerDocument;
@@ -51,7 +53,7 @@ class DiferidoTest extends \PHPUnit_Framework_TestCase
 
     public function testDiferidoReducaoXML()
     {
-        $icms_diferido = new \NFe\Entity\Imposto\ICMS\Diferido();
+        $icms_diferido = new Diferido();
         $icms_diferido->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_diferido->setBase(80.00);
         $icms_diferido->setReducao(20.00);
@@ -64,17 +66,19 @@ class DiferidoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_diferido->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testDiferidoReducaoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testDiferidoReducaoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testDiferidoReducaoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testDiferidoReducaoLoadXML()
@@ -83,7 +87,7 @@ class DiferidoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testDiferidoReducaoXML.xml');
 
-        $icms_diferido = new \NFe\Entity\Imposto\ICMS\Diferido();
+        $icms_diferido = new Diferido();
         $icms_diferido->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_diferido->getNode();
@@ -107,17 +111,19 @@ class DiferidoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_diferido->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testDiferidoDiferimentoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testDiferidoDiferimentoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testDiferidoDiferimentoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testDiferidoDiferimentoLoadXML()

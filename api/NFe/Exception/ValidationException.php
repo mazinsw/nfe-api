@@ -29,9 +29,9 @@ namespace NFe\Exception;
 
 class ValidationException extends \Exception
 {
-    private $errors = array();
+    private $errors = [];
 
-    public function __construct($errors = array())
+    public function __construct($errors = [])
     {
         $this->errors = $errors;
         reset($errors);

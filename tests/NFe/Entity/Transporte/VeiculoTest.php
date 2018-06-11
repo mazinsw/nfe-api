@@ -21,17 +21,19 @@ class VeiculoTest extends \PHPUnit_Framework_TestCase
         $xml = $veiculo->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testVeiculoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testVeiculoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testVeiculoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testVeiculoLoadXML()

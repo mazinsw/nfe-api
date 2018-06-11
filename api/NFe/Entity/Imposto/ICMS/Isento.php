@@ -73,10 +73,9 @@ class Isento extends Generico
     private $desoneracao;
     private $motivo;
 
-    public function __construct($isento = array())
+    public function __construct($isento = [])
     {
         parent::__construct($isento);
-        $this->setTributacao('40');
     }
 
     /**
@@ -176,7 +175,7 @@ class Isento extends Generico
         return $isento;
     }
 
-    public function fromArray($isento = array())
+    public function fromArray($isento = [])
     {
         if ($isento instanceof Isento) {
             $isento = $isento->toArray();
@@ -193,6 +192,9 @@ class Isento extends Generico
             $this->setMotivo($isento['motivo']);
         } else {
             $this->setMotivo(null);
+        }
+        if (!isset($isento['tributacao'])) {
+            $this->setTributacao('40');
         }
         return $this;
     }

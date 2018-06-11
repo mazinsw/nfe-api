@@ -36,7 +36,7 @@ use NFe\Entity\Imposto;
 class Quantidade extends Imposto
 {
 
-    public function __construct($quantidade = array())
+    public function __construct($quantidade = [])
     {
         parent::__construct($quantidade);
         $this->setGrupo(self::GRUPO_IPI);
@@ -85,7 +85,7 @@ class Quantidade extends Imposto
         return $quantidade;
     }
 
-    public function fromArray($quantidade = array())
+    public function fromArray($quantidade = [])
     {
         if ($quantidade instanceof Quantidade) {
             $quantidade = $quantidade->toArray();

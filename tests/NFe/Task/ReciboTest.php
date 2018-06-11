@@ -1,6 +1,8 @@
 <?php
 namespace NFe\Task;
 
+use NFe\Core\Nota;
+
 class ReciboTest extends \PHPUnit_Framework_TestCase
 {
     private $sefaz;
@@ -43,38 +45,61 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testNormalization()
+    {
+        $recibo = new Recibo();
+        $recibo->setModelo('65');
+        $this->assertEquals(Nota::MODELO_NFCE, $recibo->getModelo());
+        $this->assertEquals('65', $recibo->getModelo(true));
+        $recibo->setModelo('55');
+        $this->assertEquals(Nota::MODELO_NFE, $recibo->getModelo());
+        $this->assertEquals('55', $recibo->getModelo(true));
+        $recibo->setModelo('50');
+        $this->assertEquals('50', $recibo->getModelo(true));
+        $this->assertNull($recibo->getMensagem(true));
+        $this->assertNull($recibo->getCodigo(true));
+        $this->assertNull($recibo->getTempoMedio(true));
+    }
+
     public function testReciboAutorizado()
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $dom = $data['dom'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'autorizadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
         try {
             $recibo = new Recibo();
             $recibo->setNumero('411000002567074');
             $retorno = $recibo->consulta($nota);
+            $recibo->setMensagem('msg');
+            $recibo->setCodigo('123');
+            $recibo->setTempoMedio(3);
             $recibo->fromArray($recibo);
+            $recibo->fromArray($recibo->toArray());
             $recibo->fromArray(null);
         } catch (Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
         \NFe\Common\CurlSoap::setPostFunction(null);
+
+        if (getenv('TEST_MODE') == 'override') {
+            $dom = $nota->addProtocolo($dom);
+            $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
+            $dom->formatOutput = true;
+            file_put_contents($xml_file, $dom->saveXML());
+        }
+
         $this->assertInstanceOf('\\NFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
-
-        // $dom = $nota->addProtocolo($dom);
-        // $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
-        // $dom->formatOutput = true;
-        // file_put_contents($xml_file, $dom->saveXML());
     }
 
     public function testReciboRejeitado()
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'rejeitadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
             $recibo = new Recibo();
             $recibo->setNumero('411000002567074');
@@ -92,7 +117,7 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'processamentoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'processamentoPostFunction']);
         try {
             $recibo = new Recibo();
             $recibo->setNumero('411000002567074');
@@ -106,6 +131,15 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('105', $retorno->getStatus());
     }
 
+    public function testValidarEsquemaNotFound()
+    {
+        $recibo = new Recibo();
+        $this->setExpectedException('\Exception');
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->appendChild($dom->createElement('schema'));
+        $recibo->validar($dom);
+    }
+
     public function testReciboNaoValidado()
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
@@ -113,7 +147,7 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
         $recibo = new Recibo();
         $recibo->setNumero(null); // não informa o número do rebibo
         // evita de enviar para a SEFAZ em caso de falha
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'rejeitadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
             $this->setExpectedException('\\NFe\\Exception\\ValidationException');
             $recibo->consulta($nota);

@@ -37,7 +37,7 @@ use NFe\Common\Util;
 class Aliquota extends \NFe\Entity\Imposto\COFINS\Aliquota
 {
 
-    public function __construct($aliquota = array())
+    public function __construct($aliquota = [])
     {
         parent::__construct($aliquota);
         $this->setGrupo(self::GRUPO_COFINSST);
@@ -49,7 +49,7 @@ class Aliquota extends \NFe\Entity\Imposto\COFINS\Aliquota
         return $aliquota;
     }
 
-    public function fromArray($aliquota = array())
+    public function fromArray($aliquota = [])
     {
         if ($aliquota instanceof Aliquota) {
             $aliquota = $aliquota->toArray();

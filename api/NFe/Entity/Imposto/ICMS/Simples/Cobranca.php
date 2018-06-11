@@ -38,10 +38,9 @@ class Cobranca extends Parcial
 
     private $normal;
 
-    public function __construct($cobranca = array())
+    public function __construct($cobranca = [])
     {
         parent::__construct($cobranca);
-        $this->setTributacao('201');
     }
 
     public function getNormal()
@@ -86,7 +85,7 @@ class Cobranca extends Parcial
         return $cobranca;
     }
 
-    public function fromArray($cobranca = array())
+    public function fromArray($cobranca = [])
     {
         if ($cobranca instanceof Cobranca) {
             $cobranca = $cobranca->toArray();
@@ -94,10 +93,9 @@ class Cobranca extends Parcial
             return $this;
         }
         parent::fromArray($cobranca);
-        if (!isset($cobranca['normal']) || is_null($cobranca['normal'])) {
-            $this->setNormal(new Normal());
-        } else {
-            $this->setNormal($cobranca['normal']);
+        $this->setNormal(new Normal(isset($cobranca['normal']) ? $cobranca['normal'] : []));
+        if (!isset($cobranca['tributacao'])) {
+            $this->setTributacao('201');
         }
         return $this;
     }
@@ -113,16 +111,7 @@ class Cobranca extends Parcial
         if (is_null($this->getNormal()->getModalidade())) {
             return $parcial;
         }
-        foreach ($parcial->childNodes as $node) {
-            $node = $dom->importNode($node, true);
-            $list = $element->getElementsByTagName($node->nodeName);
-            if ($list->length == 1) {
-                $element->replaceChild($node, $list->item(0));
-            } else {
-                $element->appendChild($node);
-            }
-        }
-        return $element;
+        return Util::mergeNodes($element, $parcial);
     }
 
     public function loadNode($element, $name = null)

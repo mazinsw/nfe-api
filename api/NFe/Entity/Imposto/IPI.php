@@ -46,7 +46,7 @@ class IPI extends Imposto
     private $enquadramento;
     private $tributo;
 
-    public function __construct($ipi = array())
+    public function __construct($ipi = [])
     {
         parent::__construct($ipi);
         $this->setGrupo(self::GRUPO_IPI);
@@ -182,7 +182,7 @@ class IPI extends Imposto
         return $ipi;
     }
 
-    public function fromArray($ipi = array())
+    public function fromArray($ipi = [])
     {
         if ($ipi instanceof IPI) {
             $ipi = $ipi->toArray();
@@ -210,7 +210,7 @@ class IPI extends Imposto
         } else {
             $this->setQuantidade(null);
         }
-        if (!isset($ipi['enquadramento']) || is_null($ipi['enquadramento'])) {
+        if (!isset($ipi['enquadramento'])) {
             $this->setEnquadramento('999');
         } else {
             $this->setEnquadramento($ipi['enquadramento']);
@@ -241,7 +241,7 @@ class IPI extends Imposto
         }
         Util::appendNode($element, 'cEnq', $this->getEnquadramento(true));
         if (is_null($this->getTributo())) {
-            throw new ValidationException(array('tributo' => 'O tributo do imposto IPI não foi informado'));
+            throw new ValidationException(['tributo' => 'O tributo do imposto IPI não foi informado']);
         }
         $tributo = $this->getTributo()->getNode();
         $tributo = $dom->importNode($tributo, true);

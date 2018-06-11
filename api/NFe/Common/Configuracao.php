@@ -51,7 +51,7 @@ class Configuracao
     private $sincrono;
     private $offline;
 
-    public function __construct($configuracao = array())
+    public function __construct($configuracao = [])
     {
         $this->fromArray($configuracao);
     }
@@ -253,8 +253,8 @@ class Configuracao
 
     public function setSincrono($sincrono)
     {
-        if (!in_array($sincrono, array('N', 'Y'))) {
-            $sincrono = $sincrono?'Y':'N';
+        if (is_bool($sincrono)) {
+            $sincrono = $sincrono ? 'Y': 'N';
         }
         $this->sincrono = $sincrono;
         return $this;
@@ -294,7 +294,7 @@ class Configuracao
 
     public function toArray($recursive = false)
     {
-        $configuracao = array();
+        $configuracao = [];
         $configuracao['banco'] = $this->getBanco();
         $configuracao['emitente'] = $this->getEmitente();
         $configuracao['evento'] = $this->getEvento();
@@ -310,23 +310,15 @@ class Configuracao
         return $configuracao;
     }
 
-    public function fromArray($configuracao = array())
+    public function fromArray($configuracao = [])
     {
         if ($configuracao instanceof Configuracao) {
             $configuracao = $configuracao->toArray();
         } elseif (!is_array($configuracao)) {
             return $this;
         }
-        if (!isset($configuracao['banco']) || is_null($configuracao['banco'])) {
-            $this->setBanco(new Estatico());
-        } else {
-            $this->setBanco($configuracao['banco']);
-        }
-        if (!isset($configuracao['emitente']) || is_null($configuracao['emitente'])) {
-            $this->setEmitente(new Emitente());
-        } else {
-            $this->setEmitente($configuracao['emitente']);
-        }
+        $this->setBanco(new Estatico(isset($configuracao['banco']) ? $configuracao['banco'] : []));
+        $this->setEmitente(new Emitente(isset($configuracao['emitente']) ? $configuracao['emitente'] : []));
         if (isset($configuracao['evento'])) {
             $this->setEvento($configuracao['evento']);
         } else {
@@ -367,12 +359,12 @@ class Configuracao
         } else {
             $this->setTokenIBPT(null);
         }
-        if (!isset($configuracao['tempo_limite']) || is_null($configuracao['tempo_limite'])) {
+        if (!isset($configuracao['tempo_limite'])) {
             $this->setTempoLimite(4);
         } else {
             $this->setTempoLimite($configuracao['tempo_limite']);
         }
-        if (!isset($configuracao['sincrono']) || is_null($configuracao['sincrono'])) {
+        if (!isset($configuracao['sincrono'])) {
             $this->setSincrono('Y');
         } else {
             $this->setSincrono($configuracao['sincrono']);

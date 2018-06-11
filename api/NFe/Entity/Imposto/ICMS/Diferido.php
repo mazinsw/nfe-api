@@ -41,10 +41,9 @@ class Diferido extends Reducao
 
     private $diferimento;
 
-    public function __construct($diferido = array())
+    public function __construct($diferido = [])
     {
         parent::__construct($diferido);
-        $this->setTributacao('51');
     }
 
     /**
@@ -104,7 +103,7 @@ class Diferido extends Reducao
         return $diferido;
     }
 
-    public function fromArray($diferido = array())
+    public function fromArray($diferido = [])
     {
         if ($diferido instanceof Diferido) {
             $diferido = $diferido->toArray();
@@ -116,6 +115,9 @@ class Diferido extends Reducao
             $this->setDiferimento($diferido['diferimento']);
         } else {
             $this->setDiferimento(null);
+        }
+        if (!isset($diferido['tributacao'])) {
+            $this->setTributacao('51');
         }
         return $this;
     }

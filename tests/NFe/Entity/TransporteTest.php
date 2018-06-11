@@ -15,7 +15,7 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
     protected function createTransporte()
     {
         $transporte = new \NFe\Entity\Transporte();
-        $transporte->setFrete(\NFe\Entity\Transporte::FRETE_EMITENTE);
+        $transporte->setFrete(\NFe\Entity\Transporte::FRETE_REMETENTE);
         $transporte->getVeiculo()
                    ->setRNTC(123456789)
                    ->setPlaca('ALK1232')
@@ -68,9 +68,9 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $volume->getPeso()
             ->setLiquido(15.0)
             ->setBruto(21.0);
-        $volume->addLacre(new \NFe\Entity\Lacre(array('numero' => 123456)));
-        $volume->addLacre(new \NFe\Entity\Lacre(array('numero' => 123457)));
-        $volume->addLacre(new \NFe\Entity\Lacre(array('numero' => 123458)));
+        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123456]));
+        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123457]));
+        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123458]));
 
         $transporte->addVolume($volume);
         $transporte->fromArray($transporte);
@@ -87,17 +87,19 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/transporte/testTransporteXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/transporte/testTransporteXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/transporte/testTransporteXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testTransporteLoadXML()
@@ -126,6 +128,14 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/transporte/testTransporteFreteDestinatarioXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
@@ -133,12 +143,6 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         );
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/transporte/testTransporteFreteDestinatarioXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testTransporteFreteDestinatarioLoadXML()
@@ -167,6 +171,14 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/transporte/testTransporteFreteTerceirosXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
@@ -174,12 +186,6 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         );
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/transporte/testTransporteFreteTerceirosXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testTransporteFreteTerceirosLoadXML()
@@ -208,17 +214,19 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/transporte/testTransporteNenhumXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/transporte/testTransporteNenhumXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/transporte/testTransporteNenhumXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testTransporteNenhumLoadXML()

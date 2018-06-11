@@ -40,7 +40,7 @@ class Volume implements Node
     private $peso;
     private $lacres;
 
-    public function __construct($volume = array())
+    public function __construct($volume = [])
     {
         $this->fromArray($volume);
     }
@@ -137,7 +137,7 @@ class Volume implements Node
 
     public function toArray($recursive = false)
     {
-        $volume = array();
+        $volume = [];
         $volume['quantidade'] = $this->getQuantidade();
         $volume['especie'] = $this->getEspecie();
         $volume['marca'] = $this->getMarca();
@@ -148,7 +148,7 @@ class Volume implements Node
             $volume['peso'] = $this->getPeso();
         }
         if ($recursive) {
-            $lacres = array();
+            $lacres = [];
             $_lacres = $this->getLacres();
             foreach ($_lacres as $_lacre) {
                 $lacres[] = $_lacre->toArray($recursive);
@@ -160,7 +160,7 @@ class Volume implements Node
         return $volume;
     }
 
-    public function fromArray($volume = array())
+    public function fromArray($volume = [])
     {
         if ($volume instanceof Volume) {
             $volume = $volume->toArray();
@@ -182,18 +182,14 @@ class Volume implements Node
         } else {
             $this->setMarca(null);
         }
-        if (!isset($volume['numeracoes']) || is_null($volume['numeracoes'])) {
-            $this->setNumeracoes(array());
+        if (!isset($volume['numeracoes'])) {
+            $this->setNumeracoes([]);
         } else {
             $this->setNumeracoes($volume['numeracoes']);
         }
-        if (!isset($volume['peso']) || is_null($volume['peso'])) {
-            $this->setPeso(new Peso());
-        } else {
-            $this->setPeso($volume['peso']);
-        }
-        if (!isset($volume['lacres']) || is_null($volume['lacres'])) {
-            $this->setLacres(array());
+        $this->setPeso(new Peso(isset($volume['peso']) ? $volume['peso'] : []));
+        if (!isset($volume['lacres'])) {
+            $this->setLacres([]);
         } else {
             $this->setLacres($volume['lacres']);
         }
@@ -246,7 +242,7 @@ class Volume implements Node
         $this->setQuantidade(Util::loadNode($element, 'qVol'));
         $this->setEspecie(Util::loadNode($element, 'esp'));
         $this->setMarca(Util::loadNode($element, 'marca'));
-        $numeracoes = array();
+        $numeracoes = [];
         $volumes = Util::loadNode($element, 'nVol');
         if (trim($volumes) != '') {
             $numeracoes = explode(', ', $volumes);
@@ -259,7 +255,7 @@ class Volume implements Node
             $peso = null;
         }
         $this->setPeso($peso);
-        $lacres = array();
+        $lacres = [];
         $_fields = $element->getElementsByTagName('lacres');
         foreach ($_fields as $_item) {
             $lacre = new Lacre();

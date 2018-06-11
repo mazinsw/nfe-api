@@ -36,6 +36,14 @@ class TransportadorTest extends \PHPUnit_Framework_TestCase
         $xml = $transportador->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
@@ -43,12 +51,6 @@ class TransportadorTest extends \PHPUnit_Framework_TestCase
         );
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testTransportadorLoadXML()
@@ -80,6 +82,14 @@ class TransportadorTest extends \PHPUnit_Framework_TestCase
         $xml = $transportador->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorSemEnderecoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
@@ -87,12 +97,6 @@ class TransportadorTest extends \PHPUnit_Framework_TestCase
         );
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorSemEnderecoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testTransportadorSemEnderecoLoadXML()

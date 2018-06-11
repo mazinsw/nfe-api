@@ -12,7 +12,7 @@ class CobrancaTest extends \PHPUnit_Framework_TestCase
 
     public function testCobrancaXML()
     {
-        $icms_cobranca = new \NFe\Entity\Imposto\ICMS\Cobranca();
+        $icms_cobranca = new Cobranca();
         $icms_cobranca->getNormal()->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_cobranca->getNormal()->setBase(100.00);
         $icms_cobranca->getNormal()->setAliquota(18.00);
@@ -28,17 +28,19 @@ class CobrancaTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_cobranca->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testCobrancaXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testCobrancaXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testCobrancaXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testCobrancaLoadXML()
@@ -47,8 +49,8 @@ class CobrancaTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testCobrancaXML.xml');
 
-        $icms_cobranca = new \NFe\Entity\Imposto\ICMS\Cobranca();
-        $icms_cobranca->loadNode($dom_cmp->documentElement);
+        $icms_cobranca = Cobranca::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(Cobranca::class, $icms_cobranca);
 
         $xml = $icms_cobranca->getNode();
         $dom = $xml->ownerDocument;

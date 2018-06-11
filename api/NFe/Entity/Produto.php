@@ -64,7 +64,7 @@ class Produto extends Total
     private $cest;
     private $impostos;
 
-    public function __construct($produto = array())
+    public function __construct($produto = [])
     {
         $this->fromArray($produto);
     }
@@ -438,13 +438,13 @@ class Produto extends Total
         $config = SEFAZ::getInstance()->getConfiguracao();
         $db = $config->getBanco();
         $endereco = $config->getEmitente()->getEndereco();
-        $info = array('total' => 0.00);
-        $tipos = array(
+        $info = ['total' => 0.00];
+        $tipos = [
             // Imposto::TIPO_IMPORTADO, // TODO: determinar quando usar
             Imposto::TIPO_NACIONAL,
             Imposto::TIPO_ESTADUAL,
             Imposto::TIPO_MUNICIPAL
-        );
+        ];
         $imposto = new \NFe\Entity\Imposto\Total();
         $imposto->setBase($this->getBase());
         $aliquota = $db->getImpostoAliquota(
@@ -499,7 +499,7 @@ class Produto extends Total
         $produto['ncm'] = $this->getNCM();
         $produto['cest'] = $this->getCEST();
         if ($recursive) {
-            $impostos = array();
+            $impostos = [];
             $_impostos = $this->getImpostos();
             foreach ($_impostos as $_imposto) {
                 $impostos[] = $_imposto->toArray($recursive);
@@ -511,7 +511,7 @@ class Produto extends Total
         return $produto;
     }
 
-    public function fromArray($produto = array())
+    public function fromArray($produto = [])
     {
         if ($produto instanceof Produto) {
             $produto = $produto->toArray();
@@ -549,12 +549,12 @@ class Produto extends Total
         } else {
             $this->setDescricao(null);
         }
-        if (!isset($produto['unidade']) || is_null($produto['unidade'])) {
+        if (!isset($produto['unidade'])) {
             $this->setUnidade(self::UNIDADE_UNIDADE);
         } else {
             $this->setUnidade($produto['unidade']);
         }
-        if (!isset($produto['multiplicador']) || is_null($produto['multiplicador'])) {
+        if (!isset($produto['multiplicador'])) {
             $this->setMultiplicador(1);
         } else {
             $this->setMultiplicador($produto['multiplicador']);
@@ -574,11 +574,7 @@ class Produto extends Total
         } else {
             $this->setTributada(null);
         }
-        if (!isset($produto['peso']) || is_null($produto['peso'])) {
-            $this->setPeso(new Peso());
-        } else {
-            $this->setPeso($produto['peso']);
-        }
+        $this->setPeso(new Peso(isset($produto['peso']) ? $produto['peso'] : []));
         if (isset($produto['excecao'])) {
             $this->setExcecao($produto['excecao']);
         } else {
@@ -599,8 +595,8 @@ class Produto extends Total
         } else {
             $this->setCEST(null);
         }
-        if (!isset($produto['impostos']) || is_null($produto['impostos'])) {
-            $this->setImpostos(array());
+        if (!isset($produto['impostos'])) {
+            $this->setImpostos([]);
         } else {
             $this->setImpostos($produto['impostos']);
         }
@@ -609,13 +605,13 @@ class Produto extends Total
 
     public static function addNodeInformacoes($tributos, $element, $name = null)
     {
-        $detalhes = array();
-        $formatos = array(
+        $detalhes = [];
+        $formatos = [
             Imposto::TIPO_IMPORTADO => '%s Importado',
             Imposto::TIPO_NACIONAL => '%s Federal',
             Imposto::TIPO_ESTADUAL => '%s Estadual',
             Imposto::TIPO_MUNICIPAL => '%s Municipal'
-        );
+        ];
         foreach ($formatos as $tipo => $formato) {
             if (!isset($tributos[$tipo])) {
                 continue;
@@ -690,7 +686,7 @@ class Produto extends Total
         $element->appendChild($produto);
 
         $imposto = $dom->createElement('imposto');
-        $grupos = array();
+        $grupos = [];
         $_impostos = $this->getImpostos();
         foreach ($_impostos as $_imposto) {
             if (is_null($_imposto->getBase())) {
@@ -803,7 +799,7 @@ class Produto extends Total
             )
         );
         $this->setCEST(Util::loadNode($element, 'CEST'));
-        $impostos = array();
+        $impostos = [];
         $_fields = $root->getElementsByTagName('imposto');
         if ($_fields->length == 0) {
             throw new \Exception('Tag "imposto" da lista de "Impostos" não encontrada no Produto', 404);

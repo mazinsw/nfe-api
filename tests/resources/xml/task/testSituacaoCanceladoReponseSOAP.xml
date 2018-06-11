@@ -40,7 +40,7 @@
 							<verEvento>1.00</verEvento>
 							<detEvento versao='1.00'>
 								<descEvento>Cancelamento</descEvento>
-								<nProt>141170000157615</nProt>
+								<nProt>141170000157685</nProt>
 								<xJust>CANCELAMENTO DE PEDIDO</xJust>
 							</detEvento>
 						</infEvento>
@@ -77,7 +77,7 @@
 							<xEvento>Cancelamento</xEvento>
 							<nSeqEvento>1</nSeqEvento>
 							<dhRegEvento>2017-03-17T09:31:37-03:00</dhRegEvento>
-							<nProt>141170000157615</nProt>
+							<nProt>141170000157685</nProt>
 						</infEvento>
 					</retEvento>
 				</procEventoNFe>

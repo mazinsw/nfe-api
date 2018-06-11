@@ -44,7 +44,7 @@ class Status implements Node
     private $motivo;
     private $uf;
 
-    public function __construct($status = array())
+    public function __construct($status = [])
     {
         $this->fromArray($status);
     }
@@ -165,7 +165,7 @@ class Status implements Node
 
     public function toArray($recursive = false)
     {
-        $status = array();
+        $status = [];
         $status['ambiente'] = $this->getAmbiente();
         $status['versao'] = $this->getVersao();
         $status['status'] = $this->getStatus();
@@ -174,7 +174,7 @@ class Status implements Node
         return $status;
     }
 
-    public function fromArray($status = array())
+    public function fromArray($status = [])
     {
         if ($status instanceof Status) {
             $status = $status->toArray();

@@ -28,6 +28,7 @@
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Common\Util;
+use NFe\Entity\Imposto\Fundo\Substituido;
 
 /**
  * Tributação pelo ICMS
@@ -60,10 +61,9 @@ class Parcial extends Base
     private $margem;
     private $reducao;
 
-    public function __construct($parcial = array())
+    public function __construct($parcial = [])
     {
         parent::__construct($parcial);
-        $this->setTributacao('30');
     }
 
     /**
@@ -143,7 +143,7 @@ class Parcial extends Base
         return $parcial;
     }
 
-    public function fromArray($parcial = array())
+    public function fromArray($parcial = [])
     {
         if ($parcial instanceof Parcial) {
             $parcial = $parcial->toArray();
@@ -166,13 +166,19 @@ class Parcial extends Base
         } else {
             $this->setReducao(null);
         }
+        if (!isset($parcial['fundo']) || !($this->getFundo() instanceof Substituido)) {
+            $this->setFundo(new Substituido());
+        }
+        if (!isset($parcial['tributacao'])) {
+            $this->setTributacao('30');
+        }
         return $this;
     }
 
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'IMCS30':$name);
+        $element = $dom->createElement(is_null($name)?'ICMS30':$name);
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'modBCST', $this->getModalidade(true));
@@ -181,12 +187,12 @@ class Parcial extends Base
         Util::appendNode($element, 'vBCST', $this->getBase(true));
         Util::appendNode($element, 'pICMSST', $this->getAliquota(true));
         Util::appendNode($element, 'vICMSST', $this->getValor(true));
-        return $element;
+        return $this->exportFundo($element);
     }
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'IMCS30':$name;
+        $name = is_null($name)?'ICMS30':$name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
@@ -243,6 +249,7 @@ class Parcial extends Base
                 'Tag "pICMSST" do campo "Aliquota" não encontrada no ICMS Parcial'
             )
         );
+        $this->importFundo($element);
         return $element;
     }
 }

@@ -27,7 +27,7 @@
  */
 namespace NFe\Core;
 
-use NFe\Log\Logger;
+use NFe\Logger\Log;
 use NFe\Task\Tarefa;
 use NFe\Task\Autorizacao;
 use NFe\Common\Ajuste;
@@ -42,7 +42,7 @@ class SEFAZ
     private $configuracao;
     private static $instance;
 
-    public function __construct($sefaz = array())
+    public function __construct($sefaz = [])
     {
         $this->fromArray($sefaz);
     }
@@ -85,9 +85,9 @@ class SEFAZ
 
     public function toArray($recursive = false)
     {
-        $sefaz = array();
+        $sefaz = [];
         if ($recursive) {
-            $notas = array();
+            $notas = [];
             $_notas = $this->getNotas();
             foreach ($_notas as $_nota) {
                 $notas[] = $_nota->toArray($recursive);
@@ -104,23 +104,19 @@ class SEFAZ
         return $sefaz;
     }
 
-    public function fromArray($sefaz = array())
+    public function fromArray($sefaz = [])
     {
         if ($sefaz instanceof SEFAZ) {
             $sefaz = $sefaz->toArray();
         } elseif (!is_array($sefaz)) {
             return $this;
         }
-        if (!isset($sefaz['notas']) || is_null($sefaz['notas'])) {
-            $this->setNotas(array());
+        if (!isset($sefaz['notas'])) {
+            $this->setNotas([]);
         } else {
             $this->setNotas($sefaz['notas']);
         }
-        if (!isset($sefaz['configuracao']) || is_null($sefaz['configuracao'])) {
-            $this->setConfiguracao(new Ajuste());
-        } else {
-            $this->setConfiguracao($sefaz['configuracao']);
-        }
+        $this->setConfiguracao(new Ajuste(isset($sefaz['configuracao']) ? $sefaz['configuracao'] : []));
         return $this;
     }
 
@@ -128,11 +124,11 @@ class SEFAZ
     {
         $evento = $this->getConfiguracao()->getEvento();
         if ($retorno->isRecebido()) {
-            Logger::debug('SEFAZ.despacha - Recibo: '.$retorno->getNumero().' da '.$nota->getID(true));
+            Log::debug('SEFAZ.despacha - Recibo: '.$retorno->getNumero().' da '.$nota->getID(true));
             $evento->onNotaProcessando($nota, $dom, $retorno);
         } elseif ($retorno->isAutorizado()) {
             $dom = $nota->addProtocolo($dom);
-            Logger::debug('SEFAZ.despacha('.$retorno->getStatus().') - '.$retorno->getMotivo().
+            Log::debug('SEFAZ.despacha('.$retorno->getStatus().') - '.$retorno->getMotivo().
                 ', Protocolo: '.$retorno->getNumero().' - '.$nota->getID(true));
             $evento->onNotaAutorizada($nota, $dom, $retorno);
         } elseif ($retorno->isDenegada()) {
@@ -179,7 +175,7 @@ class SEFAZ
                         if ($nota->getEmissao() == Nota::EMISSAO_CONTINGENCIA) {
                             throw $e;
                         }
-                        Logger::debug('SEFAZ.autoriza('.$e->getCode().') - Mudando emissão para contingência: '.
+                        Log::debug('SEFAZ.autoriza('.$e->getCode().') - Mudando emissão para contingência: '.
                             $e->getMessage().' - '.$nota->getID(true));
                         $msg = substr('Falha no envio da nota: '.$e->getMessage(), 0, 256);
                         $nota->setEmissao(Nota::EMISSAO_CONTINGENCIA);
@@ -189,7 +185,7 @@ class SEFAZ
                         $envia = false;
                         continue;
                     }
-                    Logger::debug('SEFAZ.autoriza('.$retorno->getStatus().') - '.
+                    Log::debug('SEFAZ.autoriza('.$retorno->getStatus().') - '.
                         $retorno->getMotivo().' - '.$nota->getID(true));
                     $this->despacha($nota, $dom, $retorno);
                     break;
@@ -197,7 +193,7 @@ class SEFAZ
                 $evento->onNotaCompleto($nota, $dom);
                 $i++;
             } catch (\Exception $e) {
-                Logger::error('SEFAZ.autoriza('.$e->getCode().') - '.$e->getMessage());
+                Log::error('SEFAZ.autoriza('.$e->getCode().') - '.$e->getMessage());
                 $evento->onNotaErro($nota, $e);
             }
         }
@@ -216,7 +212,7 @@ class SEFAZ
             try {
                 $retorno = $pendencia->executa();
                 $dom = $pendencia->getDocumento();
-                Logger::debug('SEFAZ.consulta('.$retorno->getStatus().') - '.
+                Log::debug('SEFAZ.consulta('.$retorno->getStatus().') - '.
                     $retorno->getMotivo().' - '.$nota->getID(true));
                 $this->despacha($nota, $dom, $retorno);
                 $evento->onNotaCompleto($nota, $dom);
@@ -224,7 +220,7 @@ class SEFAZ
                 $evento->onTarefaExecutada($pendencia, $retorno);
                 $i++;
             } catch (\Exception $e) {
-                Logger::error('SEFAZ.consulta('.$e->getCode().') - '.$e->getMessage());
+                Log::error('SEFAZ.consulta('.$e->getCode().') - '.$e->getMessage());
                 $evento->onNotaErro($nota, $e);
             }
         }
@@ -243,12 +239,12 @@ class SEFAZ
                 $save_dom = $tarefa->getDocumento();
                 $retorno = $tarefa->executa();
                 $dom = $tarefa->getDocumento();
-                Logger::debug('SEFAZ.executa('.$retorno->getStatus().') - '.$retorno->getMotivo().
+                Log::debug('SEFAZ.executa('.$retorno->getStatus().') - '.$retorno->getMotivo().
                     ' - Tarefa: '.$tarefa->getID());
                 switch ($tarefa->getAcao()) {
                     case Tarefa::ACAO_INUTILIZAR:
                         $inutilizacao = $tarefa->getAgente();
-                        Logger::debug('SEFAZ.executa[inutiliza]('.$inutilizacao->getStatus().') - '.
+                        Log::debug('SEFAZ.executa[inutiliza]('.$inutilizacao->getStatus().') - '.
                             $inutilizacao->getMotivo().' - '.$inutilizacao->getID(true));
                         $evento->onInutilizado($inutilizacao, $dom);
                         break;
@@ -260,7 +256,7 @@ class SEFAZ
                 $evento->onTarefaExecutada($tarefa, $retorno);
                 $i++;
             } catch (\Exception $e) {
-                Logger::error('SEFAZ.executa('.$e->getCode().') - '.$e->getMessage());
+                Log::error('SEFAZ.executa('.$e->getCode().') - '.$e->getMessage());
                 $evento->onTarefaErro($tarefa, $e);
             }
         }
@@ -277,9 +273,9 @@ class SEFAZ
         $tarefa->setAcao(Tarefa::ACAO_INUTILIZAR);
         $tarefa->setAgente($inutilizacao);
         try {
-            $this->executa(array($tarefa));
+            $this->executa([$tarefa]);
         } catch (\Exception $e) {
-            Logger::error('SEFAZ.inutiliza('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.inutiliza('.$e->getCode().') - '.$e->getMessage());
             return false;
         }
         return true;
@@ -298,7 +294,7 @@ class SEFAZ
             $this->setNotas($notas);
             $i += $this->autoriza();
         } catch (\Exception $e) {
-            Logger::error('SEFAZ.processa[autoriza]('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.processa[autoriza]('.$e->getCode().') - '.$e->getMessage());
         }
         /* Consulta o status das notas em processamento */
         try {
@@ -306,7 +302,7 @@ class SEFAZ
             $pendencias = $db->getNotasPendentes();
             $i += $this->consulta($pendencias);
         } catch (\Exception $e) {
-            Logger::error('SEFAZ.processa[pendentes]('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.processa[pendentes]('.$e->getCode().') - '.$e->getMessage());
         }
         /* Consulta se as notas existem e cancela ou inutiliza seus números
          * Também processa pedido de inutilização e cancelamento de notas
@@ -316,7 +312,7 @@ class SEFAZ
             $tarefas = $db->getNotasTarefas();
             $i += $this->executa($tarefas);
         } catch (\Exception $e) {
-            Logger::error('SEFAZ.processa[tarefas]('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.processa[tarefas]('.$e->getCode().') - '.$e->getMessage());
         }
         return $i;
     }

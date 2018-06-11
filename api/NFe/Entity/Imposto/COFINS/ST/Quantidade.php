@@ -35,7 +35,7 @@ use NFe\Common\Util;
 class Quantidade extends \NFe\Entity\Imposto\COFINS\Quantidade
 {
 
-    public function __construct($quantidade = array())
+    public function __construct($quantidade = [])
     {
         parent::__construct($quantidade);
         $this->setGrupo(self::GRUPO_COFINSST);
@@ -47,7 +47,7 @@ class Quantidade extends \NFe\Entity\Imposto\COFINS\Quantidade
         return $quantidade;
     }
 
-    public function fromArray($quantidade = array())
+    public function fromArray($quantidade = [])
     {
         if ($quantidade instanceof Quantidade) {
             $quantidade = $quantidade->toArray();

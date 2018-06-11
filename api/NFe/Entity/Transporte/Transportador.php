@@ -36,7 +36,7 @@ use NFe\Entity\Destinatario;
 class Transportador extends Destinatario
 {
 
-    public function __construct($transportador = array())
+    public function __construct($transportador = [])
     {
         parent::__construct($transportador);
     }
@@ -47,7 +47,7 @@ class Transportador extends Destinatario
         return $transportador;
     }
 
-    public function fromArray($transportador = array())
+    public function fromArray($transportador = [])
     {
         if ($transportador instanceof Transportador) {
             $transportador = $transportador->toArray();

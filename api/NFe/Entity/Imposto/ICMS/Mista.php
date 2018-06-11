@@ -37,11 +37,9 @@ use NFe\Common\Util;
 class Mista extends Cobranca
 {
 
-    public function __construct($mista = array())
+    public function __construct($mista = [])
     {
         parent::__construct($mista);
-        $this->setTributacao('70');
-        $this->setNormal(new Reducao());
     }
 
     public function toArray($recursive = false)
@@ -50,7 +48,7 @@ class Mista extends Cobranca
         return $mista;
     }
 
-    public function fromArray($mista = array())
+    public function fromArray($mista = [])
     {
         if ($mista instanceof Mista) {
             $mista = $mista->toArray();
@@ -58,6 +56,10 @@ class Mista extends Cobranca
             return $this;
         }
         parent::fromArray($mista);
+        $this->setNormal(new Reducao(isset($mista['normal']) ? $mista['normal'] : []));
+        if (!isset($mista['tributacao'])) {
+            $this->setTributacao('70');
+        }
         return $this;
     }
 

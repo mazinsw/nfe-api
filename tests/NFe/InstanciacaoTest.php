@@ -117,7 +117,7 @@ class InstanciacaoTest extends \PHPUnit_Framework_TestCase
 
     public function testLog()
     {
-        $log = new \NFe\Log\Logger();
+        $log = new \NFe\Logger\Log();
     }
 
     public function testException()

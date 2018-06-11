@@ -1,6 +1,8 @@
 <?php
 namespace NFe\Task;
 
+use NFe\Core\Nota;
+
 class SituacaoTest extends \PHPUnit_Framework_TestCase
 {
     private $sefaz;
@@ -43,15 +45,29 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testNormalization()
+    {
+        $situacao = new Situacao();
+        $situacao->setModelo('65');
+        $this->assertEquals(Nota::MODELO_NFCE, $situacao->getModelo());
+        $this->assertEquals('65', $situacao->getModelo(true));
+        $situacao->setModelo('55');
+        $this->assertEquals(Nota::MODELO_NFE, $situacao->getModelo());
+        $this->assertEquals('55', $situacao->getModelo(true));
+        $situacao->setModelo('50');
+        $this->assertEquals('50', $situacao->getModelo(true));
+    }
+
     public function testSituacaoAutorizado()
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'autorizadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
         try {
             $situacao = new Situacao();
             $retorno = $situacao->consulta($nota);
             $situacao->fromArray($situacao);
+            $situacao->fromArray($situacao->toArray());
             $situacao->fromArray(null);
         } catch (Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -67,7 +83,7 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'inexistentePostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'inexistentePostFunction']);
         try {
             $situacao = new Situacao();
             $retorno = $situacao->consulta($nota);
@@ -84,7 +100,7 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
     {
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'canceladoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'canceladoPostFunction']);
         try {
             $situacao = new Situacao();
             $retorno = $situacao->consulta($nota);
@@ -101,14 +117,26 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         // $dom = $retorno->getNode()->ownerDocument; // descomentar essa linha quando implementar
         // TODO: Fim do problema de assinatura
         $dom = $retorno->addInformacao($dom);
+
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
+                $dom->saveXML()
+            );
+        }
+
         $dom_cmp = EventoTest::loadEventoRegistradoXML();
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
 
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
-        //     $dom->saveXML()
-        // );
+    public function testValidarEsquemaNotFound()
+    {
+        $situacao = new Situacao();
+        $this->setExpectedException('\Exception');
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->appendChild($dom->createElement('schema'));
+        $situacao->validar($dom);
     }
 
     public function testSituacaoInvalida()
@@ -118,7 +146,7 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         $nota->setID('1');
         $situacao = new Situacao();
         $situacao->setModelo('Invalido');
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'inexistentePostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'inexistentePostFunction']);
         $this->setExpectedException('\Exception');
         try {
             $retorno = $situacao->consulta($nota);

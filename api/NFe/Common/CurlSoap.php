@@ -41,7 +41,6 @@ class CurlSoap extends Curl
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
     xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-    <soap12:Header/>
     <soap12:Body/>
 </soap12:Envelope>
 XML;
@@ -75,18 +74,6 @@ XML;
         });
     }
 
-    private function reparseResponse()
-    {
-        if (isset($this->responseHeaders['Content-Type'])) {
-            $xmlPattern = '~^application/soap\+xml~i';
-            if (preg_match($xmlPattern, $this->responseHeaders['Content-Type'])) {
-                if ($this->xmlDecoder) {
-                    $this->response = call_user_func($this->xmlDecoder, $this->rawResponse);
-                }
-            }
-        }
-    }
-
     public static function setPostFunction($post_fn)
     {
         return self::$post_fn = $post_fn;
@@ -112,28 +99,10 @@ XML;
         return $this->private_key;
     }
 
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    public function getHeader()
-    {
-        return $this->response->getElementsByTagName('Header')->item(0);
-    }
-
-    public function getBody()
-    {
-        return $this->response->getElementsByTagName('Body')->item(0);
-    }
-
-    public function send($url, $body, $header = '', $action = null)
+    public function send($url, $body)
     {
         $this->setOpt(CURLOPT_SSLCERT, $this->getCertificate());
         $this->setOpt(CURLOPT_SSLKEY, $this->getPrivateKey());
-        if ($header instanceof \DOMDocument) {
-            $header = $header->saveXML($header->documentElement);
-        }
         if ($body instanceof \DOMDocument) {
             $body = $body->saveXML($body->documentElement);
         }
@@ -141,13 +110,11 @@ XML;
         $dom->preserveWhiteSpace = false;
         $dom->loadXML(self::ENVELOPE);
         $envelope = $dom->saveXML();
-        $data = str_replace('<soap12:Header/>', '<soap12:Header>'.$header.'</soap12:Header>', $envelope);
-        $data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $data);
+        $data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $envelope);
         if (is_null(self::$post_fn)) {
             $this->post($url, $data);
-            $this->reparseResponse();
         } else {
-            call_user_func_array(self::$post_fn, array($this, $url, $data));
+            call_user_func_array(self::$post_fn, [$this, $url, $data]);
         }
         if (!$this->error) {
             return $this->response;

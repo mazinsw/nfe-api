@@ -50,7 +50,7 @@ abstract class Nota implements Node
     /**
      * Versão da nota fiscal
      */
-    const VERSAO = '3.10';
+    const VERSAO = '4.00';
 
     /**
      * Versão do aplicativo gerador da nota
@@ -81,14 +81,6 @@ abstract class Nota implements Node
     const DESTINO_INTERNA = 'interna';
     const DESTINO_INTERESTADUAL = 'interestadual';
     const DESTINO_EXTERIOR = 'exterior';
-
-    /**
-     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
-     * prazo; 2 – outros.
-     */
-    const INDICADOR_AVISTA = 'avista';
-    const INDICADOR_APRAZO = 'aprazo';
-    const INDICADOR_OUTROS = 'outros';
 
     /**
      * Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe
@@ -125,16 +117,17 @@ abstract class Nota implements Node
 
     /**
      * Indicador de presença do comprador no estabelecimento comercial no
-     * momento da oepração (0-Não se aplica, ex.: Nota Fiscal complementar ou
-     * de ajuste;1-Operação presencial;2-Não presencial, internet;3-Não
-     * presencial, teleatendimento;4-NFC-e entrega em domicílio;9-Não
-     * presencial, outros)
+     * momento da operação (0-Não se aplica ex.: Nota Fiscal complementar ou de
+     * ajuste;1-Operação presencial;2-Não presencial, internet;3-Não
+     * presencial, teleatendimento;4-NFC-e entrega em domicílio;5-Operação
+     * presencial, fora do estabelecimento;9-Não presencial, outros)
      */
     const PRESENCA_NENHUM = 'nenhum';
     const PRESENCA_PRESENCIAL = 'presencial';
     const PRESENCA_INTERNET = 'internet';
     const PRESENCA_TELEATENDIMENTO = 'teleatendimento';
     const PRESENCA_ENTREGA = 'entrega';
+    const PRESENCA_AMBULANTE = 'ambulante';
     const PRESENCA_OUTROS = 'outros';
 
     /**
@@ -199,11 +192,6 @@ abstract class Nota implements Node
      * pelo emitente para cada NF-e.
      */
     private $codigo;
-    /**
-     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
-     * prazo; 2 – outros.
-     */
-    private $indicador;
     /**
      * Data e Hora de emissão do Documento Fiscal
      */
@@ -276,7 +264,7 @@ abstract class Nota implements Node
      * Constroi uma instância de Nota vazia
      * @param  array $nota Array contendo dados da Nota
      */
-    public function __construct($nota = array())
+    public function __construct($nota = [])
     {
         $this->fromArray($nota);
     }
@@ -371,7 +359,7 @@ abstract class Nota implements Node
 
     /**
      * Produtos adicionados na nota
-     * @return mixed produtos da Nota
+     * @return \NFe\Entity\Produto[] produtos da Nota
      */
     public function getProdutos()
     {
@@ -699,50 +687,6 @@ abstract class Nota implements Node
     }
 
     /**
-     * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
-     * prazo; 2 – outros.
-     * @param boolean $normalize informa se o indicador deve estar no formato do XML
-     * @return mixed indicador da Nota
-     */
-    public function getIndicador($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->indicador;
-        }
-        switch ($this->indicador) {
-            case self::INDICADOR_AVISTA:
-                return '0';
-            case self::INDICADOR_APRAZO:
-                return '1';
-            case self::INDICADOR_OUTROS:
-                return '2';
-        }
-        return $this->indicador;
-    }
-
-    /**
-     * Altera o valor do Indicador para o informado no parâmetro
-     * @param mixed $indicador novo valor para Indicador
-     * @return Nota A própria instância da classe
-     */
-    public function setIndicador($indicador)
-    {
-        switch ($indicador) {
-            case '0':
-                $indicador = self::INDICADOR_AVISTA;
-                break;
-            case '1':
-                $indicador = self::INDICADOR_APRAZO;
-                break;
-            case '2':
-                $indicador = self::INDICADOR_OUTROS;
-                break;
-        }
-        $this->indicador = $indicador;
-        return $this;
-    }
-
-    /**
      * Data e Hora de emissão do Documento Fiscal
      * @param boolean $normalize informa se o data_emissao deve estar no formato do XML
      * @return mixed data_emissao da Nota
@@ -1038,8 +982,8 @@ abstract class Nota implements Node
      */
     public function setConsumidorFinal($consumidor_final)
     {
-        if (!in_array($consumidor_final, array('N', 'Y'))) {
-            $consumidor_final = $consumidor_final?'Y':'N';
+        if (is_bool($consumidor_final)) {
+            $consumidor_final = $consumidor_final ? 'Y': 'N';
         }
         $this->consumidor_final = $consumidor_final;
         return $this;
@@ -1047,10 +991,10 @@ abstract class Nota implements Node
 
     /**
      * Indicador de presença do comprador no estabelecimento comercial no
-     * momento da oepração (0-Não se aplica, ex.: Nota Fiscal complementar ou
-     * de ajuste;1-Operação presencial;2-Não presencial, internet;3-Não
-     * presencial, teleatendimento;4-NFC-e entrega em domicílio;9-Não
-     * presencial, outros)
+     * momento da oepração (0-Não se aplica (ex.: Nota Fiscal complementar ou
+     * de ajuste;1-Operação presencial;2-Não presencial, internet;
+     * 3-Não presencial, teleatendimento;4-NFC-e entrega em domicílio;
+     * 5-Operação presencial, fora do estabelecimento;9-Não presencial, outros)
      * @param boolean $normalize informa se a presenca deve estar no formato do XML
      * @return mixed presenca da Nota
      */
@@ -1070,6 +1014,8 @@ abstract class Nota implements Node
                 return '3';
             case self::PRESENCA_ENTREGA:
                 return '4';
+            case self::PRESENCA_AMBULANTE:
+                return '5';
             case self::PRESENCA_OUTROS:
                 return '9';
         }
@@ -1098,6 +1044,9 @@ abstract class Nota implements Node
                 break;
             case '4':
                 $presenca = self::PRESENCA_ENTREGA;
+                break;
+            case '5':
+                $presenca = self::PRESENCA_AMBULANTE;
                 break;
             case '9':
                 $presenca = self::PRESENCA_OUTROS;
@@ -1179,7 +1128,7 @@ abstract class Nota implements Node
      */
     public function addObservacao($campo, $observacao)
     {
-        $this->observacoes[] = array('campo' => $campo, 'valor' => $observacao);
+        $this->observacoes[] = ['campo' => $campo, 'valor' => $observacao];
         return $this;
     }
 
@@ -1211,7 +1160,7 @@ abstract class Nota implements Node
      */
     public function addInformacao($campo, $informacao)
     {
-        $this->informacoes[] = array('campo' => $campo, 'valor' => $informacao);
+        $this->informacoes[] = ['campo' => $campo, 'valor' => $informacao];
         return $this;
     }
 
@@ -1232,7 +1181,7 @@ abstract class Nota implements Node
 
     public function toArray($recursive = false)
     {
-        $nota = array();
+        $nota = [];
         $nota['id'] = $this->getID();
         $nota['numero'] = $this->getNumero();
         if (!is_null($this->getEmitente()) && $recursive) {
@@ -1246,7 +1195,7 @@ abstract class Nota implements Node
             $nota['destinatario'] = $this->getDestinatario();
         }
         if ($recursive) {
-            $produtos = array();
+            $produtos = [];
             $_produtos = $this->getProdutos();
             foreach ($_produtos as $_produto) {
                 $produtos[] = $_produto->toArray($recursive);
@@ -1261,7 +1210,7 @@ abstract class Nota implements Node
             $nota['transporte'] = $this->getTransporte();
         }
         if ($recursive) {
-            $pagamentos = array();
+            $pagamentos = [];
             $_pagamentos = $this->getPagamentos();
             foreach ($_pagamentos as $_pagamento) {
                 $pagamentos[] = $_pagamento->toArray($recursive);
@@ -1278,7 +1227,6 @@ abstract class Nota implements Node
         $nota['destino'] = $this->getDestino();
         $nota['natureza'] = $this->getNatureza();
         $nota['codigo'] = $this->getCodigo();
-        $nota['indicador'] = $this->getIndicador();
         $nota['data_emissao'] = $this->getDataEmissao($recursive);
         $nota['serie'] = $this->getSerie();
         $nota['formato'] = $this->getFormato();
@@ -1304,7 +1252,7 @@ abstract class Nota implements Node
         return $nota;
     }
 
-    public function fromArray($nota = array())
+    public function fromArray($nota = [])
     {
         if ($nota instanceof Nota) {
             $nota = $nota->toArray();
@@ -1321,28 +1269,16 @@ abstract class Nota implements Node
         } else {
             $this->setNumero(null);
         }
-        if (!isset($nota['emitente']) || is_null($nota['emitente'])) {
-            $this->setEmitente(new Emitente());
-        } else {
-            $this->setEmitente($nota['emitente']);
-        }
-        if (!isset($nota['destinatario']) || is_null($nota['destinatario'])) {
-            $this->setDestinatario(new Destinatario());
-        } else {
-            $this->setDestinatario($nota['destinatario']);
-        }
-        if (!isset($nota['produtos']) || is_null($nota['produtos'])) {
-            $this->setProdutos(array());
+        $this->setEmitente(new Emitente(isset($nota['emitente']) ? $nota['emitente'] : []));
+        $this->setDestinatario(new Destinatario(isset($nota['destinatario']) ? $nota['destinatario'] : []));
+        if (!isset($nota['produtos'])) {
+            $this->setProdutos([]);
         } else {
             $this->setProdutos($nota['produtos']);
         }
-        if (!isset($nota['transporte']) || is_null($nota['transporte'])) {
-            $this->setTransporte(new Transporte());
-        } else {
-            $this->setTransporte($nota['transporte']);
-        }
-        if (!isset($nota['pagamentos']) || is_null($nota['pagamentos'])) {
-            $this->setPagamentos(array());
+        $this->setTransporte(new Transporte(isset($nota['transporte']) ? $nota['transporte'] : []));
+        if (!isset($nota['pagamentos'])) {
+            $this->setPagamentos([]);
         } else {
             $this->setPagamentos($nota['pagamentos']);
         }
@@ -1366,17 +1302,17 @@ abstract class Nota implements Node
         } else {
             $this->setModelo(null);
         }
-        if (!isset($nota['tipo']) || is_null($nota['tipo'])) {
+        if (!isset($nota['tipo'])) {
             $this->setTipo(self::TIPO_SAIDA);
         } else {
             $this->setTipo($nota['tipo']);
         }
-        if (!isset($nota['destino']) || is_null($nota['destino'])) {
+        if (!isset($nota['destino'])) {
             $this->setDestino(self::DESTINO_INTERNA);
         } else {
             $this->setDestino($nota['destino']);
         }
-        if (!isset($nota['natureza']) || is_null($nota['natureza'])) {
+        if (!isset($nota['natureza'])) {
             $this->setNatureza('VENDA PARA CONSUMIDOR FINAL');
         } else {
             $this->setNatureza($nota['natureza']);
@@ -1385,11 +1321,6 @@ abstract class Nota implements Node
             $this->setCodigo($nota['codigo']);
         } else {
             $this->setCodigo(null);
-        }
-        if (!isset($nota['indicador']) || is_null($nota['indicador'])) {
-            $this->setIndicador(self::INDICADOR_AVISTA);
-        } else {
-            $this->setIndicador($nota['indicador']);
         }
         if (isset($nota['data_emissao'])) {
             $this->setDataEmissao($nota['data_emissao']);
@@ -1401,12 +1332,12 @@ abstract class Nota implements Node
         } else {
             $this->setSerie(null);
         }
-        if (!isset($nota['formato']) || is_null($nota['formato'])) {
+        if (!isset($nota['formato'])) {
             $this->setFormato(self::FORMATO_NENHUMA);
         } else {
             $this->setFormato($nota['formato']);
         }
-        if (!isset($nota['emissao']) || is_null($nota['emissao'])) {
+        if (!isset($nota['emissao'])) {
             $this->setEmissao(self::EMISSAO_NORMAL);
         } else {
             $this->setEmissao($nota['emissao']);
@@ -1416,17 +1347,17 @@ abstract class Nota implements Node
         } else {
             $this->setDigitoVerificador(null);
         }
-        if (!isset($nota['ambiente']) || is_null($nota['ambiente'])) {
+        if (!isset($nota['ambiente'])) {
             $this->setAmbiente(self::AMBIENTE_HOMOLOGACAO);
         } else {
             $this->setAmbiente($nota['ambiente']);
         }
-        if (!isset($nota['finalidade']) || is_null($nota['finalidade'])) {
+        if (!isset($nota['finalidade'])) {
             $this->setFinalidade(self::FINALIDADE_NORMAL);
         } else {
             $this->setFinalidade($nota['finalidade']);
         }
-        if (!isset($nota['consumidor_final']) || is_null($nota['consumidor_final'])) {
+        if (!isset($nota['consumidor_final'])) {
             $this->setConsumidorFinal('Y');
         } else {
             $this->setConsumidorFinal($nota['consumidor_final']);
@@ -1436,11 +1367,7 @@ abstract class Nota implements Node
         } else {
             $this->setPresenca(null);
         }
-        if (!isset($nota['total'])) {
-            $this->setTotal(new Total());
-        } else {
-            $this->setTotal($nota['total']);
-        }
+        $this->setTotal(new Total(isset($nota['total']) ? $nota['total'] : []));
         if (!array_key_exists('adicionais', $nota)) {
             $this->setAdicionais(null);
         } else {
@@ -1485,7 +1412,7 @@ abstract class Nota implements Node
 
     protected function getTotais()
     {
-        $total = array();
+        $total = [];
         $total['produtos'] = 0.00;
         $total['desconto'] = 0.00;
         $total['frete'] = 0.00;
@@ -1501,6 +1428,10 @@ abstract class Nota implements Node
         $total['pis'] = 0.00;
         $total['cofins'] = 0.00;
         $total['desoneracao'] = 0.00;
+        $total['fundo'] = 0.00;
+        $total['fundo.st'] = 0.00;
+        $total['fundo.retido.st'] = 0.00;
+        $total['ipi.devolvido'] = 0.00;
         $_produtos = $this->getProdutos();
         foreach ($_produtos as $_produto) {
             if (!$_produto->getMultiplicador()) {
@@ -1518,17 +1449,28 @@ abstract class Nota implements Node
                 switch ($_imposto->getGrupo()) {
                     case Imposto::GRUPO_ICMS:
                         if (($_imposto instanceof \NFe\Entity\Imposto\ICMS\Cobranca) ||
-                                ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)) {
+                                ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)
+                        ) {
                             $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
                             $total['base'] += round($_imposto->getNormal()->getBase(), 2);
                         }
                         if (($_imposto instanceof \NFe\Entity\Imposto\ICMS\Parcial) ||
-                                ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Parcial)) {
+                                ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Parcial)
+                        ) {
                             $total['icms.st'] += round($_imposto->getValor(), 2);
                             $total['base.st'] += round($_imposto->getBase(), 2);
                         } else {
                             $total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);
                             $total['base'] += round($_imposto->getBase(), 2);
+                        }
+                        $fundo = $_imposto->getFundo();
+                        // a ordem de comparação importa pois uma classe estende da outra
+                        if ($fundo instanceof \NFe\Entity\Imposto\Fundo\Retido) {
+                            $total['fundo.retido.st'] += round($fundo->getTotal(), 2);
+                        } elseif ($fundo instanceof \NFe\Entity\Imposto\Fundo\Substituido) {
+                            $total['fundo.st'] += round($fundo->getTotal(), 2);
+                        } elseif ($fundo instanceof \NFe\Entity\Imposto\Fundo\Base) {
+                            $total['fundo'] += round($fundo->getTotal(), 2);
                         }
                         break;
                     default:
@@ -1555,14 +1497,18 @@ abstract class Nota implements Node
         Util::appendNode($icms, 'vBC', Util::toCurrency($total['base']));
         Util::appendNode($icms, 'vICMS', Util::toCurrency($total['icms']));
         Util::appendNode($icms, 'vICMSDeson', Util::toCurrency($total['desoneracao']));
+        Util::appendNode($icms, 'vFCP', Util::toCurrency($total['fundo']));
         Util::appendNode($icms, 'vBCST', Util::toCurrency($total['base.st']));
         Util::appendNode($icms, 'vST', Util::toCurrency($total['icms.st']));
+        Util::appendNode($icms, 'vFCPST', Util::toCurrency($total['fundo.st']));
+        Util::appendNode($icms, 'vFCPSTRet', Util::toCurrency($total['fundo.retido.st']));
         Util::appendNode($icms, 'vProd', Util::toCurrency($total['produtos']));
         Util::appendNode($icms, 'vFrete', Util::toCurrency($total['frete']));
         Util::appendNode($icms, 'vSeg', Util::toCurrency($total['seguro']));
         Util::appendNode($icms, 'vDesc', Util::toCurrency($total['desconto']));
         Util::appendNode($icms, 'vII', Util::toCurrency($total['ii']));
         Util::appendNode($icms, 'vIPI', Util::toCurrency($total['ipi']));
+        Util::appendNode($icms, 'vIPIDevol', Util::toCurrency($total['ipi.devolvido']));
         Util::appendNode($icms, 'vPIS', Util::toCurrency($total['pis']));
         Util::appendNode($icms, 'vCOFINS', Util::toCurrency($total['cofins']));
         Util::appendNode($icms, 'vOutro', Util::toCurrency($total['despesas']));
@@ -1602,7 +1548,6 @@ abstract class Nota implements Node
         Util::appendNode($ident, 'cUF', $estado->getCodigo(true));
         Util::appendNode($ident, 'cNF', $this->getCodigo(true));
         Util::appendNode($ident, 'natOp', $this->getNatureza(true));
-        Util::appendNode($ident, 'indPag', $this->getIndicador(true));
         Util::appendNode($ident, 'mod', $this->getModelo(true));
         Util::appendNode($ident, 'serie', $this->getSerie(true));
         Util::appendNode($ident, 'nNF', $this->getNumero(true));
@@ -1640,7 +1585,7 @@ abstract class Nota implements Node
             $info->appendChild($destinatario);
         }
         $item = 0;
-        $tributos = array();
+        $tributos = [];
         $_produtos = $this->getProdutos();
         foreach ($_produtos as $_produto) {
             if (is_null($_produto->getItem())) {
@@ -1675,12 +1620,14 @@ abstract class Nota implements Node
         $transporte = $dom->importNode($transporte, true);
         $info->appendChild($transporte);
         // TODO: adicionar cobrança
+        $pag = $dom->createElement('pag');
         $_pagamentos = $this->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
             $pagamento = $_pagamento->getNode();
             $pagamento = $dom->importNode($pagamento, true);
-            $info->appendChild($pagamento);
+            $pag->appendChild($pagamento);
         }
+        $info->appendChild($pag);
         $info_adic = $dom->createElement('infAdic');
         if (!is_null($this->getAdicionais())) {
             Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
@@ -1766,13 +1713,6 @@ abstract class Nota implements Node
                 $ident,
                 'natOp',
                 'Tag "natOp" do campo "Natureza" não encontrada'
-            )
-        );
-        $this->setIndicador(
-            Util::loadNode(
-                $ident,
-                'indPag',
-                'Tag "indPag" do campo "Indicador" não encontrada'
             )
         );
         $this->setModelo(
@@ -1892,7 +1832,7 @@ abstract class Nota implements Node
             $destinatario->loadNode($_fields->item(0), 'dest');
         }
         $this->setDestinatario($destinatario);
-        $produtos = array();
+        $produtos = [];
         $_items = $info->getElementsByTagName('det');
         foreach ($_items as $_item) {
             $produto = new Produto();
@@ -1907,12 +1847,22 @@ abstract class Nota implements Node
             $transporte->loadNode($_fields->item(0), 'transp');
         }
         $this->setTransporte($transporte);
-        $pagamentos = array();
+        $pagamentos = [];
         $_items = $info->getElementsByTagName('pag');
         foreach ($_items as $_item) {
-            $pagamento = new Pagamento();
-            $pagamento->loadNode($_item, 'pag');
-            $pagamentos[] = $pagamento;
+            $_det_items = $_item->getElementsByTagName('detPag');
+            foreach ($_det_items as $_det_item) {
+                $pagamento = new Pagamento();
+                $pagamento->loadNode($_det_item, 'detPag');
+                $pagamentos[] = $pagamento;
+            }
+            if (Util::nodeExists($_item, 'vTroco')) {
+                $pagamento = new Pagamento();
+                $pagamento->loadNode($_item, 'vTroco');
+                if ($pagamento->getValor() < 0) {
+                    $pagamentos[] = $pagamento;
+                }
+            }
         }
         $this->setPagamentos($pagamentos);
         $_fields = $info->getElementsByTagName('total');
@@ -1925,31 +1875,31 @@ abstract class Nota implements Node
         }
         $this->setTotal($total);
         $this->setAdicionais(Util::loadNode($info, 'infAdFisco'));
-        $observacoes = array();
+        $observacoes = [];
         $_items = $info->getElementsByTagName('obsCont');
         foreach ($_items as $_item) {
-            $observacao = array(
+            $observacao = [
                 'campo' => $_item->getAttribute('xCampo'),
                 'valor' => Util::loadNode(
                     $_item,
                     'xTexto',
                     'Tag "xTexto" do campo "Observação" não encontrada'
                 )
-            );
+            ];
             $observacoes[] = $observacao;
         }
         $this->setObservacoes($observacoes);
-        $informacoes = array();
+        $informacoes = [];
         $_items = $info->getElementsByTagName('obsFisco');
         foreach ($_items as $_item) {
-            $informacao = array(
+            $informacao = [
                 'campo' => $_item->getAttribute('xCampo'),
                 'valor' => Util::loadNode(
                     $_item,
                     'xTexto',
                     'Tag "xTexto" do campo "Informação" não encontrada'
                 )
-            );
+            ];
             $informacoes[] = $informacao;
         }
         $this->setInformacoes($informacoes);
@@ -2009,12 +1959,12 @@ abstract class Nota implements Node
         $dom->loadXML($dom->saveXML());
         $xsd_path = __DIR__ . '/schema';
         if (is_null($this->getProtocolo())) {
-            $xsd_file = $xsd_path . '/nfe_v3.10.xsd';
+            $xsd_file = $xsd_path . '/nfe_v'.self::VERSAO.'.xsd';
         } else {
-            $xsd_file = $xsd_path . '/procNFe_v3.10.xsd';
+            $xsd_file = $xsd_path . '/procNFe_v'.self::VERSAO.'.xsd';
         }
         if (!file_exists($xsd_file)) {
-            throw new \Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
         // Enable user error handling
         $save = libxml_use_internal_errors(true);
@@ -2022,7 +1972,7 @@ abstract class Nota implements Node
             libxml_use_internal_errors($save);
             return $dom;
         }
-        $msg = array();
+        $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
             $msg[] = 'Não foi possível validar o XML: '.$error->message;

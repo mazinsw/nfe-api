@@ -33,11 +33,9 @@ use NFe\Entity\Imposto;
 class Quantidade extends Imposto
 {
 
-    public function __construct($cofins = array())
+    public function __construct($cofins = [])
     {
         parent::__construct($cofins);
-        $this->setGrupo(self::GRUPO_COFINS);
-        $this->setTributacao('03');
     }
 
     public function getQuantidade($normalize = false)
@@ -71,7 +69,7 @@ class Quantidade extends Imposto
         return $cofins;
     }
 
-    public function fromArray($cofins = array())
+    public function fromArray($cofins = [])
     {
         if ($cofins instanceof Quantidade) {
             $cofins = $cofins->toArray();
@@ -79,6 +77,10 @@ class Quantidade extends Imposto
             return $this;
         }
         parent::fromArray($cofins);
+        $this->setGrupo(self::GRUPO_COFINS);
+        if (!isset($cofins['tributacao'])) {
+            $this->setTributacao('03');
+        }
         return $this;
     }
 

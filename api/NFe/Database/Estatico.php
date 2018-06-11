@@ -38,7 +38,7 @@ class Estatico extends Banco
     private $servicos;
     private $data_dir;
 
-    public function __construct($estatico = array())
+    public function __construct($estatico = [])
     {
         parent::__construct($estatico);
         $this->data_dir = __DIR__ . '/data';
@@ -116,7 +116,7 @@ class Estatico extends Banco
             throw new \Exception('Não exite municípios para o estado "'.$uf.'"', 404);
         }
         $array = $this->mun_codes['municipios'][strtoupper($uf)];
-        $elem = array('nome' => $municipio);
+        $elem = ['nome' => $municipio];
         $o = Util::binarySearch($elem, $array, function ($o1, $o2) {
             $n1 = Util::removeAccent($o1['nome']);
             $n2 = Util::removeAccent($o2['nome']);
@@ -135,7 +135,7 @@ class Estatico extends Banco
      */
     public function getNotasAbertas($inicio = null, $quantidade = null)
     {
-        return array(); // TODO implementar
+        return []; // TODO implementar
     }
 
     /**
@@ -143,7 +143,7 @@ class Estatico extends Banco
      */
     public function getNotasPendentes($inicio = null, $quantidade = null)
     {
-        return array(); // TODO implementar
+        return []; // TODO implementar
     }
 
     /**
@@ -152,7 +152,7 @@ class Estatico extends Banco
      */
     public function getNotasTarefas($inicio = null, $quantidade = null)
     {
-        return array(); // TODO implementar
+        return []; // TODO implementar
     }
 
     public function getInformacaoServico($emissao, $uf, $modelo = null, $ambiente = null)
@@ -187,7 +187,7 @@ class Estatico extends Banco
         if (!is_array($array)) {
             $array = $this->getInformacaoServico($emissao, $array);
         }
-        $_modelos = array('nfe', 'nfce');
+        $_modelos = ['nfe', 'nfce'];
         foreach ($_modelos as $_modelo) {
             if (!isset($array[$_modelo])) {
                 continue;
@@ -232,7 +232,7 @@ class Estatico extends Banco
         return $estatico;
     }
 
-    public function fromArray($estatico = array())
+    public function fromArray($estatico = [])
     {
         if ($estatico instanceof Estatico) {
             $estatico = $estatico->toArray();
@@ -240,11 +240,7 @@ class Estatico extends Banco
             return $this;
         }
         parent::fromArray($estatico);
-        if (!isset($estatico['ibpt']) || is_null($estatico['ibpt'])) {
-            $this->setIBPT(new IBPT());
-        } else {
-            $this->setIBPT($estatico['ibpt']);
-        }
+        $this->setIBPT(new IBPT(isset($estatico['ibpt']) ? $estatico['ibpt'] : []));
         return $this;
     }
 }

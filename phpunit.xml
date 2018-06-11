@@ -18,6 +18,7 @@
     <php>
         <ini name="date.timezone" value="UTC"/>
         <env name="APP_ENV" value="testing"/>
+        <env name="TEST_MODE" value="_override"/>
     </php>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>

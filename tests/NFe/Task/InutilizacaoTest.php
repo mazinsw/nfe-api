@@ -1,15 +1,10 @@
 <?php
 namespace NFe\Task;
 
+use NFe\Core\Nota;
+
 class InutilizacaoTest extends \PHPUnit_Framework_TestCase
 {
-    private $sefaz;
-
-    protected function setUp()
-    {
-        $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
-    }
-
     public static function criaInutilizacao()
     {
         $inutilizacao = new \NFe\Task\Inutilizacao();
@@ -52,14 +47,14 @@ class InutilizacaoTest extends \PHPUnit_Framework_TestCase
 
     public function testInutilizaInutilizado()
     {
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'inutilizadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $inutilizacao = self::criaInutilizacao();
             $dom = $inutilizacao->getNode()->ownerDocument;
             $dom = $inutilizacao->assinar($dom);
-            $dom = $inutilizacao->validar($dom);
             $dom = $inutilizacao->envia($dom);
             $inutilizacao->fromArray($inutilizacao);
+            $inutilizacao->fromArray($inutilizacao->toArray());
             $inutilizacao->fromArray(null);
         } catch (Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -68,25 +63,26 @@ class InutilizacaoTest extends \PHPUnit_Framework_TestCase
         \NFe\Common\CurlSoap::setPostFunction(null);
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
-
         $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents($xml_file, $dom->saveXML());
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
 
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
-
-        // $dom->formatOutput = true;
-        // file_put_contents($xml_file, $dom->saveXML());
     }
 
     public function testInutilizaRejeitado()
     {
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'rejeitadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         $inutilizacao = self::criaInutilizacao();
         $dom = $inutilizacao->getNode()->ownerDocument;
         $dom = $inutilizacao->assinar();
-        $dom = $inutilizacao->validar($dom);
         try {
             $this->setExpectedException('\Exception');
             $inutilizacao->envia($dom);
@@ -95,6 +91,16 @@ class InutilizacaoTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('241', $inutilizacao->getStatus());
         }
         \NFe\Common\CurlSoap::setPostFunction(null);
+    }
+
+    public function testNormalization()
+    {
+        $inutilizacao = self::criaInutilizacao();
+        $inutilizacao->setModelo('55');
+        $this->assertEquals(Nota::MODELO_NFE, $inutilizacao->getModelo());
+        $this->assertEquals('55', $inutilizacao->getModelo(true));
+        $inutilizacao->setModelo('50');
+        $this->assertEquals('50', $inutilizacao->getModelo(true));
     }
 
     public function testInutilizaoInvalida()

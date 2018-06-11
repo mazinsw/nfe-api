@@ -53,7 +53,7 @@ class Isento extends Imposto
     const TRIBUTACAO_INCIDENCIA = 'incidencia';
     const TRIBUTACAO_SUSPENSAO = 'suspensao';
 
-    public function __construct($cofins = array())
+    public function __construct($cofins = [])
     {
         parent::__construct($cofins);
         $this->setGrupo(self::GRUPO_COFINS);
@@ -134,7 +134,7 @@ class Isento extends Imposto
         return $cofins;
     }
 
-    public function fromArray($cofins = array())
+    public function fromArray($cofins = [])
     {
         if ($cofins instanceof Isento) {
             $cofins = $cofins->toArray();

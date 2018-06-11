@@ -14,6 +14,7 @@ class RetornoTest extends \PHPUnit_Framework_TestCase
     {
         $retorno = self::createRetorno();
         $retorno->fromArray($retorno);
+        $retorno->fromArray($retorno->toArray());
         $retorno->fromArray(null);
         $retorno->setStatus(101);
         $this->assertTrue($retorno->isCancelado());

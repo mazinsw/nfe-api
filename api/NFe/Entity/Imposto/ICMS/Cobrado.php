@@ -28,6 +28,7 @@
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Common\Util;
+use NFe\Entity\Imposto\Fundo\Retido;
 
 /**
  * Tributação pelo ICMS
@@ -39,10 +40,9 @@ class Cobrado extends Generico
 
     private $valor;
 
-    public function __construct($cobrado = array())
+    public function __construct($cobrado = [])
     {
         parent::__construct($cobrado);
-        $this->setTributacao('60');
     }
 
     public function getValor($normalize = false)
@@ -66,7 +66,7 @@ class Cobrado extends Generico
         return $cobrado;
     }
 
-    public function fromArray($cobrado = array())
+    public function fromArray($cobrado = [])
     {
         if ($cobrado instanceof Cobrado) {
             $cobrado = $cobrado->toArray();
@@ -79,6 +79,12 @@ class Cobrado extends Generico
         } else {
             $this->setValor(null);
         }
+        if (!isset($cobrado['fundo']) || !($this->getFundo() instanceof Retido)) {
+            $this->setFundo(new Retido());
+        }
+        if (!isset($cobrado['tributacao'])) {
+            $this->setTributacao('60');
+        }
         return $this;
     }
 
@@ -87,8 +93,9 @@ class Cobrado extends Generico
         $element = parent::getNode(is_null($name)?'ICMS60':$name);
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'vBCSTRet', $this->getBase(true));
+        Util::appendNode($element, 'pST', $this->getAliquota(true));
         Util::appendNode($element, 'vICMSSTRet', $this->getValor(true));
-        return $element;
+        return $this->exportFundo($element);
     }
 
     public function loadNode($element, $name = null)
@@ -122,6 +129,12 @@ class Cobrado extends Generico
                 'Tag "vBCSTRet" do campo "Base" não encontrada'
             )
         );
+        $this->setAliquota(
+            Util::loadNode(
+                $element,
+                'pST'
+            )
+        );
         $this->setValor(
             Util::loadNode(
                 $element,
@@ -129,6 +142,7 @@ class Cobrado extends Generico
                 'Tag "vICMSSTRet" do campo "Valor" não encontrada'
             )
         );
+        $this->importFundo($element);
         return $element;
     }
 }

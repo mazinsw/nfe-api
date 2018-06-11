@@ -43,10 +43,9 @@ class Partilha extends Mista
     private $operacao;
     private $uf;
 
-    public function __construct($partilha = array())
+    public function __construct($partilha = [])
     {
         parent::__construct($partilha);
-        $this->setTributacao('10');
     }
 
     /**
@@ -92,7 +91,7 @@ class Partilha extends Mista
         return $partilha;
     }
 
-    public function fromArray($partilha = array())
+    public function fromArray($partilha = [])
     {
         if ($partilha instanceof Partilha) {
             $partilha = $partilha->toArray();
@@ -109,6 +108,9 @@ class Partilha extends Mista
             $this->setUF($partilha['uf']);
         } else {
             $this->setUF(null);
+        }
+        if (!isset($partilha['tributacao'])) {
+            $this->setTributacao('10');
         }
         return $this;
     }

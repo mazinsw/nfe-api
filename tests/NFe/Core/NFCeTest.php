@@ -4,14 +4,13 @@ namespace NFe\Core;
 class NFCeTest extends \PHPUnit_Framework_TestCase
 {
     private $sefaz;
-    const UPDATE_XML = false;
 
     protected function setUp()
     {
         $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
     }
 
-    private function createNFCe()
+    public static function createNFCe($sefaz)
     {
         $nfce = new \NFe\Core\NFCe();
         $nfce->setCodigo('77882192');
@@ -50,7 +49,7 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $emitente->fromArray($emitente);
         $emitente->fromArray($emitente->toArray());
         $emitente->fromArray(null);
-        $this->sefaz->getConfiguracao()->setEmitente($emitente);
+        $sefaz->getConfiguracao()->setEmitente($emitente);
         $nfce->setEmitente($emitente);
 
         /* Destinatário */
@@ -183,6 +182,28 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         return $nfce;
     }
 
+    
+    public static function createTrocoNFCe($sefaz)
+    {
+        $nfce = self::createNFCe($sefaz);
+
+        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DINHEIRO);
+        $pagamento->setValor(5);
+        $pagamento->fromArray($pagamento);
+        $pagamento->fromArray($pagamento->toArray());
+        $pagamento->fromArray(null);
+        $nfce->addPagamento($pagamento);
+
+        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento->setValor(-5);
+        $pagamento->fromArray($pagamento);
+        $pagamento->fromArray($pagamento->toArray());
+        $pagamento->fromArray(null);
+        $nfce->addPagamento($pagamento);
+        return $nfce;
+    }
+
     public static function loadNFCeXML()
     {
         $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml';
@@ -190,6 +211,24 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
         return $dom_cmp;
+    }
+
+    public static function loadTrocoNFCeXMLValidada()
+    {
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testTrocoNFCeValidadaXML.xml';
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+        
+        $nfce = new \NFe\Core\NFCe();
+        $nfce->load($xml_file);
+        $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
+        $dom = $nfce->validar($dom);
+        return [
+            'nota' => $nfce,
+            'dom' => $dom,
+            'cmp' => $dom_cmp
+        ];
     }
 
     public static function loadNFCeXMLAssinado()
@@ -219,11 +258,11 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $nfce->load($xml_file);
 
         $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
-        return array(
+        return [
             'nota' => $nfce,
             'dom' => $dom,
             'cmp' => $dom_cmp
-        );
+        ];
     }
 
     public static function loadNFCeValidada()
@@ -234,11 +273,11 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp = $data['cmp'];
 
         $dom = $nfce->validar($dom);
-        return array(
+        return [
             'nota' => $nfce,
             'dom' => $dom,
             'cmp' => $dom_cmp
-        );
+        ];
     }
 
     public static function loadNFCeAutorizada()
@@ -258,20 +297,20 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom = $nfce->validar($dom);
         $nfce->setProtocolo($protocolo);
         $dom = $nfce->addProtocolo($dom);
-        return array(
+        return [
             'nota' => $nfce,
             'dom' => $dom,
             'cmp' => $dom_cmp
-        );
+        ];
     }
 
     public function testNFCeXML()
     {
-        $nfce = $this->createNFCe();
+        $nfce = self::createNFCe($this->sefaz);
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;
 
-        if (self::UPDATE_XML) {
+        if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
         }
@@ -280,14 +319,44 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
     }
 
+    public function testTrocoNFCeValidadaXML()
+    {
+        $nfce = self::createTrocoNFCe($this->sefaz);
+        $xml = $nfce->getNode();
+        $dom = $xml->ownerDocument;
+        $dom = $nfce->assinar($dom);
+        $dom = $nfce->validar($dom);
+
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)).'/resources/xml/nota/testTrocoNFCeValidadaXML.xml',
+                $dom->saveXML()
+            );
+        }
+
+        $data = self::loadTrocoNFCeXMLValidada();
+        $dom_cmp = $data['cmp'];
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
+
+    public function testTrocoNFCeAssinadaLoadXML()
+    {
+        $data = self::loadTrocoNFCeXMLValidada();
+        $dom = $data['dom'];
+        $dom_cmp = $data['cmp'];
+
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
+
     public function testNFCeAssinadaXML()
     {
-        $nfce = $this->createNFCe();
+        $nfce = self::createNFCe($this->sefaz);
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;
         $dom = $nfce->assinar($dom);
 
-        if (self::UPDATE_XML) {
+        if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
                 dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml',
@@ -332,7 +401,7 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $dom = $data['dom'];
         $dom_cmp = $data['cmp'];
         
-        if (self::UPDATE_XML) {
+        if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
                 dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml',

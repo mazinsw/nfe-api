@@ -28,6 +28,7 @@
 namespace NFe\Entity\Imposto\ICMS\Simples;
 
 use NFe\Common\Util;
+use NFe\Entity\Imposto\Fundo\Retido;
 
 /**
  * ICMS cobrado anteriormente por substituição tributária (substituído) ou
@@ -38,10 +39,9 @@ class Cobrado extends Generico
 
     private $valor;
 
-    public function __construct($cobrado = array())
+    public function __construct($cobrado = [])
     {
         parent::__construct($cobrado);
-        $this->setTributacao('500');
     }
 
     /**
@@ -76,7 +76,7 @@ class Cobrado extends Generico
         return $cobrado;
     }
 
-    public function fromArray($cobrado = array())
+    public function fromArray($cobrado = [])
     {
         if ($cobrado instanceof Cobrado) {
             $cobrado = $cobrado->toArray();
@@ -88,6 +88,12 @@ class Cobrado extends Generico
             $this->setValor($cobrado['valor']);
         } else {
             $this->setValor(null);
+        }
+        if (!isset($cobrado['fundo']) || !($this->getFundo() instanceof Retido)) {
+            $this->setFundo(new Retido());
+        }
+        if (!isset($cobrado['tributacao'])) {
+            $this->setTributacao('500');
         }
         return $this;
     }

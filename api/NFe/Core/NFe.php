@@ -30,10 +30,10 @@ namespace NFe\Core;
 /**
  * Classe para validação da nota fiscal eletrônica
  */
-abstract class NFe extends Nota
+class NFe extends Nota
 {
 
-    public function __construct($nfe = array())
+    public function __construct($nfe = [])
     {
         parent::__construct($nfe);
         $this->setModelo(self::MODELO_NFE);
@@ -45,7 +45,7 @@ abstract class NFe extends Nota
         return $nfe;
     }
 
-    public function fromArray($nfe = array())
+    public function fromArray($nfe = [])
     {
         if ($nfe instanceof NFe) {
             $nfe = $nfe->toArray();

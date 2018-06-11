@@ -36,10 +36,9 @@ use NFe\Entity\Imposto;
 class Isento extends Imposto
 {
 
-    public function __construct($isento = array())
+    public function __construct($isento = [])
     {
         parent::__construct($isento);
-        $this->setGrupo(self::GRUPO_IPI);
     }
 
     public function toArray($recursive = false)
@@ -48,7 +47,7 @@ class Isento extends Imposto
         return $isento;
     }
 
-    public function fromArray($isento = array())
+    public function fromArray($isento = [])
     {
         if ($isento instanceof Isento) {
             $isento = $isento->toArray();
@@ -56,9 +55,10 @@ class Isento extends Imposto
             return $this;
         }
         parent::fromArray($isento);
-        if (is_null($this->getTributacao())) {
+        if (!isset($isento['tributacao'])) {
             $this->setTributacao('01');
         }
+        $this->setGrupo(self::GRUPO_IPI);
         return $this;
     }
 

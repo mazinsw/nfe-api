@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="3.10">
+  <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="4.00">
     <ide>
       <cUF>41</cUF>
       <cNF>77882192</cNF>
       <natOp>VENDA PARA CONSUMIDOR FINAL</natOp>
-      <indPag>0</indPag>
       <mod>65</mod>
       <serie>1</serie>
       <nNF>81</nNF>
@@ -87,6 +86,7 @@
             <orig>0</orig>
             <CST>60</CST>
             <vBCSTRet>4.99</vBCSTRet>
+            <pST>0.0000</pST>
             <vICMSSTRet>0.00</vICMSSTRet>
           </ICMS60>
         </ICMS>
@@ -136,6 +136,7 @@
             <orig>0</orig>
             <CST>60</CST>
             <vBCSTRet>0.00</vBCSTRet>
+            <pST>0.0000</pST>
             <vICMSSTRet>0.00</vICMSSTRet>
           </ICMS60>
         </ICMS>
@@ -163,14 +164,18 @@
         <vBC>0.00</vBC>
         <vICMS>0.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
         <vBCST>4.99</vBCST>
         <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
         <vProd>13.99</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
         <vDesc>2.20</vDesc>
         <vII>0.00</vII>
         <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
         <vPIS>0.07</vPIS>
         <vCOFINS>0.35</vCOFINS>
         <vOutro>0.00</vOutro>
@@ -182,16 +187,18 @@
       <modFrete>9</modFrete>
     </transp>
     <pag>
-      <tPag>03</tPag>
-      <vPag>4.50</vPag>
-      <card>
-        <tpIntegra>2</tpIntegra>
-        <tBand>02</tBand>
-      </card>
-    </pag>
-    <pag>
-      <tPag>01</tPag>
-      <vPag>9.49</vPag>
+      <detPag>
+        <tPag>03</tPag>
+        <vPag>4.50</vPag>
+        <card>
+          <tpIntegra>2</tpIntegra>
+          <tBand>02</tBand>
+        </card>
+      </detPag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>9.49</vPag>
+      </detPag>
     </pag>
     <infAdic>
       <infCpl>Trib. aprox.: R$ 1,77 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br F3W1D7</infCpl>

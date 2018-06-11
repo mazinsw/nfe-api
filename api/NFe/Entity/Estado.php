@@ -36,7 +36,7 @@ class Estado
     private $nome;
     private $uf;
 
-    public function __construct($estado = array())
+    public function __construct($estado = [])
     {
         $this->fromArray($estado);
     }
@@ -103,14 +103,14 @@ class Estado
 
     public function toArray($recursive = false)
     {
-        $estado = array();
+        $estado = [];
         $estado['codigo'] = $this->getCodigo();
         $estado['nome'] = $this->getNome();
         $estado['uf'] = $this->getUF();
         return $estado;
     }
 
-    public function fromArray($estado = array())
+    public function fromArray($estado = [])
     {
         if ($estado instanceof Estado) {
             $estado = $estado->toArray();

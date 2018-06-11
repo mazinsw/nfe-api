@@ -46,7 +46,7 @@ class Ajuste extends Configuracao implements Evento
     private $pasta_xml_processamento;
     private $pasta_xml_assinado;
 
-    public function __construct($ajuste = array())
+    public function __construct($ajuste = [])
     {
         parent::__construct($ajuste);
         $this->setEvento($this);
@@ -283,7 +283,7 @@ class Ajuste extends Configuracao implements Evento
      */
     public function onNotaContingencia($nota, $offline, $exception)
     {
-        echo 'Forma de emissão alterada para "'.$nota->getEmissao().'" <br>';
+        // echo 'Forma de emissão alterada para "'.$nota->getEmissao().'" <br>';
         // remove o XML salvo anteriormente com a emissão normal
         $filename = $this->getPastaXmlAssinado($nota->getAmbiente()) . '/' . $nota->getID() . '.xml';
         if (file_exists($filename) && $offline) {
@@ -426,7 +426,7 @@ class Ajuste extends Configuracao implements Evento
      */
     public function onNotaErro($nota, $exception)
     {
-        echo 'Falha no processamento da nota: '.$exception->getMessage().'<br>';
+        // echo 'Falha no processamento da nota: '.$exception->getMessage().'<br>';
     }
 
     /**
@@ -457,7 +457,7 @@ class Ajuste extends Configuracao implements Evento
      */
     public function onTarefaErro($tarefa, $exception)
     {
-        echo 'Falha no processamento da tarefa: '.$exception->getMessage().'<br>';
+        // echo 'Falha no processamento da tarefa: '.$exception->getMessage().'<br>';
     }
 
     public function toArray($recursive = false)
@@ -475,7 +475,7 @@ class Ajuste extends Configuracao implements Evento
         return $ajuste;
     }
 
-    public function fromArray($ajuste = array())
+    public function fromArray($ajuste = [])
     {
         if ($ajuste instanceof Ajuste) {
             $ajuste = $ajuste->toArray();

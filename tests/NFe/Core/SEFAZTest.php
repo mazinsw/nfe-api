@@ -1,25 +1,26 @@
 <?php
 namespace NFe\Core;
 
+use NFe\Logger\Log;
+use NFe\Task\Inutilizacao;
+use NFe\Task\Tarefa;
+
 class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Evento
 {
     protected function setUp()
     {
-        \NFe\Log\Logger::getInstance()->setWriteFunction(
-            function ($type, $message) {
-            }
-        );
+        Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
     }
 
     protected function tearDown()
     {
-        \NFe\Log\Logger::getInstance()->setWriteFunction(null);
+        Log::getInstance()->setHandler(null);
     }
     
     public static function createSEFAZ()
     {
         $emitente = \NFe\Entity\EmitenteTest::createEmitente();
-        $sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $sefaz = SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()
             ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
             ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem')
@@ -29,39 +30,127 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
 
     public function testInstancia()
     {
-        $sefaz = \NFe\Core\SEFAZ::getInstance();
+        $sefaz = SEFAZ::getInstance();
         $this->assertNotNull($sefaz);
         $this->assertNotNull($sefaz->getConfiguracao());
     }
 
     public function testNotas()
     {
-        $sefaz = new \NFe\Core\SEFAZ();
-        $sefaz->addNota(new \NFe\Core\NFCe());
-        $sefaz->addNota(new \NFe\Core\NFCe());
+        $sefaz = self::createSEFAZ();
+        $sefaz->addNota(new NFCe());
+        $sefaz->addNota(new NFCe());
         $sefaz->fromArray($sefaz);
         $sefaz->fromArray($sefaz->toArray());
         $sefaz->fromArray(null);
         $this->assertCount(2, $sefaz->getNotas());
     }
 
+    public function autorizadoPostFunction($soap_curl, $url, $data)
+    {
+        \NFe\Task\AutorizacaoTest::processaPostFunction(
+            $this,
+            $soap_curl,
+            $url,
+            $data,
+            'testAutorizaSOAP.xml',
+            'testAutorizaAutorizadoReponseSOAP.xml'
+        );
+    }
+
     public function testAutoriza()
     {
-        $sefaz = new \NFe\Core\SEFAZ();
-        $sefaz->setNotas(array());
-        $this->assertEquals(0, $sefaz->autoriza());
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $nota = \NFe\Core\NFCeTest::createNFCe($sefaz);
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
+        try {
+            $sefaz->setNotas([]);
+            $sefaz->addNota($nota);
+            $this->assertEquals(1, $sefaz->autoriza());
+        } catch (Exception $e) {
+            \NFe\Common\CurlSoap::setPostFunction(null);
+            throw $e;
+        }
+        \NFe\Common\CurlSoap::setPostFunction(null);
+    }
+
+    public function networkErrorPostFunction($soap_curl, $url, $data)
+    {
+        throw new \NFe\Exception\IncompleteRequestException('Suposta falha parcial de rede', 500);
+    }
+
+    public function testAutorizaContingencia()
+    {
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $nota = \NFe\Core\NFCeTest::createNFCe($sefaz);
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'networkErrorPostFunction']);
+        try {
+            $sefaz->setNotas([]);
+            $sefaz->addNota($nota);
+            $this->assertEquals(1, $sefaz->autoriza());
+        } catch (Exception $e) {
+            $sefaz->getConfiguracao()->setOffline(null);
+            \NFe\Common\CurlSoap::setPostFunction(null);
+            throw $e;
+        }
+        $sefaz->getConfiguracao()->setOffline(null);
+        \NFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testConsulta()
     {
-        $sefaz = new \NFe\Core\SEFAZ();
-        $this->assertEquals(0, $sefaz->consulta(array()));
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $this->assertEquals(0, $sefaz->consulta([]));
     }
 
     public function testExecuta()
     {
-        $sefaz = new \NFe\Core\SEFAZ();
-        $this->assertEquals(0, $sefaz->executa(array()));
+        $sefaz = self::createSEFAZ();
+        $this->assertEquals(0, $sefaz->executa([]));
+    }
+
+    public function inutilizadoPostFunction($soap_curl, $url, $data)
+    {
+        \NFe\Common\CurlSoapTest::assertPostFunction(
+            $this,
+            $soap_curl,
+            $data,
+            'task/testInutilizaSOAP.xml',
+            'task/testInutilizaInutilizadoReponseSOAP.xml'
+        );
+    }
+
+    public function testInutiliza()
+    {
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $inutilizacao = \NFe\Task\InutilizacaoTest::criaInutilizacao();
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
+        try {
+            $this->assertTrue($sefaz->inutiliza($inutilizacao));
+        } catch (Exception $e) {
+            \NFe\Common\CurlSoap::setPostFunction(null);
+            throw $e;
+        }
+        \NFe\Common\CurlSoap::setPostFunction(null);
+    }
+
+    public function testProcessa()
+    {
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $this->assertEquals(0, $sefaz->processa());
+    }
+
+    public function testInutilizaFail()
+    {
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $inutilizacao = new Inutilizacao();
+        $this->assertFalse($sefaz->inutiliza($inutilizacao));
     }
 
 
@@ -182,7 +271,11 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onInutilizado($inutilizacao, $xml)
     {
-        // TODO: implement
+        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $xml->saveXML());
     }
 
     /**
@@ -190,7 +283,14 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onTarefaExecutada($tarefa, $retorno)
     {
-        // TODO: implement
+        if ($tarefa->getAcao() == Tarefa::ACAO_INUTILIZAR) {
+            $xml = $tarefa->getDocumento();
+            $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+            $dom_cmp = new \DOMDocument();
+            $dom_cmp->preserveWhiteSpace = false;
+            $dom_cmp->load($xml_file);
+            $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $xml->saveXML());
+        }
     }
 
     /**
@@ -198,6 +298,6 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onTarefaErro($tarefa, $exception)
     {
-        // TODO: implement
+        throw $exception;
     }
 }

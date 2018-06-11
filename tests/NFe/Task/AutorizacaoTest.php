@@ -1,6 +1,8 @@
 <?php
 namespace NFe\Task;
 
+use NFe\Core\Nota;
+
 class AutorizacaoTest extends \PHPUnit_Framework_TestCase
 {
     private $sefaz;
@@ -10,7 +12,7 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
     }
 
-    private function processaPostFunction($soap_curl, $url, $data, $xml_name, $resp_name)
+    public static function processaPostFunction($test, $soap_curl, $url, $data, $xml_name, $resp_name)
     {
         $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/'.$xml_name;
         $dom_cmp = new \DOMDocument();
@@ -26,13 +28,13 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         $node = \NFe\Common\Util::findNode($dom, 'idLote');
         $node_cmp->nodeValue = $node->nodeValue;
 
-        if (\NFe\Core\NFCeTest::UPDATE_XML) {
+        if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents($xml_file, $dom->saveXML());
         }
 
         $xml_cmp = $dom_cmp->saveXML();
-        $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
+        $test->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
         
         $xml_resp_file = dirname(dirname(__DIR__)).'/resources/xml/task/'.$resp_name;
         $dom_resp = new \DOMDocument();
@@ -44,7 +46,8 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
 
     public function autorizadoPostFunction($soap_curl, $url, $data)
     {
-        $this->processaPostFunction(
+        self::processaPostFunction(
+            $this,
             $soap_curl,
             $url,
             $data,
@@ -55,7 +58,8 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
 
     public function rejeitadoPostFunction($soap_curl, $url, $data)
     {
-        $this->processaPostFunction(
+        self::processaPostFunction(
+            $this,
             $soap_curl,
             $url,
             $data,
@@ -66,7 +70,8 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
 
     public function processamentoPostFunction($soap_curl, $url, $data)
     {
-        $this->processaPostFunction(
+        self::processaPostFunction(
+            $this,
             $soap_curl,
             $url,
             $data,
@@ -80,11 +85,12 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $dom = $data['dom'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'autorizadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
             $autorizacao->fromArray($autorizacao);
+            $autorizacao->fromArray($autorizacao->toArray());
             $autorizacao->fromArray(null);
         } catch (Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -101,7 +107,7 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $dom = $data['dom'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'rejeitadoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
@@ -119,7 +125,7 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $dom = $data['dom'];
-        \NFe\Common\CurlSoap::setPostFunction(array($this, 'processamentoPostFunction'));
+        \NFe\Common\CurlSoap::setPostFunction([$this, 'processamentoPostFunction']);
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
@@ -130,5 +136,20 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
         \NFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\NFe\\Task\\Recibo', $retorno);
         $this->assertEquals('103', $retorno->getStatus());
+    }
+
+    public function testValidarEsquemaNotFound()
+    {
+        $autorizacao = new Autorizacao();
+        $this->setExpectedException('\Exception');
+        $autorizacao->validar('<schema/>');
+    }
+
+    public function testNaoValidado()
+    {
+        $autorizacao = new Autorizacao();
+        $autorizacao->setVersao(Nota::VERSAO);
+        $this->setExpectedException('\NFe\Exception\ValidationException');
+        $autorizacao->validar('<schema/>');
     }
 }

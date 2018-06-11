@@ -38,7 +38,7 @@ class Peso
     private $liquido;
     private $bruto;
 
-    public function __construct($peso = array())
+    public function __construct($peso = [])
     {
         $this->fromArray($peso);
     }
@@ -79,13 +79,13 @@ class Peso
 
     public function toArray($recursive = false)
     {
-        $peso = array();
+        $peso = [];
         $peso['liquido'] = $this->getLiquido();
         $peso['bruto'] = $this->getBruto();
         return $peso;
     }
 
-    public function fromArray($peso = array())
+    public function fromArray($peso = [])
     {
         if ($peso instanceof Peso) {
             $peso = $peso->toArray();

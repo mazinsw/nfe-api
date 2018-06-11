@@ -43,11 +43,13 @@ class CurlSoapTest extends \PHPUnit_Framework_TestCase
             $node_cmp->nodeValue = $node->nodeValue;
         }
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents($xml_file, $dom->saveXML());
+        }
+
         $test->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
 
-        // $dom->formatOutput = true;
-        // file_put_contents($xml_file, $dom->saveXML());
-        
         $xml_resp_file = dirname(dirname(__DIR__)).'/resources/xml/'.$resp_name;
         $dom_resp = new \DOMDocument();
         $dom_resp->preserveWhiteSpace = false;
@@ -65,7 +67,7 @@ class CurlSoapTest extends \PHPUnit_Framework_TestCase
 
     public function testHookSendFunction()
     {
-        CurlSoap::setPostFunction(array($this, 'errorPostFunction'));
+        CurlSoap::setPostFunction([$this, 'errorPostFunction']);
         $this->setExpectedException('\NFe\Exception\NetworkException');
         $soap = new CurlSoap();
         $soap->send('invalid URL', new \DOMDocument());

@@ -57,7 +57,7 @@ class Evento extends Retorno
     private $modelo;
     private $informacao;
 
-    public function __construct($evento = array())
+    public function __construct($evento = [])
     {
         parent::__construct($evento);
     }
@@ -335,7 +335,7 @@ class Evento extends Retorno
      */
     public function isCancelado()
     {
-        return in_array($this->getStatus(), array('135', '155'));
+        return in_array($this->getStatus(), ['135', '155']);
     }
 
     public function toArray($recursive = false)
@@ -357,7 +357,7 @@ class Evento extends Retorno
         return $evento;
     }
 
-    public function fromArray($evento = array())
+    public function fromArray($evento = [])
     {
         if ($evento instanceof Evento) {
             $evento = $evento->toArray();
@@ -390,17 +390,17 @@ class Evento extends Retorno
         } else {
             $this->setData(null);
         }
-        if (!isset($evento['tipo']) || is_null($evento['tipo'])) {
+        if (!isset($evento['tipo'])) {
             $this->setTipo(self::TIPO_CANCELAMENTO);
         } else {
             $this->setTipo($evento['tipo']);
         }
-        if (!isset($evento['sequencia']) || is_null($evento['sequencia'])) {
+        if (!isset($evento['sequencia'])) {
             $this->setSequencia(1);
         } else {
             $this->setSequencia($evento['sequencia']);
         }
-        if (!isset($evento['descricao']) || is_null($evento['descricao'])) {
+        if (!isset($evento['descricao'])) {
             $this->setDescricao('Cancelamento');
         } else {
             $this->setDescricao($evento['descricao']);
@@ -619,8 +619,8 @@ class Evento extends Retorno
         $element->removeAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns');
         $info = $dom->getElementsByTagName('infEvento')->item(0);
         $info->removeAttribute('Id');
-        $removeTags = array('detEvento', 'verEvento', 'dhEvento', 'CNPJ', 'CPF', 'cOrgao');
-        foreach ($removeTags as $key) {
+        $remove_tags = ['detEvento', 'verEvento', 'dhEvento', 'CNPJ', 'CPF', 'cOrgao'];
+        foreach ($remove_tags as $key) {
             $_fields = $info->getElementsByTagName($key);
             if ($_fields->length == 0) {
                 continue;
@@ -717,6 +717,8 @@ class Evento extends Retorno
         $envio->setAmbiente($this->getAmbiente());
         $envio->setModelo($this->getModelo());
         $envio->setEmissao(Nota::EMISSAO_NORMAL);
+        $this->setVersao($envio->getVersao());
+        $dom = $this->validar($dom);
         $envio->setConteudo($this->getConteudo($dom));
         $resp = $envio->envia();
         $this->loadStatusNode($resp);
@@ -790,7 +792,7 @@ class Evento extends Retorno
         $xsd_path = dirname(__DIR__) . '/Core/schema';
         $xsd_file = $xsd_path . '/cancelamento/eventoCancNFe_v1.00.xsd';
         if (!file_exists($xsd_file)) {
-            throw new \Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
         // Enable user error handling
         $save = libxml_use_internal_errors(true);
@@ -798,7 +800,7 @@ class Evento extends Retorno
             libxml_use_internal_errors($save);
             return $dom;
         }
-        $msg = array();
+        $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
             $msg[] = 'Não foi possível validar o XML: '.$error->message;

@@ -42,7 +42,7 @@ class Recibo extends Retorno
     private $mensagem;
     private $modelo;
 
-    public function __construct($recibo = array())
+    public function __construct($recibo = [])
     {
         parent::__construct($recibo);
     }
@@ -165,7 +165,7 @@ class Recibo extends Retorno
         return $recibo;
     }
 
-    public function fromArray($recibo = array())
+    public function fromArray($recibo = [])
     {
         if ($recibo instanceof Recibo) {
             $recibo = $recibo->toArray();
@@ -208,6 +208,8 @@ class Recibo extends Retorno
         $envio->setAmbiente($this->getAmbiente());
         $envio->setModelo($this->getModelo());
         $envio->setEmissao(Nota::EMISSAO_NORMAL);
+        $this->setVersao($envio->getVersao());
+        $dom = $this->validar($dom);
         $envio->setConteudo($dom);
         $resp = $envio->envia();
         $this->loadNode($resp);
@@ -226,7 +228,6 @@ class Recibo extends Retorno
             $this->setModelo($nota->getModelo());
         }
         $dom = $this->getNode()->ownerDocument;
-        $dom = $this->validar($dom);
         $retorno = $this->envia($dom);
         if ($retorno->isAutorizado() && !is_null($nota)) {
             $nota->setProtocolo($retorno);
@@ -281,9 +282,9 @@ class Recibo extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/consReciNFe_v3.10.xsd';
+        $xsd_file = $xsd_path . '/consReciNFe_v'.$this->getVersao().'.xsd';
         if (!file_exists($xsd_file)) {
-            throw new \Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
         // Enable user error handling
         $save = libxml_use_internal_errors(true);
@@ -291,7 +292,7 @@ class Recibo extends Retorno
             libxml_use_internal_errors($save);
             return $dom;
         }
-        $msg = array();
+        $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
             $msg[] = 'Não foi possível validar o XML: '.$error->message;

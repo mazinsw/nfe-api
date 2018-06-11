@@ -44,7 +44,7 @@ class Endereco implements Node
     private $numero;
     private $complemento;
 
-    public function __construct($endereco = array())
+    public function __construct($endereco = [])
     {
         $this->fromArray($endereco);
     }
@@ -170,7 +170,7 @@ class Endereco implements Node
 
     public function toArray($recursive = false)
     {
-        $endereco = array();
+        $endereco = [];
         if (!is_null($this->getPais()) && $recursive) {
             $endereco['pais'] = $this->getPais()->toArray($recursive);
         } else {
@@ -189,28 +189,20 @@ class Endereco implements Node
         return $endereco;
     }
 
-    public function fromArray($endereco = array())
+    public function fromArray($endereco = [])
     {
         if ($endereco instanceof Endereco) {
             $endereco = $endereco->toArray();
         } elseif (!is_array($endereco)) {
             return $this;
         }
-        if (!isset($endereco['pais']) || is_null($endereco['pais'])) {
-            $this->setPais(new Pais(array('codigo' => 1058, 'nome' => 'Brasil')));
-        } else {
-            $this->setPais($endereco['pais']);
-        }
+        $this->setPais(new Pais(isset($endereco['pais']) ? $endereco['pais']: ['codigo' => 1058, 'nome' => 'Brasil']));
         if (isset($endereco['cep'])) {
             $this->setCEP($endereco['cep']);
         } else {
             $this->setCEP(null);
         }
-        if (!isset($endereco['municipio']) || is_null($endereco['municipio'])) {
-            $this->setMunicipio(new Municipio());
-        } else {
-            $this->setMunicipio($endereco['municipio']);
-        }
+        $this->setMunicipio(new Municipio(isset($endereco['municipio']) ? $endereco['municipio'] : []));
         if (isset($endereco['bairro'])) {
             $this->setBairro($endereco['bairro']);
         } else {

@@ -36,10 +36,9 @@ use NFe\Common\Util;
 class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
 {
 
-    public function __construct($parcial = array())
+    public function __construct($parcial = [])
     {
         parent::__construct($parcial);
-        $this->setTributacao('202');
     }
 
     public function toArray($recursive = false)
@@ -48,7 +47,7 @@ class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
         return $parcial;
     }
 
-    public function fromArray($parcial = array())
+    public function fromArray($parcial = [])
     {
         if ($parcial instanceof Parcial) {
             $parcial = $parcial->toArray();
@@ -56,13 +55,16 @@ class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
             return $this;
         }
         parent::fromArray($parcial);
+        if (!isset($parcial['tributacao'])) {
+            $this->setTributacao('202');
+        }
         return $this;
     }
 
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'IMCSSN202':$name);
+        $element = $dom->createElement(is_null($name)?'ICMSSN202':$name);
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
         Util::appendNode($element, 'modBCST', $this->getModalidade(true));
@@ -76,7 +78,7 @@ class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'IMCSSN202':$name;
+        $name = is_null($name)?'ICMSSN202':$name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {

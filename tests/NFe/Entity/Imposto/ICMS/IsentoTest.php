@@ -12,7 +12,7 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
 
     public function testIsentoXML()
     {
-        $icms_isento = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_isento = new Isento();
         $icms_isento->fromArray($icms_isento);
         $icms_isento->fromArray($icms_isento->toArray());
         $icms_isento->fromArray(null);
@@ -20,17 +20,19 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_isento->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testIsentoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testIsentoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testIsentoLoadXML()
@@ -39,8 +41,8 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoXML.xml');
 
-        $icms_isento = new \NFe\Entity\Imposto\ICMS\Isento();
-        $icms_isento->loadNode($dom_cmp->documentElement);
+        $icms_isento = Isento::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(Isento::class, $icms_isento);
 
         $xml = $icms_isento->getNode();
         $dom = $xml->ownerDocument;
@@ -51,9 +53,9 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
 
     public function testIsentoCondicionalXML()
     {
-        $icms_isento_cond = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_isento_cond = new Isento();
         $icms_isento_cond->setDesoneracao(1800.00);
-        $icms_isento_cond->setMotivo(\NFe\Entity\Imposto\ICMS\Isento::MOTIVO_TAXI);
+        $icms_isento_cond->setMotivo(Isento::MOTIVO_TAXI);
         $icms_isento_cond->fromArray($icms_isento_cond);
         $icms_isento_cond->fromArray($icms_isento_cond->toArray());
         $icms_isento_cond->fromArray(null);
@@ -61,17 +63,19 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_isento_cond->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testIsentoCondicionalXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoCondicionalXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testIsentoCondicionalXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testIsentoCondicionalLoadXML()
@@ -80,7 +84,7 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoCondicionalXML.xml');
 
-        $icms_isento_cond = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_isento_cond = new Isento();
         $icms_isento_cond->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_isento_cond->getNode();
@@ -92,7 +96,7 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
 
     public function testIsentoNaoTributadoXML()
     {
-        $icms_nao_trib = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_nao_trib = new Isento();
         $icms_nao_trib->setTributacao('41');
         $icms_nao_trib->fromArray($icms_nao_trib);
         $icms_nao_trib->fromArray($icms_nao_trib->toArray());
@@ -101,17 +105,19 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_nao_trib->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testIsentoNaoTributadoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoNaoTributadoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testIsentoNaoTributadoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testIsentoNaoTributadoLoadXML()
@@ -120,7 +126,7 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoNaoTributadoXML.xml');
 
-        $icms_nao_trib = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_nao_trib = new Isento();
         $icms_nao_trib->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_nao_trib->getNode();
@@ -132,7 +138,7 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
 
     public function testIsentoSuspensaoXML()
     {
-        $icms_suspensao = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_suspensao = new Isento();
         $icms_suspensao->setTributacao('50');
         $icms_suspensao->fromArray($icms_suspensao);
         $icms_suspensao->fromArray($icms_suspensao->toArray());
@@ -141,17 +147,19 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $xml = $icms_suspensao->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/icms/testIsentoSuspensaoXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoSuspensaoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/icms/testIsentoSuspensaoXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testIsentoSuspensaoLoadXML()
@@ -160,7 +168,7 @@ class IsentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testIsentoSuspensaoXML.xml');
 
-        $icms_suspensao = new \NFe\Entity\Imposto\ICMS\Isento();
+        $icms_suspensao = new Isento();
         $icms_suspensao->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_suspensao->getNode();

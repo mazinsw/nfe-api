@@ -44,7 +44,7 @@ abstract class Pessoa implements Node
     private $endereco;
     private $telefone;
 
-    public function __construct($pessoa = array())
+    public function __construct($pessoa = [])
     {
         $this->fromArray($pessoa);
     }
@@ -155,7 +155,7 @@ abstract class Pessoa implements Node
 
     public function toArray($recursive = false)
     {
-        $pessoa = array();
+        $pessoa = [];
         $pessoa['razao_social'] = $this->getRazaoSocial();
         $pessoa['cnpj'] = $this->getCNPJ();
         $pessoa['ie'] = $this->getIE();
@@ -169,7 +169,7 @@ abstract class Pessoa implements Node
         return $pessoa;
     }
 
-    public function fromArray($pessoa = array())
+    public function fromArray($pessoa = [])
     {
         if ($pessoa instanceof Pessoa) {
             $pessoa = $pessoa->toArray();
@@ -198,6 +198,8 @@ abstract class Pessoa implements Node
         }
         if (!array_key_exists('endereco', $pessoa)) {
             $this->setEndereco(new Endereco());
+        } elseif (isset($pessoa['endereco'])) {
+            $this->setEndereco(new Endereco($pessoa['endereco']));
         } else {
             $this->setEndereco($pessoa['endereco']);
         }

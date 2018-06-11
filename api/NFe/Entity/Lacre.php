@@ -38,7 +38,7 @@ class Lacre implements Node
 
     private $numero;
 
-    public function __construct($lacre = array())
+    public function __construct($lacre = [])
     {
         $this->fromArray($lacre);
     }
@@ -63,12 +63,12 @@ class Lacre implements Node
 
     public function toArray($recursive = false)
     {
-        $lacre = array();
+        $lacre = [];
         $lacre['numero'] = $this->getNumero();
         return $lacre;
     }
 
-    public function fromArray($lacre = array())
+    public function fromArray($lacre = [])
     {
         if ($lacre instanceof Lacre) {
             $lacre = $lacre->toArray();

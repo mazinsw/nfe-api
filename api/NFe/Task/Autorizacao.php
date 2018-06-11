@@ -35,7 +35,7 @@ use NFe\Exception\ValidationException;
 class Autorizacao extends Retorno
 {
 
-    public function __construct($autorizacao = array())
+    public function __construct($autorizacao = [])
     {
         parent::__construct($autorizacao);
     }
@@ -46,7 +46,7 @@ class Autorizacao extends Retorno
         return $autorizacao;
     }
 
-    public function fromArray($autorizacao = array())
+    public function fromArray($autorizacao = [])
     {
         if ($autorizacao instanceof Autorizacao) {
             $autorizacao = $autorizacao->toArray();
@@ -81,14 +81,15 @@ class Autorizacao extends Retorno
 
     public function envia($nota, $dom)
     {
-        $xmlContent = $this->getConteudo($dom);
-        $domLote = $this->validar($xmlContent);
         $envio = new Envio();
         $envio->setServico(Envio::SERVICO_AUTORIZACAO);
         $envio->setAmbiente($nota->getAmbiente());
         $envio->setModelo($nota->getModelo());
         $envio->setEmissao($nota->getEmissao());
-        $envio->setConteudo($domLote);
+        $this->setVersao($envio->getVersao());
+        $xml_content = $this->getConteudo($dom);
+        $dom_lote = $this->validar($xml_content);
+        $envio->setConteudo($dom_lote);
         $resp = $envio->envia();
         $this->loadNode($resp);
         if ($this->isProcessado()) {
@@ -121,14 +122,14 @@ class Autorizacao extends Retorno
     /**
      * Valida o XML em lote
      */
-    public function validar($xmlContent)
+    public function validar($xml_content)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->loadXML($xmlContent);
+        $dom->loadXML($xml_content);
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/enviNFe_v3.10.xsd';
+        $xsd_file = $xsd_path . '/enviNFe_v'.$this->getVersao().'.xsd';
         if (!file_exists($xsd_file)) {
-            throw new \Exception('O arquivo "'.$xsd_file.'" de esquema XSD não existe!', 404);
+            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
         // Enable user error handling
         $save = libxml_use_internal_errors(true);
@@ -136,7 +137,7 @@ class Autorizacao extends Retorno
             libxml_use_internal_errors($save);
             return $dom;
         }
-        $msg = array();
+        $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
             $msg[] = 'Não foi possível validar o XML: '.$error->message;

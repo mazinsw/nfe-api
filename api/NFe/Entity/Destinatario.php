@@ -51,7 +51,7 @@ class Destinatario extends Pessoa
     private $email;
     private $indicador;
 
-    public function __construct($destinatario = array())
+    public function __construct($destinatario = [])
     {
         parent::__construct($destinatario);
     }
@@ -154,7 +154,7 @@ class Destinatario extends Pessoa
         return $destinatario;
     }
 
-    public function fromArray($destinatario = array())
+    public function fromArray($destinatario = [])
     {
         if ($destinatario instanceof Destinatario) {
             $destinatario = $destinatario->toArray();
@@ -177,7 +177,7 @@ class Destinatario extends Pessoa
         } else {
             $this->setEmail(null);
         }
-        if (!isset($destinatario['indicador']) || is_null($destinatario['indicador'])) {
+        if (!isset($destinatario['indicador'])) {
             $this->setIndicador(self::INDICADOR_NENHUM);
         } else {
             $this->setIndicador($destinatario['indicador']);

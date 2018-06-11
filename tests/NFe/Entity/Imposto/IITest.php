@@ -12,7 +12,7 @@ class IITest extends \PHPUnit_Framework_TestCase
 
     public function testIIXML()
     {
-        $ii = new \NFe\Entity\Imposto\II();
+        $ii = new II();
         $ii->setBase(1000.00);
         $ii->setDespesas(150.00);
         $ii->setValor(100.00);
@@ -24,17 +24,19 @@ class IITest extends \PHPUnit_Framework_TestCase
         $xml = $ii->getNode();
         $dom = $xml->ownerDocument;
 
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                $this->resource_path . '/xml/imposto/testIIXML.xml',
+                $dom->saveXML($xml)
+            );
+        }
+
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/testIIXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
-
-        // $dom->formatOutput = true;
-        // file_put_contents(
-        //     $this->resource_path . '/xml/imposto/testIIXML.xml',
-        //     $dom->saveXML($xml)
-        // );
     }
 
     public function testIILoadXML()
@@ -43,8 +45,8 @@ class IITest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/testIIXML.xml');
 
-        $ii = new \NFe\Entity\Imposto\II();
-        $ii->loadNode($dom_cmp->documentElement);
+        $ii = II::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(II::class, $ii);
 
         $xml = $ii->getNode();
         $dom = $xml->ownerDocument;

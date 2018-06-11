@@ -42,7 +42,7 @@ class II extends Imposto
     private $valor;
     private $iof;
 
-    public function __construct($ii = array())
+    public function __construct($ii = [])
     {
         parent::__construct($ii);
         $this->setGrupo(self::GRUPO_II);
@@ -108,7 +108,7 @@ class II extends Imposto
         return $ii;
     }
 
-    public function fromArray($ii = array())
+    public function fromArray($ii = [])
     {
         if ($ii instanceof II) {
             $ii = $ii->toArray();
