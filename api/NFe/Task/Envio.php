@@ -280,8 +280,14 @@ class Envio
             $this->getAmbiente()
         );
         if (!isset($info[$this->getServico()])) {
-            throw new \Exception('O serviço "'.$this->getServico().
-                '" não está disponível para o estado "'.$estado->getUF().'"', 404);
+            throw new \Exception(
+                sprintf(
+                    'O serviço "%s" não está disponível para o estado "%s"',
+                    $this->getServico(),
+                    $estado->getUF()
+                ),
+                404
+            );
         }
         return $info[$this->getServico()];
     }

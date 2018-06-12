@@ -1,6 +1,10 @@
 <?php
 namespace NFe\Database;
 
+use NFe\Core\Nota;
+use NFe\Task\Envio;
+use NFe\Core\NFCe;
+
 class BancoTest extends \PHPUnit_Framework_TestCase
 {
     private $banco;
@@ -89,7 +93,7 @@ class BancoTest extends \PHPUnit_Framework_TestCase
 
     public function testInformacaoServico()
     {
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'PI');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_NORMAL, 'PI');
         $this->assertArrayHasKey('nfe', $data);
         $this->assertArrayHasKey('homologacao', $data['nfe']);
         $this->assertArrayHasKey('inutilizacao', $data['nfe']['homologacao']);
@@ -146,8 +150,8 @@ class BancoTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('retorno', $data['producao']);
         $this->assertArrayHasKey('evento', $data['producao']);
 
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_CONTINGENCIA, 'AC', 'nfe');
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_CONTINGENCIA, 'AC', '55');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_CONTINGENCIA, 'AC', 'nfe');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_CONTINGENCIA, 'AC', '55');
         $this->assertArrayHasKey('homologacao', $data);
         $this->assertArrayHasKey('protocolo', $data['homologacao']);
         $this->assertArrayHasKey('status', $data['homologacao']);
@@ -162,8 +166,8 @@ class BancoTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('retorno', $data['producao']);
         $this->assertArrayHasKey('evento', $data['producao']);
 
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'AC', 'nfe', '1');
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'AC', 'nfe', '2');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_NORMAL, 'AC', 'nfe', '1');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_NORMAL, 'AC', 'nfe', '2');
         $this->assertArrayHasKey('inutilizacao', $data);
         $this->assertArrayHasKey('protocolo', $data);
         $this->assertArrayHasKey('status', $data);
@@ -185,13 +189,13 @@ class BancoTest extends \PHPUnit_Framework_TestCase
     public function testInformacaoServicoModeloInvalido()
     {
         $this->setExpectedException('\Exception');
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'PI', 'nfse');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_NORMAL, 'PI', 'nfse');
     }
 
     public function testInformacaoServicoAmbienteInvalido()
     {
         $this->setExpectedException('\Exception');
-        $data = $this->banco->getInformacaoServico(\NFe\Core\Nota::EMISSAO_NORMAL, 'PI', 'nfe', 'teste');
+        $data = $this->banco->getInformacaoServico(Nota::EMISSAO_NORMAL, 'PI', 'nfe', 'teste');
     }
 
     public function testNotasTarefas()
@@ -204,5 +208,150 @@ class BancoTest extends \PHPUnit_Framework_TestCase
 
         $tarefas = $this->banco->getNotasTarefas(0, 0);
         $this->assertCount(0, $tarefas);
+    }
+
+    public function testServicesACBR()
+    {
+        $ini = dirname(dirname(__DIR__)) . '/resources/ACBrNFeServicos.ini';
+        $content = \file_get_contents($ini);
+        // $content = \preg_replace('/[;]+[^\n\r]*[\n\r]*/', '', $content);
+        $values = \parse_ini_string($content, true, INI_SCANNER_RAW);
+        settype($values, 'array');
+        $estados = [
+            'AC',
+            'AL',
+            'AP',
+            'AM',
+            'BA',
+            'CE',
+            'DF',
+            'ES',
+            'GO',
+            'MA',
+            'MT',
+            'MS',
+            'MG',
+            'PA',
+            'PB',
+            'PR',
+            'PE',
+            'PI',
+            'RJ',
+            'RN',
+            'RS',
+            'RO',
+            'RR',
+            'SC',
+            'SP',
+            'SE',
+            'TO'
+        ];
+        $info_servicos = [
+            'qrcode' => 'QRCode',
+            'consulta' => 'ConsultaNFCe'
+        ];
+        $info_ambientes = [
+            Nota::AMBIENTE_PRODUCAO => 'P',
+            Nota::AMBIENTE_HOMOLOGACAO => 'H'
+        ];
+        $ambientes = [Nota::AMBIENTE_PRODUCAO, Nota::AMBIENTE_HOMOLOGACAO];
+        foreach ($estados as $uf) {
+            foreach ($ambientes as $ambiente) {
+                $data = $this->banco->getInformacaoServico(
+                    Nota::EMISSAO_NORMAL,
+                    $uf,
+                    Nota::MODELO_NFCE
+                );
+                if (isset($data['versao'])) {
+                    $default_versao = $data['versao'];
+                } else {
+                    $default_versao = Nota::VERSAO;
+                }
+                $data = $data[$ambiente];
+                $section = sprintf('NFCe_%s_%s', $uf, $info_ambientes[$ambiente]);
+                $entries = $values[$section];
+                if (isset($entries['Usar'])) {
+                    $other = $values[$entries['Usar']];
+                    $entries = array_merge($entries, $other);
+                }
+                $servicos = [
+                    Envio::SERVICO_INUTILIZACAO,
+                    Envio::SERVICO_PROTOCOLO,
+                    Envio::SERVICO_STATUS,
+                    Envio::SERVICO_CADASTRO,
+                    Envio::SERVICO_AUTORIZACAO,
+                    Envio::SERVICO_RETORNO,
+                    Envio::SERVICO_RECEPCAO,
+                    Envio::SERVICO_CONFIRMACAO,
+                    Envio::SERVICO_EVENTO
+                ];
+                foreach ($servicos as $servico) {
+                    if (!isset($data[$servico])) {
+                        continue;
+                    }
+                    $info = $data[$servico];
+                    if (is_array($info) && isset($info['versao'])) {
+                        $versao = $info['versao'];
+                    } else {
+                        $versao = $default_versao;
+                    }
+                    $entry = sprintf('%s_%s', $info['servico'], $versao);
+                    if (!isset($entries[$entry])) {
+                        $this->fail(
+                            sprintf(
+                                'Não existe url de %s para o serviço "%s", versão "%s" e estado "%s"',
+                                $ambiente,
+                                $info['servico'],
+                                $versao,
+                                $uf
+                            )
+                        );
+                    }
+                    $url = trim($entries[$entry]);
+                    $this->assertEquals(
+                        [$uf => [$ambiente => [$info['servico'] => $url]]],
+                        [$uf => [$ambiente => [$info['servico'] => $info['url']]]]
+                    );
+                }
+                $urls = ['qrcode', 'consulta'];
+                foreach ($urls as $servico) {
+                    if (!isset($data[$servico])) {
+                        continue;
+                    }
+                    $info = $data[$servico];
+                    if (is_array($info) && isset($info['versao'])) {
+                        $versao = $info['versao'];
+                    } else {
+                        $versao = NFCe::QRCODE_VERSAO;
+                        $versao = preg_replace('/(\d)(\d{2})/', '$1.$2', NFCe::QRCODE_VERSAO);
+                    }
+                    if (is_array($info)) {
+                        $info_url = $info['url'];
+                    } else {
+                        $info_url = $info;
+                    }
+                    $info_servico = $info_servicos[$servico];
+                    $entry = sprintf('URL-%s_%s', $info_servico, $versao);
+                    if (!isset($entries[$entry]) && $versao = '1.00') {
+                        $entry = sprintf('URL-%s', $info_servico);
+                    }
+                    if (!isset($entries[$entry])) {
+                        $this->fail(
+                            sprintf(
+                                'Não existe url para o serviço "%s", versão "%s" e estado "%s"',
+                                $info_servico,
+                                $versao,
+                                $uf
+                            )
+                        );
+                    }
+                    $url = trim($entries[$entry]);
+                    $this->assertEquals(
+                        [$uf => [$ambiente => [$info_servico => $url]]],
+                        [$uf => [$ambiente => [$info_servico => $info_url]]]
+                    );
+                }
+            }
+        }
     }
 }

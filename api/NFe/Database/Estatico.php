@@ -28,6 +28,7 @@
 namespace NFe\Database;
 
 use NFe\Common\Util;
+use NFe\Core\Nota;
 
 class Estatico extends Banco
 {
@@ -81,7 +82,10 @@ class Estatico extends Banco
     public function getCodigoEstado($uf)
     {
         if (!isset($this->uf_codes['estados'][strtoupper($uf)])) {
-            throw new \Exception('Não foi encontrado o código do IBGE para o estado "'.$uf.'"', 404);
+            throw new \Exception(
+                sprintf('Não foi encontrado o código do IBGE para o estado "%s"', $uf),
+                404
+            );
         }
         $codigo = $this->uf_codes['estados'][strtoupper($uf)];
         return intval($codigo);
@@ -93,7 +97,10 @@ class Estatico extends Banco
     public function getCodigoOrgao($uf)
     {
         if (!isset($this->uf_codes['orgaos'][strtoupper($uf)])) {
-            throw new \Exception('Não foi encontrado o código do orgão para o estado "'.$uf.'"', 404);
+            throw new \Exception(
+                sprintf('Não foi encontrado o código do orgão para o estado "%s"', $uf),
+                404
+            );
         }
         $codigo = $this->uf_codes['orgaos'][strtoupper($uf)];
         return intval($codigo);
@@ -113,7 +120,10 @@ class Estatico extends Banco
     public function getCodigoMunicipio($municipio, $uf)
     {
         if (!isset($this->mun_codes['municipios'][strtoupper($uf)])) {
-            throw new \Exception('Não exite municípios para o estado "'.$uf.'"', 404);
+            throw new \Exception(
+                sprintf('Não exite municípios para o estado "%s"', $uf),
+                404
+            );
         }
         $array = $this->mun_codes['municipios'][strtoupper($uf)];
         $elem = ['nome' => $municipio];
@@ -123,8 +133,10 @@ class Estatico extends Banco
             return strcasecmp($n1, $n2);
         });
         if ($o === false) {
-            throw new \Exception('Não foi encontrado o código do IBGE para o município "'.
-                $municipio.'" do estado "'.$uf.'"', 404);
+            throw new \Exception(
+                sprintf('Não foi encontrado o código do IBGE para o município "%s" do estado "%s"', $municipio, $uf),
+                404
+            );
         }
         return $o['codigo'];
     }
@@ -159,35 +171,41 @@ class Estatico extends Banco
     {
         switch ($emissao) {
             case '1':
-                $emissao = 'normal';
+                $emissao = Nota::EMISSAO_NORMAL;
                 break;
             case '9':
-                $emissao = 'contingencia';
+                $emissao = Nota::EMISSAO_CONTINGENCIA;
                 break;
         }
         switch ($modelo) {
             case '55':
-                $modelo = 'nfe';
+                $modelo = Nota::MODELO_NFE;
                 break;
             case '65':
-                $modelo = 'nfce';
+                $modelo = Nota::MODELO_NFCE;
                 break;
         }
-        if ($modelo == 'nfce') {
-            $emissao = 'normal'; // NFCe envia contingência pelo webservice normal
+        if ($modelo == Nota::MODELO_NFCE) {
+            $emissao = Nota::EMISSAO_NORMAL; // NFCe envia contingência pelo webservice normal
         }
         if (!isset($this->servicos[$emissao])) {
-            throw new \Exception('Falha ao obter o serviço da SEFAZ para o tipo de emissão "'.$emissao.'"', 404);
+            throw new \Exception(
+                sprintf('Falha ao obter o serviço da SEFAZ para o tipo de emissão "%s"', $emissao),
+                404
+            );
         }
         $array = $this->servicos[$emissao];
         if (!isset($array[strtoupper($uf)])) {
-            throw new \Exception('Falha ao obter o serviço da SEFAZ para a UF "'.$uf.'"', 404);
+            throw new \Exception(
+                sprintf('Falha ao obter o serviço da SEFAZ para a UF "%s"', $uf),
+                404
+            );
         }
         $array = $array[strtoupper($uf)];
         if (!is_array($array)) {
             $array = $this->getInformacaoServico($emissao, $array);
         }
-        $_modelos = ['nfe', 'nfce'];
+        $_modelos = [Nota::MODELO_NFE, Nota::MODELO_NFCE];
         foreach ($_modelos as $_modelo) {
             if (!isset($array[$_modelo])) {
                 continue;
@@ -204,21 +222,27 @@ class Estatico extends Banco
         }
         if (!is_null($modelo)) {
             if (!isset($array[$modelo])) {
-                throw new \Exception('Falha ao obter o serviço da SEFAZ para o modelo de nota "'.$modelo.'"', 404);
+                throw new \Exception(
+                    sprintf('Falha ao obter o serviço da SEFAZ para o modelo de nota "%s"', $modelo),
+                    404
+                );
             }
             $array = $array[$modelo];
         }
         switch ($ambiente) {
             case '1':
-                $ambiente = 'producao';
+                $ambiente = Nota::AMBIENTE_PRODUCAO;
                 break;
             case '2':
-                $ambiente = 'homologacao';
+                $ambiente = Nota::AMBIENTE_HOMOLOGACAO;
                 break;
         }
         if (!is_null($modelo) && !is_null($ambiente)) {
             if (!isset($array[$ambiente])) {
-                throw new \Exception('Falha ao obter o serviço da SEFAZ para o ambiente "'.$ambiente.'"', 404);
+                throw new \Exception(
+                    sprintf('Falha ao obter o serviço da SEFAZ para o ambiente "%s"', $ambiente),
+                    404
+                );
             }
             $array = $array[$ambiente];
         }
