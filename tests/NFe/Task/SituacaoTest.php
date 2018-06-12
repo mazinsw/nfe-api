@@ -118,7 +118,7 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         // TODO: Fim do problema de assinatura
         $dom = $retorno->addInformacao($dom);
 
-        if (getenv('TEST_MODE') == 'override') {
+        if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             file_put_contents(
                 dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',

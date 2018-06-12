@@ -43,7 +43,7 @@ class CurlSoapTest extends \PHPUnit_Framework_TestCase
             $node_cmp->nodeValue = $node->nodeValue;
         }
 
-        if (getenv('TEST_MODE') == 'override') {
+        if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             file_put_contents($xml_file, $dom->saveXML());
         }

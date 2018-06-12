@@ -82,7 +82,7 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
         
-        if (getenv('TEST_MODE') == 'override') {
+        if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
             file_put_contents($xml_file, $dom->saveXML());

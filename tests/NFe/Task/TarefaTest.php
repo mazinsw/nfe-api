@@ -186,7 +186,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($retorno->isCancelado());
         $dom = $tarefa->getDocumento();
 
-        if (getenv('TEST_MODE') == 'override') {
+        if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             file_put_contents(
                 dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
@@ -297,7 +297,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
         $node = \NFe\Common\Util::findNode($dom, 'SignatureValue');
         $node_cmp->nodeValue = $node->nodeValue;
 
-        if (getenv('TEST_MODE') == 'override') {
+        if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             file_put_contents($xml_file, $dom->saveXML());
         }

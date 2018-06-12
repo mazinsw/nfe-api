@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
   <soap12:Body>
-    <nfeDadosMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao">
+    <nfeDadosMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NfeAutorizacao">
       <enviNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
-        <idLote>152841007497300</idLote>
+        <idLote>152883681015969</idLote>
         <indSinc>1</indSinc>
         <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
           <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="4.00">
@@ -220,8 +220,8 @@
             </infAdic>
           </infNFe>
           <infNFeSupl>
-            <qrCode><![CDATA[http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41160908380787000176650010000000811778821925&nVersao=100&tpAmb=2&cDest=12345678912&dhEmi=323031362d30392d31375430303a33363a30332b30303a3030&vNF=11.79&vICMS=0.00&digVal=436b7a536f6355622f434e7247346c4d324d665335736a585a58303d&cIdToken=000000&cHashQRCode=13d48963e9b41a076b2171004adf6715d876334c]]></qrCode>
-            <urlChave><![CDATA[http://www.fazenda.pr.gov.br/]]></urlChave>
+            <qrCode><![CDATA[http://www.fazenda.pr.gov.br/nfce/qrcode/?chNFe=41160908380787000176650010000000811778821925&nVersao=100&tpAmb=2&cDest=12345678912&dhEmi=323031362d30392d31375430303a33363a30332b30303a3030&vNF=11.79&vICMS=0.00&digVal=436b7a536f6355622f434e7247346c4d324d665335736a585a58303d&cIdToken=000000&cHashQRCode=13d48963e9b41a076b2171004adf6715d876334c]]></qrCode>
+            <urlChave><![CDATA[http://www.fazenda.pr.gov.br]]></urlChave>
           </infNFeSupl>
           <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
             <SignedInfo>

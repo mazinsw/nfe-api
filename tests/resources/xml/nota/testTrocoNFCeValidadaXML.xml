@@ -219,8 +219,8 @@
     </infAdic>
   </infNFe>
   <infNFeSupl>
-    <qrCode><![CDATA[http://www.dfeportal.fazenda.pr.gov.br/dfe-portal/rest/servico/consultaNFCe?chNFe=41160908380787000176650010000000811778821925&nVersao=100&tpAmb=2&cDest=12345678912&dhEmi=323031362d30392d31375430303a33363a30332b30303a3030&vNF=11.79&vICMS=0.00&digVal=4b556c6e3048397844376c7551497a68687a6f6d38553137656c4d3d&cIdToken=000000&cHashQRCode=caf87f4b0de8d23f1cfb931a35df75cd0316fcf2]]></qrCode>
-    <urlChave><![CDATA[http://www.fazenda.pr.gov.br/]]></urlChave>
+    <qrCode><![CDATA[http://www.fazenda.pr.gov.br/nfce/qrcode/?chNFe=41160908380787000176650010000000811778821925&nVersao=100&tpAmb=2&cDest=12345678912&dhEmi=323031362d30392d31375430303a33363a30332b30303a3030&vNF=11.79&vICMS=0.00&digVal=4b556c6e3048397844376c7551497a68687a6f6d38553137656c4d3d&cIdToken=000000&cHashQRCode=caf87f4b0de8d23f1cfb931a35df75cd0316fcf2]]></qrCode>
+    <urlChave><![CDATA[http://www.fazenda.pr.gov.br]]></urlChave>
   </infNFeSupl>
   <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
     <SignedInfo>
