@@ -36,7 +36,7 @@ class CurlSoap extends Curl
 {
 
     const ENVELOPE = <<<XML
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <soap12:Envelope 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
@@ -60,8 +60,6 @@ XML;
     {
         parent::__construct($base_url);
         $this->setHeader('Content-Type', 'application/soap+xml; charset=utf-8');
-        $this->setOpt(CURLOPT_SSL_VERIFYPEER, false);
-        $this->setOpt(CURLOPT_SSLVERSION, 1);
         $this->setConnectTimeout(4);
         $this->setTimeout(6);
         $this->setXmlDecoder(function ($response) {

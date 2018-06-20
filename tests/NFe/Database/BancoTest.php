@@ -4,6 +4,7 @@ namespace NFe\Database;
 use NFe\Core\Nota;
 use NFe\Task\Envio;
 use NFe\Core\NFCe;
+use NFe\Common\Util;
 
 class BancoTest extends \PHPUnit_Framework_TestCase
 {
@@ -210,145 +211,119 @@ class BancoTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $tarefas);
     }
 
-    public function testServicesACBR()
+    public function testNFCeServices()
     {
-        $ini = dirname(dirname(__DIR__)) . '/resources/ACBrNFeServicos.ini';
-        $content = \file_get_contents($ini);
-        // $content = \preg_replace('/[;]+[^\n\r]*[\n\r]*/', '', $content);
-        $values = \parse_ini_string($content, true, INI_SCANNER_RAW);
-        settype($values, 'array');
-        $estados = [
-            'AC',
-            'AL',
-            'AP',
-            'AM',
-            'BA',
-            'CE',
-            'DF',
-            'ES',
-            'GO',
-            'MA',
-            'MT',
-            'MS',
-            'MG',
-            'PA',
-            'PB',
-            'PR',
-            'PE',
-            'PI',
-            'RJ',
-            'RN',
-            'RS',
-            'RO',
-            'RR',
-            'SC',
-            'SP',
-            'SE',
-            'TO'
-        ];
-        $info_servicos = [
-            'qrcode' => 'QRCode',
-            'consulta' => 'ConsultaNFCe'
-        ];
-        $info_ambientes = [
-            Nota::AMBIENTE_PRODUCAO => 'P',
-            Nota::AMBIENTE_HOMOLOGACAO => 'H'
+        $filename = dirname(dirname(__DIR__)) . '/resources/wsnfe_4.00_mod65.xml';
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->load($filename);
+        $ufs = $dom->getElementsByTagName('UF');
+        $servicos = [
+            'NfeAutorizacao' => 'autorizacao',
+            'NfeRetAutorizacao' => 'retorno',
+            'NfeInutilizacao' => 'inutilizacao',
+            'NfeConsultaProtocolo' => 'protocolo',
+            'NfeStatusServico' => 'status',
+            'RecepcaoEvento' => 'evento',
+            'NfeConsultaQR' => 'qrcode',
+            'CscNFCe' => 'administracao'
         ];
         $ambientes = [Nota::AMBIENTE_PRODUCAO, Nota::AMBIENTE_HOMOLOGACAO];
-        foreach ($estados as $uf) {
+        $normal = [];
+        foreach ($ufs as $uf_node) {
+            $sigla = Util::loadNode($uf_node, 'sigla');
             foreach ($ambientes as $ambiente) {
-                $data = $this->banco->getInformacaoServico(
-                    Nota::EMISSAO_NORMAL,
-                    $uf,
-                    Nota::MODELO_NFCE
-                );
-                if (isset($data['versao'])) {
-                    $default_versao = $data['versao'];
+                $node_ambiente = Util::findNode($uf_node, $ambiente);
+                foreach ($node_ambiente->childNodes as $servico_node) {
+                    if (!isset($servicos[$servico_node->nodeName])) {
+                        continue;
+                    }
+                    $name = $servicos[$servico_node->nodeName];
+                    $url = trim($servico_node->nodeValue);
+                    if ($url == '') {
+                        continue;
+                    }
+                    $servico = $servico_node->getAttribute('operation');
+                    $version = $servico_node->getAttribute('version');
+                    if ($name == 'qrcode') {
+                        $normal[$sigla]['nfce'][$ambiente][$name] = trim($url, '?');
+                    } else {
+                        $normal[$sigla]['nfce'][$ambiente][$name]['url'] = $url;
+                        $normal[$sigla]['nfce'][$ambiente][$name]['servico'] = $servico;
+                        if ($version != Nota::VERSAO) {
+                            $normal[$sigla]['nfce'][$ambiente][$name]['versao'] = $version;
+                        }
+                    }
+                }
+            }
+        }
+        $filename = dirname(dirname(__DIR__)) . '/resources/uri_consulta_nfce.json';
+        $json = file_get_contents($filename);
+        $consultas = json_decode($json, true);
+        $ambientes_codes = [Nota::AMBIENTE_PRODUCAO => 1, Nota::AMBIENTE_HOMOLOGACAO => 2];
+        foreach ($ambientes_codes as $ambiente => $ambiente_code) {
+            foreach ($consultas[$ambiente_code] as $sigla => $url) {
+                if ($url == '') {
+                    continue;
+                }
+                $normal[$sigla]['nfce'][$ambiente]['consulta'] = trim($url, '?&');
+            }
+        }
+        // correções
+        $normal['MT']['nfce'][Nota::AMBIENTE_PRODUCAO]['protocolo']['servico'] = 'NFeConsultaProtocolo4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['autorizacao']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['retorno']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeRetAutorizacao4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['inutilizacao']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeInutilizacao4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['protocolo']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeConsulta4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['protocolo']['servico'] = 'NFeConsultaProtocolo4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['status']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeStatusServico4';
+        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['evento']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/RecepcaoEvento4';
+
+        $normal['BA']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://hnfe.sefaz.ba.gov.br/servicos/nfce/default.aspx';
+        $normal['GO']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'http://www.nfce.go.gov.br/post/ver/214344/consulta-nfce';
+        $normal['GO']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://www.nfce.go.gov.br/post/ver/214413/consulta-nfc-e-homologacao';
+        $normal['PE']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe';
+        $normal['PE']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe';
+        $normal['RN']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'http://nfce.set.rn.gov.br/portalDFE/NFCe/ConsultaNFCe.aspx';
+        $normal['RN']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://hom.nfce.set.rn.gov.br/portalDFE/NFCe/ConsultaNFCe.aspx';
+        $normal['RO']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://www.nfce.sefin.ro.gov.br/consultaAmbHomologacao.jsp';
+        $normal['SP']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'https://www.nfce.fazenda.sp.gov.br/consulta';
+        $normal['SP']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta';
+
+        $normal['PR']['nfce'][Nota::AMBIENTE_PRODUCAO]['qrcode'] = 'http://www.fazenda.pr.gov.br/nfce/qrcode/';
+        $normal['PR']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['qrcode'] = 'http://www.fazenda.pr.gov.br/nfce/qrcode/';
+        $normal['SE']['nfce'][Nota::AMBIENTE_PRODUCAO]['qrcode'] = 'http://www.nfce.se.gov.br/portal/consultarNFCe.jsp';
+        $normal['TO']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['qrcode'] = 'http://apps.sefaz.to.gov.br/portal-nfce-homologacao/qrcodeNFCe';
+        foreach ($normal as $uf => $values) {
+            $data_uf = $this->banco->getInformacaoServico(
+                Nota::EMISSAO_NORMAL,
+                $uf,
+                Nota::MODELO_NFCE
+            );
+            foreach ($ambientes as $ambiente) {
+                if (isset($data_uf['versao'])) {
+                    $default_versao = $data_uf['versao'];
                 } else {
                     $default_versao = Nota::VERSAO;
                 }
-                $data = $data[$ambiente];
-                $section = sprintf('NFCe_%s_%s', $uf, $info_ambientes[$ambiente]);
-                $entries = $values[$section];
-                if (isset($entries['Usar'])) {
-                    $other = $values[$entries['Usar']];
-                    $entries = array_merge($entries, $other);
-                }
-                $servicos = [
-                    Envio::SERVICO_INUTILIZACAO,
-                    Envio::SERVICO_PROTOCOLO,
-                    Envio::SERVICO_STATUS,
-                    Envio::SERVICO_CADASTRO,
-                    Envio::SERVICO_AUTORIZACAO,
-                    Envio::SERVICO_RETORNO,
-                    Envio::SERVICO_RECEPCAO,
-                    Envio::SERVICO_CONFIRMACAO,
-                    Envio::SERVICO_EVENTO
-                ];
-                foreach ($servicos as $servico) {
+                $servicos = $values['nfce'][$ambiente];
+                $urls = ['qrcode', 'consulta'];
+                $data = $data_uf[$ambiente];
+                foreach ($servicos as $servico => $url) {
                     if (!isset($data[$servico])) {
-                        continue;
-                    }
-                    $info = $data[$servico];
-                    if (is_array($info) && isset($info['versao'])) {
-                        $versao = $info['versao'];
-                    } else {
-                        $versao = $default_versao;
-                    }
-                    $entry = sprintf('%s_%s', $info['servico'], $versao);
-                    if (!isset($entries[$entry])) {
                         $this->fail(
                             sprintf(
                                 'Não existe url de %s para o serviço "%s", versão "%s" e estado "%s"',
                                 $ambiente,
-                                $info['servico'],
-                                $versao,
+                                $servico,
+                                $default_versao,
                                 $uf
                             )
                         );
-                    }
-                    $url = trim($entries[$entry]);
-                    $this->assertEquals(
-                        [$uf => [$ambiente => [$info['servico'] => $url]]],
-                        [$uf => [$ambiente => [$info['servico'] => $info['url']]]]
-                    );
-                }
-                $urls = ['qrcode', 'consulta'];
-                foreach ($urls as $servico) {
-                    if (!isset($data[$servico])) {
-                        continue;
                     }
                     $info = $data[$servico];
-                    if (is_array($info) && isset($info['versao'])) {
-                        $versao = $info['versao'];
-                    } else {
-                        $versao = NFCe::QRCODE_VERSAO;
-                        $versao = preg_replace('/(\d)(\d{2})/', '$1.$2', NFCe::QRCODE_VERSAO);
-                    }
-                    if (is_array($info)) {
-                        $info_url = $info['url'];
-                    } else {
-                        $info_url = $info;
-                    }
-                    $info_servico = $info_servicos[$servico];
-                    $entry = sprintf('URL-%s_%s', $info_servico, $versao);
-                    if (!isset($entries[$entry]) && $versao = '1.00') {
-                        $entry = sprintf('URL-%s', $info_servico);
-                    }
-                    if (!isset($entries[$entry])) {
-                        $this->fail(
-                            sprintf(
-                                'Não existe url para o serviço "%s", versão "%s" e estado "%s"',
-                                $info_servico,
-                                $versao,
-                                $uf
-                            )
-                        );
-                    }
-                    $url = trim($entries[$entry]);
                     $this->assertEquals(
-                        [$uf => [$ambiente => [$info_servico => $url]]],
-                        [$uf => [$ambiente => [$info_servico => $info_url]]]
+                        [$uf => [$ambiente => [$servico => $url]]],
+                        [$uf => [$ambiente => [$servico => $info]]]
                     );
                 }
             }
