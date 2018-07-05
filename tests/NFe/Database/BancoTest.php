@@ -211,120 +211,58 @@ class BancoTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $tarefas);
     }
 
-    public function testNFCeServices()
+    /**
+     * Renomear a função para testWSDL para verificar os endereços dos web services
+     * Realizar essa operação regularmente para garantir, após a verificação,
+     * voltar o nome da função para onlineTestWSDL
+     */
+    public function onlineTestWSDL()
     {
-        $filename = dirname(dirname(__DIR__)) . '/resources/wsnfe_4.00_mod65.xml';
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->load($filename);
-        $ufs = $dom->getElementsByTagName('UF');
-        $servicos = [
-            'NfeAutorizacao' => 'autorizacao',
-            'NfeRetAutorizacao' => 'retorno',
-            'NfeInutilizacao' => 'inutilizacao',
-            'NfeConsultaProtocolo' => 'protocolo',
-            'NfeStatusServico' => 'status',
-            'RecepcaoEvento' => 'evento',
-            'NfeConsultaQR' => 'qrcode',
-            'CscNFCe' => 'administracao'
-        ];
-        $ambientes = [Nota::AMBIENTE_PRODUCAO, Nota::AMBIENTE_HOMOLOGACAO];
-        $normal = [];
-        foreach ($ufs as $uf_node) {
-            $sigla = Util::loadNode($uf_node, 'sigla');
-            foreach ($ambientes as $ambiente) {
-                $node_ambiente = Util::findNode($uf_node, $ambiente);
-                foreach ($node_ambiente->childNodes as $servico_node) {
-                    if (!isset($servicos[$servico_node->nodeName])) {
-                        continue;
-                    }
-                    $name = $servicos[$servico_node->nodeName];
-                    $url = trim($servico_node->nodeValue);
-                    if ($url == '') {
-                        continue;
-                    }
-                    $servico = $servico_node->getAttribute('operation');
-                    $version = $servico_node->getAttribute('version');
-                    if ($name == 'qrcode') {
-                        $normal[$sigla]['nfce'][$ambiente][$name] = trim($url, '?');
-                    } else {
-                        $normal[$sigla]['nfce'][$ambiente][$name]['url'] = $url;
-                        $normal[$sigla]['nfce'][$ambiente][$name]['servico'] = $servico;
-                        if ($version != Nota::VERSAO) {
-                            $normal[$sigla]['nfce'][$ambiente][$name]['versao'] = $version;
+        global $app;
+        
+        $sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
+        $sefaz->getConfiguracao()
+            ->setArquivoChavePublica(dirname(dirname(dirname(__DIR__))) . '/docs/cert/public.pem')
+            ->setArquivoChavePrivada(dirname(dirname(dirname(__DIR__))) . '/docs/cert/private.pem');
+        $banco = $sefaz->getConfiguracao()->getBanco();
+        $chave_publica = $sefaz->getConfiguracao()->getArquivoChavePublica();
+        $chave_privada = $sefaz->getConfiguracao()->getArquivoChavePrivada();
+        $soap = new \Curl\Curl();
+        $soap->setOpt(CURLOPT_SSLCERT, $chave_publica);
+        $soap->setOpt(CURLOPT_SSLKEY, $chave_privada);
+        $ufs = ['AM', 'BA', 'CE', 'GO', 'MG', 'MS', 'MT', 'PE', 'PR', 'RS', 'SP', 'MA', 'PA', 'AC', 'AL', 'AP', 'DF',
+            'ES', 'PB', 'PI', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO'];
+        $modelos = [Nota::MODELO_NFE, Nota::MODELO_NFCE];
+        foreach ($modelos as $modelo) {
+            foreach ($ufs as $uf) {
+                $data = $banco->getInformacaoServico(
+                    Nota::EMISSAO_NORMAL,
+                    $uf,
+                    $modelo
+                );
+                $ambientes = [Nota::AMBIENTE_PRODUCAO, Nota::AMBIENTE_HOMOLOGACAO];
+                foreach ($ambientes as $ambiente) {
+                    $servicos = $data[$ambiente];
+                    foreach ($servicos as $servico => $values) {
+                        if (!is_array($values)) {
+                            continue;
+                        }
+                        $url = $values['url'].'?wsdl';
+                        $response = $soap->get($url);
+                        if (!$soap->error) {
+                            $namespace = (string)$response['targetNamespace'];
+                            $action = str_replace(Nota::PORTAL . '/wsdl/', '', $namespace);
+                            // echo $soap->rawResponse;
+                            $this->assertEquals(
+                                [$uf => [$modelo => [$ambiente => [$servico => ['servico' => $action]]]]],
+                                [$uf => [$modelo => [$ambiente => [$servico => ['servico' => $values['servico']]]]]]
+                            );
+                        } else {
+                            // exibe os erros de conexão, mas não interfere na execução dos testes
+                            echo "\n".'ERROR('.$url.') = '.$soap->errorMessage.': '.$uf . ': ' . $servico . ': '.
+                                ', Ambiente: '.$ambiente;
                         }
                     }
-                }
-            }
-        }
-        $filename = dirname(dirname(__DIR__)) . '/resources/uri_consulta_nfce.json';
-        $json = file_get_contents($filename);
-        $consultas = json_decode($json, true);
-        $ambientes_codes = [Nota::AMBIENTE_PRODUCAO => 1, Nota::AMBIENTE_HOMOLOGACAO => 2];
-        foreach ($ambientes_codes as $ambiente => $ambiente_code) {
-            foreach ($consultas[$ambiente_code] as $sigla => $url) {
-                if ($url == '') {
-                    continue;
-                }
-                $normal[$sigla]['nfce'][$ambiente]['consulta'] = trim($url, '?&');
-            }
-        }
-        // correções
-        $normal['MT']['nfce'][Nota::AMBIENTE_PRODUCAO]['protocolo']['servico'] = 'NFeConsultaProtocolo4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['autorizacao']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeAutorizacao4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['retorno']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeRetAutorizacao4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['inutilizacao']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeInutilizacao4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['protocolo']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeConsulta4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['protocolo']['servico'] = 'NFeConsultaProtocolo4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['status']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/NfeStatusServico4';
-        $normal['MT']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['evento']['url'] = 'https://homologacao.sefaz.mt.gov.br/nfcews/services/RecepcaoEvento4';
-
-        $normal['BA']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://hnfe.sefaz.ba.gov.br/servicos/nfce/default.aspx';
-        $normal['GO']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'http://www.nfce.go.gov.br/post/ver/214344/consulta-nfce';
-        $normal['GO']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://www.nfce.go.gov.br/post/ver/214413/consulta-nfc-e-homologacao';
-        $normal['PE']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe';
-        $normal['PE']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe';
-        $normal['RN']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'http://nfce.set.rn.gov.br/portalDFE/NFCe/ConsultaNFCe.aspx';
-        $normal['RN']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://hom.nfce.set.rn.gov.br/portalDFE/NFCe/ConsultaNFCe.aspx';
-        $normal['RO']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'http://www.nfce.sefin.ro.gov.br/consultaAmbHomologacao.jsp';
-        $normal['SP']['nfce'][Nota::AMBIENTE_PRODUCAO]['consulta'] = 'https://www.nfce.fazenda.sp.gov.br/consulta';
-        $normal['SP']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['consulta'] = 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta';
-
-        $normal['PR']['nfce'][Nota::AMBIENTE_PRODUCAO]['qrcode'] = 'http://www.fazenda.pr.gov.br/nfce/qrcode/';
-        $normal['PR']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['qrcode'] = 'http://www.fazenda.pr.gov.br/nfce/qrcode/';
-        $normal['SE']['nfce'][Nota::AMBIENTE_PRODUCAO]['qrcode'] = 'http://www.nfce.se.gov.br/portal/consultarNFCe.jsp';
-        $normal['TO']['nfce'][Nota::AMBIENTE_HOMOLOGACAO]['qrcode'] = 'http://apps.sefaz.to.gov.br/portal-nfce-homologacao/qrcodeNFCe';
-        foreach ($normal as $uf => $values) {
-            $data_uf = $this->banco->getInformacaoServico(
-                Nota::EMISSAO_NORMAL,
-                $uf,
-                Nota::MODELO_NFCE
-            );
-            foreach ($ambientes as $ambiente) {
-                if (isset($data_uf['versao'])) {
-                    $default_versao = $data_uf['versao'];
-                } else {
-                    $default_versao = Nota::VERSAO;
-                }
-                $servicos = $values['nfce'][$ambiente];
-                $urls = ['qrcode', 'consulta'];
-                $data = $data_uf[$ambiente];
-                foreach ($servicos as $servico => $url) {
-                    if (!isset($data[$servico])) {
-                        $this->fail(
-                            sprintf(
-                                'Não existe url de %s para o serviço "%s", versão "%s" e estado "%s"',
-                                $ambiente,
-                                $servico,
-                                $default_versao,
-                                $uf
-                            )
-                        );
-                    }
-                    $info = $data[$servico];
-                    $this->assertEquals(
-                        [$uf => [$ambiente => [$servico => $url]]],
-                        [$uf => [$ambiente => [$servico => $info]]]
-                    );
                 }
             }
         }
