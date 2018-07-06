@@ -1410,7 +1410,7 @@ abstract class Nota implements Node
         return $id.Util::getDAC($id, 11);
     }
 
-    protected function getTotais()
+    public function getTotais()
     {
         $total = [];
         $total['produtos'] = 0.00;
