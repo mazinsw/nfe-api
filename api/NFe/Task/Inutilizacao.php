@@ -220,7 +220,7 @@ class Inutilizacao extends Retorno
      */
     public function isInutilizado()
     {
-        return $this->getStatus() == '102';
+        return in_array($this->getStatus(), ['102', '563']);
     }
 
     public function toArray($recursive = false)
