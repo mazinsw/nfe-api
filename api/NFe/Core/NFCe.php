@@ -255,9 +255,6 @@ class NFCe extends Nota
         }
         $this->setQRCodeURL($qrcode_url);
         $consulta_url = Util::loadNode($element, 'urlChave');
-        if (Util::nodeExists($element, 'Signature') && is_null($consulta_url)) {
-            throw new \Exception('Tag "urlChave" não encontrada na NFCe', 404);
-        }
         $this->setConsultaURL($consulta_url);
         return $element;
     }
