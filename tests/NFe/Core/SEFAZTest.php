@@ -17,6 +17,9 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
         Log::getInstance()->setHandler(null);
     }
     
+    /**
+     * @return \NFe\Core\SEFAZ default instance
+     */
     public static function createSEFAZ()
     {
         $emitente = \NFe\Entity\EmitenteTest::createEmitente();

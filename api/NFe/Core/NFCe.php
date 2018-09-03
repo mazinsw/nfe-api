@@ -39,7 +39,7 @@ class NFCe extends Nota
     /**
      * Versão do QRCode
      */
-    const QRCODE_VERSAO = '100';
+    const QRCODE_VERSAO = '2';
 
     /**
      * Texto com o QR-Code impresso no DANFE NFC-e
@@ -168,37 +168,34 @@ class NFCe extends Nota
         return $this;
     }
 
-    private function gerarQRCodeInfo(&$dom)
+    private function makeUrlQuery($dom)
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
         $totais = $this->getTotais();
-        // if ($this->getEmissao() == self::EMISSAO_NORMAL) {
+        if ($this->getEmissao() == self::EMISSAO_NORMAL) {
+            $params = [
+                $this->getID(), // chave de acesso
+                self::QRCODE_VERSAO, // versão do QR Code
+                $this->getAmbiente(true), // Identificação do ambiente
+                intval($config->getToken()), // Identificador do CSC (Sem zeros não significativos)
+            ];
+        } else { // contingência
             $dig_val = Util::loadNode($dom, 'DigestValue', 'Tag "DigestValue" não encontrada na NFCe');
-        // } else {
-        //     $dig_val = base64_encode(sha1($dom->saveXML(), true));
-        // }
-        $params = [
-            'chNFe' => $this->getID(),
-            'nVersao' => self::QRCODE_VERSAO,
-            'tpAmb' => $this->getAmbiente(true),
-            'cDest' => null,
-            'dhEmi' => Util::toHex($this->getDataEmissao(true)),
-            'vNF' => Util::toCurrency($totais['nota']),
-            'vICMS' => Util::toCurrency($totais[Imposto::GRUPO_ICMS]),
-            'digVal' => Util::toHex($dig_val),
-            'cIdToken' => Util::padDigit($config->getToken(), 6),
-            'cHashQRCode' => null
-        ];
-        if (!is_null($this->getDestinatario())) {
-            $params['cDest'] = $this->getDestinatario()->getID(true);
-        } else {
-            unset($params['cDest']);
+            $params = [
+                $this->getID(), // chave de acesso
+                self::QRCODE_VERSAO, // versão do QR Code
+                $this->getAmbiente(true), // Identificação do ambiente
+                date('d', $this->getDataEmissao()), // dia da data de emissão
+                Util::toCurrency($totais['nota']), // valor total da NFC-e
+                Util::toHex($dig_val), // DigestValue da NFC-e
+                intval($config->getToken()), // Identificador do CSC (Sem zeros não significativos)
+            ];
         }
-        $_params = $params;
-        unset($_params['cHashQRCode']);
-        $query = http_build_query($_params);
-        $params['cHashQRCode'] = sha1($query.$config->getCSC());
-        return $params;
+        $query = implode('|', $params);
+        $hash = sha1($query.$config->getCSC());
+        $params = [$query, $hash];
+        $query = implode('|', $params);
+        return ['p' => $query];
     }
 
     private function buildURLs($dom)
@@ -211,8 +208,8 @@ class NFCe extends Nota
         if (is_array($url)) {
             $url = $url['url'];
         }
-        $params = $this->gerarQRCodeInfo($dom);
-        $query = http_build_query($params);
+        $params = $this->makeUrlQuery($dom);
+        $query = urldecode(http_build_query($params));
         $url .= (strpos($url, '?') === false?'?':'&').$query;
         $this->setQRCodeURL($url);
         if (!isset($info['consulta'])) {

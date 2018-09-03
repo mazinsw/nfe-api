@@ -47,6 +47,9 @@ class SEFAZ
         $this->fromArray($sefaz);
     }
 
+    /**
+     * @return \NFe\Core\SEFAZ default instance
+     */
     public static function getInstance($new = false)
     {
         if (is_null(self::$instance) || $new) {
