@@ -129,7 +129,7 @@
 						"versao": "1.00"
 					},
 					"qrcode": "https://sistemas.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp",
-					"consulta": "http://sistemas.sefaz.am.gov.br/nfceweb/formConsulta.do"
+					"consulta": "http://www.sefaz.am.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"autorizacao": {
@@ -163,7 +163,7 @@
 						"versao": "1.00"
 					},
 					"qrcode": "http://homnfce.sefaz.am.gov.br/nfceweb/consultarNFCe.jsp",
-					"consulta": "http://homnfce.sefaz.am.gov.br/nfceweb/formConsulta.do"
+					"consulta": "http://www.sefaz.am.gov.br/nfce/consulta"
 				}
 			}
 		},
@@ -254,12 +254,12 @@
 			"nfce": {
 				"base": "SVRS",
 				"producao": {
-					"qrcode": "http://nfe.sefaz.ba.gov.br/servicos/nfce/modulos/geral/NFCEC_consulta_chave_acesso.aspx",
-					"consulta": "http://nfe.sefaz.ba.gov.br/servicos/nfce/default.aspx"
+					"qrcode": "http://nfe.sefaz.ba.gov.br/servicos/nfce/qrcode.aspx",
+					"consulta": "http://www.sefaz.ba.gov.br/nfce/consulta"
 				},
 				"homologacao": {
-					"qrcode": "http://hnfe.sefaz.ba.gov.br/servicos/nfce/modulos/geral/NFCEC_consulta_chave_acesso.aspx",
-					"consulta": "http://hnfe.sefaz.ba.gov.br/servicos/nfce/default.aspx"
+					"qrcode": "http://hnfe.sefaz.ba.gov.br/servicos/nfce/qrcode.aspx",
+					"consulta": "http://hinternet.sefaz.ba.gov.br/nfce/consulta"
 				}
 			}
 		},
@@ -362,7 +362,7 @@
 				"versao": "3.10",
 				"producao": {
 					"qrcode": "http://nfce.sefaz.ce.gov.br/pages/ShowNFCe.html",
-					"consulta": "http://nfce.sefaz.ce.gov.br/pages/consultaNota.jsf"
+					"consulta": "http://www.sefaz.ce.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"inutilizacao": {
@@ -395,7 +395,7 @@
 						"versao": "1.00"
 					},
 					"qrcode": "http://nfceh.sefaz.ce.gov.br/pages/ShowNFCe.html",
-					"consulta": "http://nfceh.sefaz.ce.gov.br/pages/consultaNota.jsf"
+					"consulta": "http://www.sefaz.ce.gov.br/nfce/consulta"
 				}
 			}
 		},
@@ -742,27 +742,27 @@
 			"nfce": {
 				"producao": {
 					"autorizacao": {
-						"url": "https://nfce.fazenda.ms.gov.br/ws/NFeAutorizacao4",
+						"url": "https://nfce.sefaz.ms.gov.br/ws/NFeAutorizacao4",
 						"servico": "NFeAutorizacao4"
 					},
 					"retorno": {
-						"url": "https://nfce.fazenda.ms.gov.br/ws/NFeRetAutorizacao4",
+						"url": "https://nfce.sefaz.ms.gov.br/ws/NFeRetAutorizacao4",
 						"servico": "NFeRetAutorizacao4"
 					},
 					"inutilizacao": {
-						"url": "https://nfce.fazenda.ms.gov.br/ws/NFeInutilizacao4",
+						"url": "https://nfce.sefaz.ms.gov.br/ws/NFeInutilizacao4",
 						"servico": "NFeInutilizacao4"
 					},
 					"protocolo": {
-						"url": "https://nfce.fazenda.ms.gov.br/ws/NFeConsultaProtocolo4",
+						"url": "https://nfce.sefaz.ms.gov.br/ws/NFeConsultaProtocolo4",
 						"servico": "NFeConsultaProtocolo4"
 					},
 					"status": {
-						"url": "https://nfce.fazenda.ms.gov.br/ws/NFeStatusServico4",
+						"url": "https://nfce.sefaz.ms.gov.br/ws/NFeStatusServico4",
 						"servico": "NFeStatusServico4"
 					},
 					"evento": {
-						"url": "https://nfce.fazenda.ms.gov.br/ws/NFeRecepcaoEvento4",
+						"url": "https://nfce.sefaz.ms.gov.br/ws/NFeRecepcaoEvento4",
 						"servico": "NFeRecepcaoEvento4",
 						"versao": "1.00"
 					},
@@ -1690,11 +1690,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "https://appnfc.sefa.pa.gov.br/portal/view/consultas/nfce/nfceForm.seam",
-					"consulta": "https://appnfc.sefa.pa.gov.br/portal/view/consultas/nfce/consultanfce.seam"
+					"consulta": "http://www.sefa.pa.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "https://appnfc.sefa.pa.gov.br/portal-homologacao/view/consultas/nfce/nfceForm.seam",
-					"consulta": "https://appnfc.sefa.pa.gov.br/portal-homologacao/view/consultas/nfce/consultanfce.seam"
+					"consulta": "http://www.sefa.pa.gov.br/nfce/consulta"
 				}
 			}
 		},
@@ -1741,11 +1741,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "https://www.sefaz.ap.gov.br/nfce/nfcep.php",
-					"consulta": "https://www.sefaz.ap.gov.br/sate/seg/SEGf_AcessarFuncao.jsp?cdFuncao=FIS_1261"
+					"consulta": "http://www.sefaz.ap.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "https://www.sefaz.ap.gov.br/nfcehml/nfce.php",
-					"consulta": "https://www.sefaz.ap.gov.br/sate1/seg/SEGf_AcessarFuncao.jsp?cdFuncao=FIS_1261"
+					"consulta": "http://www.sefaz.ap.gov.br/nfce/consulta"
 				}
 			}
 		},
