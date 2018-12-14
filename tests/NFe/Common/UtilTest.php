@@ -24,6 +24,17 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(Util::isLess(0.01, 0.01));
     }
 
+    public function testCreateDirectory(Type $var = null)
+    {
+        $root = dirname(dirname(dirname(__DIR__)));
+        $path = $root . '/storage/test123';
+        $this->assertFalse(file_exists($path));
+        Util::createDirectory($path);
+        $this->assertTrue(file_exists($path));
+        rmdir($path);
+        $this->assertFalse(file_exists($path));
+    }
+
     public function testGetModulo10()
     {
         $this->assertEquals(6, Util::getModulo10('1264361568465'));

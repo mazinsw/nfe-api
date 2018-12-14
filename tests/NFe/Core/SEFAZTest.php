@@ -46,6 +46,7 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
         $sefaz->fromArray($sefaz);
         $sefaz->fromArray($sefaz->toArray());
         $sefaz->fromArray(null);
+        $sefaz->toArray(true);
         $this->assertCount(2, $sefaz->getNotas());
     }
 
@@ -162,7 +163,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaGerada($nota, $xml)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaGerada($nota, $xml);
     }
 
     /**
@@ -170,7 +172,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaAssinada($nota, $xml)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaAssinada($nota, $xml);
     }
 
     /**
@@ -178,7 +181,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaValidada($nota, $xml)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaValidada($nota, $xml);
     }
 
     /**
@@ -186,7 +190,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaEnviando($nota, $xml)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaEnviando($nota, $xml);
     }
 
     /**
@@ -196,7 +201,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaContingencia($nota, $offline, $exception)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaContingencia($nota, $offline, $exception);
     }
 
     /**
@@ -204,7 +210,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaAutorizada($nota, $xml, $retorno)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaAutorizada($nota, $xml, $retorno);
     }
 
     /**
@@ -213,7 +220,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaCompleto($nota, $xml)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaCompleto($nota, $xml);
     }
 
     /**
@@ -222,7 +230,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaRejeitada($nota, $xml, $retorno)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaRejeitada($nota, $xml, $retorno);
     }
 
     /**
@@ -231,7 +240,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaDenegada($nota, $xml, $retorno)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaDenegada($nota, $xml, $retorno);
     }
 
     /**
@@ -241,7 +251,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaPendente($nota, $xml, $exception)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaPendente($nota, $xml, $exception);
     }
 
     /**
@@ -250,7 +261,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaProcessando($nota, $xml, $retorno)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaProcessando($nota, $xml, $retorno);
     }
 
     /**
@@ -258,7 +270,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaCancelada($nota, $xml, $retorno)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaCancelada($nota, $xml, $retorno);
     }
 
     /**
@@ -266,7 +279,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onNotaErro($nota, $exception)
     {
-        // TODO: implement
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onNotaErro($nota, $exception);
     }
 
     /**
@@ -274,6 +288,9 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onInutilizado($inutilizacao, $xml)
     {
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onInutilizado($inutilizacao, $xml);
+
         $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
@@ -286,6 +303,9 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onTarefaExecutada($tarefa, $retorno)
     {
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onTarefaExecutada($tarefa, $retorno);
+
         if ($tarefa->getAcao() == Tarefa::ACAO_INUTILIZAR) {
             $xml = $tarefa->getDocumento();
             $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
@@ -301,6 +321,8 @@ class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Event
      */
     public function onTarefaErro($tarefa, $exception)
     {
+        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste->onTarefaErro($tarefa, $exception);
         throw $exception;
     }
 }

@@ -195,6 +195,20 @@ class Util
     }
 
     /**
+     * Cria diretório com permissões
+     * @param string $dir caminho da pasta a ser criada
+     * @param int $access permissões da pasta
+     */
+    public static function createDirectory($dir, $access = 0711)
+    {
+        $oldUmask = umask(0);
+        if (!file_exists($dir)) {
+            mkdir($dir, $access, true);
+        }
+        umask($oldUmask);
+    }
+
+    /**
      * Retorna o módulo dos dígitos por 11
      * @param string $digitos dígitos para o cálculo
      * @return int            dígito do módulo 11

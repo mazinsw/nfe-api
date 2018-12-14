@@ -45,8 +45,7 @@ $RECYCLE.BIN/
 # Network Trash Folder
 # Temporary Items
 .apdisk
-docs/cert/*.pfx
-docs/cert/*.pem
+docs/certs/*.pfx
 *.sublime-workspace
 storage/
 vendor/

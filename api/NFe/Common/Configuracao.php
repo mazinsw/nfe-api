@@ -35,22 +35,50 @@ use NFe\Database\Estatico;
  */
 class Configuracao
 {
-
+    /**
+     * @var \NFe\Database\Banco
+     */
     private $banco;
+    /**
+     * @var \NFe\Entity\Emitente
+     */
     private $emitente;
+    /**
+     * @var Evento
+     */
     private $evento;
-    private $chave_publica;
-    private $chave_privada;
-    private $arquivo_chave_publica;
-    private $arquivo_chave_privada;
-    private $expiracao;
+    /**
+     * @var Certificado
+     */
+    private $certificado;
+    /**
+     * @var string
+     */
     private $token;
+    /**
+     * @var string
+     */
     private $csc;
+    /**
+     * @var string
+     */
     private $token_ibpt;
+    /**
+     * @var int
+     */
     private $tempo_limite;
+    /**
+     * @var string
+     */
     private $sincrono;
+    /**
+     * @var int
+     */
     private $offline;
 
+    /**
+     * @param mixed $configuracao array ou instância
+     */
     public function __construct($configuracao = [])
     {
         $this->fromArray($configuracao);
@@ -58,12 +86,18 @@ class Configuracao
 
     /**
      * Banco que fornece informações sobre items da nota como: Códigos e Taxas
+     * @return \NFe\Database\Banco
      */
     public function getBanco()
     {
         return $this->banco;
     }
 
+    /**
+     * Banco que fornece informações sobre items da nota como: Códigos e Taxas
+     * @param \NFe\Database\Banco $banco
+     * @return self
+     */
     public function setBanco($banco)
     {
         $this->banco = $banco;
@@ -72,12 +106,18 @@ class Configuracao
 
     /**
      * Emitente da nota fiscal
+     * @return \NFe\Entity\Emitente
      */
     public function getEmitente()
     {
         return $this->emitente;
     }
 
+    /**
+     * Emitente da nota fiscal
+     * @param \NFe\Entity\Emitente $emitente
+     * @return self
+     */
     public function setEmitente($emitente)
     {
         $this->emitente = $emitente;
@@ -86,12 +126,18 @@ class Configuracao
 
     /**
      * Informa a instancia que receberá os eventos do processamento das notas
+     * @return Evento
      */
     public function getEvento()
     {
         return $this->evento;
     }
 
+    /**
+     * Informa a instancia que receberá os eventos do processamento das notas
+     * @param Evento $evento
+     * @return self
+     */
     public function setEvento($evento)
     {
         $this->evento = $evento;
@@ -99,91 +145,139 @@ class Configuracao
     }
 
     /**
+     * Certificado para assinar os XMLs
+     * @return Certificado
+     */
+    public function getCertificado()
+    {
+        return $this->certificado;
+    }
+
+    /**
+     * Informa o certificado para assinar os XMLs
+     * @param Certificado $certificado
+     * @return self
+     */
+    public function setCertificado($certificado)
+    {
+        $this->certificado = $certificado;
+        return $this;
+    }
+
+    /**
      * Conteúdo da chave pública ou certificado no formato PEM
+     * @return string
+     * @deprecated Use getCertificado()->getChavePublica
      */
     public function getChavePublica()
     {
-        return $this->chave_publica;
+        return $this->getCertificado()->getChavePublica();
     }
 
+    /**
+     * Conteúdo da chave pública ou certificado no formato PEM
+     * @param string $chave_publica
+     * @return self
+     * @deprecated Use getCertificado()->setChavePublica
+     */
     public function setChavePublica($chave_publica)
     {
-        $this->chave_publica = $chave_publica;
-        $this->carregaChavePublica();
+        $this->getCertificado()->setChavePublica($chave_publica);
         return $this;
     }
 
     /**
      * Conteúdo da chave privada do certificado no formato PEM
+     * @return string
+     * @deprecated Use getCertificado()->getChavePrivada
      */
     public function getChavePrivada()
     {
-        return $this->chave_privada;
+        return $this->getCertificado()->getChavePrivada();
     }
 
+    /**
+     * Conteúdo da chave privada do certificado no formato PEM
+     * @param string $chave_privada
+     * @return self
+     * @deprecated Use getCertificado()->setChavePrivada
+     */
     public function setChavePrivada($chave_privada)
     {
-        $this->chave_privada = $chave_privada;
+        $this->getCertificado()->setChavePrivada($chave_privada);
         return $this;
     }
 
     /**
      * Informa o caminho do arquivo da chave pública ou certificado no formato
      * PEM
+     * @return string
+     * @deprecated Use getCertificado()->getArquivoChavePublica
      */
     public function getArquivoChavePublica()
     {
-        return $this->arquivo_chave_publica;
+        return $this->getCertificado()->getArquivoChavePublica();
     }
 
+    /**
+     * Informa o caminho do arquivo da chave pública ou certificado no formato
+     * PEM
+     * @param string $arquivo_chave_publica
+     * @return self
+     * @deprecated Use getCertificado()->setArquivoChavePublica
+     */
     public function setArquivoChavePublica($arquivo_chave_publica)
     {
-        $this->arquivo_chave_publica = $arquivo_chave_publica;
-        if (file_exists($arquivo_chave_publica)) {
-            $this->setChavePublica(file_get_contents($arquivo_chave_publica));
-        }
+        $this->getCertificado()->setArquivoChavePublica($arquivo_chave_publica);
         return $this;
     }
 
     /**
      * Caminho do arquivo da chave privada do certificado no formato PEM
+     * @return string
+     * @deprecated Use getCertificado()->getArquivoChavePrivada
      */
     public function getArquivoChavePrivada()
     {
-        return $this->arquivo_chave_privada;
+        return $this->getCertificado()->getArquivoChavePrivada();
     }
 
+    /**
+     * Altera o caminho do arquivo da chave privada do certificado no formato PEM
+     * @param string $arquivo_chave_privada
+     * @return self
+     * @deprecated Use getCertificado()->setArquivoChavePrivada
+     */
     public function setArquivoChavePrivada($arquivo_chave_privada)
     {
-        $this->arquivo_chave_privada = $arquivo_chave_privada;
-        if (file_exists($arquivo_chave_privada)) {
-            $this->setChavePrivada(file_get_contents($arquivo_chave_privada));
-        }
+        $this->getCertificado()->setArquivoChavePrivada($arquivo_chave_privada);
         return $this;
     }
 
     /**
      * Data de expiração do certificado em timestamp
+     * @return int
+     * @deprecated Use getCertificado()->getExpiracao
      */
     public function getExpiracao()
     {
-        return $this->expiracao;
-    }
-
-    private function setExpiracao($expiracao)
-    {
-        $this->expiracao = $expiracao;
-        return $this;
+        return $this->getCertificado()->getExpiracao();
     }
 
     /**
      * Token do CSC
+     * @return string
      */
     public function getToken()
     {
         return $this->token;
     }
 
+    /**
+     * Informa o token do CSC, geralmente 000001
+     * @param string $token
+     * @return self
+     */
     public function setToken($token)
     {
         $this->token = $token;
@@ -192,12 +286,18 @@ class Configuracao
 
     /**
      * Código do contribuinte para emissão de nota fiscal
+     * @return string
      */
     public function getCSC()
     {
         return $this->csc;
     }
 
+    /**
+     * Informa o código do contribuinte para emissão de nota fiscal
+     * @param string $csc
+     * @return self
+     */
     public function setCSC($csc)
     {
         $this->csc = $csc;
@@ -298,9 +398,7 @@ class Configuracao
         $configuracao['banco'] = $this->getBanco();
         $configuracao['emitente'] = $this->getEmitente();
         $configuracao['evento'] = $this->getEvento();
-        $configuracao['arquivo_chave_publica'] = $this->getArquivoChavePublica();
-        $configuracao['arquivo_chave_privada'] = $this->getArquivoChavePrivada();
-        $configuracao['expiracao'] = $this->getExpiracao();
+        $configuracao['certificado'] = $this->getCertificado();
         $configuracao['token'] = $this->getToken();
         $configuracao['csc'] = $this->getCSC();
         $configuracao['token_ibpt'] = $this->getTokenIBPT();
@@ -319,30 +417,11 @@ class Configuracao
         }
         $this->setBanco(new Estatico(isset($configuracao['banco']) ? $configuracao['banco'] : []));
         $this->setEmitente(new Emitente(isset($configuracao['emitente']) ? $configuracao['emitente'] : []));
+        $this->setCertificado(new Certificado(isset($configuracao['certificado']) ? $configuracao['certificado'] : []));
         if (isset($configuracao['evento'])) {
             $this->setEvento($configuracao['evento']);
         } else {
             $this->setEvento(null);
-        }
-        if (isset($configuracao['chave_publica'])) {
-            $this->setChavePublica($configuracao['chave_publica']);
-        } else {
-            $this->setChavePublica(null);
-        }
-        if (isset($configuracao['chave_privada'])) {
-            $this->setChavePrivada($configuracao['chave_privada']);
-        } else {
-            $this->setChavePrivada(null);
-        }
-        if (isset($configuracao['arquivo_chave_publica'])) {
-            $this->setArquivoChavePublica($configuracao['arquivo_chave_publica']);
-        } else {
-            $this->setArquivoChavePublica(null);
-        }
-        if (isset($configuracao['arquivo_chave_privada'])) {
-            $this->setArquivoChavePrivada($configuracao['arquivo_chave_privada']);
-        } else {
-            $this->setArquivoChavePrivada(null);
         }
         if (isset($configuracao['token'])) {
             $this->setToken($configuracao['token']);
@@ -372,26 +451,14 @@ class Configuracao
         return $this;
     }
 
-    private function carregaChavePublica()
-    {
-        if (is_null($this->getChavePublica())) {
-            $this->setExpiracao(null);
-        } else {
-            $cert = openssl_x509_read($this->getChavePublica());
-            $cert_data = openssl_x509_parse($cert);
-            $this->setExpiracao($cert_data['validTo_time_t']);
-        }
-    }
-
+    /**
+     * Certifica que o certificado está informado e é válido
+     * @throws \Exception quando o certificado estiver expirado ou não informado
+     */
     public function verificaValidadeCertificado()
     {
-        if (getenv('APP_ENV') == 'testing') {
-            return;
-        }
-        if (is_null($this->getExpiracao())) {
-            throw new \Exception('A data de expiração do certificado não foi informada', 401);
-        } elseif ($this->getExpiracao() < time()) {
-            throw new \Exception('O certificado digital expirou', 500);
+        if (getenv('APP_ENV') != 'testing') {
+            $this->getCertificado()->requerValido();
         }
     }
 }

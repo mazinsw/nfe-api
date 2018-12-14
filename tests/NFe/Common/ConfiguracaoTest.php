@@ -52,6 +52,9 @@ class ConfiguracaoTest extends \PHPUnit_Framework_TestCase
         $this->config
             ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
             ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
+        $this->config
+            ->setChavePublica($this->config->getChavePublica())
+            ->setChavePrivada($this->config->getChavePrivada());
         $this->assertEquals('2010-10-02', date('Y-m-d', $this->config->getExpiracao()));
     }
 }

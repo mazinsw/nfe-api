@@ -37,18 +37,37 @@ use NFe\Common\Ajuste;
  */
 class SEFAZ
 {
-
+    /**
+     * Lista de notas a serem processadas
+     * @var Nota[]
+     */
     private $notas;
+
+    /**
+     * Configurações a serem usadas
+     * @var \NFe\Common\Configuracao
+     */
     private $configuracao;
+
+    /**
+     * Instância global
+     * @var self
+     */
     private static $instance;
 
+    /**
+     * Constroi uma intência a partir de outra ou array
+     * @param mixed $sefaz outra instância ou array
+     */
     public function __construct($sefaz = [])
     {
         $this->fromArray($sefaz);
     }
 
     /**
-     * @return \NFe\Core\SEFAZ default instance
+     * Obtém a instância global dessa classe
+     * @param bool $new cria uma nova instância
+     * @return self default instance
      */
     public static function getInstance($new = false)
     {
@@ -58,34 +77,62 @@ class SEFAZ
         return self::$instance;
     }
 
+    /**
+     * Lista de notas a serem processadas
+     * @return Nota[]
+     */
     public function getNotas()
     {
         return $this->notas;
     }
 
+    /**
+     * Informa a lista de notas a serem processadas
+     * @param Nota[] $notas
+     * @return self
+     */
     public function setNotas($notas)
     {
         $this->notas = $notas;
         return $this;
     }
 
+    /**
+     * Adiciona uma nota ao processamento
+     * @param Nota $nota
+     * @return self
+     */
     public function addNota($nota)
     {
         $this->notas[] = $nota;
         return $this;
     }
 
+    /**
+     * Configuração usada atualmente
+     * @return \NFe\Common\Configuracao
+     */
     public function getConfiguracao()
     {
         return $this->configuracao;
     }
 
+    /**
+     * Informa a nova configuração a ser usada
+     * @param \NFe\Common\Configuracao $configuracao
+     * @return self
+     */
     public function setConfiguracao($configuracao)
     {
         $this->configuracao = $configuracao;
         return $this;
     }
 
+    /**
+     * Converte a instância atual em array
+     * @param bool $recursive se deve converter os itens também em array
+     * @return array
+     */
     public function toArray($recursive = false)
     {
         $sefaz = [];
@@ -107,6 +154,11 @@ class SEFAZ
         return $sefaz;
     }
 
+    /**
+     * Preenche a instância atual com dados do array ou outra instância
+     * @param mixed $sefaz outra instância ou array de dados
+     * @return self
+     */
     public function fromArray($sefaz = [])
     {
         if ($sefaz instanceof SEFAZ) {
@@ -123,7 +175,13 @@ class SEFAZ
         return $this;
     }
 
-    private function despacha($nota, &$dom, $retorno)
+    /**
+     * Chama os eventos da nota lançando exceção em caso de rejeição
+     * @param Nota $nota nota a ser despachada
+     * @param \DOMDocument $dom xml da nota
+     * @param \NFe\Task\Retorno $retorno resposta da SEFAZ
+     */
+    private function despacha($nota, $dom, $retorno)
     {
         $evento = $this->getConfiguracao()->getEvento();
         if ($retorno->isRecebido()) {
@@ -148,6 +206,7 @@ class SEFAZ
      * Envia as notas adicionadas para a SEFAZ, caso não consiga, torna-as em contingência
      * todos os status são informados no evento da configuração, caso não possua evento,
      * uma \Exception será lançada na primeira falha
+     * @return int quantidade de notas processadas ou que entraram em contingência
      */
     public function autoriza()
     {
@@ -205,6 +264,7 @@ class SEFAZ
 
     /**
      * Consulta o status das notas em processamento
+     * @return int quantidade de consultas executadas com sucesso
      */
     public function consulta($pendencias)
     {
@@ -230,8 +290,10 @@ class SEFAZ
         return $i;
     }
 
-    /* Consulta se as notas existem e cancela ou inutiliza seus números
+    /**
+     * Consulta se as notas existem e cancela ou inutiliza seus números
      * Também processa pedido de inutilização e cancelamento de notas
+     * @return int quantidade de tarefas executadas com sucesso
      */
     public function executa($tarefas)
     {
@@ -266,9 +328,11 @@ class SEFAZ
         return $i;
     }
 
-    /* *
+    /**
      * Inutiliza um intervalo de números de notas fiscais e insere o resultado no
      * próprio objeto de inutilização
+     * @param \NFe\Task\Inutilizacao $inutilizacao tarefa a ser inutilizada
+     * @return bool se a inutilização foi realizada com sucesso
      */
     public function inutiliza($inutilizacao)
     {
@@ -286,6 +350,7 @@ class SEFAZ
 
     /**
      * Obtém as notas pendentes de autorização e envia para a SEFAZ
+     * @return int quantidade de tarefas e notas processadas
      */
     public function processa()
     {

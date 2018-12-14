@@ -7,10 +7,24 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
     {
     }
 
+    public function testIndicador()
+    {
+        $pagamento = new Pagamento();
+        $pagamento->setIndicador('0');
+        $this->assertEquals(Pagamento::INDICADOR_AVISTA, $pagamento->getIndicador());
+        $this->assertEquals('0', $pagamento->getIndicador(true));
+        $pagamento->setIndicador('1');
+        $this->assertEquals(Pagamento::INDICADOR_APRAZO, $pagamento->getIndicador());
+        $this->assertEquals('1', $pagamento->getIndicador(true));
+        $pagamento->setIndicador('2');
+        $this->assertEquals('2', $pagamento->getIndicador());
+        $this->assertEquals('2', $pagamento->getIndicador(true));
+    }
+
     public function testPagamentoDinheiroXML()
     {
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DINHEIRO);
+        $pagamento = new Pagamento();
+        $pagamento->setForma(Pagamento::FORMA_DINHEIRO);
         $pagamento->setValor(8.10);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
@@ -40,7 +54,7 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoDinheiroXML.xml');
 
-        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp->documentElement);
 
         $xml = $pagamento->getNode();
@@ -52,8 +66,8 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
 
     public function testPagamentoTrocoXML()
     {
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DINHEIRO);
+        $pagamento = new Pagamento();
+        $pagamento->setForma(Pagamento::FORMA_DINHEIRO);
         $pagamento->setValor(-8.10);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
@@ -83,7 +97,7 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoTrocoXML.xml');
 
-        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp, 'vTroco');
 
         $xml = $pagamento->getNode();
@@ -95,12 +109,12 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
 
     public function testPagamentoCartaoXML()
     {
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_CREDITO);
+        $pagamento = new Pagamento();
+        $pagamento->setForma(Pagamento::FORMA_CREDITO);
         $pagamento->setValor(4.50);
         $pagamento->setIntegrado('Y');
         $pagamento->setCredenciadora('60889128000422');
-        $pagamento->setBandeira(\NFe\Entity\Pagamento::BANDEIRA_MASTERCARD);
+        $pagamento->setBandeira(Pagamento::BANDEIRA_MASTERCARD);
         $pagamento->setAutorizacao('110011');
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
@@ -130,7 +144,7 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoXML.xml');
 
-        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp->documentElement);
 
         $xml = $pagamento->getNode();
@@ -142,11 +156,11 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
 
     public function testPagamentoCartaoNaoIntegradoXML()
     {
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DEBITO);
+        $pagamento = new Pagamento();
+        $pagamento->setForma(Pagamento::FORMA_DEBITO);
         $pagamento->setValor(4.50);
         $pagamento->setIntegrado('N');
-        $pagamento->setBandeira(\NFe\Entity\Pagamento::BANDEIRA_VISA);
+        $pagamento->setBandeira(Pagamento::BANDEIRA_VISA);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
         $pagamento->fromArray(null);
@@ -175,7 +189,7 @@ class PagamentoTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml');
 
-        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp->documentElement);
 
         $xml = $pagamento->getNode();

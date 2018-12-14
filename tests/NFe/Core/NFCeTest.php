@@ -373,6 +373,13 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         self::loadNFCeValidada();
     }
 
+    public function testNFCeLoadFail()
+    {
+        $nfce = new \NFe\Core\NFCe();
+        $this->setExpectedException('\Exception');
+        $nfce->load('invalido.xml');
+    }
+
     public function testNFCeLoadXML()
     {
         $dom_cmp = self::loadNFCeXML();

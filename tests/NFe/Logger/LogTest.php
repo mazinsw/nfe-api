@@ -5,7 +5,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        // Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
+        Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
     }
 
     protected function tearDown()

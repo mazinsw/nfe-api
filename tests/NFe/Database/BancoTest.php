@@ -222,8 +222,8 @@ class BancoTest extends \PHPUnit_Framework_TestCase
         
         $sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
         $sefaz->getConfiguracao()
-            ->setArquivoChavePublica(dirname(dirname(dirname(__DIR__))) . '/docs/cert/public.pem')
-            ->setArquivoChavePrivada(dirname(dirname(dirname(__DIR__))) . '/docs/cert/private.pem');
+            ->setArquivoChavePublica(dirname(dirname(dirname(__DIR__))) . '/docs/certs/public.pem')
+            ->setArquivoChavePrivada(dirname(dirname(dirname(__DIR__))) . '/docs/certs/private.pem');
         $banco = $sefaz->getConfiguracao()->getBanco();
         $chave_publica = $sefaz->getConfiguracao()->getArquivoChavePublica();
         $chave_privada = $sefaz->getConfiguracao()->getArquivoChavePrivada();

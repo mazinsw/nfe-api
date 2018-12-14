@@ -1,5 +1,5 @@
 # NFe-API
-## API para geração e envio de notas fiscais eletrônicas brasileiras (Beta)
+## Bliblioteca para geração, transmissão e tratamento de eventos de notas fiscais eletrônicas
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Build Status][ico-travis]][link-travis]
@@ -7,16 +7,17 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-###### Essa biblioteca permite a geração de notas fiscais de consumidor, serviço e outras
+###### Essa biblioteca permite a geração, transmissão e tratamento de eventos de notas fiscais eletrônicas do Brasil
 
 ## Vantagens
 - Código bem estruturado e bem reaproveitado que permite a fácil manutenção
-- Estrutura de suporte para vários modelos de notas
-- Fácil configuração e usabilidade
+- Estrutura de código expansível para vários modelos de notas
+- Fácil configuração e usabilidade (Só precisa implementar 2 classes para integração)
 - Testes e cobertura de código que garantem melhor estabilidade
+- Estrutura desvinculada do XML, atualizações quase não afetam em produção
 
 ## Motivo do projeto
-As biliotecas de código aberto encontradas até o momento (2016) não fornecem uma estrutura sólida e de fácil utilização/manutenção, dessa forma surgiu a necessidade de criar uma bilioteca capaz de gerar notas fiscais em diversos modelos e que seja de fácil utilização 
+As biliotecas de código aberto encontradas até o momento (2016) não fornecem uma estrutura sólida e de fácil utilização/manutenção, dessa forma surgiu a necessidade de criar uma bilioteca capaz de gerar notas fiscais em diversos modelos e que seja de fácil utilização
 
 ## Ideia do projeto
 A ideia é criar uma bilioteca em que as entidades da nota sejam implementadas em classes separadas, cada uma gerando seu próprio nó XML, no final da geração todos os nós são unificados assim gerando o XML por completo, dessa forma fica fácil a manutenção pois parte da ideia da divisão e conquista
@@ -25,85 +26,21 @@ A ideia é criar uma bilioteca em que as entidades da nota sejam implementadas e
 
 Você precisará do [Composer][link-composer] para instalar essa biblioteca.
 
-Execute o comando abaixo na pasta do projeto
+Execute o comando abaixo na pasta do seu projeto
 
 ```sh
 composer require mazinsw/nfe-api
 ```
 
-## Exemplo básico de geração de nota fiscal
-```php
-<?php
+## Documentação
 
-use NFe\Core\NFCe;
-use NFe\Entity\Emitente;
-/* outras declarações use */
+Acesse [aqui](../../wiki) para ver a documentação
 
-$nfce = new NFCe();
-$nfce->setCodigo('123456');
-$nfce->setSerie('1');
-$nfce->setNumero('73');
-$nfce->setDataEmissao(time());
-/* outras informações */
-
-/* Emitente */
-$emitente = new Emitente();
-$emitente->setRazaoSocial('Empresa LTDA');
-$emitente->setFantasia('Minha Empresa');
-$emitente->setCNPJ('08120787000152');
-$emitente->setIE('123456789');
-$emitente->setRegime(Emitente::REGIME_SIMPLES);
-
-$endereco = new Endereco();
-$endereco->setCEP('01122500');
-$endereco->getMunicipio()
-         ->setNome('Paranavaí')
-         ->getEstado()
-         ->setUF('PR');
-$endereco->setBairro('Centro');
-$endereco->setLogradouro('Rua Paranavaí');
-$endereco->setNumero('123');
-
-$emitente->setEndereco($endereco);
-$nfce->setEmitente($emitente);
-
-/* Destinatário */
-$destinatario = new Destinatario();
-$destinatario->setNome('Fulano da Silva');
-$destinatario->setCPF('12345678912');
-
-$destinatario->setEndereco($endereco);
-$nfce->setDestinatario($destinatario);
-
-/* Produtos */
-$produto = new Produto();
-$produto->setCodigo(123456);
-$produto->setCodigoBarras('7894900011531');
-$produto->setDescricao('REFRIGERANTE COCA-COLA 2L');
-$produto->setUnidade(Produto::UNIDADE_UNIDADE);
-$produto->setPreco(4.99);
-$produto->setQuantidade(1);
-$produto->setNCM('22021000');
-$produto->setCEST('0300700');
-$produto->setCFOP('5405');
-$nfce->addProduto($produto);
-
-/* Pagamentos */
-$pagamento = new Pagamento();
-$pagamento->setForma(Pagamento::FORMA_DINHEIRO);
-$pagamento->setValor(9.49);
-$nfce->addPagamento($pagamento);
-
-$sefaz = SEFAZ::getInstance();
-$sefaz->addNota($nfce)
-	  ->autoriza();
-```
-
-## Expansão do projeto
-Como o projeto é grande, precisamos da colaboração de desenvolvedores para melhoria do projeto, para isso envie suas implementações por meio de um Pull request
+## Colaboração no projeto
+Para melhoria do projeto envie suas implementações por meio de um Pull request
 
 ## Solução de problemas
-O código foi implementado e testado com PHP 5.6, verifique sua versão do PHP em caso de falhas na execução
+Caso tenha problemas ao utilizar a biblioteca, acesse o grupo no Discord: https://discord.gg/XGU2Y77
 
 ## Dependências
 - PHP 5.6 ou superior
@@ -111,7 +48,9 @@ O código foi implementado e testado com PHP 5.6, verifique sua versão do PHP e
 - Extensão curl para envio da nota
 
 ## Limitações
-- Apenas para o modelo NFC-e foi implementado e testado
+- Apenas o modelo NFC-e foi implementado e testado
+- Só funciona com certificado digital modelo A1
+- Não suporta duas versões da NF-e ao mesmo tempo
 
 ## Licença
 Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.
