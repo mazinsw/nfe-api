@@ -78,6 +78,20 @@ class NFeTest extends \PHPUnit_Framework_TestCase
         $destinatario->fromArray(null);
         $nfe->setDestinatario($destinatario);
 
+        /* Responsável */
+        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel->setCNPJ('12345678000123');
+        $responsavel->setContato('Empresa LTDA');
+        $responsavel->setEmail('contato@empresa.com.br');
+        $responsavel->setTelefone('11988220055');
+        $responsavel->setIDCsrt(99);
+        $responsavel->setHashCsrt('aWv6LeEM4X6u4+qBl2OYZ8grigw=');
+
+        $responsavel->fromArray($responsavel);
+        $responsavel->fromArray($responsavel->toArray());
+        $responsavel->fromArray(null);
+        $nfe->setResponsavel($responsavel);
+
         /* Produtos */
         $produto = new \NFe\Entity\Produto();
         $produto->setCodigo(123456);

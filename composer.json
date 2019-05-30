@@ -50,6 +50,9 @@
         ],
         "cover": [
             "phpunit --coverage-html storage/coverage"
+        ],
+        "check_psr": [
+            "phpcs --colors --standard=psr2 api/NFe/ tests/"
         ]
     }
 }

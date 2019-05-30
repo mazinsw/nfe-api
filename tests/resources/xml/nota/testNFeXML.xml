@@ -199,5 +199,13 @@
         <xTexto>123456</xTexto>
       </obsFisco>
     </infAdic>
+    <infRespTec>
+      <CNPJ>12345678000123</CNPJ>
+      <xContato>Empresa LTDA</xContato>
+      <email>contato@empresa.com.br</email>
+      <fone>11988220055</fone>
+      <idCSRT>99</idCSRT>
+      <hashCSRT>aWv6LeEM4X6u4+qBl2OYZ8grigw=</hashCSRT>
+    </infRespTec>
   </infNFe>
 </NFe>

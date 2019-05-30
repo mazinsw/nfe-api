@@ -9,6 +9,7 @@ class InstanciacaoTest extends \PHPUnit_Framework_TestCase
 
     public function testNewEntity()
     {
+        $responsavel = new \NFe\Entity\Responsavel();
         $destinatario = new \NFe\Entity\Destinatario();
         $emitente = new \NFe\Entity\Emitente();
         $endereco = new \NFe\Entity\Endereco();

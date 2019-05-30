@@ -37,6 +37,7 @@ use NFe\Entity\Emitente;
 use NFe\Entity\Pagamento;
 use NFe\Entity\Transporte;
 use NFe\Entity\Destinatario;
+use NFe\Entity\Responsavel;
 use NFe\Exception\ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
@@ -146,6 +147,10 @@ abstract class Nota implements Node
      * Destinatário que receberá os produtos
      */
     private $destinatario;
+    /**
+     * Grupo de informações do responsável técnico pelo sistema
+     */
+    private $responsavel;
     /**
      * Produtos adicionados na nota
      */
@@ -354,6 +359,26 @@ abstract class Nota implements Node
     public function setDestinatario($destinatario)
     {
         $this->destinatario = $destinatario;
+        return $this;
+    }
+
+    /**
+     * Grupo de informações do responsável técnico pelo sistema
+     * @return mixed responsável da Nota
+     */
+    public function getResponsavel()
+    {
+        return $this->responsavel;
+    }
+
+    /**
+     * Altera o valor do grupo de informações do responsável técnico pelo sistema
+     * @param mixed $responsavel novo valor para grupo de informações do responsável
+     * @return Nota A própria instância da classe
+     */
+    public function setResponsavel($responsavel)
+    {
+        $this->responsavel = $responsavel;
         return $this;
     }
 
@@ -1194,6 +1219,11 @@ abstract class Nota implements Node
         } else {
             $nota['destinatario'] = $this->getDestinatario();
         }
+        if (!is_null($this->getResponsavel()) && $recursive) {
+            $nota['responsavel'] = $this->getResponsavel()->toArray($recursive);
+        } else {
+            $nota['responsavel'] = $this->getResponsavel();
+        }
         if ($recursive) {
             $produtos = [];
             $_produtos = $this->getProdutos();
@@ -1271,6 +1301,7 @@ abstract class Nota implements Node
         }
         $this->setEmitente(new Emitente(isset($nota['emitente']) ? $nota['emitente'] : []));
         $this->setDestinatario(new Destinatario(isset($nota['destinatario']) ? $nota['destinatario'] : []));
+        $this->setResponsavel(new Responsavel(isset($nota['responsavel']) ? $nota['responsavel'] : []));
         if (!isset($nota['produtos'])) {
             $this->setProdutos([]);
         } else {
@@ -1657,6 +1688,11 @@ abstract class Nota implements Node
         // TODO: adicionar exportação
         // TODO: adicionar compra
         // TODO: adicionar cana
+        if (!is_null($this->getResponsavel())) {
+            $responsavel = $this->getResponsavel()->getNode();
+            $responsavel = $dom->importNode($responsavel, true);
+            $info->appendChild($responsavel);
+        }
         $element->appendChild($info);
         $dom->appendChild($element);
         return $element;
@@ -1832,6 +1868,13 @@ abstract class Nota implements Node
             $destinatario->loadNode($_fields->item(0), 'dest');
         }
         $this->setDestinatario($destinatario);
+        $_fields = $info->getElementsByTagName('infRespTec');
+        $responsavel = null;
+        if ($_fields->length > 0) {
+            $responsavel = new Responsavel();
+            $responsavel->loadNode($_fields->item(0), 'infRespTec');
+        }
+        $this->setResponsavel($responsavel);
         $produtos = [];
         $_items = $info->getElementsByTagName('det');
         foreach ($_items as $_item) {

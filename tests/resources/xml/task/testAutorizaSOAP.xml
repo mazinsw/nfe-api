@@ -3,7 +3,7 @@
   <soap12:Body>
     <nfeDadosMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4">
       <enviNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
-        <idLote>154394872639249</idLote>
+        <idLote>155923552566533</idLote>
         <indSinc>1</indSinc>
         <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
           <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="4.00">
@@ -218,6 +218,14 @@
                 <xTexto>123456</xTexto>
               </obsFisco>
             </infAdic>
+            <infRespTec>
+              <CNPJ>12345678000123</CNPJ>
+              <xContato>Empresa LTDA</xContato>
+              <email>contato@empresa.com.br</email>
+              <fone>11988220055</fone>
+              <idCSRT>99</idCSRT>
+              <hashCSRT>aWv6LeEM4X6u4+qBl2OYZ8grigw=</hashCSRT>
+            </infRespTec>
           </infNFe>
           <infNFeSupl>
             <qrCode><![CDATA[http://www.fazenda.pr.gov.br/nfce/qrcode/?p=41160908380787000176650010000000811778821925|2|2|0|cba885c8d7cb9ad92421d05b41e1d74231285cd1]]></qrCode>
@@ -233,10 +241,10 @@
                   <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
                 </Transforms>
                 <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-                <DigestValue>naFJlEsRbUm5H/tPaGhY+jg7rMY=</DigestValue>
+                <DigestValue>YMzAnWPmtPRfvEDecieggG5ODFE=</DigestValue>
               </Reference>
             </SignedInfo>
-            <SignatureValue>Q4KK8Vo+JFp902F24YAcsWGc6E3KvsGxf7YmF5kX8FxoQDQXPGc3IlThz/LzTkILpo8O96mBRLbg9Vqtcgc5YwzkuiQ6msoYCSWNdL937d3O0CQxj3Tw83m+ydFLZhLfoo/trleo3Ieww4kkKsbvsw4aShM+O34zCsDAtPQOyEQ=</SignatureValue>
+            <SignatureValue>WHcGqVxtV6u4Il5A/aOsAAu1gT8S3FRf0YgxNuWWbc8IAWaiOlXJ/k5B9M1EhCaU9uEcpOkaDqN21HNDROsHXpfGUYGd1tjrqjPFZ0ZdL0IVtoPNrwrk9AzSxx6K8PzP/wOO/RPCkobThwQsd1aL/n3baAMxEvBXmEanT2mgezQ=</SignatureValue>
             <KeyInfo>
               <X509Data>
                 <X509Certificate>MIIEqzCCA5OgAwIBAgIDMTg4MA0GCSqGSIb3DQEBBQUAMIGSMQswCQYDVQQGEwJCUjELMAkGA1UECBMCUlMxFTATBgNVBAcTDFBvcnRvIEFsZWdyZTEdMBsGA1UEChMUVGVzdGUgUHJvamV0byBORmUgUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMSEwHwYDVQQDExhORmUgLSBBQyBJbnRlcm1lZGlhcmlhIDEwHhcNMDkwNTIyMTcwNzAzWhcNMTAxMDAyMTcwNzAzWjCBnjELMAkGA1UECBMCUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMR0wGwYDVQQKExRUZXN0ZSBQcm9qZXRvIE5GZSBSUzEVMBMGA1UEBxMMUE9SVE8gQUxFR1JFMQswCQYDVQQGEwJCUjEtMCsGA1UEAxMkTkZlIC0gQXNzb2NpYWNhbyBORi1lOjk5OTk5MDkwOTEwMjcwMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx1O/e1Q+xh+wCoxa4pr/5aEFt2dEX9iBJyYu/2a78emtorZKbWeyK435SRTbHxHSjqe1sWtIhXBaFa2dHiukT1WJyoAcXwB1GtxjT2VVESQGtRiujMa+opus6dufJJl7RslAjqN/ZPxcBXaezt0nHvnUB/uB1K8WT9G7ES0V17wIDAQABo4IBfjCCAXowIgYDVR0jAQEABBgwFoAUPT5TqhNWAm+ZpcVsvB7malDBjEQwDwYDVR0TAQH/BAUwAwEBADAPBgNVHQ8BAf8EBQMDAOAAMAwGA1UdIAEBAAQCMAAwgawGA1UdEQEBAASBoTCBnqA4BgVgTAEDBKAvBC0yMjA4MTk3Nzk5OTk5OTk5OTk5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDCgEgYFYEwBAwKgCQQHREZULU5GZaAZBgVgTAEDA6AQBA45OTk5OTA5MDkxMDI3MKAXBgVgTAEDB6AOBAwwMDAwMDAwMDAwMDCBGmRmdC1uZmVAcHJvY2VyZ3MucnMuZ292LmJyMCAGA1UdJQEB/wQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDBTBgNVHR8BAQAESTBHMEWgQ6BBhj9odHRwOi8vbmZlY2VydGlmaWNhZG8uc2VmYXoucnMuZ292LmJyL0xDUi9BQ0ludGVybWVkaWFyaWEzOC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAJFytXuiS02eJO0iMQr/Hi+Ox7/vYiPewiDL7s5EwO8A9jKx9G2Baz0KEjcdaeZk9a2NzDEgX9zboPxhw0RkWahVCP2xvRFWswDIa2WRUT/LHTEuTeKCJ0iF/um/kYM8PmWxPsDWzvsCCRp146lc0lz9LGm5ruPVYPZ/7DAoimUk3bdCMW/rzkVYg7iitxHrhklxH7YWQHUwbcqPt7Jv0RJxclc1MhQlV2eM2MO1iIlk8Eti86dRrJVoicR1bwc6/YDqDp4PFONTi1ddewRu6elGS74AzCcNYRSVTINYiZLpBZO0uivrnTEnsFguVnNtWb9MAHGt3tkR0gAVs6S0fm8=</X509Certificate>
