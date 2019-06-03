@@ -1034,11 +1034,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe",
-					"consulta": "http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe"
+					"consulta": "nfce.sefaz.pe.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe",
-					"consulta": "http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe"
+					"consulta": "nfce.sefaz.pe.gov.br/nfce/consulta"
 				}
 			}
 		},
