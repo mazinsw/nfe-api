@@ -59,6 +59,7 @@ XML;
     public function __construct($base_url = null)
     {
         parent::__construct($base_url);
+        $this->setOpt(CURLOPT_CAINFO, dirname(dirname(dirname(__DIR__))) . '/docs/cacert/cacert.pem');
         $this->setHeader('Content-Type', 'application/soap+xml; charset=utf-8');
         $this->setConnectTimeout(4);
         $this->setTimeout(6);

@@ -239,7 +239,7 @@ class SEFAZ
                         }
                         Log::debug('SEFAZ.autoriza('.$e->getCode().') - Mudando emissão para contingência: '.
                             $e->getMessage().' - '.$nota->getID(true));
-                        $msg = substr('Falha no envio da nota: '.$e->getMessage(), 0, 256);
+                        $msg = 'Falha no envio da nota';
                         $nota->setEmissao(Nota::EMISSAO_CONTINGENCIA);
                         $nota->setDataContingencia(time());
                         $nota->setJustificativa($msg);

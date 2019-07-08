@@ -650,8 +650,62 @@
 			},
 			"nfce": {
 				"producao": {
+					"autorizacao": {
+						"url": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeAutorizacao4",
+						"servico": "NFeAutorizacao4"
+					},
+					"retorno": {
+						"url": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeRetAutorizacao4",
+						"servico": "NFeRetAutorizacao4"
+					},
+					"inutilizacao": {
+						"url": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeInutilizacao4",
+						"servico": "NFeInutilizacao4"
+					},
+					"protocolo": {
+						"url": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeConsultaProtocolo4",
+						"servico": "NFeConsultaProtocolo4"
+					},
+					"status": {
+						"url": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4",
+						"servico": "NFeStatusServico4"
+					},
+					"evento": {
+						"url": "https://nfce.fazenda.mg.gov.br/nfce/services/NFeRecepcaoEvento4",
+						"servico": "NFeRecepcaoEvento4",
+						"versao": "1.00"
+					},
+					"qrcode": "https://nfce.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
+					"consulta": "http://nfce.fazenda.mg.gov.br/portalnfce"
 				},
 				"homologacao": {
+					"autorizacao": {
+						"url": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeAutorizacao4",
+						"servico": "NFeAutorizacao4"
+					},
+					"retorno": {
+						"url": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeRetAutorizacao4",
+						"servico": "NFeRetAutorizacao4"
+					},
+					"inutilizacao": {
+						"url": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeInutilizacao4",
+						"servico": "NFeInutilizacao4"
+					},
+					"protocolo": {
+						"url": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeConsultaProtocolo4",
+						"servico": "NFeConsultaProtocolo4"
+					},
+					"status": {
+						"url": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeStatusServico4",
+						"servico": "NFeStatusServico4"
+					},
+					"evento": {
+						"url": "https://hnfce.fazenda.mg.gov.br/nfce/services/NFeRecepcaoEvento4",
+						"servico": "NFeRecepcaoEvento4",
+						"versao": "1.00"
+					},
+					"qrcode": "https://nfce.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
+					"consulta": "http://hnfce.fazenda.mg.gov.br/portalnfce"
 				}
 			}
 		},
@@ -1826,11 +1880,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode",
-					"consulta": "http://www.nfce.fazenda.rj.gov.br/consulta"
+					"consulta": "www.fazenda.rj.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode",
-					"consulta": "http://www.nfce.fazenda.rj.gov.br/consulta"
+					"consulta": "www.fazenda.rj.gov.br/nfce/consulta"
 				}
 			}
 		},
