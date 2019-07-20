@@ -417,7 +417,9 @@ class Pagamento implements Node
         if ($this->isIntegrado()) {
             Util::appendNode($cartao, 'CNPJ', $this->getCredenciadora(true));
         }
-        Util::appendNode($cartao, 'tBand', $this->getBandeira(true));
+        if (!is_null($this->getBandeira())) {
+            Util::appendNode($cartao, 'tBand', $this->getBandeira(true));
+        }
         if ($this->isIntegrado()) {
             Util::appendNode($cartao, 'cAut', $this->getAutorizacao(true));
         }

@@ -49,7 +49,6 @@ docs/certs/*.pfx
 *.sublime-workspace
 storage/
 vendor/
-composer.lock
 *.mwb.bak
 utils/IBPT/*.csv
 docs/api/
