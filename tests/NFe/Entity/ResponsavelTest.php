@@ -3,7 +3,7 @@ namespace NFe\Entity;
 
 use NFe\Common\Util;
 
-class ResponsavelTest extends \PHPUnit_Framework_TestCase
+class ResponsavelTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

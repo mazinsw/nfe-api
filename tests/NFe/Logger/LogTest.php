@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Logger;
 
-class LogTest extends \PHPUnit_Framework_TestCase
+class LogTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
@@ -15,6 +15,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 
     public function testLogs()
     {
+        $this->assertNotNull(Log::getInstance());
         Log::getInstance()->fromArray(Log::getInstance());
         Log::getInstance()->fromArray(Log::getInstance()->toArray());
         Log::getInstance()->fromArray(null);

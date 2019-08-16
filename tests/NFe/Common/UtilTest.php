@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Common;
 
-class UtilTest extends \PHPUnit_Framework_TestCase
+class UtilTest extends \PHPUnit\Framework\TestCase
 {
     public function testToCurrency()
     {
@@ -59,7 +59,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString('<bar>1</bar>', $dom->saveXML($found));
         $found = Util::findNode($element, 'foo');
         $this->assertXmlStringEqualsXmlString('<foo><bar>1</bar></foo>', $dom->saveXML($found));
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         Util::findNode($element, 'other');
     }
 }

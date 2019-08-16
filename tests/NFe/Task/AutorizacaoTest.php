@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class AutorizacaoTest extends \PHPUnit_Framework_TestCase
+class AutorizacaoTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -141,7 +141,7 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
     public function testValidarEsquemaNotFound()
     {
         $autorizacao = new Autorizacao();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $autorizacao->validar('<schema/>');
     }
 
@@ -149,7 +149,7 @@ class AutorizacaoTest extends \PHPUnit_Framework_TestCase
     {
         $autorizacao = new Autorizacao();
         $autorizacao->setVersao(Nota::VERSAO);
-        $this->setExpectedException('\NFe\Exception\ValidationException');
+        $this->expectException('\NFe\Exception\ValidationException');
         $autorizacao->validar('<schema/>');
     }
 }

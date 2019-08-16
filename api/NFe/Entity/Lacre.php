@@ -35,7 +35,6 @@ use NFe\Common\Util;
  */
 class Lacre implements Node
 {
-
     private $numero;
 
     public function __construct($lacre = [])

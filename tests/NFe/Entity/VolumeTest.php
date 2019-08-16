@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class VolumeTest extends \PHPUnit_Framework_TestCase
+class VolumeTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
@@ -83,7 +83,7 @@ class VolumeTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->loadXML('<invalid/>');
 
         $volume = new \NFe\Entity\Volume();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $element = $volume->loadNode($dom_cmp->documentElement);
     }
 }

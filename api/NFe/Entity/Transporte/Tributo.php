@@ -36,7 +36,6 @@ use NFe\Entity\Municipio;
  */
 class Tributo extends Imposto
 {
-
     private $servico;
     private $cfop;
     private $municipio;

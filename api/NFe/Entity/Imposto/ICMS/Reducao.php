@@ -36,7 +36,6 @@ use NFe\Common\Util;
  */
 class Reducao extends Normal
 {
-
     private $reducao;
 
     public function __construct($reducao = [])

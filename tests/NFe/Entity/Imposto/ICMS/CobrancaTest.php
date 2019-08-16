@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\ICMS;
 
-class CobrancaTest extends \PHPUnit_Framework_TestCase
+class CobrancaTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

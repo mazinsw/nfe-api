@@ -36,7 +36,6 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 class Evento extends Retorno
 {
-
     const VERSAO = '1.00';
 
     const TIPO_CANCELAMENTO = '110111';

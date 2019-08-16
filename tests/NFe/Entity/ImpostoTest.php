@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class ImpostoTest extends \PHPUnit_Framework_TestCase
+class ImpostoTest extends \PHPUnit\Framework\TestCase
 {
     public function testLoadInvalid()
     {

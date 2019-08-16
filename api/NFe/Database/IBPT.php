@@ -32,7 +32,6 @@ use NFe\Logger\Log;
 
 class IBPT
 {
-
     private $tabela;
     private $offline;
 

@@ -4,7 +4,7 @@
         convertErrorsToExceptions="true"
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
-        colors="true">
+        colors="false">
     <testsuites>
         <testsuite name="NFe-API Test Suite">
             <directory>tests/NFe/</directory>
@@ -21,7 +21,8 @@
         <env name="TEST_MODE" value="_override"/>
     </php>
     <logging>
+        <log type="coverage-text" target="php://stdout" showOnlySummary="true"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="junit" target="build/logs/junit.xml"/>
     </logging>
 </phpunit>

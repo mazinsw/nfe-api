@@ -34,7 +34,6 @@ use NFe\Exception\ValidationException;
 
 class Autorizacao extends Retorno
 {
-
     public function __construct($autorizacao = [])
     {
         parent::__construct($autorizacao);

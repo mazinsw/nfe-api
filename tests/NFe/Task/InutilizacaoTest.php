@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class InutilizacaoTest extends \PHPUnit_Framework_TestCase
+class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 {
     public static function criaInutilizacao()
     {
@@ -84,7 +84,7 @@ class InutilizacaoTest extends \PHPUnit_Framework_TestCase
         $dom = $inutilizacao->getNode()->ownerDocument;
         $dom = $inutilizacao->assinar();
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $inutilizacao->envia($dom);
         } catch (Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -109,7 +109,7 @@ class InutilizacaoTest extends \PHPUnit_Framework_TestCase
         $inutilizacao->setModelo('Invalido');
         $dom = $inutilizacao->getNode()->ownerDocument;
         $dom = $inutilizacao->assinar();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $dom = $inutilizacao->validar($dom);
     }
 }

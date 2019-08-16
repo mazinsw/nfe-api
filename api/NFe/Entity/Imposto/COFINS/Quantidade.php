@@ -32,7 +32,6 @@ use NFe\Entity\Imposto;
 
 class Quantidade extends Imposto
 {
-
     public function __construct($cofins = [])
     {
         parent::__construct($cofins);

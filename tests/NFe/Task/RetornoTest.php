@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Task;
 
-class RetornoTest extends \PHPUnit_Framework_TestCase
+class RetornoTest extends \PHPUnit\Framework\TestCase
 {
     public static function createRetorno()
     {

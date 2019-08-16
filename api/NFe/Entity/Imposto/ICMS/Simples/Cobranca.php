@@ -35,7 +35,6 @@ use NFe\Common\Util;
  */
 class Cobranca extends Parcial
 {
-
     private $normal;
 
     public function __construct($cobranca = [])

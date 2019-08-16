@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Task;
 
-class TarefaTest extends \PHPUnit_Framework_TestCase
+class TarefaTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -136,11 +136,12 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
         $tarefa->setNota($nota);
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'emptyPostFunction']);
+        $this->expectException('\Exception');
         try {
             $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
+            \NFe\Common\CurlSoap::setPostFunction(null);
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaInutilizacaoSemNota()
@@ -150,7 +151,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -167,7 +168,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -262,7 +263,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -279,7 +280,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -345,7 +346,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -365,7 +366,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
@@ -382,7 +383,7 @@ class TarefaTest extends \PHPUnit_Framework_TestCase
 
         \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);

@@ -48,7 +48,7 @@ class Gerador extends Estatico
             // $contingencia = $nota->isContingencia();
             if ($contingencia) {
                 $nfce->setEmissao(\NFe\Core\Nota::EMISSAO_CONTINGENCIA);
-                // $nfce->setDataEmissao($nota->getDataLancamento());
+            // $nfce->setDataEmissao($nota->getDataLancamento());
                 // $nfce->setDataContingencia($nota->getDataLancamento());
                 // $nfce->setJustificativa($nota->getMotivo());
             } else {

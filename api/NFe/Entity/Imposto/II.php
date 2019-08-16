@@ -37,7 +37,6 @@ use NFe\Entity\Imposto;
  */
 class II extends Imposto
 {
-
     private $despesas;
     private $valor;
     private $iof;

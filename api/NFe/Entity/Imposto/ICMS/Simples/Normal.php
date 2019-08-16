@@ -34,7 +34,6 @@ use NFe\Common\Util;
  */
 class Normal extends \NFe\Entity\Imposto\ICMS\Normal
 {
-
     public function __construct($normal = [])
     {
         parent::__construct($normal);

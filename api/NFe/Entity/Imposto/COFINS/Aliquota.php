@@ -32,7 +32,6 @@ use NFe\Entity\Imposto;
 
 class Aliquota extends Imposto
 {
-
     const TRIBUTACAO_NORMAL = 'normal';
     const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
 

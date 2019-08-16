@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Common;
 
-class CertificadoTest extends \PHPUnit_Framework_TestCase
+class CertificadoTest extends \PHPUnit\Framework\TestCase
 {
     public function testCarrega()
     {
@@ -16,7 +16,7 @@ class CertificadoTest extends \PHPUnit_Framework_TestCase
     public function testCarregaFalhaAbrir()
     {
         $certificado = new Certificado();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $certificado->carrega('invalido.pfx', 'invalido');
     }
 
@@ -24,7 +24,7 @@ class CertificadoTest extends \PHPUnit_Framework_TestCase
     {
         $root = dirname(dirname(dirname(__DIR__)));
         $certificado = new Certificado();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $certificado->carrega($root . '/docs/certs/certificado.pfx', 'invalido');
     }
 
@@ -36,7 +36,7 @@ class CertificadoTest extends \PHPUnit_Framework_TestCase
         $certificado->fromArray($certificado);
         $certificado->fromArray(null);
         $this->assertEquals('2010-10-02', date('Y-m-d', $certificado->getExpiracao()));
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $certificado->requerValido();
     }
 
@@ -54,7 +54,7 @@ class CertificadoTest extends \PHPUnit_Framework_TestCase
             $this->fail('Exceção não lançada na função getNode');
         } catch (\Exception $e) {
         }
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $certificado->loadNode(null);
     }
 }

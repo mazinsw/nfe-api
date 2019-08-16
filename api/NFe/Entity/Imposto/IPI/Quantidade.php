@@ -35,7 +35,6 @@ use NFe\Entity\Imposto;
  */
 class Quantidade extends Imposto
 {
-
     public function __construct($quantidade = [])
     {
         parent::__construct($quantidade);

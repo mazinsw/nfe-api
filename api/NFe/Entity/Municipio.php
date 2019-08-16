@@ -34,7 +34,6 @@ use NFe\Core\SEFAZ;
  */
 class Municipio
 {
-
     private $estado;
     private $codigo;
     private $nome;

@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class ReciboTest extends \PHPUnit_Framework_TestCase
+class ReciboTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -134,7 +134,7 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
     public function testValidarEsquemaNotFound()
     {
         $recibo = new Recibo();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($dom->createElement('schema'));
         $recibo->validar($dom);
@@ -149,7 +149,7 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
         // evita de enviar para a SEFAZ em caso de falha
         \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
-            $this->setExpectedException('\\NFe\\Exception\\ValidationException');
+            $this->expectException('\\NFe\\Exception\\ValidationException');
             $recibo->consulta($nota);
         } catch (Exception $e) {
         }
@@ -159,7 +159,7 @@ class ReciboTest extends \PHPUnit_Framework_TestCase
     public function testReciboLoadInvalidXML()
     {
         $recibo = new Recibo();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $recibo->loadNode(new \DOMDocument(), Recibo::INFO_TAGNAME);
     }
 }

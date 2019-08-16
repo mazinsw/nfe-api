@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Core;
 
-class NFCeTest extends \PHPUnit_Framework_TestCase
+class NFCeTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -382,15 +382,10 @@ class NFCeTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
     }
 
-    public function testNFCeValidarXML()
-    {
-        self::loadNFCeValidada();
-    }
-
     public function testNFCeLoadFail()
     {
         $nfce = new \NFe\Core\NFCe();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $nfce->load('invalido.xml');
     }
 

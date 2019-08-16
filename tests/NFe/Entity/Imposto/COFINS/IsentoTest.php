@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\COFINS;
 
-class IsentoTest extends \PHPUnit_Framework_TestCase
+class IsentoTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

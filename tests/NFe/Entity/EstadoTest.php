@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class EstadoTest extends \PHPUnit_Framework_TestCase
+class EstadoTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

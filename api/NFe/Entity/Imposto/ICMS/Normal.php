@@ -35,7 +35,6 @@ use NFe\Entity\Imposto\Fundo\Base as Fundo;
  */
 class Normal extends Base
 {
-
     const MODALIDADE_AGREGADO = 'agregado';
     const MODALIDADE_PAUTA = 'pauta';
     const MODALIDADE_TABELADO = 'tabelado';

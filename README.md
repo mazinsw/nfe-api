@@ -43,7 +43,7 @@ Para melhoria do projeto envie suas implementações por meio de um Pull request
 Caso tenha problemas ao utilizar a biblioteca, acesse o grupo no Discord: https://discord.gg/XGU2Y77
 
 ## Dependências
-- PHP 5.6 ou superior
+- PHP 7.1 ou superior
 - Extensão openssl para assinatura da nota
 - Extensão curl para envio da nota
 

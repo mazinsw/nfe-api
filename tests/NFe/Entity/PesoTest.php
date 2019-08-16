@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class PesoTest extends \PHPUnit_Framework_TestCase
+class PesoTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {

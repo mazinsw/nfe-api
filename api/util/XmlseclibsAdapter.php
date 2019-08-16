@@ -115,7 +115,7 @@ class XmlseclibsAdapter implements AdapterInterface
             );
         }
         $node = $data;
-        if(!is_null($tag)) {
+        if (!is_null($tag)) {
             $nodes = $data->getElementsByTagName($tag);
             $node = $nodes->item(0);
         }
@@ -129,8 +129,12 @@ class XmlseclibsAdapter implements AdapterInterface
 
         $objXMLSecDSig = $this->createXmlSecurityDSig();
         $objXMLSecDSig->setCanonicalMethod($this->canonicalMethod);
-        $objXMLSecDSig->addReference($node, $this->digestAlgorithm, $this->transforms, 
-            array('overwrite' => false, 'force_uri' => true));
+        $objXMLSecDSig->addReference(
+            $node,
+            $this->digestAlgorithm,
+            $this->transforms,
+            array('overwrite' => false, 'force_uri' => true)
+        );
         $objXMLSecDSig->sign($objKey, $data->documentElement);
 
         /* Add associated public key */

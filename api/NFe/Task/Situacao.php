@@ -33,7 +33,6 @@ use NFe\Exception\ValidationException;
 
 class Situacao extends Retorno
 {
-
     private $chave;
     private $modelo;
 

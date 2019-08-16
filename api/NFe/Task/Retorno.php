@@ -31,7 +31,6 @@ use NFe\Common\Util;
 
 class Retorno extends Status
 {
-
     private $data_recebimento;
 
     public function __construct($retorno = [])

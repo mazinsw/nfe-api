@@ -35,7 +35,6 @@ use NFe\Common\Util;
  */
 class Integral extends Normal
 {
-
     public function __construct($integral = [])
     {
         parent::__construct($integral);

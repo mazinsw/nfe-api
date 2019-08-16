@@ -5,7 +5,7 @@ use NFe\Logger\Log;
 use NFe\Task\Inutilizacao;
 use NFe\Task\Tarefa;
 
-class SEFAZTest extends \PHPUnit_Framework_TestCase implements \NFe\Common\Evento
+class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Evento
 {
     protected function setUp()
     {

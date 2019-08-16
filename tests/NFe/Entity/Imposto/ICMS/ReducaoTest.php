@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\ICMS;
 
-class ReducaoTest extends \PHPUnit_Framework_TestCase
+class ReducaoTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

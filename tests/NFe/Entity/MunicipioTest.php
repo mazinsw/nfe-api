@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class MunicipioTest extends \PHPUnit_Framework_TestCase
+class MunicipioTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

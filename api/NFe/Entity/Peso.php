@@ -34,7 +34,6 @@ use NFe\Common\Util;
  */
 class Peso
 {
-
     private $liquido;
     private $bruto;
 

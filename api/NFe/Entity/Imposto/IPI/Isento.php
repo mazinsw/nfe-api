@@ -35,7 +35,6 @@ use NFe\Entity\Imposto;
  */
 class Isento extends Imposto
 {
-
     public function __construct($isento = [])
     {
         parent::__construct($isento);

@@ -29,7 +29,6 @@ namespace NFe\Entity;
 
 class Pais
 {
-
     private $codigo;
     private $nome;
 

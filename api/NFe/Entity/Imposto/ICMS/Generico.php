@@ -35,7 +35,6 @@ use NFe\Common\Util;
  */
 class Generico extends Mista
 {
-
     public function __construct($generico = [])
     {
         parent::__construct($generico);

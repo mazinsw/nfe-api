@@ -32,7 +32,6 @@ use NFe\Common\Util;
 
 class Volume implements Node
 {
-
     private $quantidade;
     private $especie;
     private $marca;

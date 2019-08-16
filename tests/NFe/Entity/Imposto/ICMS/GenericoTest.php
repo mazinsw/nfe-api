@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\ICMS;
 
-class GenericoTest extends \PHPUnit_Framework_TestCase
+class GenericoTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

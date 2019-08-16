@@ -35,7 +35,6 @@ use NFe\Common\Util;
  */
 class Endereco implements Node
 {
-
     private $pais;
     private $cep;
     private $municipio;

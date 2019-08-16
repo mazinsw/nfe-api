@@ -31,7 +31,6 @@ use NFe\Core\SEFAZ;
 
 class Estado
 {
-
     private $codigo;
     private $nome;
     private $uf;

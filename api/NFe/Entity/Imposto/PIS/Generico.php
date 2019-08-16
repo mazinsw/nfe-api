@@ -32,7 +32,6 @@ use NFe\Entity\Imposto;
 
 class Generico extends Imposto
 {
-
     private $valor;
 
     public function __construct($generico = [])

@@ -32,7 +32,6 @@ namespace NFe\Core;
  */
 class NFe extends Nota
 {
-
     public function __construct($nfe = [])
     {
         parent::__construct($nfe);

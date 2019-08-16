@@ -38,7 +38,6 @@ use NFe\Exception\ValidationException;
  */
 class IPI extends Imposto
 {
-
     private $classe;
     private $cnpj;
     private $selo;

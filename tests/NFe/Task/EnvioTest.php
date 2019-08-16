@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class EnvioTest extends \PHPUnit_Framework_TestCase
+class EnvioTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -85,7 +85,7 @@ class EnvioTest extends \PHPUnit_Framework_TestCase
         $envio->fromArray(null);
         $this->sefaz->getConfiguracao()->setOffline(time());
         \NFe\Common\CurlSoap::setPostFunction([$this, 'nulPostFunction']);
-        $this->setExpectedException('\NFe\Exception\NetworkException');
+        $this->expectException('\NFe\Exception\NetworkException');
         try {
             $envio->envia();
         } catch (Exception $e) {
@@ -101,7 +101,7 @@ class EnvioTest extends \PHPUnit_Framework_TestCase
     {
         $envio = self::createEnvio();
         \NFe\Common\CurlSoap::setPostFunction([$this, 'errorPostFunction']);
-        $this->setExpectedException('\NFe\Exception\NetworkException');
+        $this->expectException('\NFe\Exception\NetworkException');
         try {
             $envio->envia();
         } catch (Exception $e) {
@@ -117,7 +117,7 @@ class EnvioTest extends \PHPUnit_Framework_TestCase
     {
         $envio = self::createEnvio();
         $envio->setServico('qrcode');
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $envio->getServico(true);
     }
 
@@ -125,7 +125,7 @@ class EnvioTest extends \PHPUnit_Framework_TestCase
     {
         $envio = self::createEnvio();
         $envio->setServico('cancelar');
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $envio->getServico(true);
     }
 }

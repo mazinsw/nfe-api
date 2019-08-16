@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\ICMS\Simples;
 
-class NormalTest extends \PHPUnit_Framework_TestCase
+class NormalTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

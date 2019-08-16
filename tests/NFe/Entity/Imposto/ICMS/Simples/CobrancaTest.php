@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\ICMS\Simples;
 
-class CobrancaTest extends \PHPUnit_Framework_TestCase
+class CobrancaTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 
@@ -12,7 +12,7 @@ class CobrancaTest extends \PHPUnit_Framework_TestCase
 
     public function testCobrancaXML()
     {
-         // TODO: verificar vICMSST = 12.96
+        // TODO: verificar vICMSST = 12.96
         $icms_cobranca = new Cobranca();
         $icms_cobranca->getNormal()->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_cobranca->getNormal()->setBase(1036.80);

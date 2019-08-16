@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\COFINS\ST;
 
-class QuantidadeTest extends \PHPUnit_Framework_TestCase
+class QuantidadeTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

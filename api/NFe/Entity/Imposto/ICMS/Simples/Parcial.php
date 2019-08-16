@@ -35,7 +35,6 @@ use NFe\Common\Util;
  */
 class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
 {
-
     public function __construct($parcial = [])
     {
         parent::__construct($parcial);

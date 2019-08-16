@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class EventoTest extends \PHPUnit_Framework_TestCase
+class EventoTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -135,7 +135,7 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         $evento = self::createEvento($nota);
         $evento->setAmbiente('Produção');
         $dom = $evento->assinar();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $dom = $evento->validar($dom);
     }
 
@@ -144,7 +144,7 @@ class EventoTest extends \PHPUnit_Framework_TestCase
         $data = \NFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $evento = self::createEvento($nota);
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $dom = $evento->addInformacao(new \DOMDocument());
     }
 }

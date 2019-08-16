@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class PaisTest extends \PHPUnit_Framework_TestCase
+class PaisTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {

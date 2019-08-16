@@ -36,7 +36,6 @@ use NFe\Common\Util;
  */
 class Aliquota extends \NFe\Entity\Imposto\PIS\Aliquota
 {
-
     public function __construct($aliquota = [])
     {
         parent::__construct($aliquota);

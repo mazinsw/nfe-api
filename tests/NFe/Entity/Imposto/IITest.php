@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto;
 
-class IITest extends \PHPUnit_Framework_TestCase
+class IITest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

@@ -3,7 +3,7 @@ namespace NFe\Database;
 
 use \NFe\Logger\Log;
 
-class IBPTTest extends \PHPUnit_Framework_TestCase
+class IBPTTest extends \PHPUnit\Framework\TestCase
 {
     private $ibpt;
 

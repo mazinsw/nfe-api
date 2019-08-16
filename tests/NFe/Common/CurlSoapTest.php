@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Common;
 
-class CurlSoapTest extends \PHPUnit_Framework_TestCase
+class CurlSoapTest extends \PHPUnit\Framework\TestCase
 {
     private $config;
 
@@ -68,7 +68,7 @@ class CurlSoapTest extends \PHPUnit_Framework_TestCase
     public function testHookSendFunction()
     {
         CurlSoap::setPostFunction([$this, 'errorPostFunction']);
-        $this->setExpectedException('\NFe\Exception\NetworkException');
+        $this->expectException('\NFe\Exception\NetworkException');
         $soap = new CurlSoap();
         $soap->send('invalid URL', new \DOMDocument());
         CurlSoap::setPostFunction(null);

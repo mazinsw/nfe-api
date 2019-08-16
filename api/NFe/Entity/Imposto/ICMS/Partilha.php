@@ -39,7 +39,6 @@ use NFe\Common\Util;
  */
 class Partilha extends Mista
 {
-
     private $operacao;
     private $uf;
 

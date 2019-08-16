@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Transporte;
 
-class TransportadorTest extends \PHPUnit_Framework_TestCase
+class TransportadorTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {

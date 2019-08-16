@@ -36,7 +36,6 @@ use NFe\Common\Util;
  */
 class Substituto extends Cobrado
 {
-
     public function __construct($substituto = [])
     {
         parent::__construct($substituto);

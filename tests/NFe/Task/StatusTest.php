@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class StatusTest extends \PHPUnit_Framework_TestCase
+class StatusTest extends \PHPUnit\Framework\TestCase
 {
     public static function createStatus()
     {
@@ -17,6 +17,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $status->fromArray($status);
         $status->fromArray($status->toArray());
         $status->fromArray(null);
+        $this->assertEquals(self::createStatus(), $status);
     }
 
     public function testNormalization()
@@ -35,7 +36,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     public function testStatusLoadInvalidXML()
     {
         $status = self::createStatus();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $status->loadNode(new \DOMDocument());
     }
 }

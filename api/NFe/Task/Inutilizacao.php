@@ -36,7 +36,6 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 class Inutilizacao extends Retorno
 {
-
     private $id;
     private $ano;
     private $cnpj;

@@ -32,7 +32,6 @@ use NFe\Core\Nota;
 
 class Estatico extends Banco
 {
-
     private $ibpt;
     private $uf_codes;
     private $mun_codes;

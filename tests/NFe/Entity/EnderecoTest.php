@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class EnderecoTest extends \PHPUnit_Framework_TestCase
+class EnderecoTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

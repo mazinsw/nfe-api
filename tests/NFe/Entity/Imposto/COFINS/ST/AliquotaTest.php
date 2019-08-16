@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Imposto\COFINS\ST;
 
-class AliquotaTest extends \PHPUnit_Framework_TestCase
+class AliquotaTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 

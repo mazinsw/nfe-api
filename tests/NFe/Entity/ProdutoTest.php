@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class ProdutoTest extends \PHPUnit_Framework_TestCase
+class ProdutoTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
@@ -81,9 +81,9 @@ class ProdutoTest extends \PHPUnit_Framework_TestCase
 
         $produto = new \NFe\Entity\Produto();
         $produto->loadNode($dom_cmp->documentElement);
-        $produto->setNCM('00000000');
+        $produto->setNCM('00000009');
 
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $produto->getImpostoInfo();
     }
 }

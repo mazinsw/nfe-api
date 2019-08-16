@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class TransporteTest extends \PHPUnit_Framework_TestCase
+class TransporteTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
     private $sefaz;
@@ -252,7 +252,7 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->load($this->resource_path . '/xml/transporte/testTransporteSemModalidadeXML.xml');
 
         $transporte = new \NFe\Entity\Transporte();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $transporte->loadNode($dom_cmp->documentElement);
     }
 
@@ -263,7 +263,7 @@ class TransporteTest extends \PHPUnit_Framework_TestCase
         $dom_cmp->loadXML('<invalid/>');
 
         $transporte = new \NFe\Entity\Transporte();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $transporte->loadNode($dom_cmp->documentElement);
     }
 }

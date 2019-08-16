@@ -29,7 +29,6 @@ namespace NFe\Database;
 
 abstract class Banco
 {
-
     public function __construct($banco = [])
     {
         $this->fromArray($banco);

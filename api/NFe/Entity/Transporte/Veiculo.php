@@ -32,7 +32,6 @@ use NFe\Common\Util;
 
 class Veiculo implements Node
 {
-
     private $placa;
     private $uf;
     private $rntc;

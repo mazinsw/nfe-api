@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Common;
 
-class ConfiguracaoTest extends \PHPUnit_Framework_TestCase
+class ConfiguracaoTest extends \PHPUnit\Framework\TestCase
 {
     private $config;
 

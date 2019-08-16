@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity\Transporte;
 
-class TributoTest extends \PHPUnit_Framework_TestCase
+class TributoTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

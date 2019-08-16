@@ -36,7 +36,6 @@ use NFe\Common\Util;
  */
 class Mista extends Cobranca
 {
-
     public function __construct($mista = [])
     {
         parent::__construct($mista);

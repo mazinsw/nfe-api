@@ -34,7 +34,6 @@ use NFe\Common\Util;
  */
 class Isento extends Generico
 {
-
     public function __construct($isento = [])
     {
         parent::__construct($isento);

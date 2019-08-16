@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class DestinatarioTest extends \PHPUnit_Framework_TestCase
+class DestinatarioTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -118,7 +118,6 @@ class DestinatarioTest extends \PHPUnit_Framework_TestCase
 
     public function testDestinatarioJuridicoLoadXML()
     {
-
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');

@@ -31,7 +31,6 @@ use NFe\Entity\Imposto;
 
 class Total extends Imposto
 {
-
     public function __construct($total = [])
     {
         parent::__construct($total);

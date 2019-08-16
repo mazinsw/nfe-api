@@ -38,7 +38,6 @@ use NFe\Common\Util;
  */
 class Diferido extends Reducao
 {
-
     private $diferimento;
 
     public function __construct($diferido = [])

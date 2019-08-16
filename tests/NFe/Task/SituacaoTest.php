@@ -3,7 +3,7 @@ namespace NFe\Task;
 
 use NFe\Core\Nota;
 
-class SituacaoTest extends \PHPUnit_Framework_TestCase
+class SituacaoTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
@@ -133,7 +133,7 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
     public function testValidarEsquemaNotFound()
     {
         $situacao = new Situacao();
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($dom->createElement('schema'));
         $situacao->validar($dom);
@@ -147,7 +147,7 @@ class SituacaoTest extends \PHPUnit_Framework_TestCase
         $situacao = new Situacao();
         $situacao->setModelo('Invalido');
         \NFe\Common\CurlSoap::setPostFunction([$this, 'inexistentePostFunction']);
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         try {
             $retorno = $situacao->consulta($nota);
         } catch (Exception $e) {

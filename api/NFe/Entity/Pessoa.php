@@ -36,7 +36,6 @@ use NFe\Common\Util;
  */
 abstract class Pessoa implements Node
 {
-
     private $razao_social;
     private $cnpj;
     private $ie;

@@ -36,7 +36,6 @@ use NFe\Entity\Imposto\Fundo\Retido;
  */
 class Cobrado extends Generico
 {
-
     private $valor;
 
     public function __construct($cobrado = [])

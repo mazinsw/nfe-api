@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class EmitenteTest extends \PHPUnit_Framework_TestCase
+class EmitenteTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

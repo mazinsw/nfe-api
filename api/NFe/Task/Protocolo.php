@@ -36,7 +36,6 @@ use NFe\Common\Util;
  */
 class Protocolo extends Retorno
 {
-
     private $chave;
     private $validacao;
     private $numero;

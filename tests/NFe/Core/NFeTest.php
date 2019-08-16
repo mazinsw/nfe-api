@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Core;
 
-class NFeTest extends \PHPUnit_Framework_TestCase
+class NFeTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 

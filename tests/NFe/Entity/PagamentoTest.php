@@ -1,7 +1,7 @@
 <?php
 namespace NFe\Entity;
 
-class PagamentoTest extends \PHPUnit_Framework_TestCase
+class PagamentoTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {

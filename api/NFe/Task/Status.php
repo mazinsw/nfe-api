@@ -37,7 +37,6 @@ use NFe\Entity\Estado;
  */
 class Status implements Node
 {
-
     private $ambiente;
     private $versao;
     private $status;

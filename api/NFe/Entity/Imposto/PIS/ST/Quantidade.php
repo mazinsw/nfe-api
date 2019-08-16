@@ -34,7 +34,6 @@ use NFe\Common\Util;
  */
 class Quantidade extends \NFe\Entity\Imposto\PIS\Quantidade
 {
-
     public function __construct($quantidade = [])
     {
         parent::__construct($quantidade);

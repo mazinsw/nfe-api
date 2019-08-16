@@ -35,7 +35,6 @@ use NFe\Entity\Destinatario;
  */
 class Transportador extends Destinatario
 {
-
     public function __construct($transportador = [])
     {
         parent::__construct($transportador);
