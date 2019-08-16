@@ -1088,11 +1088,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "http://nfce.sefaz.pe.gov.br/nfce-web/consultarNFCe",
-					"consulta": "http://nfce.sefaz.pe.gov.br/nfce/consulta"
+					"consulta": "nfce.sefaz.pe.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "http://nfcehomolog.sefaz.pe.gov.br/nfce-web/consultarNFCe",
-					"consulta": "http://nfce.sefaz.pe.gov.br/nfce/consulta"
+					"consulta": "nfce.sefaz.pe.gov.br/nfce/consulta"
 				}
 			}
 		},
@@ -1829,11 +1829,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "http://app.sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx",
-					"consulta": "http://www.sefaz.es.gov.br/nfce/consulta"
+					"consulta": "www.sefaz.es.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "http://homologacao.sefaz.es.gov.br/ConsultaNFCe/qrcode.aspx",
-					"consulta": "http://www.sefaz.es.gov.br/nfce/consulta"
+					"consulta": "www.sefaz.es.gov.br/nfce/consulta"
 				}
 			}
 		},
@@ -1880,11 +1880,11 @@
 				"base": "SVRS",
 				"producao": {
 					"qrcode": "http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode",
-					"consulta": "http://www.fazenda.rj.gov.br/nfce/consulta"
+					"consulta": "www.fazenda.rj.gov.br/nfce/consulta"
 				},
 				"homologacao": {
 					"qrcode": "http://www4.fazenda.rj.gov.br/consultaNFCe/QRCode",
-					"consulta": "http://www.fazenda.rj.gov.br/nfce/consulta"
+					"consulta": "www.fazenda.rj.gov.br/nfce/consulta"
 				}
 			}
 		},
