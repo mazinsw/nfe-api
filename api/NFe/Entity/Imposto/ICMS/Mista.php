@@ -64,7 +64,7 @@ class Mista extends Cobranca
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMS70':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMS70' : $name);
         $dom = $element->ownerDocument;
         return $element;
     }
@@ -73,7 +73,7 @@ class Mista extends Cobranca
     {
         $normal = new Reducao();
         $this->setNormal($normal);
-        $name = is_null($name)?'ICMS70':$name;
+        $name = is_null($name) ? 'ICMS70' : $name;
         $element = parent::loadNode($element, $name);
         if (is_null($this->getNormal()->getReducao())) {
             $this->getNormal()->setReducao($this->getReducao());

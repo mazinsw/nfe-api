@@ -101,12 +101,12 @@ class Cobranca extends Parcial
 
     public function getNode($name = null)
     {
-        $element = $this->getNormal()->getNode(is_null($name)?'ICMSSN201':$name);
+        $element = $this->getNormal()->getNode(is_null($name) ? 'ICMSSN201' : $name);
         if (is_null($this->getModalidade())) {
             return $element;
         }
         $dom = $element->ownerDocument;
-        $parcial = parent::getNode(is_null($name)?'ICMSSN201':$name);
+        $parcial = parent::getNode(is_null($name) ? 'ICMSSN201' : $name);
         if (is_null($this->getNormal()->getModalidade())) {
             return $parcial;
         }
@@ -115,11 +115,11 @@ class Cobranca extends Parcial
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMSSN201':$name;
+        $name = is_null($name) ? 'ICMSSN201' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

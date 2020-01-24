@@ -64,7 +64,7 @@ class Substituto extends Cobrado
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMSST':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMSST' : $name);
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'vBCSTDest', $this->getNormal()->getBase(true));
         Util::appendNode($element, 'vICMSSTDest', $this->getNormal()->getValor(true));
@@ -73,7 +73,7 @@ class Substituto extends Cobrado
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMSST':$name;
+        $name = is_null($name) ? 'ICMSST' : $name;
         $element = parent::loadNode($element, $name);
         $this->getNormal()->setBase(
             Util::loadNode(

@@ -108,7 +108,7 @@ XML;
         $dom->preserveWhiteSpace = false;
         $dom->loadXML(self::ENVELOPE);
         $envelope = $dom->saveXML();
-        $data = str_replace('<soap12:Body/>', '<soap12:Body>'.$body.'</soap12:Body>', $envelope);
+        $data = str_replace('<soap12:Body/>', '<soap12:Body>' . $body . '</soap12:Body>', $envelope);
         if (is_null(self::$post_fn)) {
             $this->post($url, $data);
         } else {

@@ -51,8 +51,14 @@
         "cover": [
             "phpunit --coverage-html storage/coverage"
         ],
-        "check_psr": [
-            "phpcs --colors --standard=psr2 api/NFe/ tests/"
+        "psr-fix": [
+            "phpcbf --standard=PSR12 api/NFe/ tests/"
+        ],
+        "check-style": [
+            "phpcs --colors --standard=PSR12 api/NFe/ tests/"
+        ],
+        "gen-class": [
+            "java -jar utils/SQLtoClass.jar -p utils/config.properties -t utils/template -o storage/generated"
         ]
     }
 }

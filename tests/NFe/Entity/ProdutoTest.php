@@ -43,7 +43,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
 
         $xml = $produto->getNode();
         $dom = $xml->ownerDocument;
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/produto/testProdutoXML.xml';
 
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
@@ -61,7 +61,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/produto/testProdutoXML.xml');
 
         $produto = new \NFe\Entity\Produto();
         $produto->loadNode($dom_cmp->documentElement);
@@ -77,7 +77,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/produto/testProdutoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/produto/testProdutoXML.xml');
 
         $produto = new \NFe\Entity\Produto();
         $produto->loadNode($dom_cmp->documentElement);

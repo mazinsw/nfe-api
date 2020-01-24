@@ -70,7 +70,7 @@ class Evento extends Retorno
         if (!$normalize) {
             return $this->id;
         }
-        return 'ID'.$this->id;
+        return 'ID' . $this->id;
     }
 
     public function setID($id)
@@ -452,7 +452,7 @@ class Evento extends Retorno
         $this->setID($this->gerarID());
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'evento':$name);
+        $element = $dom->createElement(is_null($name) ? 'evento' : $name);
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = self::VERSAO;
@@ -496,7 +496,7 @@ class Evento extends Retorno
     {
         $root = $element;
         $element = Util::findNode($element, 'evento');
-        $name = is_null($name)?'infEvento':$name;
+        $name = is_null($name) ? 'infEvento' : $name;
         $element = Util::findNode($element, $name);
         $this->setOrgao(
             Util::loadNode(
@@ -598,7 +598,7 @@ class Evento extends Retorno
 
     public function loadStatusNode($element, $name = null)
     {
-        $name = is_null($name)?self::TAG_RETORNO_ENVIO:$name;
+        $name = is_null($name) ? self::TAG_RETORNO_ENVIO : $name;
         $element = parent::loadNode($element, $name);
         $this->setOrgao(
             Util::loadNode(
@@ -658,7 +658,7 @@ class Evento extends Retorno
     public function loadReturnNode($element, $name = null)
     {
         $element = Util::findNode($element, Evento::TAG_RETORNO);
-        $name = is_null($name)?'infEvento':$name;
+        $name = is_null($name) ? 'infEvento' : $name;
         $element = parent::loadNode($element, $name);
         $this->setOrgao(
             Util::loadNode(
@@ -733,7 +733,7 @@ class Evento extends Retorno
     public function addInformacao($dom)
     {
         if (is_null($this->getInformacao())) {
-            throw new \Exception('A informação não foi informado no evento "'.$this->getID().'"', 404);
+            throw new \Exception('A informação não foi informado no evento "' . $this->getID() . '"', 404);
         }
         $evento = $dom->getElementsByTagName('evento')->item(0);
         // Corrige xmlns:default
@@ -802,7 +802,7 @@ class Evento extends Retorno
         $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
         }
         libxml_clear_errors();
         libxml_use_internal_errors($save);

@@ -92,7 +92,7 @@ class Integral extends Normal
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMS00':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMS00' : $name);
         if (Util::nodeExists($element, 'vBCFCP')) {
             $node = Util::findNode($element, 'vBCFCP');
             $node->parentNode->removeChild($node);
@@ -102,7 +102,7 @@ class Integral extends Normal
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMS00':$name;
+        $name = is_null($name) ? 'ICMS00' : $name;
         $element = parent::loadNode($element, $name);
         return $element;
     }

@@ -234,11 +234,14 @@ class Tarefa
         $evento = $this->getAgente();
         if (is_null($evento)) {
             if (is_null($nota)) {
-                throw new \Exception('A nota não foi informada na tarefa de cancelamento "'.$this->getID().'"', 404);
+                throw new \Exception(
+                    'A nota não foi informada na tarefa de cancelamento "' . $this->getID() . '"',
+                    404
+                );
             }
             if (is_null($nota->getProtocolo())) {
-                throw new \Exception('A nota não possui protocolo de autorização para o cancelamento "'.
-                    $this->getID().'"', 404);
+                throw new \Exception('A nota não possui protocolo de autorização para o cancelamento "' .
+                    $this->getID() . '"', 404);
             }
             $evento = new Evento();
             $evento->setData(time());
@@ -274,7 +277,10 @@ class Tarefa
         $inutilizacao = $this->getAgente();
         if (is_null($inutilizacao)) {
             if (is_null($nota)) {
-                throw new \Exception('A nota não foi informada na tarefa de inutilização "'.$this->getID().'"', 404);
+                throw new \Exception(
+                    'A nota não foi informada na tarefa de inutilização "' . $this->getID() . '"',
+                    404
+                );
             }
             $inutilizacao = new Inutilizacao();
             $inutilizacao->setAno(date('Y'));
@@ -306,7 +312,7 @@ class Tarefa
         $agente = $this->getAgente();
         if (is_null($agente)) {
             if (is_null($nota)) {
-                throw new \Exception('A nota não foi informada na tarefa de consulta "'.$this->getID().'"', 404);
+                throw new \Exception('A nota não foi informada na tarefa de consulta "' . $this->getID() . '"', 404);
             }
             $agente = new Situacao();
             $agente->setChave($nota->getID());

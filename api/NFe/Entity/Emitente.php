@@ -131,7 +131,7 @@ class Emitente extends Pessoa
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'emit':$name);
+        $element = $dom->createElement(is_null($name) ? 'emit' : $name);
         Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
         if (!is_null($this->getFantasia())) {
@@ -153,7 +153,7 @@ class Emitente extends Pessoa
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'emit':$name;
+        $name = is_null($name) ? 'emit' : $name;
         $element = parent::loadNode($element, $name);
         $this->setFantasia(Util::loadNode($element, 'xFant'));
         $this->setRegime(

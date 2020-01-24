@@ -43,14 +43,14 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioFisicoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioFisicoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioFisicoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioFisicoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -59,7 +59,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioFisicoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioFisicoXML.xml');
 
         $destinatario = new \NFe\Entity\Destinatario();
         $destinatario->loadNode($dom_cmp->documentElement);
@@ -104,14 +104,14 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioJuridicoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -120,7 +120,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');
 
         $destinatario = new \NFe\Entity\Destinatario();
         $destinatario->loadNode($dom_cmp->documentElement);
@@ -147,14 +147,14 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -163,7 +163,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml');
 
         $destinatario = new \NFe\Entity\Destinatario();
         $destinatario->loadNode($dom_cmp->documentElement);

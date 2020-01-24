@@ -159,7 +159,7 @@ class Status implements Node
      */
     public static function genLote()
     {
-        return substr(Util::padText(number_format(microtime(true)*1000000, 0, '', ''), 15), 0, 15);
+        return substr(Util::padText(number_format(microtime(true) * 1000000, 0, '', ''), 15), 0, 15);
     }
 
     public function toArray($recursive = false)
@@ -211,7 +211,7 @@ class Status implements Node
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'Status':$name);
+        $element = $dom->createElement(is_null($name) ? 'Status' : $name);
         Util::appendNode($element, 'tpAmb', $this->getAmbiente(true));
         Util::appendNode($element, 'verAplic', $this->getVersao(true));
         Util::appendNode($element, 'cStat', $this->getStatus(true));
@@ -224,11 +224,11 @@ class Status implements Node
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'Status':$name;
+        $name = is_null($name) ? 'Status' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" do Status não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" do Status não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

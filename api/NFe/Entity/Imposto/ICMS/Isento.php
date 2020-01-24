@@ -201,7 +201,7 @@ class Isento extends Generico
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMS40':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMS40' : $name);
         $dom = $element->ownerDocument;
         if (!is_null($this->getDesoneracao())) {
             Util::appendNode($element, 'vICMSDeson', $this->getDesoneracao(true));
@@ -214,7 +214,7 @@ class Isento extends Generico
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMS40':$name;
+        $name = is_null($name) ? 'ICMS40' : $name;
         $element = parent::loadNode($element, $name);
         $this->setDesoneracao(Util::loadNode($element, 'vICMSDeson'));
         $this->setMotivo(Util::loadNode($element, 'motDesICMS'));

@@ -121,7 +121,7 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml',
                 $dom->saveXML()
             );
         }

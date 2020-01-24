@@ -136,7 +136,7 @@ class Retorno extends Status
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'':$name);
+        $element = parent::getNode(is_null($name) ? '' : $name);
         $dom = $element->ownerDocument;
         $status = $element->getElementsByTagName('cStat')->item(0);
         if (!is_null($this->getDataRecebimento())) {
@@ -147,7 +147,7 @@ class Retorno extends Status
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'Retorno':$name;
+        $name = is_null($name) ? 'Retorno' : $name;
         $retorno = parent::loadNode($element, $name);
         $this->setDataRecebimento(Util::loadNode($retorno, 'dhRecbto'));
         return $retorno;

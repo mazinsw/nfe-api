@@ -291,7 +291,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
         $ajuste = new \NFe\Common\Ajuste();
         $ajuste->onInutilizado($inutilizacao, $xml);
 
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -308,7 +308,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
 
         if ($tarefa->getAcao() == Tarefa::ACAO_INUTILIZAR) {
             $xml = $tarefa->getDocumento();
-            $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+            $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
             $dom_cmp = new \DOMDocument();
             $dom_cmp->preserveWhiteSpace = false;
             $dom_cmp->load($xml_file);

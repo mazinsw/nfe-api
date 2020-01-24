@@ -56,7 +56,7 @@ class IBPT
         if (isset($this->tabela[$uf])) {
             return $this->tabela[$uf];
         }
-        $file = __DIR__ . '/data/IBPT/'.$uf.'.json';
+        $file = __DIR__ . '/data/IBPT/' . $uf . '.json';
         if (!file_exists($file)) {
             return false;
         }
@@ -75,7 +75,7 @@ class IBPT
         if ($data === false) {
             return false;
         }
-        $key = $ncm.'.'.sprintf('%02s', $ex);
+        $key = $ncm . '.' . sprintf('%02s', $ex);
         if (!isset($data['estados'][$uf][$key])) {
             return false;
         }
@@ -103,7 +103,7 @@ class IBPT
         $curl->setTimeout(3);
         $data = $curl->get($params);
         if ($curl->error) {
-            Log::warning('IBPT.getImpostoOnline('.$curl->errorCode.') - '.$curl->errorMessage);
+            Log::warning('IBPT.getImpostoOnline(' . $curl->errorCode . ') - ' . $curl->errorMessage);
             $this->setOffline(true);
             return false;
         }

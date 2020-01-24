@@ -284,7 +284,7 @@ abstract class Nota implements Node
         if (!$normalize) {
             return $this->id;
         }
-        return 'NFe'.$this->id;
+        return 'NFe' . $this->id;
     }
 
     /**
@@ -1008,7 +1008,7 @@ abstract class Nota implements Node
     public function setConsumidorFinal($consumidor_final)
     {
         if (is_bool($consumidor_final)) {
-            $consumidor_final = $consumidor_final ? 'Y': 'N';
+            $consumidor_final = $consumidor_final ? 'Y' : 'N';
         }
         $this->consumidor_final = $consumidor_final;
         return $this;
@@ -1438,7 +1438,7 @@ abstract class Nota implements Node
             $this->getEmissao(true),
             $this->getCodigo()
         );
-        return $id.Util::getDAC($id, 11);
+        return $id . Util::getDAC($id, 11);
     }
 
     public function getTotais()
@@ -1520,7 +1520,7 @@ abstract class Nota implements Node
     private function getNodeTotal($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'total':$name);
+        $element = $dom->createElement(is_null($name) ? 'total' : $name);
 
         // Totais referentes ao ICMS
         $total = $this->getTotais();
@@ -1562,7 +1562,7 @@ abstract class Nota implements Node
         $this->setDigitoVerificador(substr($this->getID(), -1, 1));
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'NFe':$name);
+        $element = $dom->createElement(is_null($name) ? 'NFe' : $name);
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', self::PORTAL);
 
         $info = $dom->createElement('infNFe');
@@ -1704,11 +1704,11 @@ abstract class Nota implements Node
             throw new \Exception("Nota com XML mal formado ou vazio", 500);
         }
         $root = $element;
-        $name = is_null($name)?'NFe':$name;
+        $name = is_null($name) ? 'NFe' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }
@@ -1720,7 +1720,7 @@ abstract class Nota implements Node
         }
         $id = $info->getAttribute('Id');
         if (strlen($id) != 47) {
-            throw new \Exception('Atributo "Id" inválido, encontrado: "'.$id.'"', 500);
+            throw new \Exception('Atributo "Id" inválido, encontrado: "' . $id . '"', 500);
         }
         $this->setID(substr($id, 3));
         $_fields = $info->getElementsByTagName('ide');
@@ -1966,7 +1966,7 @@ abstract class Nota implements Node
     {
         $dom = new \DOMDocument();
         if (!file_exists($filename)) {
-            throw new \Exception('Arquivo XML "'.$filename.'" não encontrado', 404);
+            throw new \Exception('Arquivo XML "' . $filename . '" não encontrado', 404);
         }
         $dom->load($filename);
         $this->loadNode($dom->documentElement);
@@ -2002,9 +2002,9 @@ abstract class Nota implements Node
         $dom->loadXML($dom->saveXML());
         $xsd_path = __DIR__ . '/schema';
         if (is_null($this->getProtocolo())) {
-            $xsd_file = $xsd_path . '/nfe_v'.self::VERSAO.'.xsd';
+            $xsd_file = $xsd_path . '/nfe_v' . self::VERSAO . '.xsd';
         } else {
-            $xsd_file = $xsd_path . '/procNFe_v'.self::VERSAO.'.xsd';
+            $xsd_file = $xsd_path . '/procNFe_v' . self::VERSAO . '.xsd';
         }
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
@@ -2018,7 +2018,7 @@ abstract class Nota implements Node
         $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
         }
         libxml_clear_errors();
         libxml_use_internal_errors($save);
@@ -2031,7 +2031,7 @@ abstract class Nota implements Node
     public function addProtocolo($dom)
     {
         if (is_null($this->getProtocolo())) {
-            throw new \Exception('O protocolo não foi informado na nota "'.$this->getID().'"', 404);
+            throw new \Exception('O protocolo não foi informado na nota "' . $this->getID() . '"', 404);
         }
         $notae = $dom->getElementsByTagName('NFe')->item(0);
         // Corrige xmlns:default

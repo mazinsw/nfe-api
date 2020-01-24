@@ -120,7 +120,7 @@ class Veiculo implements Node
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'veicTransp':$name);
+        $element = $dom->createElement(is_null($name) ? 'veicTransp' : $name);
         Util::appendNode($element, 'placa', $this->getPlaca(true));
         Util::appendNode($element, 'UF', $this->getUF(true));
         if (!is_null($this->getRNTC())) {
@@ -131,11 +131,11 @@ class Veiculo implements Node
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'veicTransp':$name;
+        $name = is_null($name) ? 'veicTransp' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" do Veiculo não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" do Veiculo não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

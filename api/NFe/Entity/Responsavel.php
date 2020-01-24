@@ -226,7 +226,7 @@ class Responsavel extends Pessoa implements Node
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'infRespTec':$name);
+        $element = $dom->createElement(is_null($name) ? 'infRespTec' : $name);
         Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         Util::appendNode($element, 'xContato', $this->getContato(true));
         Util::appendNode($element, 'email', $this->getEmail(true));
@@ -248,11 +248,11 @@ class Responsavel extends Pessoa implements Node
      */
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'infRespTec':$name;
+        $name = is_null($name) ? 'infRespTec' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" do Responsavel não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" do Responsavel não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

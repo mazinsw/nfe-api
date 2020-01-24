@@ -291,7 +291,7 @@ class Produto extends Total
     public function getTributada($normalize = false)
     {
         if (!$normalize) {
-            return is_null($this->tributada)?$this->getQuantidade():$this->tributada;
+            return is_null($this->tributada) ? $this->getQuantidade() : $this->tributada;
         }
         return Util::toFloat($this->getTributada());
     }
@@ -624,20 +624,20 @@ class Produto extends Total
         if (count($detalhes) == 0) {
             return null;
         }
-        $fonte = 'Fonte: '.$tributos['info']['fonte'].' '.$tributos['info']['chave'];
+        $fonte = 'Fonte: ' . $tributos['info']['fonte'] . ' ' . $tributos['info']['chave'];
         $ultimo = '';
         if (count($detalhes) > 1) {
-            $ultimo = ' e '.array_pop($detalhes);
+            $ultimo = ' e ' . array_pop($detalhes);
         }
-        $texto = 'Trib. aprox.: '.implode(', ', $detalhes).$ultimo.'. '.$fonte;
-        Util::appendNode($element, is_null($name)?'infAdProd':$name, $texto);
+        $texto = 'Trib. aprox.: ' . implode(', ', $detalhes) . $ultimo . '. ' . $fonte;
+        Util::appendNode($element, is_null($name) ? 'infAdProd' : $name, $texto);
         return $texto;
     }
 
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'det':$name);
+        $element = $dom->createElement(is_null($name) ? 'det' : $name);
         $attr = $dom->createAttribute('nItem');
         $attr->value = $this->getItem(true);
         $element->appendChild($attr);
@@ -715,11 +715,11 @@ class Produto extends Total
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'det':$name;
+        $name = is_null($name) ? 'det' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" do Produto não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" do Produto não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

@@ -30,7 +30,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public static function loadEventoRegistradoXML()
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml';
         $dom = new \DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->load($xml_file);
@@ -84,7 +84,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         
         if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
-            $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
+            $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml';
             file_put_contents($xml_file, $dom->saveXML());
         }
 

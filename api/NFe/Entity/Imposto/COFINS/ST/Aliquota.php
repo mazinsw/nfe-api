@@ -61,7 +61,7 @@ class Aliquota extends \NFe\Entity\Imposto\COFINS\Aliquota
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'COFINSST':$name);
+        $element = parent::getNode(is_null($name) ? 'COFINSST' : $name);
         $item = $element->getElementsByTagName('CST')->item(0);
         $element->removeChild($item);
         return $element;
@@ -69,11 +69,11 @@ class Aliquota extends \NFe\Entity\Imposto\COFINS\Aliquota
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'COFINSST':$name;
+        $name = is_null($name) ? 'COFINSST' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

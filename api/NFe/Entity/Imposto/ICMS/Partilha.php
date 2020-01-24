@@ -116,7 +116,7 @@ class Partilha extends Mista
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMSPart':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMSPart' : $name);
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'pBCOp', $this->getOperacao(true));
         Util::appendNode($element, 'UFST', $this->getUF(true));
@@ -125,7 +125,7 @@ class Partilha extends Mista
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMSPart':$name;
+        $name = is_null($name) ? 'ICMSPart' : $name;
         $element = parent::loadNode($element, $name);
         $this->setOperacao(
             Util::loadNode(

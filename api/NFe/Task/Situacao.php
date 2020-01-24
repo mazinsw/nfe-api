@@ -172,7 +172,7 @@ class Situacao extends Retorno
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'consSitNFe':$name);
+        $element = $dom->createElement(is_null($name) ? 'consSitNFe' : $name);
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;
@@ -187,7 +187,7 @@ class Situacao extends Retorno
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?self::TAG_RETORNO:$name;
+        $name = is_null($name) ? self::TAG_RETORNO : $name;
         $element = parent::loadNode($element, $name);
         $this->setChave(Util::loadNode($element, 'chNFe'));
         return $element;
@@ -200,7 +200,7 @@ class Situacao extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/consSitNFe_v'.$this->getVersao().'.xsd';
+        $xsd_file = $xsd_path . '/consSitNFe_v' . $this->getVersao() . '.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
@@ -213,7 +213,7 @@ class Situacao extends Retorno
         $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
         }
         libxml_clear_errors();
         libxml_use_internal_errors($save);

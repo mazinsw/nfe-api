@@ -101,7 +101,7 @@ class Base extends Imposto
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'FCP':$name);
+        $element = $dom->createElement(is_null($name) ? 'FCP' : $name);
         Util::appendNode($element, 'vBCFCP', $this->getBase(true));
         Util::appendNode($element, 'pFCP', $this->getAliquota(true));
         Util::appendNode($element, 'vFCP', $this->getValor(true));
@@ -116,11 +116,11 @@ class Base extends Imposto
      */
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'FCP':$name;
+        $name = is_null($name) ? 'FCP' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

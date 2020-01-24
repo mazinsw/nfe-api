@@ -31,14 +31,14 @@ class TributoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testTributoXML.xml',
+                dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testTributoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testTributoXML.xml');
+        $dom_cmp->load(dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testTributoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -47,7 +47,7 @@ class TributoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testTributoXML.xml');
+        $dom_cmp->load(dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testTributoXML.xml');
 
         $retencao = new \NFe\Entity\Transporte\Tributo();
         $retencao->loadNode($dom_cmp->documentElement);

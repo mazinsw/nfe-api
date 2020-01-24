@@ -24,14 +24,14 @@ class VeiculoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testVeiculoXML.xml',
+                dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testVeiculoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testVeiculoXML.xml');
+        $dom_cmp->load(dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testVeiculoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -40,7 +40,7 @@ class VeiculoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(dirname(__DIR__))).'/resources/xml/transporte/testVeiculoXML.xml');
+        $dom_cmp->load(dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testVeiculoXML.xml');
 
         $veiculo = new \NFe\Entity\Transporte\Veiculo();
         $veiculo->loadNode($dom_cmp->documentElement);

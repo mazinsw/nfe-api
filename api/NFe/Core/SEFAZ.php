@@ -185,12 +185,12 @@ class SEFAZ
     {
         $evento = $this->getConfiguracao()->getEvento();
         if ($retorno->isRecebido()) {
-            Log::debug('SEFAZ.despacha - Recibo: '.$retorno->getNumero().' da '.$nota->getID(true));
+            Log::debug('SEFAZ.despacha - Recibo: ' . $retorno->getNumero() . ' da ' . $nota->getID(true));
             $evento->onNotaProcessando($nota, $dom, $retorno);
         } elseif ($retorno->isAutorizado()) {
             $dom = $nota->addProtocolo($dom);
-            Log::debug('SEFAZ.despacha('.$retorno->getStatus().') - '.$retorno->getMotivo().
-                ', Protocolo: '.$retorno->getNumero().' - '.$nota->getID(true));
+            Log::debug('SEFAZ.despacha(' . $retorno->getStatus() . ') - ' . $retorno->getMotivo() .
+                ', Protocolo: ' . $retorno->getNumero() . ' - ' . $nota->getID(true));
             $evento->onNotaAutorizada($nota, $dom, $retorno);
         } elseif ($retorno->isDenegada()) {
             $evento->onNotaDenegada($nota, $dom, $retorno);
@@ -237,8 +237,8 @@ class SEFAZ
                         if ($nota->getEmissao() == Nota::EMISSAO_CONTINGENCIA) {
                             throw $e;
                         }
-                        Log::debug('SEFAZ.autoriza('.$e->getCode().') - Mudando emissão para contingência: '.
-                            $e->getMessage().' - '.$nota->getID(true));
+                        Log::debug('SEFAZ.autoriza(' . $e->getCode() . ') - Mudando emissão para contingência: ' .
+                            $e->getMessage() . ' - ' . $nota->getID(true));
                         $msg = 'Falha no envio da nota';
                         $nota->setEmissao(Nota::EMISSAO_CONTINGENCIA);
                         $nota->setDataContingencia(time());
@@ -247,15 +247,15 @@ class SEFAZ
                         $envia = false;
                         continue;
                     }
-                    Log::debug('SEFAZ.autoriza('.$retorno->getStatus().') - '.
-                        $retorno->getMotivo().' - '.$nota->getID(true));
+                    Log::debug('SEFAZ.autoriza(' . $retorno->getStatus() . ') - ' .
+                        $retorno->getMotivo() . ' - ' . $nota->getID(true));
                     $this->despacha($nota, $dom, $retorno);
                     break;
                 } while (true);
                 $evento->onNotaCompleto($nota, $dom);
                 $i++;
             } catch (\Exception $e) {
-                Log::error('SEFAZ.autoriza('.$e->getCode().') - '.$e->getMessage());
+                Log::error('SEFAZ.autoriza(' . $e->getCode() . ') - ' . $e->getMessage());
                 $evento->onNotaErro($nota, $e);
             }
         }
@@ -275,15 +275,15 @@ class SEFAZ
             try {
                 $retorno = $pendencia->executa();
                 $dom = $pendencia->getDocumento();
-                Log::debug('SEFAZ.consulta('.$retorno->getStatus().') - '.
-                    $retorno->getMotivo().' - '.$nota->getID(true));
+                Log::debug('SEFAZ.consulta(' . $retorno->getStatus() . ') - ' .
+                    $retorno->getMotivo() . ' - ' . $nota->getID(true));
                 $this->despacha($nota, $dom, $retorno);
                 $evento->onNotaCompleto($nota, $dom);
                 $pendencia->setDocumento($dom);
                 $evento->onTarefaExecutada($pendencia, $retorno);
                 $i++;
             } catch (\Exception $e) {
-                Log::error('SEFAZ.consulta('.$e->getCode().') - '.$e->getMessage());
+                Log::error('SEFAZ.consulta(' . $e->getCode() . ') - ' . $e->getMessage());
                 $evento->onNotaErro($nota, $e);
             }
         }
@@ -304,13 +304,13 @@ class SEFAZ
                 $save_dom = $tarefa->getDocumento();
                 $retorno = $tarefa->executa();
                 $dom = $tarefa->getDocumento();
-                Log::debug('SEFAZ.executa('.$retorno->getStatus().') - '.$retorno->getMotivo().
-                    ' - Tarefa: '.$tarefa->getID());
+                Log::debug('SEFAZ.executa(' . $retorno->getStatus() . ') - ' . $retorno->getMotivo() .
+                    ' - Tarefa: ' . $tarefa->getID());
                 switch ($tarefa->getAcao()) {
                     case Tarefa::ACAO_INUTILIZAR:
                         $inutilizacao = $tarefa->getAgente();
-                        Log::debug('SEFAZ.executa[inutiliza]('.$inutilizacao->getStatus().') - '.
-                            $inutilizacao->getMotivo().' - '.$inutilizacao->getID(true));
+                        Log::debug('SEFAZ.executa[inutiliza](' . $inutilizacao->getStatus() . ') - ' .
+                            $inutilizacao->getMotivo() . ' - ' . $inutilizacao->getID(true));
                         $evento->onInutilizado($inutilizacao, $dom);
                         break;
                     default:
@@ -321,7 +321,7 @@ class SEFAZ
                 $evento->onTarefaExecutada($tarefa, $retorno);
                 $i++;
             } catch (\Exception $e) {
-                Log::error('SEFAZ.executa('.$e->getCode().') - '.$e->getMessage());
+                Log::error('SEFAZ.executa(' . $e->getCode() . ') - ' . $e->getMessage());
                 $evento->onTarefaErro($tarefa, $e);
             }
         }
@@ -342,7 +342,7 @@ class SEFAZ
         try {
             $this->executa([$tarefa]);
         } catch (\Exception $e) {
-            Log::error('SEFAZ.inutiliza('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.inutiliza(' . $e->getCode() . ') - ' . $e->getMessage());
             return false;
         }
         return true;
@@ -362,7 +362,7 @@ class SEFAZ
             $this->setNotas($notas);
             $i += $this->autoriza();
         } catch (\Exception $e) {
-            Log::error('SEFAZ.processa[autoriza]('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.processa[autoriza](' . $e->getCode() . ') - ' . $e->getMessage());
         }
         /* Consulta o status das notas em processamento */
         try {
@@ -370,7 +370,7 @@ class SEFAZ
             $pendencias = $db->getNotasPendentes();
             $i += $this->consulta($pendencias);
         } catch (\Exception $e) {
-            Log::error('SEFAZ.processa[pendentes]('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.processa[pendentes](' . $e->getCode() . ') - ' . $e->getMessage());
         }
         /* Consulta se as notas existem e cancela ou inutiliza seus números
          * Também processa pedido de inutilização e cancelamento de notas
@@ -380,7 +380,7 @@ class SEFAZ
             $tarefas = $db->getNotasTarefas();
             $i += $this->executa($tarefas);
         } catch (\Exception $e) {
-            Log::error('SEFAZ.processa[tarefas]('.$e->getCode().') - '.$e->getMessage());
+            Log::error('SEFAZ.processa[tarefas](' . $e->getCode() . ') - ' . $e->getMessage());
         }
         return $i;
     }

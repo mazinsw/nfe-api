@@ -340,7 +340,7 @@ class Configuracao
         if (!$normalize) {
             return $this->sincrono;
         }
-        return $this->isSincrono()?'1':'0';
+        return $this->isSincrono() ? '1' : '0';
     }
 
     /**
@@ -354,7 +354,7 @@ class Configuracao
     public function setSincrono($sincrono)
     {
         if (is_bool($sincrono)) {
-            $sincrono = $sincrono ? 'Y': 'N';
+            $sincrono = $sincrono ? 'Y' : 'N';
         }
         $this->sincrono = $sincrono;
         return $this;

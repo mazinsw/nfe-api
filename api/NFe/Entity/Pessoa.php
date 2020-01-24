@@ -212,11 +212,11 @@ abstract class Pessoa implements Node
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'emit':$name;
+        $name = is_null($name) ? 'emit' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }
@@ -247,7 +247,7 @@ abstract class Pessoa implements Node
             $endereco = new Endereco();
             $endereco->loadNode($_fields->item(0), $tag_ender);
         } elseif ($this instanceof Emitente) {
-            throw new \Exception('Tag "'.$tag_ender.'" do objeto "Endereco" não encontrada', 404);
+            throw new \Exception('Tag "' . $tag_ender . '" do objeto "Endereco" não encontrada', 404);
         }
         $this->setEndereco($endereco);
         $telefone = null;

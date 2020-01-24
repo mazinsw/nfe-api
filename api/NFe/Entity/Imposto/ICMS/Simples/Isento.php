@@ -72,13 +72,13 @@ class Isento extends Generico
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMSSN102':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMSSN102' : $name);
         return $element;
     }
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMSSN102':$name;
+        $name = is_null($name) ? 'ICMSSN102' : $name;
         $element = parent::loadNode($element, $name);
         return $element;
     }

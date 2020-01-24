@@ -150,7 +150,7 @@ class Util
      */
     public static function toMoney($value)
     {
-        return 'R$ '.number_format($value, 2, ',', '.');
+        return 'R$ ' . number_format($value, 2, ',', '.');
     }
 
     /**
@@ -164,7 +164,7 @@ class Util
     public static function binarySearch($elem, $array, $cmp_fn)
     {
         $bot = 0;
-        $top = count($array) -1;
+        $top = count($array) - 1;
         while ($top >= $bot) {
             $p = floor(($top + $bot) / 2);
             $o = $array[$p];
@@ -243,7 +243,7 @@ class Util
             $mul++;
             $dig = $digitos[$i];
             $term = $dig * $mul;
-            $sum += ($dig == 9)?$dig:($term % 9);
+            $sum += ($dig == 9) ? $dig : ($term % 9);
             if ($mul == 2) {
                 $mul = 0; // reset
             }
@@ -267,7 +267,7 @@ class Util
         } else {
             $ret = self::getModulo11($digitos);
         }
-        return ($ret <= $ext)? $presente: ($div - $ret);
+        return ($ret <= $ext) ? $presente : ($div - $ret);
     }
 
     public static function appendNode($element, $name, $text, $before = null)
@@ -316,7 +316,7 @@ class Util
         $list = $element->getElementsByTagName($name);
         if ($list->length == 0) {
             if (is_null($exception)) {
-                $exception = 'Node "'.$name.'" not found on element "'.$element->nodeName.'"';
+                $exception = 'Node "' . $name . '" not found on element "' . $element->nodeName . '"';
             }
             throw new \Exception($exception, 404);
         }

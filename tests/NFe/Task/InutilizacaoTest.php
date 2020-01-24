@@ -63,7 +63,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
         \NFe\Common\CurlSoap::setPostFunction(null);
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
 
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;

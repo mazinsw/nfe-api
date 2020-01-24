@@ -36,14 +36,14 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoDinheiroXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoDinheiroXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoDinheiroXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoDinheiroXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -52,7 +52,7 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoDinheiroXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoDinheiroXML.xml');
 
         $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp->documentElement);
@@ -79,14 +79,14 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoTrocoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoTrocoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoTrocoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoTrocoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -95,7 +95,7 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoTrocoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoTrocoXML.xml');
 
         $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp, 'vTroco');
@@ -126,14 +126,14 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoCartaoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoCartaoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -142,7 +142,7 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoCartaoXML.xml');
 
         $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp->documentElement);
@@ -171,14 +171,14 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -187,7 +187,7 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoCartaoNaoIntegradoXML.xml');
 
         $pagamento = new Pagamento();
         $pagamento->loadNode($dom_cmp->documentElement);

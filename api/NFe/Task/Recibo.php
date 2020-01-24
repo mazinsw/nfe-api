@@ -237,7 +237,7 @@ class Recibo extends Retorno
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'consReciNFe':$name);
+        $element = $dom->createElement(is_null($name) ? 'consReciNFe' : $name);
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;
@@ -251,11 +251,11 @@ class Recibo extends Retorno
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'retConsReciNFe':$name;
+        $name = is_null($name) ? 'retConsReciNFe' : $name;
         if ($name == self::INFO_TAGNAME) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         } else {
@@ -281,7 +281,7 @@ class Recibo extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/consReciNFe_v'.$this->getVersao().'.xsd';
+        $xsd_file = $xsd_path . '/consReciNFe_v' . $this->getVersao() . '.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
@@ -294,7 +294,7 @@ class Recibo extends Retorno
         $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
         }
         libxml_clear_errors();
         libxml_use_internal_errors($save);

@@ -47,14 +47,14 @@ class EnderecoTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/endereco/testEnderecoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/endereco/testEnderecoXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/endereco/testEnderecoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/endereco/testEnderecoXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -63,7 +63,7 @@ class EnderecoTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/endereco/testEnderecoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/endereco/testEnderecoXML.xml');
 
         $endereco = new \NFe\Entity\Endereco();
         $endereco->loadNode($dom_cmp->documentElement);

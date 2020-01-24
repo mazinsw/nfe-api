@@ -39,7 +39,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorXML.xml',
+                dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorXML.xml',
                 $dom->saveXML($xml)
             );
         }
@@ -47,7 +47,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
-            dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorXML.xml'
+            dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorXML.xml'
         );
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
@@ -58,7 +58,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
-            dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorXML.xml'
+            dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorXML.xml'
         );
 
         $transportador = new \NFe\Entity\Transporte\Transportador();
@@ -85,7 +85,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorSemEnderecoXML.xml',
+                dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorSemEnderecoXML.xml',
                 $dom->saveXML($xml)
             );
         }
@@ -93,7 +93,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
-            dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorSemEnderecoXML.xml'
+            dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorSemEnderecoXML.xml'
         );
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
@@ -104,7 +104,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(
-            dirname(dirname(dirname(__DIR__))).'/resources/xml/transportador/testTransportadorSemEnderecoXML.xml'
+            dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorSemEnderecoXML.xml'
         );
 
         $transportador = new \NFe\Entity\Transporte\Transportador();

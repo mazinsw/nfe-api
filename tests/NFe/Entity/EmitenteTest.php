@@ -62,14 +62,14 @@ class EmitenteTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/emitente/testEmitenteXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/emitente/testEmitenteXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/emitente/testEmitenteXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/emitente/testEmitenteXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -78,7 +78,7 @@ class EmitenteTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/emitente/testEmitenteXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/emitente/testEmitenteXML.xml');
 
         $emitente = new \NFe\Entity\Emitente();
         $emitente->loadNode($dom_cmp->documentElement);

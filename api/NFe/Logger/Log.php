@@ -141,7 +141,7 @@ class Log
             return $this;
         }
         if (!isset($log['directory'])) {
-            $this->setDirectory(dirname(dirname(dirname(__DIR__))).'/storage/logs');
+            $this->setDirectory(dirname(dirname(dirname(__DIR__))) . '/storage/logs');
         } else {
             $this->setDirectory($log['directory']);
         }

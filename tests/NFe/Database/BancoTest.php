@@ -247,7 +247,7 @@ class BancoTest extends \PHPUnit\Framework\TestCase
                         if (!is_array($values)) {
                             continue;
                         }
-                        $url = $values['url'].'?wsdl';
+                        $url = $values['url'] . '?wsdl';
                         $response = $soap->get($url);
                         if (!$soap->error) {
                             $namespace = (string)$response['targetNamespace'];
@@ -259,8 +259,9 @@ class BancoTest extends \PHPUnit\Framework\TestCase
                             );
                         } else {
                             // exibe os erros de conexão, mas não interfere na execução dos testes
-                            echo "\n".'ERROR('.$url.') = '.$soap->errorMessage.': '.$uf . ': ' . $servico . ': '.
-                                ', Ambiente: '.$ambiente;
+                            echo "\n" . 'ERROR(' . $url . ') = ' .
+                                $soap->errorMessage . ': ' . $uf . ': ' . $servico . ': ' .
+                                ', Ambiente: ' . $ambiente;
                         }
                     }
                 }

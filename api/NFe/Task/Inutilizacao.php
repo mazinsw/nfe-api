@@ -69,7 +69,7 @@ class Inutilizacao extends Retorno
         if (!$normalize) {
             return $this->id;
         }
-        return 'ID'.$this->id;
+        return 'ID' . $this->id;
     }
 
     public function setID($id)
@@ -313,7 +313,7 @@ class Inutilizacao extends Retorno
         $this->setID($this->gerarID());
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'inutNFe':$name);
+        $element = $dom->createElement(is_null($name) ? 'inutNFe' : $name);
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;
@@ -372,7 +372,7 @@ class Inutilizacao extends Retorno
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'infInut':$name;
+        $name = is_null($name) ? 'infInut' : $name;
         $element = parent::loadNode($element, $name);
         if (!$this->isInutilizado()) {
             return $element;
@@ -433,7 +433,7 @@ class Inutilizacao extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/inutNFe_v'.$this->getVersao().'.xsd';
+        $xsd_file = $xsd_path . '/inutNFe_v' . $this->getVersao() . '.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
@@ -446,7 +446,7 @@ class Inutilizacao extends Retorno
         $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
         }
         libxml_clear_errors();
         libxml_use_internal_errors($save);

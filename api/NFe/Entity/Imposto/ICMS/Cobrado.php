@@ -89,7 +89,7 @@ class Cobrado extends Generico
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMS60':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMS60' : $name);
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'vBCSTRet', $this->getBase(true));
         Util::appendNode($element, 'pST', $this->getAliquota(true));
@@ -99,11 +99,11 @@ class Cobrado extends Generico
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMS60':$name;
+        $name = is_null($name) ? 'ICMS60' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

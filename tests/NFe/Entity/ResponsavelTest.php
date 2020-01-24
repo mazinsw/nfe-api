@@ -32,14 +32,14 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/responsavel/testResponsavelXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/responsavel/testResponsavelXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -48,7 +48,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/responsavel/testResponsavelXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelXML.xml');
 
         $responsavel = new \NFe\Entity\Responsavel();
         $responsavel->loadNode($dom_cmp->documentElement);
@@ -64,7 +64,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/responsavel/testResponsavelXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelXML.xml');
 
         $responsavel = new \NFe\Entity\Responsavel();
         $this->expectException('\Exception');
@@ -75,7 +75,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/responsavel/testResponsavelInvalidXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelInvalidXML.xml');
 
         $responsavel = new \NFe\Entity\Responsavel();
         $responsavel->loadNode($dom_cmp->documentElement, 'infRespTec');

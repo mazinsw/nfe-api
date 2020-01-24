@@ -192,7 +192,7 @@ class NFCe extends Nota
             ];
         }
         $query = implode('|', $params);
-        $hash = sha1($query.$config->getCSC());
+        $hash = sha1($query . $config->getCSC());
         $params = [$query, $hash];
         $query = implode('|', $params);
         return ['p' => $query];
@@ -202,7 +202,7 @@ class NFCe extends Nota
     {
         $info = $this->getURLs();
         if (!isset($info['qrcode'])) {
-            throw new \Exception('Não existe URL de consulta de QRCode para o estado "'.$estado->getUF().'"', 404);
+            throw new \Exception('Não existe URL de consulta de QRCode para o estado "' . $estado->getUF() . '"', 404);
         }
         $url = $info['qrcode'];
         if (is_array($url)) {
@@ -210,10 +210,10 @@ class NFCe extends Nota
         }
         $params = $this->makeUrlQuery($dom);
         $query = urldecode(http_build_query($params));
-        $url .= (strpos($url, '?') === false?'?':'&').$query;
+        $url .= (strpos($url, '?') === false ? '?' : '&') . $query;
         $this->setQRCodeURL($url);
         if (!isset($info['consulta'])) {
-            throw new \Exception('Não existe URL de consulta da nota para o estado "'.$estado->getUF().'"', 404);
+            throw new \Exception('Não existe URL de consulta da nota para o estado "' . $estado->getUF() . '"', 404);
         }
         $url = $info['consulta'];
         if (is_array($url)) {

@@ -100,7 +100,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
 
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -223,7 +223,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml',
                 $dom->saveXML()
             );
         }
@@ -311,7 +311,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($nota->getID(), $retorno->getChave());
 
 
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/testEventoRegistrado.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);

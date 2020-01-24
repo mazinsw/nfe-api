@@ -113,7 +113,7 @@ class Autorizacao extends Retorno
 
     public function loadNode($element, $name = null)
     {
-        $tag = is_null($name)?'retEnviNFe':$name;
+        $tag = is_null($name) ? 'retEnviNFe' : $name;
         $element = parent::loadNode($element, $tag);
         return $element;
     }
@@ -126,7 +126,7 @@ class Autorizacao extends Retorno
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->loadXML($xml_content);
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/enviNFe_v'.$this->getVersao().'.xsd';
+        $xsd_file = $xsd_path . '/enviNFe_v' . $this->getVersao() . '.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
@@ -139,7 +139,7 @@ class Autorizacao extends Retorno
         $msg = [];
         $errors = libxml_get_errors();
         foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: '.$error->message;
+            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
         }
         libxml_clear_errors();
         libxml_use_internal_errors($save);

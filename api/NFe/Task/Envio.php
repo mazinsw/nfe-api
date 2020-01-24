@@ -99,9 +99,9 @@ class Envio
         }
         $url = $this->getServiceInfo();
         if (is_array($url) && isset($url['servico'])) {
-            return Nota::PORTAL.'/wsdl/'.$url['servico'];
+            return Nota::PORTAL . '/wsdl/' . $url['servico'];
         }
-        throw new \Exception('A ação do serviço "'.$this->getServico().'" não foi configurada', 404);
+        throw new \Exception('A ação do serviço "' . $this->getServico() . '" não foi configurada', 404);
     }
 
     /**
@@ -355,7 +355,7 @@ class Envio
     public function getNode($name = null)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name)?'nfeDadosMsg':$name);
+        $element = $dom->createElement(is_null($name) ? 'nfeDadosMsg' : $name);
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', $this->getServico(true));
         // Corrige xmlns:default
         // $data = $dom->importNode($this->getConteudo()->documentElement, true);

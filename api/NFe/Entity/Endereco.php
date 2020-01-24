@@ -147,7 +147,7 @@ class Endereco implements Node
      */
     public function getDescricao($normalize = false)
     {
-        return $this->getLogradouro().', '.$this->getNumero().' - '.$this->getBairro();
+        return $this->getLogradouro() . ', ' . $this->getNumero() . ' - ' . $this->getBairro();
     }
 
     /**
@@ -195,7 +195,7 @@ class Endereco implements Node
         } elseif (!is_array($endereco)) {
             return $this;
         }
-        $this->setPais(new Pais(isset($endereco['pais']) ? $endereco['pais']: ['codigo' => 1058, 'nome' => 'Brasil']));
+        $this->setPais(new Pais(isset($endereco['pais']) ? $endereco['pais'] : ['codigo' => 1058, 'nome' => 'Brasil']));
         if (isset($endereco['cep'])) {
             $this->setCEP($endereco['cep']);
         } else {
@@ -235,7 +235,7 @@ class Endereco implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $this->checkCodigos();
-        $element = $dom->createElement(is_null($name)?'enderEmit':$name);
+        $element = $dom->createElement(is_null($name) ? 'enderEmit' : $name);
         Util::appendNode($element, 'xLgr', $this->getLogradouro(true));
         Util::appendNode($element, 'nro', $this->getNumero(true));
         if (!is_null($this->getComplemento())) {
@@ -254,11 +254,11 @@ class Endereco implements Node
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'enderEmit':$name;
+        $name = is_null($name) ? 'enderEmit' : $name;
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {
-                throw new \Exception('Tag "'.$name.'" não encontrada', 404);
+                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
             }
             $element = $_fields->item(0);
         }

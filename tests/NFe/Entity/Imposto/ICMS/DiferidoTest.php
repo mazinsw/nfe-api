@@ -7,7 +7,7 @@ class DiferidoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->resource_path = dirname(dirname(dirname(dirname(__DIR__)))).'/resources';
+        $this->resource_path = dirname(dirname(dirname(dirname(__DIR__)))) . '/resources';
     }
 
     public function testDiferidoXML()

@@ -99,7 +99,7 @@ class Reducao extends Normal
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMS20':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMS20' : $name);
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'pRedBC', $this->getReducao(true));
         return $element;
@@ -107,7 +107,7 @@ class Reducao extends Normal
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMS20':$name;
+        $name = is_null($name) ? 'ICMS20' : $name;
         $element = parent::loadNode($element, $name);
         $this->setReducao(
             Util::loadNode(

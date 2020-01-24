@@ -49,7 +49,7 @@ class Cobrado extends Generico
     public function getBase($normalize = false)
     {
         if (!$normalize) {
-            return is_null($this->getValor())?0.00:parent::getBase($normalize);
+            return is_null($this->getValor()) ? 0.00 : parent::getBase($normalize);
         }
         return Util::toCurrency($this->getBase());
     }
@@ -99,7 +99,7 @@ class Cobrado extends Generico
 
     public function getNode($name = null)
     {
-        $element = parent::getNode(is_null($name)?'ICMSSN500':$name);
+        $element = parent::getNode(is_null($name) ? 'ICMSSN500' : $name);
         $dom = $element->ownerDocument;
         if (is_null($this->getValor())) {
             return $element;
@@ -111,7 +111,7 @@ class Cobrado extends Generico
 
     public function loadNode($element, $name = null)
     {
-        $name = is_null($name)?'ICMSSN500':$name;
+        $name = is_null($name) ? 'ICMSSN500' : $name;
         $element = parent::loadNode($element, $name);
         $this->setBase(Util::loadNode($element, 'vBCSTRet'));
         $this->setValor(Util::loadNode($element, 'vICMSSTRet'));

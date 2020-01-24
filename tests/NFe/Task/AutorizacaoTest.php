@@ -14,7 +14,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
 
     public static function processaPostFunction($test, $soap_curl, $url, $data, $xml_name, $resp_name)
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/task/'.$xml_name;
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/' . $xml_name;
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -36,7 +36,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $xml_cmp = $dom_cmp->saveXML();
         $test->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
         
-        $xml_resp_file = dirname(dirname(__DIR__)).'/resources/xml/task/'.$resp_name;
+        $xml_resp_file = dirname(dirname(__DIR__)) . '/resources/xml/task/' . $resp_name;
         $dom_resp = new \DOMDocument();
         $dom_resp->preserveWhiteSpace = false;
         $dom_resp->load($xml_resp_file);

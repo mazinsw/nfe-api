@@ -32,14 +32,14 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeXML.xml',
                 $dom->saveXML($xml)
             );
         }
 
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeXML.xml');
         $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
@@ -48,7 +48,7 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeXML.xml');
 
         $volume = new \NFe\Entity\Volume();
         $volume->loadNode($dom_cmp->documentElement);
@@ -64,7 +64,7 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
-        $dom_cmp->load(dirname(dirname(__DIR__)).'/resources/xml/volume/testVolumeSemPesoXML.xml');
+        $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeSemPesoXML.xml');
 
         $volume = new \NFe\Entity\Volume();
         $element = $volume->loadNode($dom_cmp->documentElement);

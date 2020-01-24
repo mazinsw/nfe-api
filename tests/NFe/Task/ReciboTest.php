@@ -85,7 +85,7 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
 
         if (getenv('TEST_MODE') == 'override') {
             $dom = $nota->addProtocolo($dom);
-            $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
+            $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAutorizadoXML.xml';
             $dom->formatOutput = true;
             file_put_contents($xml_file, $dom->saveXML());
         }

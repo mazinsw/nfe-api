@@ -220,7 +220,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
     public static function loadNFCeXML()
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -229,7 +229,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
     public static function loadTrocoNFCeXMLValidada()
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testTrocoNFCeValidadaXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testTrocoNFCeValidadaXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -247,7 +247,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
     public static function loadNFCeXMLAssinado()
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAssinadaXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -256,7 +256,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
     public static function loadNFCeXMLAutorizado()
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAutorizadoXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -267,7 +267,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = self::loadNFCeXMLAssinado();
 
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAssinadaXML.xml';
         $nfce = new \NFe\Core\NFCe();
         $nfce->load($xml_file);
 
@@ -298,7 +298,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = self::loadNFCeXMLAutorizado();
 
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAutorizadoXML.xml';
         $nfce = new \NFe\Core\NFCe();
         $nfce->load($xml_file);
 
@@ -326,7 +326,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
-            file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
+            file_put_contents(dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeXML.xml', $dom->saveXML());
         }
 
         $dom_cmp = self::loadNFCeXML();
@@ -344,7 +344,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/nota/testTrocoNFCeValidadaXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/nota/testTrocoNFCeValidadaXML.xml',
                 $dom->saveXML()
             );
         }
@@ -373,7 +373,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAssinadaXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAssinadaXML.xml',
                 $dom->saveXML()
             );
         }
@@ -420,7 +420,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(
-                dirname(dirname(__DIR__)).'/resources/xml/nota/testNFCeAutorizadoXML.xml',
+                dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAutorizadoXML.xml',
                 $dom->saveXML()
             );
         }

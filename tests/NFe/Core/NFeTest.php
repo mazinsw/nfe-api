@@ -178,7 +178,7 @@ class NFeTest extends \PHPUnit\Framework\TestCase
 
     public static function loadNFeXML()
     {
-        $xml_file = dirname(dirname(__DIR__)).'/resources/xml/nota/testNFeXML.xml';
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFeXML.xml';
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
@@ -193,7 +193,7 @@ class NFeTest extends \PHPUnit\Framework\TestCase
 
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
-            file_put_contents(dirname(dirname(__DIR__)).'/resources/xml/nota/testNFeXML.xml', $dom->saveXML());
+            file_put_contents(dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFeXML.xml', $dom->saveXML());
         }
 
         $dom_cmp = self::loadNFeXML();
