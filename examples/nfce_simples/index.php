@@ -1,4 +1,5 @@
 <?php
+
 require dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 require __DIR__ . '/Gerador.php';
 require __DIR__ . '/Processador.php';

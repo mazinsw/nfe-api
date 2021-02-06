@@ -1,4 +1,5 @@
 <?php
+
 namespace Example;
 
 use NFe\Database\Estatico;
@@ -48,7 +49,7 @@ class Gerador extends Estatico
             // $contingencia = $nota->isContingencia();
             if ($contingencia) {
                 $nfce->setEmissao(\NFe\Core\Nota::EMISSAO_CONTINGENCIA);
-            // $nfce->setDataEmissao($nota->getDataLancamento());
+                // $nfce->setDataEmissao($nota->getDataLancamento());
                 // $nfce->setDataContingencia($nota->getDataLancamento());
                 // $nfce->setJustificativa($nota->getMotivo());
             } else {
@@ -137,7 +138,7 @@ class Gerador extends Estatico
             }
             $produto->addImposto($imposto);
             $nfce->addProduto($produto);
-            
+
             $pagamento = new \NFe\Entity\Pagamento();
             $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DINHEIRO);
             $pagamento->setValor(5.00);
@@ -147,7 +148,7 @@ class Gerador extends Estatico
             // }
             // $pagamento->setAutorizacao('110011');
             $nfce->addPagamento($pagamento);
-            
+
             $troco = new \NFe\Entity\Pagamento();
             $troco->setValor(-1.50);
             $nfce->addPagamento($troco);
@@ -181,7 +182,7 @@ class Gerador extends Estatico
         //     $recibo->setNumero($nota->getRecibo());
         //     $recibo->setAmbiente($nfce->getAmbiente());
         //     $recibo->setModelo($nfce->getModelo());
-            
+
         //     // Cria a tarefa para consultar
         //     $tarefa = new \NFe\Task\Tarefa();
         //     $tarefa->setID($nota->getID()); // salva o ID da nota para posterior uso
@@ -189,7 +190,7 @@ class Gerador extends Estatico
         //     $tarefa->setNota($nfce);
         //     $tarefa->setAgente($recibo);
         //     $tarefa->setDocumento($dom);
-            
+
         //     $tarefas[] = $tarefa;
         // } catch (\Exception $e) {
         //     // marcar aqui a nota no banco como não corrigida

@@ -1,4 +1,5 @@
 <?php
+
 namespace Example;
 
 use NFe\Common\Ajuste;
@@ -25,8 +26,8 @@ class Processador extends Ajuste
         Util::createDirectory($pasta_xml);
         $this->setPastaXmlBase($pasta_xml);
         // informa onde estão os arquivos do certificado
-        $this->setArquivoChavePublica($storage . '/certs/public.pem');
-        $this->setArquivoChavePrivada($storage . '/certs/private.pem');
+        $this->getCertificado()->setArquivoChavePublica($storage . '/certs/public.pem');
+        $this->getCertificado()->setArquivoChavePrivada($storage . '/certs/private.pem');
         // informa o token e o CSC
         $this->setToken($info['contrib']['token']);
         $this->setCSC($info['contrib']['csc']);
