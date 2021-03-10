@@ -40,29 +40,35 @@ class Total implements Node
      * Valor Total dos produtos e serviços
      */
     private $produtos;
+
     /**
      * Valor do Desconto
      */
     private $desconto;
+
     /**
      * informar o valor do Seguro, o Seguro deve ser rateado entre os itens de
      * produto
      */
     private $seguro;
+
     /**
      * informar o valor do Frete, o Frete deve ser rateado entre os itens de
      * produto.
      */
     private $frete;
+
     /**
      * informar o valor de outras despesas acessórias do item de produto ou
      * serviço
      */
     private $despesas;
+
     /**
      * Valor estimado total de impostos federais, estaduais e municipais
      */
     private $tributos;
+
     /**
      * Informações complementares de interesse do Contribuinte
      */

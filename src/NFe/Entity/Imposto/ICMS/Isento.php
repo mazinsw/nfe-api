@@ -58,17 +58,17 @@ class Isento extends Generico
      * condutor
      * 16 - Olimpíadas Rio 2016
      */
-    const MOTIVO_TAXI = 'taxi';
-    const MOTIVO_PRODUTOR = 'produtor';
-    const MOTIVO_LOCADORA = 'locadora';
-    const MOTIVO_CONSULAR = 'consular';
-    const MOTIVO_CONTRAN = 'contran';
-    const MOTIVO_SUFRAMA = 'suframa';
-    const MOTIVO_VENDA = 'venda';
-    const MOTIVO_OUTROS = 'outros';
-    const MOTIVO_CONDUTOR = 'condutor';
-    const MOTIVO_DEFICIENTE = 'deficiente';
-    const MOTIVO_OLIMPIADAS = 'olimpiadas';
+    public const MOTIVO_TAXI = 'taxi';
+    public const MOTIVO_PRODUTOR = 'produtor';
+    public const MOTIVO_LOCADORA = 'locadora';
+    public const MOTIVO_CONSULAR = 'consular';
+    public const MOTIVO_CONTRAN = 'contran';
+    public const MOTIVO_SUFRAMA = 'suframa';
+    public const MOTIVO_VENDA = 'venda';
+    public const MOTIVO_OUTROS = 'outros';
+    public const MOTIVO_CONDUTOR = 'condutor';
+    public const MOTIVO_DEFICIENTE = 'deficiente';
+    public const MOTIVO_OLIMPIADAS = 'olimpiadas';
 
     private $desoneracao;
     private $motivo;

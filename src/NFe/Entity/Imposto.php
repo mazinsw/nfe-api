@@ -39,23 +39,23 @@ abstract class Imposto implements Node
     /**
      * Tipo de imposto
      */
-    const TIPO_IMPORTADO = 'importado';
-    const TIPO_NACIONAL = 'nacional';
-    const TIPO_ESTADUAL = 'estadual';
-    const TIPO_MUNICIPAL = 'municipal';
+    public const TIPO_IMPORTADO = 'importado';
+    public const TIPO_NACIONAL = 'nacional';
+    public const TIPO_ESTADUAL = 'estadual';
+    public const TIPO_MUNICIPAL = 'municipal';
 
     /**
      * Grupo do imposto
      */
-    const GRUPO_ICMS = 'icms';
-    const GRUPO_PIS = 'pis';
-    const GRUPO_COFINS = 'cofins';
-    const GRUPO_IPI = 'ipi';
-    const GRUPO_II = 'ii';
-    const GRUPO_PISST = 'pisst';
-    const GRUPO_COFINSST = 'cofinsst';
-    const GRUPO_ISSQN = 'issqn';
-    const GRUPO_ICMSUFDEST = 'icmsufdest';
+    public const GRUPO_ICMS = 'icms';
+    public const GRUPO_PIS = 'pis';
+    public const GRUPO_COFINS = 'cofins';
+    public const GRUPO_IPI = 'ipi';
+    public const GRUPO_II = 'ii';
+    public const GRUPO_PISST = 'pisst';
+    public const GRUPO_COFINSST = 'cofinsst';
+    public const GRUPO_ISSQN = 'issqn';
+    public const GRUPO_ICMSUFDEST = 'icmsufdest';
 
     private $tipo;
     private $grupo;

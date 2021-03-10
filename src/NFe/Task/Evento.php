@@ -36,11 +36,11 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 class Evento extends Retorno
 {
-    const VERSAO = '1.00';
+    public const VERSAO = '1.00';
 
-    const TIPO_CANCELAMENTO = '110111';
-    const TAG_RETORNO = 'retEvento';
-    const TAG_RETORNO_ENVIO = 'retEnvEvento';
+    public const TIPO_CANCELAMENTO = '110111';
+    public const TAG_RETORNO = 'retEvento';
+    public const TAG_RETORNO_ENVIO = 'retEnvEvento';
 
     private $id;
     private $orgao;

@@ -39,18 +39,22 @@ class Certificado implements Node
      * @var string
      */
     private $chave_publica;
+
     /**
      * @var string
      */
     private $chave_privada;
+
     /**
      * @var string
      */
     private $arquivo_chave_publica;
+
     /**
      * @var string
      */
     private $arquivo_chave_privada;
+
     /**
      * @var int
      */

@@ -52,12 +52,12 @@ class Transporte implements Node
      * destinatário;
      * 9- Sem Ocorrência de transporte.
      */
-    const FRETE_REMETENTE = 'remetente';
-    const FRETE_DESTINATARIO = 'destinatario';
-    const FRETE_TERCEIROS = 'terceiros';
-    const FRETE_PROPRIOREMETENTE = 'proprio_remetente';
-    const FRETE_PROPRIODESTINATARIO = 'proprio_destinatario';
-    const FRETE_NENHUM = 'nenhum';
+    public const FRETE_REMETENTE = 'remetente';
+    public const FRETE_DESTINATARIO = 'destinatario';
+    public const FRETE_TERCEIROS = 'terceiros';
+    public const FRETE_PROPRIOREMETENTE = 'proprio_remetente';
+    public const FRETE_PROPRIODESTINATARIO = 'proprio_destinatario';
+    public const FRETE_NENHUM = 'nenhum';
 
     private $frete;
     private $transportador;

@@ -32,8 +32,8 @@ use NFe\Entity\Imposto;
 
 class Aliquota extends Imposto
 {
-    const TRIBUTACAO_NORMAL = 'normal';
-    const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
+    public const TRIBUTACAO_NORMAL = 'normal';
+    public const TRIBUTACAO_DIFERENCIADA = 'diferenciada';
 
     public function __construct($pis = [])
     {

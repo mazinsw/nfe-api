@@ -27,6 +27,7 @@
  */
 namespace NFe\Entity;
 
+use DOMElement;
 use NFe\Common\Util;
 use NFe\Common\Node;
 

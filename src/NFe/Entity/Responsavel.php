@@ -42,10 +42,12 @@ class Responsavel extends Pessoa implements Node
      */
     private $contato;
     private $email;
+
     /**
      * Identificador do CSRT utilizado para montar o hash do CSRT
      */
     private $idcsrt;
+
     /**
      * O hashCSRT é o resultado da função hash (SHA-1 – Base64) do CSRT
      * fornecido pelo fisco mais a Chave de Acesso da NFe.

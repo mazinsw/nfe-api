@@ -36,34 +36,41 @@ class Pagamento implements Node
      * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
      * prazo.
      */
-    const INDICADOR_AVISTA = 'avista';
-    const INDICADOR_APRAZO = 'aprazo';
+    public const INDICADOR_AVISTA = 'avista';
+    public const INDICADOR_APRAZO = 'aprazo';
 
     /**
      * Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão
      * de Débito;05-Crédito Loja;10-Vale Alimentação;11-Vale Refeição;12-Vale
      * Presente;13-Vale Combustível;99 - Outros
      */
-    const FORMA_DINHEIRO = 'dinheiro';
-    const FORMA_CHEQUE = 'cheque';
-    const FORMA_CREDITO = 'credito';
-    const FORMA_DEBITO = 'debito';
-    const FORMA_CREDIARIO = 'crediario';
-    const FORMA_ALIMENTACAO = 'alimentacao';
-    const FORMA_REFEICAO = 'refeicao';
-    const FORMA_PRESENTE = 'presente';
-    const FORMA_COMBUSTIVEL = 'combustivel';
-    const FORMA_OUTROS = 'outros';
+    public const FORMA_DINHEIRO = 'dinheiro';
+    public const FORMA_CHEQUE = 'cheque';
+    public const FORMA_CREDITO = 'credito';
+    public const FORMA_DEBITO = 'debito';
+    public const FORMA_CREDIARIO = 'crediario';
+    public const FORMA_ALIMENTACAO = 'alimentacao';
+    public const FORMA_REFEICAO = 'refeicao';
+    public const FORMA_PRESENTE = 'presente';
+    public const FORMA_COMBUSTIVEL = 'combustivel';
+    public const FORMA_DUPLICATA = 'duplicata';
+    public const FORMA_BOLETO = 'boleto';
+    public const FORMA_DEPOSITO = 'deposito';
+    public const FORMA_INSTANTANEO = 'instantaneo';
+    public const FORMA_TRANSFERENCIA = 'transferencia';
+    public const FORMA_FIDELIDADE = 'fidelidade';
+    public const FORMA_CORTESIA = 'cortesia';
+    public const FORMA_OUTROS = 'outros';
 
     /**
      * Bandeira da operadora de cartão de crédito/débito:01–Visa;
      * 02–Mastercard; 03–American Express; 04–Sorocred; 99–Outros
      */
-    const BANDEIRA_VISA = 'visa';
-    const BANDEIRA_MASTERCARD = 'mastercard';
-    const BANDEIRA_AMEX = 'amex';
-    const BANDEIRA_SOROCRED = 'sorocred';
-    const BANDEIRA_OUTROS = 'outros';
+    public const BANDEIRA_VISA = 'visa';
+    public const BANDEIRA_MASTERCARD = 'mastercard';
+    public const BANDEIRA_AMEX = 'amex';
+    public const BANDEIRA_SOROCRED = 'sorocred';
+    public const BANDEIRA_OUTROS = 'outros';
 
     /**
      * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à

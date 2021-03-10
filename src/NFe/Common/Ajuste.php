@@ -41,41 +41,49 @@ class Ajuste extends Configuracao implements Evento
      * @var string
      */
     private $pasta_xml_base;
+
     /**
      * Subpasta onde será salvo os XMLs das numerações inutilizadas
      * @var string
      */
     private $pasta_xml_inutilizado;
+
     /**
      * Subpasta onde será salvo os XMLs dos eventos de cancelamentos
      * @var string
      */
     private $pasta_xml_cancelado;
+
     /**
      * Subpasta onde será salvo os XMLs das notas pendentes de envio
      * @var string
      */
     private $pasta_xml_pendente;
+
     /**
      * Subpasta onde será salvo os XMLs das notas denegadas pela SEFAZ
      * @var string
      */
     private $pasta_xml_denegado;
+
     /**
      * Subpasta onde será salvo os XMLs das notas rejeitadas
      * @var string
      */
     private $pasta_xml_rejeitado;
+
     /**
      * Subpasta onde será salvo os XMLs das notas autorizadas
      * @var string
      */
     private $pasta_xml_autorizado;
+
     /**
      * Subpasta onde será salvo os XMLs das notas em processamento na SEFAZ
      * @var string
      */
     private $pasta_xml_processamento;
+
     /**
      * Subpasta onde será salvo os XMLs das notas assinadas com certificado digital
      * @var string

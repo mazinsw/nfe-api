@@ -32,9 +32,9 @@ namespace NFe\Common;
  */
 class Util
 {
-    const ACCENT_CHARS =
+    public const ACCENT_CHARS =
         'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
-    const NORMAL_CHARS =
+    public const NORMAL_CHARS =
         'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
     
     /**

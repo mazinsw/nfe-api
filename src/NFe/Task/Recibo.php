@@ -33,7 +33,7 @@ use NFe\Exception\ValidationException;
 
 class Recibo extends Retorno
 {
-    const INFO_TAGNAME = 'infRec';
+    public const INFO_TAGNAME = 'infRec';
 
     private $numero;
     private $tempo_medio;

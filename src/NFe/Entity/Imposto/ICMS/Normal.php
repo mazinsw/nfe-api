@@ -35,10 +35,10 @@ use NFe\Entity\Imposto\Fundo\Base as Fundo;
  */
 class Normal extends Base
 {
-    const MODALIDADE_AGREGADO = 'agregado';
-    const MODALIDADE_PAUTA = 'pauta';
-    const MODALIDADE_TABELADO = 'tabelado';
-    const MODALIDADE_OPERACAO = 'operacao';
+    public const MODALIDADE_AGREGADO = 'agregado';
+    public const MODALIDADE_PAUTA = 'pauta';
+    public const MODALIDADE_TABELADO = 'tabelado';
+    public const MODALIDADE_OPERACAO = 'operacao';
 
     private $modalidade;
 

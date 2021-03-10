@@ -39,38 +39,47 @@ class Configuracao
      * @var \NFe\Database\Banco
      */
     private $banco;
+
     /**
      * @var \NFe\Entity\Emitente
      */
     private $emitente;
+
     /**
      * @var Evento
      */
     private $evento;
+
     /**
      * @var Certificado
      */
     private $certificado;
+
     /**
      * @var string
      */
     private $token;
+
     /**
      * @var string
      */
     private $csc;
+
     /**
      * @var string
      */
     private $token_ibpt;
+
     /**
      * @var int
      */
     private $tempo_limite;
+
     /**
      * @var string
      */
     private $sincrono;
+
     /**
      * @var int
      */

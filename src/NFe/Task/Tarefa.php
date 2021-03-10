@@ -33,9 +33,9 @@ class Tarefa
     /**
      * Ação a ser realizada sobre o objeto ou recibo
      */
-    const ACAO_CONSULTAR = 'consultar';
-    const ACAO_INUTILIZAR = 'inutilizar';
-    const ACAO_CANCELAR = 'cancelar';
+    public const ACAO_CONSULTAR = 'consultar';
+    public const ACAO_INUTILIZAR = 'inutilizar';
+    public const ACAO_CANCELAR = 'cancelar';
 
     private $id;
     private $acao;

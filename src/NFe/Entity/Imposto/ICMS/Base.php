@@ -45,9 +45,9 @@ abstract class Base extends Imposto
      *
      * 2 - Estrangeira - Adquirida no mercado interno
      */
-    const ORIGEM_NACIONAL = 'nacional';
-    const ORIGEM_ESTRANGEIRA = 'estrangeira';
-    const ORIGEM_INTERNO = 'interno';
+    public const ORIGEM_NACIONAL = 'nacional';
+    public const ORIGEM_ESTRANGEIRA = 'estrangeira';
+    public const ORIGEM_INTERNO = 'interno';
 
     /**
      * origem da mercadoria:
@@ -57,6 +57,7 @@ abstract class Base extends Imposto
      * - Estrangeira - Adquirida no mercado interno
      */
     private $origem;
+
     /**
      * Fundo de Combate à Probreza
      */

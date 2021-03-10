@@ -39,12 +39,13 @@ class NFCe extends Nota
     /**
      * Versão do QRCode
      */
-    const QRCODE_VERSAO = '2';
+    public const QRCODE_VERSAO = '2';
 
     /**
      * Texto com o QR-Code impresso no DANFE NFC-e
      */
     private $qrcode_url;
+
     /**
      * Informar a URL da "Consulta por chave de acesso da NFC-e". A mesma URL
      * que deve estar informada no DANFE NFC-e para consulta por chave de

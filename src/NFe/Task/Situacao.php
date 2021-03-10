@@ -36,7 +36,7 @@ class Situacao extends Retorno
     private $chave;
     private $modelo;
 
-    const TAG_RETORNO = 'retConsSitNFe';
+    public const TAG_RETORNO = 'retConsSitNFe';
 
     public function __construct($situacao = [])
     {

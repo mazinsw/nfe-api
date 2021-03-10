@@ -38,9 +38,9 @@ class Base extends Imposto
     /**
      * Grupo do imposto
      */
-    const GRUPO_FCP = 'fcp';
-    const GRUPO_FCPST = 'fcpst';
-    const GRUPO_FCPSTRET = 'fcpstret';
+    public const GRUPO_FCP = 'fcp';
+    public const GRUPO_FCPST = 'fcpst';
+    public const GRUPO_FCPSTRET = 'fcpstret';
 
     
     /**

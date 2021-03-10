@@ -50,12 +50,12 @@ class Parcial extends Base
      * 5 -
      * Pauta (valor).
      */
-    const MODALIDADE_TABELADO = 'tabelado';
-    const MODALIDADE_NEGATIVO = 'negativo';
-    const MODALIDADE_POSITIVO = 'positivo';
-    const MODALIDADE_NEUTRO = 'neutro';
-    const MODALIDADE_AGREGADO = 'agregado';
-    const MODALIDADE_PAUTA = 'pauta';
+    public const MODALIDADE_TABELADO = 'tabelado';
+    public const MODALIDADE_NEGATIVO = 'negativo';
+    public const MODALIDADE_POSITIVO = 'positivo';
+    public const MODALIDADE_NEUTRO = 'neutro';
+    public const MODALIDADE_AGREGADO = 'agregado';
+    public const MODALIDADE_PAUTA = 'pauta';
 
     private $modalidade;
     private $margem;

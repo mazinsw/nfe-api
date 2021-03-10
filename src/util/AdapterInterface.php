@@ -23,19 +23,19 @@ interface AdapterInterface
      */
     /* Digest */
     /** @var string SHA1 Digest Algorithm URI */
-    const SHA1 = 'http://www.w3.org/2000/09/xmldsig#sha1';
+    public const SHA1 = 'http://www.w3.org/2000/09/xmldsig#sha1';
 
     /* Signature */
     /** @var string DSA with SHA1 (DSS) Sign Algorithm URI */
-    const DSA_SHA1 = 'http://www.w3.org/2000/09/xmldsig#dsa-sha1';
+    public const DSA_SHA1 = 'http://www.w3.org/2000/09/xmldsig#dsa-sha1';
     /** @var string RSA with SHA1 Sign Algorithm URI */
-    const RSA_SHA1 = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
+    public const RSA_SHA1 = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
 
     /* Canonicalization */
-    const XML_C14N = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
+    public const XML_C14N = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
 
     /* Transform */
-    const ENVELOPED = 'http://www.w3.org/2000/09/xmldsig#enveloped-signature';
+    public const ENVELOPED = 'http://www.w3.org/2000/09/xmldsig#enveloped-signature';
 
     /**
      * Set the private key for data sign.

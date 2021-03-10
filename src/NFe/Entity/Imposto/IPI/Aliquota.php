@@ -41,10 +41,10 @@ class Aliquota extends Imposto
      * 50-Saída tributada
      * 99-Outras saídas
      */
-    const TRIBUTACAO_CREDITO = 'credito';
-    const TRIBUTACAO_ENTRADA = 'entrada';
-    const TRIBUTACAO_TRIBUTADA = 'tributada';
-    const TRIBUTACAO_SAIDA = 'saida';
+    public const TRIBUTACAO_CREDITO = 'credito';
+    public const TRIBUTACAO_ENTRADA = 'entrada';
+    public const TRIBUTACAO_TRIBUTADA = 'tributada';
+    public const TRIBUTACAO_SAIDA = 'saida';
 
     public function __construct($aliquota = [])
     {

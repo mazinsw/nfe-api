@@ -43,9 +43,9 @@ class Destinatario extends Pessoa
      * 2 – Contribuinte isento de inscrição;
      * 9 – Não Contribuinte
      */
-    const INDICADOR_PAGAMENTO = 'pagamento';
-    const INDICADOR_ISENTO = 'isento';
-    const INDICADOR_NENHUM = 'nenhum';
+    public const INDICADOR_PAGAMENTO = 'pagamento';
+    public const INDICADOR_ISENTO = 'isento';
+    public const INDICADOR_NENHUM = 'nenhum';
 
     private $cpf;
     private $email;

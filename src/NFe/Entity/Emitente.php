@@ -40,9 +40,9 @@ class Emitente extends Pessoa
      * com: 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite
      * de receita bruta; 3 – Regime Normal.
      */
-    const REGIME_SIMPLES = 'simples';
-    const REGIME_EXCESSO = 'excesso';
-    const REGIME_NORMAL = 'normal';
+    public const REGIME_SIMPLES = 'simples';
+    public const REGIME_EXCESSO = 'excesso';
+    public const REGIME_NORMAL = 'normal';
 
     private $fantasia;
     private $regime;

@@ -206,7 +206,7 @@ $[field.else.if(searchable)]
      * @param $[Field.unix.plural] $$[field.unix.plural] Instância d$[field.gender] $[Field.unix.plural] que será adicionada
      * @return self A própria instância da classe
      */
-    public function add$[Field.unix.plural]($$[field.unix.plural])
+    public function add$[Field.norm.singular]($$[field.unix.plural])
     {
         $this->$[field.unix][] = $$[field.unix.plural];
         return $this;

@@ -42,37 +42,41 @@ class Envio
     /**
      * Tipo de serviço a ser executado
      */
-    const SERVICO_INUTILIZACAO = 'inutilizacao';
-    const SERVICO_PROTOCOLO = 'protocolo';
-    const SERVICO_STATUS = 'status';
-    const SERVICO_CADASTRO = 'cadastro';
-    const SERVICO_AUTORIZACAO = 'autorizacao';
-    const SERVICO_RETORNO = 'retorno';
-    const SERVICO_RECEPCAO = 'recepcao';
-    const SERVICO_CONFIRMACAO = 'confirmacao';
-    const SERVICO_EVENTO = 'evento';
-    const SERVICO_DESTINADAS = 'destinadas';
-    const SERVICO_DOWNLOAD = 'download';
-    const SERVICO_DISTRIBUICAO = 'distribuicao';
+    public const SERVICO_INUTILIZACAO = 'inutilizacao';
+    public const SERVICO_PROTOCOLO = 'protocolo';
+    public const SERVICO_STATUS = 'status';
+    public const SERVICO_CADASTRO = 'cadastro';
+    public const SERVICO_AUTORIZACAO = 'autorizacao';
+    public const SERVICO_RETORNO = 'retorno';
+    public const SERVICO_RECEPCAO = 'recepcao';
+    public const SERVICO_CONFIRMACAO = 'confirmacao';
+    public const SERVICO_EVENTO = 'evento';
+    public const SERVICO_DESTINADAS = 'destinadas';
+    public const SERVICO_DOWNLOAD = 'download';
+    public const SERVICO_DISTRIBUICAO = 'distribuicao';
 
     /**
      * Tipo de serviço a ser executado
      */
     private $servico;
+
     /**
      * Identificação do Ambiente:
      * 1 - Produção
      * 2 - Homologação
      */
     private $ambiente;
+
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
      */
     private $modelo;
+
     /**
      * Forma de emissão da NF-e
      */
     private $emissao;
+
     /**
      * Conteudo a ser enviado
      */

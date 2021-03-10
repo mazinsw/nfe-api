@@ -41,11 +41,11 @@ class Produto extends Total
     /**
      * Unidade do produto, Não informar a grandeza
      */
-    const UNIDADE_UNIDADE = 'unidade';
-    const UNIDADE_PECA = 'peca';
-    const UNIDADE_METRO = 'metro';
-    const UNIDADE_GRAMA = 'grama';
-    const UNIDADE_LITRO = 'litro';
+    public const UNIDADE_UNIDADE = 'unidade';
+    public const UNIDADE_PECA = 'peca';
+    public const UNIDADE_METRO = 'metro';
+    public const UNIDADE_GRAMA = 'grama';
+    public const UNIDADE_LITRO = 'litro';
 
     private $item;
     private $pedido;

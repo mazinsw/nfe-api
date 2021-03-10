@@ -44,11 +44,11 @@ class Isento extends Imposto
      * Incidência da contribuição;
      * 09 - Operação com suspensão da contribuição;
      */
-    const TRIBUTACAO_MONOFASICA = 'monofasica';
-    const TRIBUTACAO_ZERO = 'zero';
-    const TRIBUTACAO_ISENTA = 'isenta';
-    const TRIBUTACAO_INCIDENCIA = 'incidencia';
-    const TRIBUTACAO_SUSPENSAO = 'suspensao';
+    public const TRIBUTACAO_MONOFASICA = 'monofasica';
+    public const TRIBUTACAO_ZERO = 'zero';
+    public const TRIBUTACAO_ISENTA = 'isenta';
+    public const TRIBUTACAO_INCIDENCIA = 'incidencia';
+    public const TRIBUTACAO_SUSPENSAO = 'suspensao';
 
     public function __construct($pis = [])
     {

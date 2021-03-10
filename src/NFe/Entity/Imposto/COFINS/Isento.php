@@ -46,12 +46,12 @@ class Isento extends Imposto
      * 09 -
      * Operação com suspensão da contribuição;
      */
-    const TRIBUTACAO_MONOFASICA = 'monofasica';
-    const TRIBUTACAO_ST = 'st';
-    const TRIBUTACAO_ZERO = 'zero';
-    const TRIBUTACAO_ISENTA = 'isenta';
-    const TRIBUTACAO_INCIDENCIA = 'incidencia';
-    const TRIBUTACAO_SUSPENSAO = 'suspensao';
+    public const TRIBUTACAO_MONOFASICA = 'monofasica';
+    public const TRIBUTACAO_ST = 'st';
+    public const TRIBUTACAO_ZERO = 'zero';
+    public const TRIBUTACAO_ISENTA = 'isenta';
+    public const TRIBUTACAO_INCIDENCIA = 'incidencia';
+    public const TRIBUTACAO_SUSPENSAO = 'suspensao';
 
     public function __construct($cofins = [])
     {

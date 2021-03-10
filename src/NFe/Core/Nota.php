@@ -36,8 +36,9 @@ use NFe\Entity\Produto;
 use NFe\Entity\Emitente;
 use NFe\Entity\Pagamento;
 use NFe\Entity\Transporte;
-use NFe\Entity\Destinatario;
 use NFe\Entity\Responsavel;
+use NFe\Entity\Destinatario;
+use NFe\Entity\Intermediador;
 use NFe\Exception\ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
@@ -51,70 +52,70 @@ abstract class Nota implements Node
     /**
      * Versão da nota fiscal
      */
-    const VERSAO = '4.00';
+    public const VERSAO = '4.00';
 
     /**
      * Versão do aplicativo gerador da nota
      */
-    const APP_VERSAO = '1.0';
+    public const APP_VERSAO = '1.0';
 
     /**
      * Portal da nota fiscal
      */
-    const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
+    public const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
      */
-    const MODELO_NFE = 'nfe';
-    const MODELO_NFCE = 'nfce';
+    public const MODELO_NFE = 'nfe';
+    public const MODELO_NFCE = 'nfce';
 
     /**
      * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
      */
-    const TIPO_ENTRADA = 'entrada';
-    const TIPO_SAIDA = 'saida';
+    public const TIPO_ENTRADA = 'entrada';
+    public const TIPO_SAIDA = 'saida';
 
     /**
      * Identificador de Local de destino da operação
      * (1-Interna;2-Interestadual;3-Exterior)
      */
-    const DESTINO_INTERNA = 'interna';
-    const DESTINO_INTERESTADUAL = 'interestadual';
-    const DESTINO_EXTERIOR = 'exterior';
+    public const DESTINO_INTERNA = 'interna';
+    public const DESTINO_INTERESTADUAL = 'interestadual';
+    public const DESTINO_EXTERIOR = 'exterior';
 
     /**
      * Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe
      * Paisagem;3-DANFe Simplificado;4-DANFe NFC-e;5-DANFe NFC-e em mensagem
      * eletrônica)
      */
-    const FORMATO_NENHUMA = 'nenhuma';
-    const FORMATO_RETRATO = 'retrato';
-    const FORMATO_PAISAGEM = 'paisagem';
-    const FORMATO_SIMPLIFICADO = 'simplificado';
-    const FORMATO_CONSUMIDOR = 'consumidor';
-    const FORMATO_MENSAGEM = 'mensagem';
+    public const FORMATO_NENHUMA = 'nenhuma';
+    public const FORMATO_RETRATO = 'retrato';
+    public const FORMATO_PAISAGEM = 'paisagem';
+    public const FORMATO_SIMPLIFICADO = 'simplificado';
+    public const FORMATO_CONSUMIDOR = 'consumidor';
+    public const FORMATO_MENSAGEM = 'mensagem';
 
     /**
      * Forma de emissão da NF-e
      */
-    const EMISSAO_NORMAL = 'normal';
-    const EMISSAO_CONTINGENCIA = 'contingencia';
+    public const EMISSAO_NORMAL = 'normal';
+    public const EMISSAO_CONTINGENCIA = 'contingencia';
 
     /**
      * Identificação do Ambiente: 1 - Produção, 2 - Homologação
      */
-    const AMBIENTE_PRODUCAO = 'producao';
-    const AMBIENTE_HOMOLOGACAO = 'homologacao';
+    public const AMBIENTE_PRODUCAO = 'producao';
+    public const AMBIENTE_HOMOLOGACAO = 'homologacao';
 
     /**
      * Finalidade da emissão da NF-e: 1 - NFe normal, 2 - NFe complementar, 3 -
      * NFe de ajuste, 4 - Devolução/Retorno
      */
-    const FINALIDADE_NORMAL = 'normal';
-    const FINALIDADE_COMPLEMENTAR = 'complementar';
-    const FINALIDADE_AJUSTE = 'ajuste';
-    const FINALIDADE_RETORNO = 'retorno';
+    public const FINALIDADE_NORMAL = 'normal';
+    public const FINALIDADE_COMPLEMENTAR = 'complementar';
+    public const FINALIDADE_AJUSTE = 'ajuste';
+    public const FINALIDADE_RETORNO = 'retorno';
 
     /**
      * Indicador de presença do comprador no estabelecimento comercial no
@@ -123,116 +124,167 @@ abstract class Nota implements Node
      * presencial, teleatendimento;4-NFC-e entrega em domicílio;5-Operação
      * presencial, fora do estabelecimento;9-Não presencial, outros)
      */
-    const PRESENCA_NENHUM = 'nenhum';
-    const PRESENCA_PRESENCIAL = 'presencial';
-    const PRESENCA_INTERNET = 'internet';
-    const PRESENCA_TELEATENDIMENTO = 'teleatendimento';
-    const PRESENCA_ENTREGA = 'entrega';
-    const PRESENCA_AMBULANTE = 'ambulante';
-    const PRESENCA_OUTROS = 'outros';
+    public const PRESENCA_NENHUM = 'nenhum';
+    public const PRESENCA_PRESENCIAL = 'presencial';
+    public const PRESENCA_INTERNET = 'internet';
+    public const PRESENCA_TELEATENDIMENTO = 'teleatendimento';
+    public const PRESENCA_ENTREGA = 'entrega';
+    public const PRESENCA_AMBULANTE = 'ambulante';
+    public const PRESENCA_OUTROS = 'outros';
+
+    /**
+     * Indicador de intermediador/marketplace 0=Operação sem intermediador (em
+     * site ou plataforma própria) 1=Operação em site ou plataforma de
+     * terceiros (intermediadores/marketplace)
+     */
+    public const INTERMEDIACAO_NENHUM = 'nenhum';
+    public const INTERMEDIACAO_TERCEIROS = 'terceiros';
 
     /**
      * Chave da nota fiscal
      */
     private $id;
+
     /**
      * Número do Documento Fiscal
      */
     private $numero;
+
     /**
      * Emitente da nota fiscal
+     * 
+     * @var Emitente
      */
     private $emitente;
+
     /**
      * Destinatário que receberá os produtos
+     * 
+     * @var Destinatario
      */
     private $destinatario;
+
     /**
      * Grupo de informações do responsável técnico pelo sistema
+     *
+     * @var Responsavel
      */
     private $responsavel;
+
+    /**
+     * Grupo de Informações do Intermediador da Transação
+     *
+     * @var Intermediador
+     */
+    private $intermediador;
+
     /**
      * Produtos adicionados na nota
+     * 
+     * @var Produto[]
      */
     private $produtos;
+
     /**
      * Informações de trasnporte da mercadoria
+     * 
+     * @var Transporte
      */
     private $transporte;
+
     /**
      * Pagamentos realizados
+     * 
+     * @var Pagamento[]
      */
     private $pagamentos;
+
     /**
      * Data e Hora da saída ou de entrada da mercadoria / produto
      */
     private $data_movimentacao;
+
     /**
      * Informar a data e hora de entrada em contingência
      */
     private $data_contingencia;
+
     /**
      * Informar a Justificativa da entrada em contingência
      */
     private $justificativa;
+
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
      */
     private $modelo;
+
     /**
      * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
      */
     private $tipo;
+
     /**
      * Identificador de Local de destino da operação
      * (1-Interna;2-Interestadual;3-Exterior)
      */
     private $destino;
+
     /**
      * Descrição da Natureza da Operação
      */
     private $natureza;
+
     /**
      * Código numérico que compõe a Chave de Acesso. Número aleatório gerado
      * pelo emitente para cada NF-e.
      */
     private $codigo;
+
     /**
      * Data e Hora de emissão do Documento Fiscal
      */
     private $data_emissao;
+
     /**
      * Série do Documento Fiscal: série normal 0-889, Avulsa Fisco 890-899,
      * SCAN 900-999
      */
     private $serie;
+
     /**
      * Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe
      * Paisagem;3-DANFe Simplificado;4-DANFe NFC-e;5-DANFe NFC-e em mensagem
      * eletrônica)
      */
     private $formato;
+
     /**
      * Forma de emissão da NF-e
      */
     private $emissao;
+
     /**
      * Digito Verificador da Chave de Acesso da NF-e
      */
     private $digito_verificador;
+
     /**
      * Identificação do Ambiente: 1 - Produção, 2 - Homologação
      */
     private $ambiente;
+
     /**
      * Finalidade da emissão da NF-e: 1 - NFe normal, 2 - NFe complementar, 3 -
      * NFe de ajuste, 4 - Devolução/Retorno
      */
     private $finalidade;
+
     /**
      * Indica operação com consumidor final (0-Não;1-Consumidor Final)
      */
     private $consumidor_final;
+
     /**
      * Indicador de presença do comprador no estabelecimento comercial no
      * momento da oepração (0-Não se aplica, ex.: Nota Fiscal complementar ou
@@ -241,27 +293,43 @@ abstract class Nota implements Node
      * presencial, outros)
      */
     private $presenca;
+
+    /**
+     * Indicador de intermediador/marketplace 0=Operação sem intermediador (em
+     * site ou plataforma própria) 1=Operação em site ou plataforma de
+     * terceiros (intermediadores/marketplace)
+     *
+     * @var string
+     */
+    private $intermediacao;
+
     /**
      * Dados dos totais da NF-e
      */
     private $total;
+
     /**
      * Informações adicionais de interesse do Fisco
      */
     private $adicionais;
+
     /**
      * Campo de uso livre do contribuinte informar o nome do campo no atributo
      * xCampo e o conteúdo do campo no xTexto
      */
     private $observacoes;
+
     /**
      * Campo de uso exclusivo do Fisco informar o nome do campo no atributo
      * xCampo e o conteúdo do campo no xTexto
      */
     private $informacoes;
+
     /**
      * Protocolo de autorização da nota, informado apenas quando a nota for
      * enviada e autorizada
+     * 
+     * @var Protocolo
      */
     private $protocolo;
 
@@ -290,7 +358,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do ID para o informado no parâmetro
      * @param mixed $id novo valor para ID
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setID($id)
     {
@@ -314,7 +382,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Numero para o informado no parâmetro
      * @param mixed $numero novo valor para Numero
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setNumero($numero)
     {
@@ -324,7 +392,7 @@ abstract class Nota implements Node
 
     /**
      * Emitente da nota fiscal
-     * @return mixed emitente da Nota
+     * @return Emitente emitente da Nota
      */
     public function getEmitente()
     {
@@ -333,8 +401,8 @@ abstract class Nota implements Node
 
     /**
      * Altera o valor do Emitente para o informado no parâmetro
-     * @param mixed $emitente novo valor para Emitente
-     * @return Nota A própria instância da classe
+     * @param Emitente $emitente novo valor para Emitente
+     * @return self
      */
     public function setEmitente($emitente)
     {
@@ -344,7 +412,7 @@ abstract class Nota implements Node
 
     /**
      * Destinatário que receberá os produtos
-     * @return mixed destinatario da Nota
+     * @return Destinatario destinatario da Nota
      */
     public function getDestinatario()
     {
@@ -353,8 +421,8 @@ abstract class Nota implements Node
 
     /**
      * Altera o valor do Destinatario para o informado no parâmetro
-     * @param mixed $destinatario novo valor para Destinatario
-     * @return Nota A própria instância da classe
+     * @param Destinatario $destinatario novo valor para Destinatario
+     * @return self
      */
     public function setDestinatario($destinatario)
     {
@@ -364,7 +432,7 @@ abstract class Nota implements Node
 
     /**
      * Grupo de informações do responsável técnico pelo sistema
-     * @return mixed responsável da Nota
+     * @return Responsavel responsável da Nota
      */
     public function getResponsavel()
     {
@@ -373,8 +441,8 @@ abstract class Nota implements Node
 
     /**
      * Altera o valor do grupo de informações do responsável técnico pelo sistema
-     * @param mixed $responsavel novo valor para grupo de informações do responsável
-     * @return Nota A própria instância da classe
+     * @param Responsavel $responsavel novo valor para grupo de informações do responsável
+     * @return self
      */
     public function setResponsavel($responsavel)
     {
@@ -384,7 +452,7 @@ abstract class Nota implements Node
 
     /**
      * Produtos adicionados na nota
-     * @return \NFe\Entity\Produto[] produtos da Nota
+     * @return Produto[] produtos da Nota
      */
     public function getProdutos()
     {
@@ -393,8 +461,10 @@ abstract class Nota implements Node
 
     /**
      * Altera o valor do Produtos para o informado no parâmetro
-     * @param mixed $produtos novo valor para Produtos
-     * @return Nota A própria instância da classe
+     *
+     * @param Produto[] $produtos
+     *
+     * @return self
      */
     public function setProdutos($produtos)
     {
@@ -405,11 +475,34 @@ abstract class Nota implements Node
     /**
      * Adiciona um(a) Produto para a lista de produto
      * @param Produto $produto Instância do Produto que será adicionada
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function addProduto($produto)
     {
         $this->produtos[] = $produto;
+        return $this;
+    }
+
+    /**
+     * Grupo de Informações do Intermediador da Transação
+     *
+     * @return Intermediador
+     */
+    public function getIntermediador()
+    {
+        return $this->intermediador;
+    }
+    
+    /**
+     * Altera o valor do Intermediador para o informado no parâmetro
+     *
+     * @param Intermediador $intermediador
+     *
+     * @return self
+     */
+    public function setIntermediador($intermediador)
+    {
+        $this->intermediador = $intermediador;
         return $this;
     }
 
@@ -425,7 +518,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Transporte para o informado no parâmetro
      * @param mixed $transporte novo valor para Transporte
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setTransporte($transporte)
     {
@@ -445,7 +538,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Pagamentos para o informado no parâmetro
      * @param mixed $pagamentos novo valor para Pagamentos
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setPagamentos($pagamentos)
     {
@@ -456,7 +549,7 @@ abstract class Nota implements Node
     /**
      * Adiciona um(a) Pagamento para a lista de pagamento
      * @param Pagamento $pagamento Instância do Pagamento que será adicionada
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function addPagamento($pagamento)
     {
@@ -480,7 +573,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da DataMovimentacao para o informado no parâmetro
      * @param mixed $data_movimentacao novo valor para DataMovimentacao
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setDataMovimentacao($data_movimentacao)
     {
@@ -507,7 +600,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da DataContingencia para o informado no parâmetro
      * @param mixed $data_contingencia novo valor para DataContingencia
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setDataContingencia($data_contingencia)
     {
@@ -534,7 +627,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Justificativa para o informado no parâmetro
      * @param mixed $justificativa novo valor para Justificativa
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setJustificativa($justificativa)
     {
@@ -564,7 +657,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Modelo para o informado no parâmetro
      * @param mixed $modelo novo valor para Modelo
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setModelo($modelo)
     {
@@ -602,7 +695,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Tipo para o informado no parâmetro
      * @param mixed $tipo novo valor para Tipo
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setTipo($tipo)
     {
@@ -643,7 +736,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Destino para o informado no parâmetro
      * @param mixed $destino novo valor para Destino
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setDestino($destino)
     {
@@ -678,7 +771,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Natureza para o informado no parâmetro
      * @param mixed $natureza novo valor para Natureza
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setNatureza($natureza)
     {
@@ -703,7 +796,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Codigo para o informado no parâmetro
      * @param mixed $codigo novo valor para Codigo
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setCodigo($codigo)
     {
@@ -727,7 +820,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do DataEmissao para o informado no parâmetro
      * @param mixed $data_emissao novo valor para DataEmissao
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setDataEmissao($data_emissao)
     {
@@ -755,7 +848,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Serie para o informado no parâmetro
      * @param mixed $serie novo valor para Serie
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setSerie($serie)
     {
@@ -795,7 +888,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Formato para o informado no parâmetro
      * @param mixed $formato novo valor para Formato
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setFormato($formato)
     {
@@ -845,7 +938,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Emissao para o informado no parâmetro
      * @param mixed $emissao novo valor para Emissao
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setEmissao($emissao)
     {
@@ -877,7 +970,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do DigitoVerificador para o informado no parâmetro
      * @param mixed $digito_verificador novo valor para DigitoVerificador
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setDigitoVerificador($digito_verificador)
     {
@@ -907,7 +1000,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Ambiente para o informado no parâmetro
      * @param mixed $ambiente novo valor para Ambiente
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setAmbiente($ambiente)
     {
@@ -950,7 +1043,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Finalidade para o informado no parâmetro
      * @param mixed $finalidade novo valor para Finalidade
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setFinalidade($finalidade)
     {
@@ -1003,7 +1096,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do ConsumidorFinal para o informado no parâmetro
      * @param mixed $consumidor_final novo valor para ConsumidorFinal
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setConsumidorFinal($consumidor_final)
     {
@@ -1050,7 +1143,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Presenca para o informado no parâmetro
      * @param mixed $presenca novo valor para Presenca
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setPresenca($presenca)
     {
@@ -1082,6 +1175,47 @@ abstract class Nota implements Node
     }
 
     /**
+     * Indicador de intermediador/marketplace 0=Operação sem intermediador (em
+     * site ou plataforma própria) 1=Operação em site ou plataforma de
+     * terceiros (intermediadores/marketplace)
+     * @param boolean $normalize informa se a intermediacao deve estar no formato do XML
+     * @return string intermediacao of Nota
+     */
+    public function getIntermediacao($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->intermediacao;
+        }
+        switch ($this->intermediacao) {
+            case self::INTERMEDIACAO_NENHUM:
+                return '0';
+            case self::INTERMEDIACAO_TERCEIROS:
+                return '1';
+        }
+        return $this->intermediacao;
+    }
+    
+    /**
+     * Altera o valor da Intermediacao para o informado no parâmetro
+     * @param mixed $intermediacao novo valor para Intermediacao
+     * @param string $intermediacao Novo intermediacao para Nota
+     * @return self
+     */
+    public function setIntermediacao($intermediacao)
+    {
+        switch ($intermediacao) {
+            case '0':
+                $intermediacao = self::INTERMEDIACAO_NENHUM;
+                break;
+            case '1':
+                $intermediacao = self::INTERMEDIACAO_TERCEIROS;
+                break;
+        }
+        $this->intermediacao = $intermediacao;
+        return $this;
+    }
+
+    /**
      * Dados dos totais da NF-e
      * @return mixed total da Nota
      */
@@ -1093,7 +1227,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor do Total para o informado no parâmetro
      * @param mixed $total novo valor para Total
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setTotal($total)
     {
@@ -1117,7 +1251,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Adicionais para o informado no parâmetro
      * @param mixed $adicionais novo valor para Adicionais
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setAdicionais($adicionais)
     {
@@ -1138,7 +1272,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Observacoes para o informado no parâmetro
      * @param mixed $observacoes novo valor para Observacoes
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setObservacoes($observacoes)
     {
@@ -1149,7 +1283,7 @@ abstract class Nota implements Node
     /**
      * Adiciona um(a) Observacao para a lista de observacao
      * @param Observacao $observacao Instância da Observacao que será adicionada
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function addObservacao($campo, $observacao)
     {
@@ -1170,7 +1304,7 @@ abstract class Nota implements Node
     /**
      * Altera o valor da Informacoes para o informado no parâmetro
      * @param mixed $informacoes novo valor para Informacoes
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function setInformacoes($informacoes)
     {
@@ -1181,7 +1315,7 @@ abstract class Nota implements Node
     /**
      * Adiciona um(a) Informacao para a lista de informacao
      * @param Informacao $informacao Instância da Informacao que será adicionada
-     * @return Nota A própria instância da classe
+     * @return self
      */
     public function addInformacao($campo, $informacao)
     {
@@ -1234,6 +1368,11 @@ abstract class Nota implements Node
         } else {
             $nota['produtos'] = $this->getProdutos();
         }
+        if (!is_null($this->getIntermediador()) && $recursive) {
+            $nota['intermediador'] = $this->getIntermediador()->toArray($recursive);
+        } else {
+            $nota['intermediador'] = $this->getIntermediador();
+        }
         if (!is_null($this->getTransporte()) && $recursive) {
             $nota['transporte'] = $this->getTransporte()->toArray($recursive);
         } else {
@@ -1266,6 +1405,7 @@ abstract class Nota implements Node
         $nota['finalidade'] = $this->getFinalidade();
         $nota['consumidor_final'] = $this->getConsumidorFinal();
         $nota['presenca'] = $this->getPresenca();
+        $nota['intermediacao'] = $this->getIntermediacao();
         if (!is_null($this->getTotal()) && $recursive) {
             $nota['total'] = $this->getTotal()->toArray($recursive);
         } else {
@@ -1306,6 +1446,11 @@ abstract class Nota implements Node
             $this->setProdutos([]);
         } else {
             $this->setProdutos($nota['produtos']);
+        }
+        if (isset($nota['intermediador'])) {
+            $this->setIntermediador(new Intermediador(isset($nota['intermediador'])));
+        } else {
+            $this->setIntermediador(null);
         }
         $this->setTransporte(new Transporte(isset($nota['transporte']) ? $nota['transporte'] : []));
         if (!isset($nota['pagamentos'])) {
@@ -1397,6 +1542,11 @@ abstract class Nota implements Node
             $this->setPresenca($nota['presenca']);
         } else {
             $this->setPresenca(null);
+        }
+        if (isset($nota['intermediacao'])) {
+            $this->setIntermediacao($nota['intermediacao']);
+        } else {
+            $this->setIntermediacao(null);
         }
         $this->setTotal(new Total(isset($nota['total']) ? $nota['total'] : []));
         if (!array_key_exists('adicionais', $nota)) {
@@ -1593,6 +1743,9 @@ abstract class Nota implements Node
         Util::appendNode($ident, 'finNFe', $this->getFinalidade(true));
         Util::appendNode($ident, 'indFinal', $this->getConsumidorFinal(true));
         Util::appendNode($ident, 'indPres', $this->getPresenca(true));
+        if (!is_null($this->getIntermediacao())) {
+            Util::appendNode($element, 'indIntermed', $this->getIntermediacao(true));
+        }
         Util::appendNode($ident, 'procEmi', 0); // emissão de NF-e com aplicativo do contribuinte
         Util::appendNode($ident, 'verProc', self::APP_VERSAO);
         if (!is_null($this->getDataMovimentacao())) {
@@ -1662,6 +1815,11 @@ abstract class Nota implements Node
         $info_adic = $dom->createElement('infAdic');
         if (!is_null($this->getAdicionais())) {
             Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
+        }
+        if (!is_null($this->getIntermediador())) {
+            $intermediador = $this->getIntermediador()->getNode();
+            $intermediador = $dom->importNode($intermediador, true);
+            $element->appendChild($intermediador);
         }
         // TODO: adicionar informações adicionais somente na NFC-e?
         $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
@@ -1850,6 +2008,7 @@ abstract class Nota implements Node
                 'Tag "indPres" do campo "Presenca" não encontrada'
             )
         );
+        $this->setIntermediacao(Util::loadNode($ident, 'indIntermed'));
         $this->setDataContingencia(Util::loadNode($ident, 'dhCont'));
         $this->setJustificativa(Util::loadNode($ident, 'xJust'));
         $emitente->loadNode(
@@ -1883,6 +2042,13 @@ abstract class Nota implements Node
             $produtos[] = $produto;
         }
         $this->setProdutos($produtos);
+        $_fields = $info->getElementsByTagName('infIntermed');
+        $intermediador = null;
+        if ($_fields->length > 0) {
+            $intermediador = new Intermediador();
+            $intermediador->loadNode($_fields->item(0), 'infIntermed');
+        }
+        $this->setIntermediador($intermediador);
         $_fields = $info->getElementsByTagName('transp');
         $transporte = null;
         if ($_fields->length > 0) {
