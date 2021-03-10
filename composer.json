@@ -33,10 +33,10 @@
     },
     "autoload": {
         "psr-4": {
-            "NFe\\": "api/NFe"
+            "NFe\\": "src/NFe"
         },
         "classmap": [
-            "api/util"
+            "src/util"
         ]
     },
     "autoload-dev": {
@@ -52,10 +52,10 @@
             "phpunit --coverage-html storage/coverage"
         ],
         "psr-fix": [
-            "phpcbf --standard=PSR12 api/NFe/ tests/"
+            "phpcbf --standard=PSR12 src/NFe/ tests/"
         ],
         "check-style": [
-            "phpcs --colors --standard=PSR12 api/NFe/ tests/"
+            "phpcs --colors --standard=PSR12 src/NFe/ tests/"
         ],
         "gen-class": [
             "java -jar utils/SQLtoClass.jar -p utils/config.properties -t utils/template -o storage/generated"

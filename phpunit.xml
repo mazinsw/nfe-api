@@ -12,7 +12,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">api/NFe</directory>
+            <directory suffix=".php">src/NFe</directory>
         </whitelist>
     </filter>
     <php>
