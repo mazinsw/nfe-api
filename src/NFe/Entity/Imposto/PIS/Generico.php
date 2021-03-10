@@ -2,7 +2,7 @@
 /**
  * MIT License
  *
- * Copyright (c) 2016 MZ Desenvolvimento de Sistemas LTDA
+ * Copyright (c) 2016 GrandChef Desenvolvimento de Sistemas LTDA
  *
  * @author Francimar Alves <mazinsw@gmail.com>
  *
