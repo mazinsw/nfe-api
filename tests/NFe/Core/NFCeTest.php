@@ -196,7 +196,6 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         return $nfce;
     }
 
-    
     public static function createTrocoNFCe($sefaz)
     {
         $nfce = self::createNFCe($sefaz);
@@ -218,6 +217,18 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         return $nfce;
     }
 
+    public static function createIntermediadorNFCe($sefaz)
+    {
+        $nfce = self::createNFCe($sefaz);
+
+        $nfce->setIntermediacao(\NFe\Core\Nota::INTERMEDIACAO_TERCEIROS);
+        $intermediador = new \NFe\Entity\Intermediador();
+        $intermediador->setCNPJ('14380200000121');
+        $intermediador->setIdentificador('iFood');
+        $nfce->setIntermediador($intermediador);
+        return $nfce;
+    }
+
     public static function loadNFCeXML()
     {
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeXML.xml';
@@ -234,6 +245,24 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
         
+        $nfce = new \NFe\Core\NFCe();
+        $nfce->load($xml_file);
+        $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
+        $dom = $nfce->validar($dom);
+        return [
+            'nota' => $nfce,
+            'dom' => $dom,
+            'cmp' => $dom_cmp
+        ];
+    }
+
+    public static function loadIntermediadorNFCeXMLValidada()
+    {
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testIntermediadorNFCeValidadaXML.xml';
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+
         $nfce = new \NFe\Core\NFCe();
         $nfce->load($xml_file);
         $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
@@ -350,6 +379,27 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         }
 
         $data = self::loadTrocoNFCeXMLValidada();
+        $dom_cmp = $data['cmp'];
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
+
+    public function testIntermediadorNFCeValidadaXML()
+    {
+        $nfce = self::createIntermediadorNFCe($this->sefaz);
+        $xml = $nfce->getNode();
+        $dom = $xml->ownerDocument;
+        $dom = $nfce->assinar($dom);
+        $dom = $nfce->validar($dom);
+
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents(
+                dirname(dirname(__DIR__)) . '/resources/xml/nota/testIntermediadorNFCeValidadaXML.xml',
+                $dom->saveXML()
+            );
+        }
+
+        $data = self::loadIntermediadorNFCeXMLValidada();
         $dom_cmp = $data['cmp'];
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
     }

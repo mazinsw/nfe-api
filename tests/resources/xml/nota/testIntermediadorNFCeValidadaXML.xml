@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="4.00">
+    <ide>
+      <cUF>41</cUF>
+      <cNF>77882192</cNF>
+      <natOp>VENDA PARA CONSUMIDOR FINAL</natOp>
+      <mod>65</mod>
+      <serie>1</serie>
+      <nNF>81</nNF>
+      <dhEmi>2016-09-17T00:36:03+00:00</dhEmi>
+      <tpNF>1</tpNF>
+      <idDest>1</idDest>
+      <cMunFG>4118402</cMunFG>
+      <tpImp>4</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV>5</cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <indFinal>1</indFinal>
+      <indPres>1</indPres>
+      <indIntermed>1</indIntermed>
+      <procEmi>0</procEmi>
+      <verProc>1.0</verProc>
+    </ide>
+    <emit>
+      <CNPJ>08380787000176</CNPJ>
+      <xNome>Empresa LTDA</xNome>
+      <xFant>Minha Empresa</xFant>
+      <enderEmit>
+        <xLgr>Rua Paranavaí</xLgr>
+        <nro>123</nro>
+        <xBairro>Centro</xBairro>
+        <cMun>4118402</cMun>
+        <xMun>Paranavaí</xMun>
+        <UF>PR</UF>
+        <CEP>01122500</CEP>
+        <cPais>1058</cPais>
+        <xPais>Brasil</xPais>
+        <fone>11955886644</fone>
+      </enderEmit>
+      <IE>123456789</IE>
+      <IM>98765</IM>
+      <CRT>1</CRT>
+    </emit>
+    <dest>
+      <CPF>12345678912</CPF>
+      <xNome>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
+      <enderDest>
+        <xLgr>Rua Paranavaí</xLgr>
+        <nro>123</nro>
+        <xBairro>Centro</xBairro>
+        <cMun>4118402</cMun>
+        <xMun>Paranavaí</xMun>
+        <UF>PR</UF>
+        <CEP>01122500</CEP>
+        <cPais>1058</cPais>
+        <xPais>Brasil</xPais>
+        <fone>11988220055</fone>
+      </enderDest>
+      <indIEDest>9</indIEDest>
+      <email>fulano@site.com.br</email>
+    </dest>
+    <det nItem="1">
+      <prod>
+        <cProd>123456</cProd>
+        <cEAN>7894900011531</cEAN>
+        <xProd>NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xProd>
+        <NCM>22021000</NCM>
+        <CEST>0300700</CEST>
+        <CFOP>5405</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>4.9900000000</vUnCom>
+        <vProd>4.99</vProd>
+        <cEANTrib/>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>4.9900000000</vUnTrib>
+        <indTot>1</indTot>
+        <nItemPed>1</nItemPed>
+      </prod>
+      <imposto>
+        <vTotTrib>1.65</vTotTrib>
+        <ICMS>
+          <ICMS60>
+            <orig>0</orig>
+            <CST>60</CST>
+            <vBCSTRet>4.99</vBCSTRet>
+            <pST>0.0000</pST>
+            <vICMSSTRet>0.00</vICMSSTRet>
+          </ICMS60>
+        </ICMS>
+        <PIS>
+          <PISAliq>
+            <CST>01</CST>
+            <vBC>4.99</vBC>
+            <pPIS>0.6500</pPIS>
+            <vPIS>0.03</vPIS>
+          </PISAliq>
+        </PIS>
+        <COFINS>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>4.99</vBC>
+            <pCOFINS>3.0000</pCOFINS>
+            <vCOFINS>0.15</vCOFINS>
+          </COFINSAliq>
+        </COFINS>
+      </imposto>
+      <infAdProd>Trib. aprox.: R$ 0,75 Federal e R$ 0,90 Estadual. Fonte: IBPT/empresometro.com.br 5A16F8</infAdProd>
+    </det>
+    <det nItem="2">
+      <prod>
+        <cProd>123456</cProd>
+        <cEAN>7894900011523</cEAN>
+        <xProd>NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xProd>
+        <NCM>22021000</NCM>
+        <CEST>0300700</CEST>
+        <CFOP>5405</CFOP>
+        <uCom>UN</uCom>
+        <qCom>2.0000</qCom>
+        <vUnCom>4.5000000000</vUnCom>
+        <vProd>9.00</vProd>
+        <cEANTrib/>
+        <uTrib>UN</uTrib>
+        <qTrib>2.0000</qTrib>
+        <vUnTrib>4.5000000000</vUnTrib>
+        <vDesc>2.20</vDesc>
+        <indTot>1</indTot>
+        <nItemPed>2</nItemPed>
+      </prod>
+      <imposto>
+        <vTotTrib>2.24</vTotTrib>
+        <ICMS>
+          <ICMS60>
+            <orig>0</orig>
+            <CST>60</CST>
+            <vBCSTRet>0.00</vBCSTRet>
+            <pST>0.0000</pST>
+            <vICMSSTRet>0.00</vICMSSTRet>
+          </ICMS60>
+        </ICMS>
+        <PIS>
+          <PISAliq>
+            <CST>01</CST>
+            <vBC>6.80</vBC>
+            <pPIS>0.6500</pPIS>
+            <vPIS>0.04</vPIS>
+          </PISAliq>
+        </PIS>
+        <COFINS>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>6.80</vBC>
+            <pCOFINS>3.0000</pCOFINS>
+            <vCOFINS>0.20</vCOFINS>
+          </COFINSAliq>
+        </COFINS>
+      </imposto>
+      <infAdProd>Trib. aprox.: R$ 1,02 Federal e R$ 1,22 Estadual. Fonte: IBPT/empresometro.com.br 5A16F8</infAdProd>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>4.99</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>13.99</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>2.20</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.07</vPIS>
+        <vCOFINS>0.35</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>11.79</vNF>
+        <vTotTrib>3.89</vTotTrib>
+      </ICMSTot>
+    </total>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>03</tPag>
+        <vPag>4.50</vPag>
+        <card>
+          <tpIntegra>2</tpIntegra>
+          <tBand>02</tBand>
+        </card>
+      </detPag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>9.49</vPag>
+      </detPag>
+    </pag>
+    <infIntermed>
+      <CNPJ>14380200000121</CNPJ>
+      <idCadIntTran>iFood</idCadIntTran>
+    </infIntermed>
+    <infAdic>
+      <infCpl>Trib. aprox.: R$ 1,77 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br 5A16F8</infCpl>
+      <obsCont xCampo="Vendedor">
+        <xTexto>Fulano de Tal</xTexto>
+      </obsCont>
+      <obsCont xCampo="Local">
+        <xTexto>Mesa 02</xTexto>
+      </obsCont>
+      <obsFisco xCampo="RegimeEspecial">
+        <xTexto>123456</xTexto>
+      </obsFisco>
+    </infAdic>
+    <infRespTec>
+      <CNPJ>12345678000123</CNPJ>
+      <xContato>Empresa LTDA</xContato>
+      <email>contato@empresa.com.br</email>
+      <fone>11988220055</fone>
+      <idCSRT>99</idCSRT>
+      <hashCSRT>aWv6LeEM4X6u4+qBl2OYZ8grigw=</hashCSRT>
+    </infRespTec>
+  </infNFe>
+  <infNFeSupl>
+    <qrCode><![CDATA[http://www.fazenda.pr.gov.br/nfce/qrcode?p=41160908380787000176650010000000811778821925|2|2|0|cba885c8d7cb9ad92421d05b41e1d74231285cd1]]></qrCode>
+    <urlChave><![CDATA[http://www.fazenda.pr.gov.br/nfce/consulta]]></urlChave>
+  </infNFeSupl>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+      <Reference URI="#NFe41160908380787000176650010000000811778821925">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        <DigestValue>N9c7JXlI90NgQqhg+nwXixlKGJc=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>fYEysuvxnnxGt2+MOS93i/fGRNGof4T8rcogUvQ0vFFECL4GB6uL44io8NoLabGHjYJgr7io8l7QUeblG2lbpmzEQX8NCF7Rzo11vUOKaE/P1yjO2oftuu4nJSGXFzek8fdgP4Hp5J9O7XkmYb7CjPRBoxXmG4ADiMlkN187YQE=</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509Certificate>MIIEqzCCA5OgAwIBAgIDMTg4MA0GCSqGSIb3DQEBBQUAMIGSMQswCQYDVQQGEwJCUjELMAkGA1UECBMCUlMxFTATBgNVBAcTDFBvcnRvIEFsZWdyZTEdMBsGA1UEChMUVGVzdGUgUHJvamV0byBORmUgUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMSEwHwYDVQQDExhORmUgLSBBQyBJbnRlcm1lZGlhcmlhIDEwHhcNMDkwNTIyMTcwNzAzWhcNMTAxMDAyMTcwNzAzWjCBnjELMAkGA1UECBMCUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMR0wGwYDVQQKExRUZXN0ZSBQcm9qZXRvIE5GZSBSUzEVMBMGA1UEBxMMUE9SVE8gQUxFR1JFMQswCQYDVQQGEwJCUjEtMCsGA1UEAxMkTkZlIC0gQXNzb2NpYWNhbyBORi1lOjk5OTk5MDkwOTEwMjcwMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx1O/e1Q+xh+wCoxa4pr/5aEFt2dEX9iBJyYu/2a78emtorZKbWeyK435SRTbHxHSjqe1sWtIhXBaFa2dHiukT1WJyoAcXwB1GtxjT2VVESQGtRiujMa+opus6dufJJl7RslAjqN/ZPxcBXaezt0nHvnUB/uB1K8WT9G7ES0V17wIDAQABo4IBfjCCAXowIgYDVR0jAQEABBgwFoAUPT5TqhNWAm+ZpcVsvB7malDBjEQwDwYDVR0TAQH/BAUwAwEBADAPBgNVHQ8BAf8EBQMDAOAAMAwGA1UdIAEBAAQCMAAwgawGA1UdEQEBAASBoTCBnqA4BgVgTAEDBKAvBC0yMjA4MTk3Nzk5OTk5OTk5OTk5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDCgEgYFYEwBAwKgCQQHREZULU5GZaAZBgVgTAEDA6AQBA45OTk5OTA5MDkxMDI3MKAXBgVgTAEDB6AOBAwwMDAwMDAwMDAwMDCBGmRmdC1uZmVAcHJvY2VyZ3MucnMuZ292LmJyMCAGA1UdJQEB/wQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDBTBgNVHR8BAQAESTBHMEWgQ6BBhj9odHRwOi8vbmZlY2VydGlmaWNhZG8uc2VmYXoucnMuZ292LmJyL0xDUi9BQ0ludGVybWVkaWFyaWEzOC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAJFytXuiS02eJO0iMQr/Hi+Ox7/vYiPewiDL7s5EwO8A9jKx9G2Baz0KEjcdaeZk9a2NzDEgX9zboPxhw0RkWahVCP2xvRFWswDIa2WRUT/LHTEuTeKCJ0iF/um/kYM8PmWxPsDWzvsCCRp146lc0lz9LGm5ruPVYPZ/7DAoimUk3bdCMW/rzkVYg7iitxHrhklxH7YWQHUwbcqPt7Jv0RJxclc1MhQlV2eM2MO1iIlk8Eti86dRrJVoicR1bwc6/YDqDp4PFONTi1ddewRu6elGS74AzCcNYRSVTINYiZLpBZO0uivrnTEnsFguVnNtWb9MAHGt3tkR0gAVs6S0fm8=</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+  </Signature>
+</NFe>

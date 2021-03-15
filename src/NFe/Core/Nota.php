@@ -1744,7 +1744,7 @@ abstract class Nota implements Node
         Util::appendNode($ident, 'indFinal', $this->getConsumidorFinal(true));
         Util::appendNode($ident, 'indPres', $this->getPresenca(true));
         if (!is_null($this->getIntermediacao())) {
-            Util::appendNode($element, 'indIntermed', $this->getIntermediacao(true));
+            Util::appendNode($ident, 'indIntermed', $this->getIntermediacao(true));
         }
         Util::appendNode($ident, 'procEmi', 0); // emissão de NF-e com aplicativo do contribuinte
         Util::appendNode($ident, 'verProc', self::APP_VERSAO);
@@ -1812,14 +1812,14 @@ abstract class Nota implements Node
             $pag->appendChild($pagamento);
         }
         $info->appendChild($pag);
-        $info_adic = $dom->createElement('infAdic');
-        if (!is_null($this->getAdicionais())) {
-            Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
-        }
         if (!is_null($this->getIntermediador())) {
             $intermediador = $this->getIntermediador()->getNode();
             $intermediador = $dom->importNode($intermediador, true);
-            $element->appendChild($intermediador);
+            $info->appendChild($intermediador);
+        }
+        $info_adic = $dom->createElement('infAdic');
+        if (!is_null($this->getAdicionais())) {
+            Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
         }
         // TODO: adicionar informações adicionais somente na NFC-e?
         $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
@@ -2042,13 +2042,6 @@ abstract class Nota implements Node
             $produtos[] = $produto;
         }
         $this->setProdutos($produtos);
-        $_fields = $info->getElementsByTagName('infIntermed');
-        $intermediador = null;
-        if ($_fields->length > 0) {
-            $intermediador = new Intermediador();
-            $intermediador->loadNode($_fields->item(0), 'infIntermed');
-        }
-        $this->setIntermediador($intermediador);
         $_fields = $info->getElementsByTagName('transp');
         $transporte = null;
         if ($_fields->length > 0) {
@@ -2083,6 +2076,13 @@ abstract class Nota implements Node
             throw new \Exception('Tag "total" do objeto "Total" não encontrada na Nota', 404);
         }
         $this->setTotal($total);
+        $_fields = $info->getElementsByTagName('infIntermed');
+        $intermediador = null;
+        if ($_fields->length > 0) {
+            $intermediador = new Intermediador();
+            $intermediador->loadNode($_fields->item(0), 'infIntermed');
+        }
+        $this->setIntermediador($intermediador);
         $this->setAdicionais(Util::loadNode($info, 'infAdFisco'));
         $observacoes = [];
         $_items = $info->getElementsByTagName('obsCont');

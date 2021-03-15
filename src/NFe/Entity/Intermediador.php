@@ -157,7 +157,7 @@ class Intermediador implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'infIntermed' : $name);
-        Util::appendNode($element, 'cnpj', $this->getCNPJ(true));
+        Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         Util::appendNode($element, 'idCadIntTran', $this->getIdentificador(true));
         return $element;
     }
@@ -181,8 +181,8 @@ class Intermediador implements Node
         $this->setCNPJ(
             Util::loadNode(
                 $element,
-                'cnpj',
-                'Tag "cnpj" não encontrada no Intermediador'
+                'CNPJ',
+                'Tag "CNPJ" não encontrada no Intermediador'
             )
         );
         $this->setIdentificador(
