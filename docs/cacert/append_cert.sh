@@ -8,5 +8,6 @@ do
     name=$(echo $file | cut -d / -f 2)
     echo "" >> cacert.pem
     echo "$name" >> cacert.pem
+    echo $name | sed -r 's/./=/g' >> cacert.pem
     cat $file >> cacert.pem
 done
