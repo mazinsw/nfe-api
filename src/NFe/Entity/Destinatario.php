@@ -189,27 +189,27 @@ class Destinatario extends Pessoa
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'dest' : $name);
-        if (!is_null($this->getCNPJ())) {
+        if (! empty($this->getCNPJ())) {
             Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {
             Util::appendNode($element, 'CPF', $this->getCPF(true));
         }
-        if (!is_null($this->getNome())) {
+        if (! empty($this->getNome())) {
             Util::appendNode($element, 'xNome', $this->getNome(true));
         }
         if (!is_null($this->getEndereco())) {
             $endereco = $this->getEndereco()->getNode('enderDest');
             $endereco = $dom->importNode($endereco, true);
-            if (!is_null($this->getTelefone())) {
+            if (! empty($this->getTelefone())) {
                 Util::appendNode($endereco, 'fone', $this->getTelefone(true));
             }
             $element->appendChild($endereco);
         }
         Util::appendNode($element, 'indIEDest', $this->getIndicador(true));
-        if (!is_null($this->getCNPJ()) && !is_null($this->getIE())) {
+        if (! empty($this->getCNPJ()) && ! empty($this->getIE())) {
             Util::appendNode($element, 'IE', $this->getIE(true));
         }
-        if (!is_null($this->getEmail())) {
+        if (! empty($this->getEmail())) {
             Util::appendNode($element, 'email', $this->getEmail(true));
         }
         return $element;

@@ -61,17 +61,17 @@ class Transportador extends Destinatario
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'transporta' : $name);
-        if (!is_null($this->getCNPJ())) {
+        if (! empty($this->getCNPJ())) {
             Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {
             Util::appendNode($element, 'CPF', $this->getCPF(true));
         }
-        if (!is_null($this->getCNPJ())) {
+        if (! empty($this->getCNPJ())) {
             Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
         } else {
             Util::appendNode($element, 'xNome', $this->getNome(true));
         }
-        if (!is_null($this->getCNPJ())) {
+        if (! empty($this->getCNPJ())) {
             Util::appendNode($element, 'IE', $this->getIE(true));
         }
         if (!is_null($this->getEndereco())) {
@@ -100,7 +100,7 @@ class Transportador extends Destinatario
         }
         $this->setCNPJ($cnpj);
         $this->setCPF($cpf);
-        if (!is_null($this->getCNPJ())) {
+        if (! empty($this->getCNPJ())) {
             $this->setRazaoSocial(
                 Util::loadNode(
                     $element,

@@ -238,7 +238,7 @@ class Endereco implements Node
         $element = $dom->createElement(is_null($name) ? 'enderEmit' : $name);
         Util::appendNode($element, 'xLgr', $this->getLogradouro(true));
         Util::appendNode($element, 'nro', $this->getNumero(true));
-        if (!is_null($this->getComplemento())) {
+        if (! empty($this->getComplemento())) {
             Util::appendNode($element, 'xCpl', $this->getComplemento(true));
         }
         Util::appendNode($element, 'xBairro', $this->getBairro(true));

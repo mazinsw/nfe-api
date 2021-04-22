@@ -326,10 +326,10 @@ class Protocolo extends Retorno
             $recebimento = $status;
         }
         Util::appendNode($info, 'chNFe', $this->getChave(true), $recebimento);
-        if (!is_null($this->getCodigo())) {
+        if (! is_null($this->getCodigo())) {
             Util::appendNode($info, 'cMsg', $this->getCodigo(true));
         }
-        if (!is_null($this->getMensagem())) {
+        if (! empty($this->getMensagem())) {
             Util::appendNode($info, 'xMsg', $this->getMensagem(true));
         }
         $element->appendChild($info);

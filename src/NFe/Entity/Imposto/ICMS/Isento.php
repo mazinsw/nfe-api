@@ -203,10 +203,10 @@ class Isento extends Generico
     {
         $element = parent::getNode(is_null($name) ? 'ICMS40' : $name);
         $dom = $element->ownerDocument;
-        if (!is_null($this->getDesoneracao())) {
+        if (! is_null($this->getDesoneracao())) {
             Util::appendNode($element, 'vICMSDeson', $this->getDesoneracao(true));
         }
-        if (!is_null($this->getDesoneracao())) {
+        if (! empty($this->getMotivo())) {
             Util::appendNode($element, 'motDesICMS', $this->getMotivo(true));
         }
         return $element;

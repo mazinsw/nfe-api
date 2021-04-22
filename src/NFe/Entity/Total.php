@@ -364,7 +364,7 @@ class Total implements Node
         if (!is_null($this->getTributos())) {
             Util::appendNode($element, 'vTotTrib', $this->getTributos(true));
         }
-        if (!is_null($this->getComplemento())) {
+        if (! empty($this->getComplemento())) {
             Util::appendNode($element, 'infCpl', $this->getComplemento(true));
         }
         return $element;
