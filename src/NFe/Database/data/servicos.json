@@ -1945,7 +1945,15 @@
 				"base": "SVRS"
 			},
 			"nfce": {
-				"base": "SVRS"
+				"base": "SVRS",
+				"producao": {
+					"qrcode": "https://sat.sef.sc.gov.br/nfce/consulta",
+					"consulta": "https://sat.sef.sc.gov.br/nfce/consulta"
+				},
+				"homologacao": {
+					"qrcode": "https://hom.sat.sef.sc.gov.br/nfce/consulta",
+					"consulta": "https://hom.sat.sef.sc.gov.br/nfce/consulta"
+				}
 			}
 		},
 		"SE": {
