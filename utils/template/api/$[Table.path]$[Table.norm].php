@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 $[table.if(package)]
 namespace $[table.package];
 $[table.end]
@@ -151,7 +153,7 @@ $[field.end]
         return $this->$[field.unix] == 'Y';
     }
 $[field.end]
-    
+
     /**
      * Altera o valor d$[field.gender] $[Field.norm] para o informado no parâmetro
      * @param mixed $$[field.unix] novo valor para $[Field.norm]
@@ -192,7 +194,7 @@ $[field.else.if(datetime)]
         }
 $[field.else.if(boolean)]
         if ($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]is_bool($$[field.unix])) {
-            $$[field.unix] = $$[field.unix] ? 'Y': 'N';
+            $$[field.unix] = $$[field.unix] ? 'Y' : 'N';
         }
 $[field.end]
         $this->$[field.unix] = $$[field.unix];

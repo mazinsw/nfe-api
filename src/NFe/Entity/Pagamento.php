@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use NFe\Common\Node;
@@ -42,7 +44,10 @@ class Pagamento implements Node
     /**
      * Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão
      * de Débito;05-Crédito Loja;10-Vale Alimentação;11-Vale Refeição;12-Vale
-     * Presente;13-Vale Combustível;99 - Outros
+     * Presente;13-Vale Combustível;14 - Duplicata Mercantil;15 - Boleto
+     * Bancario;16=Depósito Bancário;17=Pagamento Instantâneo
+     * (PIX);18=Transferência bancária, Carteira Digital;19=Programa de
+     * fidelidade, Cashback, Crédito Virtual.;90 - Sem Pagamento;99 - Outros
      */
     public const FORMA_DINHEIRO = 'dinheiro';
     public const FORMA_CHEQUE = 'cheque';
@@ -77,13 +82,63 @@ class Pagamento implements Node
      * prazo.
      */
     private $indicador;
+
+    /**
+     * Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão
+     * de Débito;05-Crédito Loja;10-Vale Alimentação;11-Vale Refeição;12-Vale
+     * Presente;13-Vale Combustível;14 - Duplicata Mercantil;15 - Boleto
+     * Bancario;16=Depósito Bancário;17=Pagamento Instantâneo
+     * (PIX);18=Transferência bancária, Carteira Digital;19=Programa de
+     * fidelidade, Cashback, Crédito Virtual.;90 - Sem Pagamento;99 - Outros
+     *
+     * @var string
+     */
     private $forma;
+
+    /**
+     * Valor do Pagamento
+     *
+     * @var float
+     */
     private $valor;
+
+    /**
+     * Tipo de Integração do processo de pagamento com o sistema de automação
+     * da empresa/1=Pagamento integrado com o sistema de automação da empresa
+     * Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com
+     * o sistema de automação da empresa Ex: equipamento POS
+     *
+     * @var string
+     */
     private $integrado;
+
+    /**
+     * CNPJ da credenciadora de cartão de crédito/débito
+     *
+     * @var string
+     */
     private $credenciadora;
+
+    /**
+     * Número de autorização da operação cartão de crédito/débito
+     *
+     * @var string
+     */
     private $autorizacao;
+
+    /**
+     * Bandeira da operadora de cartão de crédito/débito:01–Visa;
+     * 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners
+     * Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros
+     *
+     * @var string
+     */
     private $bandeira;
 
+    /**
+     * Constroi uma instância de Pagamento vazia
+     * @param array $pagamento Array contendo dados do Pagamento
+     */
     public function __construct($pagamento = [])
     {
         $this->fromArray($pagamento);
@@ -131,7 +186,12 @@ class Pagamento implements Node
     /**
      * Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão
      * de Débito;05-Crédito Loja;10-Vale Alimentação;11-Vale Refeição;12-Vale
-     * Presente;13-Vale Combustível;99 - Outros
+     * Presente;13-Vale Combustível;14 - Duplicata Mercantil;15 - Boleto
+     * Bancario;16=Depósito Bancário;17=Pagamento Instantâneo
+     * (PIX);18=Transferência bancária, Carteira Digital;19=Programa de
+     * fidelidade, Cashback, Crédito Virtual.;90 - Sem Pagamento;99 - Outros
+     * @param boolean $normalize informa se o forma deve estar no formato do XML
+     * @return string forma of Pagamento
      */
     public function getForma($normalize = false)
     {
@@ -157,12 +217,32 @@ class Pagamento implements Node
                 return '12';
             case self::FORMA_COMBUSTIVEL:
                 return '13';
+            case self::FORMA_DUPLICATA:
+                return '14';
+            case self::FORMA_BOLETO:
+                return '15';
+            case self::FORMA_DEPOSITO:
+                return '16';
+            case self::FORMA_INSTANTANEO:
+                return '17';
+            case self::FORMA_TRANSFERENCIA:
+                return '18';
+            case self::FORMA_FIDELIDADE:
+                return '19';
+            case self::FORMA_CORTESIA:
+                return '90';
             case self::FORMA_OUTROS:
                 return '99';
         }
         return $this->forma;
     }
 
+    /**
+     * Altera o valor do Forma para o informado no parâmetro
+     * @param mixed $forma novo valor para Forma
+     * @param string $forma Novo forma para Pagamento
+     * @return self A própria instância da classe
+     */
     public function setForma($forma)
     {
         switch ($forma) {
@@ -193,6 +273,27 @@ class Pagamento implements Node
             case '13':
                 $forma = self::FORMA_COMBUSTIVEL;
                 break;
+            case '14':
+                $forma = self::FORMA_DUPLICATA;
+                break;
+            case '15':
+                $forma = self::FORMA_BOLETO;
+                break;
+            case '16':
+                $forma = self::FORMA_DEPOSITO;
+                break;
+            case '17':
+                $forma = self::FORMA_INSTANTANEO;
+                break;
+            case '18':
+                $forma = self::FORMA_TRANSFERENCIA;
+                break;
+            case '19':
+                $forma = self::FORMA_FIDELIDADE;
+                break;
+            case '90':
+                $forma = self::FORMA_CORTESIA;
+                break;
             case '99':
                 $forma = self::FORMA_OUTROS;
                 break;
@@ -203,6 +304,8 @@ class Pagamento implements Node
 
     /**
      * Valor do Pagamento
+     * @param boolean $normalize informa se a valor deve estar no formato do XML
+     * @return float valor of Pagamento
      */
     public function getValor($normalize = false)
     {
@@ -212,6 +315,12 @@ class Pagamento implements Node
         return Util::toCurrency($this->valor);
     }
 
+    /**
+     * Altera o valor da Valor para o informado no parâmetro
+     * @param mixed $valor novo valor para Valor
+     * @param float $valor Novo valor para Pagamento
+     * @return self A própria instância da classe
+     */
     public function setValor($valor)
     {
         $valor = floatval($valor);
@@ -224,6 +333,8 @@ class Pagamento implements Node
      * da empresa/1=Pagamento integrado com o sistema de automação da empresa
      * Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com
      * o sistema de automação da empresa Ex: equipamento POS
+     * @param boolean $normalize informa se o integrado deve estar no formato do XML
+     * @return string integrado of Pagamento
      */
     public function getIntegrado($normalize = false)
     {
@@ -238,12 +349,19 @@ class Pagamento implements Node
      * da empresa/1=Pagamento integrado com o sistema de automação da empresa
      * Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com
      * o sistema de automação da empresa Ex: equipamento POS
+     * @return boolean informa se o Integrado está habilitado
      */
     public function isIntegrado()
     {
         return $this->integrado == 'Y';
     }
 
+    /**
+     * Altera o valor do Integrado para o informado no parâmetro
+     * @param mixed $integrado novo valor para Integrado
+     * @param string $integrado Novo integrado para Pagamento
+     * @return self A própria instância da classe
+     */
     public function setIntegrado($integrado)
     {
         if (is_bool($integrado)) {
@@ -255,6 +373,8 @@ class Pagamento implements Node
 
     /**
      * CNPJ da credenciadora de cartão de crédito/débito
+     * @param boolean $normalize informa se a credenciadora deve estar no formato do XML
+     * @return string credenciadora of Pagamento
      */
     public function getCredenciadora($normalize = false)
     {
@@ -264,6 +384,12 @@ class Pagamento implements Node
         return $this->credenciadora;
     }
 
+    /**
+     * Altera o valor da Credenciadora para o informado no parâmetro
+     * @param mixed $credenciadora novo valor para Credenciadora
+     * @param string $credenciadora Novo credenciadora para Pagamento
+     * @return self A própria instância da classe
+     */
     public function setCredenciadora($credenciadora)
     {
         $this->credenciadora = $credenciadora;
@@ -272,6 +398,8 @@ class Pagamento implements Node
 
     /**
      * Número de autorização da operação cartão de crédito/débito
+     * @param boolean $normalize informa se a autorizacao deve estar no formato do XML
+     * @return string autorizacao of Pagamento
      */
     public function getAutorizacao($normalize = false)
     {
@@ -281,6 +409,12 @@ class Pagamento implements Node
         return $this->autorizacao;
     }
 
+    /**
+     * Altera o valor da Autorizacao para o informado no parâmetro
+     * @param mixed $autorizacao novo valor para Autorizacao
+     * @param string $autorizacao Novo autorizacao para Pagamento
+     * @return self A própria instância da classe
+     */
     public function setAutorizacao($autorizacao)
     {
         $this->autorizacao = $autorizacao;
@@ -289,7 +423,10 @@ class Pagamento implements Node
 
     /**
      * Bandeira da operadora de cartão de crédito/débito:01–Visa;
-     * 02–Mastercard; 03–American Express; 04–Sorocred; 99–Outros
+     * 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners
+     * Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros
+     * @param boolean $normalize informa se a bandeira deve estar no formato do XML
+     * @return string bandeira of Pagamento
      */
     public function getBandeira($normalize = false)
     {
@@ -305,12 +442,28 @@ class Pagamento implements Node
                 return '03';
             case self::BANDEIRA_SOROCRED:
                 return '04';
+            case self::BANDEIRA_DINERS:
+                return '05';
+            case self::BANDEIRA_ELO:
+                return '06';
+            case self::BANDEIRA_HIPERCARD:
+                return '07';
+            case self::BANDEIRA_AURA:
+                return '08';
+            case self::BANDEIRA_CABAL:
+                return '09';
             case self::BANDEIRA_OUTROS:
                 return '99';
         }
         return $this->bandeira;
     }
 
+    /**
+     * Altera o valor da Bandeira para o informado no parâmetro
+     * @param mixed $bandeira novo valor para Bandeira
+     * @param string $bandeira Novo bandeira para Pagamento
+     * @return self A própria instância da classe
+     */
     public function setBandeira($bandeira)
     {
         switch ($bandeira) {
@@ -325,6 +478,21 @@ class Pagamento implements Node
                 break;
             case '04':
                 $bandeira = self::BANDEIRA_SOROCRED;
+                break;
+            case '05':
+                $bandeira = self::BANDEIRA_DINERS;
+                break;
+            case '06':
+                $bandeira = self::BANDEIRA_ELO;
+                break;
+            case '07':
+                $bandeira = self::BANDEIRA_HIPERCARD;
+                break;
+            case '08':
+                $bandeira = self::BANDEIRA_AURA;
+                break;
+            case '09':
+                $bandeira = self::BANDEIRA_CABAL;
                 break;
             case '99':
                 $bandeira = self::BANDEIRA_OUTROS;
