@@ -69,12 +69,18 @@ class Pagamento implements Node
 
     /**
      * Bandeira da operadora de cartão de crédito/débito:01–Visa;
-     * 02–Mastercard; 03–American Express; 04–Sorocred; 99–Outros
+     * 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners
+     * Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros
      */
     public const BANDEIRA_VISA = 'visa';
     public const BANDEIRA_MASTERCARD = 'mastercard';
     public const BANDEIRA_AMEX = 'amex';
     public const BANDEIRA_SOROCRED = 'sorocred';
+    public const BANDEIRA_DINERS = 'diners';
+    public const BANDEIRA_ELO = 'elo';
+    public const BANDEIRA_HIPERCARD = 'hipercard';
+    public const BANDEIRA_AURA = 'aura';
+    public const BANDEIRA_CABAL = 'cabal';
     public const BANDEIRA_OUTROS = 'outros';
 
     /**
