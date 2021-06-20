@@ -2,6 +2,6 @@
 set PATH=%PATH%;%~pd0..\vendor\bin
 
 cd ..
-cmd /C phpdoc --progressbar --sourcecode -d api\NFe -t docs\api
+cmd /C phpdoc --progressbar --sourcecode -d src\NFe -t docs\docs
 cd %~pd0
-start %~pd0..\docs\api\index.html
+start %~pd0..\docs\docs\index.html
