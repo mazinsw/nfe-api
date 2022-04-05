@@ -675,7 +675,7 @@
 						"servico": "NFeRecepcaoEvento4",
 						"versao": "1.00"
 					},
-					"qrcode": "https://nfce.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
+					"qrcode": "https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
 					"consulta": "http://nfce.fazenda.mg.gov.br/portalnfce"
 				},
 				"homologacao": {
@@ -704,7 +704,7 @@
 						"servico": "NFeRecepcaoEvento4",
 						"versao": "1.00"
 					},
-					"qrcode": "https://nfce.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
+					"qrcode": "https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
 					"consulta": "http://hnfce.fazenda.mg.gov.br/portalnfce"
 				}
 			}
