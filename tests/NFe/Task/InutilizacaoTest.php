@@ -8,6 +8,11 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 {
     public static function criaInutilizacao()
     {
+        \NFe\Core\SEFAZ::getInstance()
+            ->getConfiguracao()->getEmitente()->getEndereco()
+            ->getMunicipio()->getEstado()->setUF('PR');
+        \NFe\Core\SEFAZ::getInstance()
+            ->getConfiguracao()->getEmitente()->setCNPJ('08380787000176');
         $inutilizacao = new \NFe\Task\Inutilizacao();
         $inutilizacao->setUF(\NFe\Core\SEFAZ::getInstance()
             ->getConfiguracao()->getEmitente()->getEndereco()
@@ -57,7 +62,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
             $inutilizacao->fromArray($inutilizacao);
             $inutilizacao->fromArray($inutilizacao->toArray());
             $inutilizacao->fromArray(null);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
@@ -84,14 +89,16 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
         $inutilizacao = self::criaInutilizacao();
         $dom = $inutilizacao->getNode()->ownerDocument;
         $dom = $inutilizacao->assinar();
+        $this->expectException('\Exception');
         try {
-            $this->expectException('\Exception');
             $inutilizacao->envia($dom);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \NFe\Common\CurlSoap::setPostFunction(null);
             $this->assertEquals('241', $inutilizacao->getStatus());
+            throw $e;
+        } finally {
+            \NFe\Common\CurlSoap::setPostFunction(null);
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testNormalization()

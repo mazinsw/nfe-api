@@ -4,6 +4,7 @@ namespace NFe\Common;
 
 class ConfiguracaoTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var Configuracao */
     private $config;
 
     protected function setUp(): void
@@ -51,11 +52,12 @@ class ConfiguracaoTest extends \PHPUnit\Framework\TestCase
     public function testDataExpiracao()
     {
         $this->config
-            ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
-            ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
-        $this->config
-            ->setChavePublica($this->config->getChavePublica())
-            ->setChavePrivada($this->config->getChavePrivada());
-        $this->assertEquals('2010-10-02', date('Y-m-d', $this->config->getExpiracao()));
+            ->getCertificado()
+                ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
+                ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
+        $this->config->getCertificado()
+            ->setChavePublica($this->config->getCertificado()->getChavePublica())
+            ->setChavePrivada($this->config->getCertificado()->getChavePrivada());
+        $this->assertEquals('2010-10-02', date('Y-m-d', $this->config->getCertificado()->getExpiracao()));
     }
 }

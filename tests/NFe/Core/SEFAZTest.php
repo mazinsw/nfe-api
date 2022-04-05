@@ -2,6 +2,7 @@
 
 namespace NFe\Core;
 
+use NFe\Database\Estatico;
 use NFe\Logger\Log;
 use NFe\Task\Inutilizacao;
 use NFe\Task\Tarefa;
@@ -23,11 +24,21 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public static function createSEFAZ()
     {
+        $banco = SEFAZ::getInstance()->getConfiguracao()->getBanco();
+        if ($banco instanceof Estatico) {
+            $banco->setIBPT(null);
+        }
+        SEFAZ::getInstance()->getConfiguracao()->setBanco(null);
+        SEFAZ::getInstance()->getConfiguracao()->setCertificado(null);
+        SEFAZ::getInstance()->setConfiguracao(null);
+        gc_collect_cycles();
         $emitente = \NFe\Entity\EmitenteTest::createEmitente();
         $sefaz = SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()
-            ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
-            ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem')
+            ->getCertificado()
+                ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
+                ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
+        $sefaz->getConfiguracao()
             ->setEmitente($emitente);
         return $sefaz;
     }

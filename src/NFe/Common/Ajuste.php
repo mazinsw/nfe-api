@@ -102,8 +102,8 @@ class Ajuste extends Configuracao implements Evento
         $this->setTempoLimite(30);
         $root_path = dirname(dirname(dirname(__DIR__)));
         $cert_dir = $root_path . '/storage/certs';
-        $this->setArquivoChavePublica($cert_dir . '/public.pem');
-        $this->setArquivoChavePrivada($cert_dir . '/private.pem');
+        $this->getCertificado()->setArquivoChavePublica($cert_dir . '/public.pem');
+        $this->getCertificado()->setArquivoChavePrivada($cert_dir . '/private.pem');
 
         $this->setPastaXmlBase($root_path . '/storage/xml');
         $this->setPastaXmlInutilizado('{ambiente}/inutilizado');

@@ -222,12 +222,12 @@ class BancoTest extends \PHPUnit\Framework\TestCase
         global $app;
 
         $sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
-        $sefaz->getConfiguracao()
+        $sefaz->getConfiguracao()->getCertificado()
             ->setArquivoChavePublica(dirname(dirname(dirname(__DIR__))) . '/docs/certs/public.pem')
             ->setArquivoChavePrivada(dirname(dirname(dirname(__DIR__))) . '/docs/certs/private.pem');
         $banco = $sefaz->getConfiguracao()->getBanco();
-        $chave_publica = $sefaz->getConfiguracao()->getArquivoChavePublica();
-        $chave_privada = $sefaz->getConfiguracao()->getArquivoChavePrivada();
+        $chave_publica = $sefaz->getConfiguracao()->getCertificado()->getArquivoChavePublica();
+        $chave_privada = $sefaz->getConfiguracao()->getCertificado()->getArquivoChavePrivada();
         $soap = new \Curl\Curl();
         $soap->setOpt(CURLOPT_SSLCERT, $chave_publica);
         $soap->setOpt(CURLOPT_SSLKEY, $chave_privada);
