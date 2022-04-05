@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class VolumeTest extends \PHPUnit\Framework\TestCase

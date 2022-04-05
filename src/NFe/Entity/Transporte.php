@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use NFe\Common\Node;
@@ -38,7 +40,6 @@ use NFe\Entity\Transporte\Transportador;
  */
 class Transporte implements Node
 {
-
     /**
      * Modalidade do frete
      * 0- Contratação do Frete por conta do Remetente
@@ -109,11 +110,11 @@ class Transporte implements Node
         }
         return $this->frete;
     }
-    
+
     /**
      * Altera o valor do Frete para o informado no parâmetro
      * @param mixed $frete novo valor para Frete
-     * @return Transporte A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setFrete($frete)
     {

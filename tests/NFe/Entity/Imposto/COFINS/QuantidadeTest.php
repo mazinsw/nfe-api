@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\COFINS;
 
 class QuantidadeTest extends \PHPUnit\Framework\TestCase

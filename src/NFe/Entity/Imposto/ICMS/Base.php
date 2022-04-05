@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Entity\Imposto;
@@ -38,7 +40,6 @@ use NFe\Entity\Imposto\Fundo\Substituido;
  */
 abstract class Base extends Imposto
 {
-
     /**
      * origem da mercadoria: 0 - Nacional
      * 1 - Estrangeira - Importação direta
@@ -101,7 +102,7 @@ abstract class Base extends Imposto
     /**
      * Altera o valor da Origem para o informado no parâmetro
      * @param mixed $origem novo valor para Origem
-     * @return Base A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setOrigem($origem)
     {
@@ -111,17 +112,17 @@ abstract class Base extends Imposto
 
     /**
      * Fundo de Combate à Probreza
-     * @return \NFe\Entity\Imposto\Fundo\Base Base do fundo de combate à pobreza
+     * @return \NFe\Entity\Imposto\Fundo\Base|null Base do fundo de combate à pobreza
      */
     public function getFundo()
     {
         return $this->fundo;
     }
-    
+
     /**
      * Altera o valor do Fundo para o informado no parâmetro
      * @param mixed $fundo novo valor para Fundo
-     * @return Base A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setFundo($fundo)
     {
@@ -170,7 +171,7 @@ abstract class Base extends Imposto
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $base Array ou instância de Base, para copiar os valores
-     * @return Base A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($base = [])
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Database;
 
 abstract class Banco
@@ -43,7 +45,7 @@ abstract class Banco
      * Obtém o código do orgão por estado
      */
     abstract public function getCodigoOrgao($uf);
-    
+
     /**
      * Obtém a aliquota do imposto de acordo com o tipo
      */

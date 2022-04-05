@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Common;
 
 class CurlSoapTest extends \PHPUnit\Framework\TestCase

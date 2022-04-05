@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class ProdutoTest extends \PHPUnit\Framework\TestCase
@@ -35,7 +36,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
-        
+
         $produto->addImposto($imposto);
         $produto->fromArray($produto);
         $produto->fromArray($produto->toArray());

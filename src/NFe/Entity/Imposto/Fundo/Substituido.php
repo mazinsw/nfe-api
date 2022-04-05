@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\Fundo;
 
+use DOMElement;
 use NFe\Common\Util;
 
 /**
@@ -35,8 +38,6 @@ use NFe\Common\Util;
  */
 class Substituido extends Base
 {
-
-    
     /**
      * Constroi uma instância de Substituido vazia
      * @param  array $substituido Array contendo dados do Substituido
@@ -59,7 +60,7 @@ class Substituido extends Base
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $substituido Array ou instância de Substituido, para copiar os valores
-     * @return Substituido A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($substituido = [])
     {

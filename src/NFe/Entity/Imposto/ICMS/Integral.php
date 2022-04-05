@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Common\Util;
@@ -39,12 +41,12 @@ class Integral extends Normal
     {
         parent::__construct($integral);
     }
-    
+
     /**
      * Altera o valor do Fundo para o informado no parâmetro
      * interceptando a alteração do fundo para aplicar a base integral
      * @param mixed $fundo novo valor para Fundo
-     * @return Base A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setFundo($fundo)
     {
@@ -59,7 +61,7 @@ class Integral extends Normal
      * Altera o valor do Base para o informado no parâmetro
      * interceptando a alteração do base para aplicar a base integral no fundo
      * @param mixed $base novo valor para Base
-     * @return Imposto A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setBase($base)
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Database;
 
 use NFe\Core\Nota;
@@ -219,7 +220,7 @@ class BancoTest extends \PHPUnit\Framework\TestCase
     public function onlineTestWSDL()
     {
         global $app;
-        
+
         $sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
         $sefaz->getConfiguracao()
             ->setArquivoChavePublica(dirname(dirname(dirname(__DIR__))) . '/docs/certs/public.pem')

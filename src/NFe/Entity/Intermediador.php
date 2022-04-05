@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use DOMElement;
@@ -73,11 +75,12 @@ class Intermediador implements Node
         }
         return $this->cnpj;
     }
-    
+
     /**
      * Altera o valor do CNPJ para o informado no parâmetro
-     * @param mixed $cnpj novo valor para CNPJ
-     * @param string $cnpj Novo cnpj para Intermediador
+     *
+     * @param string|null $cnpj Novo cnpj para Intermediador
+     *
      * @return self A própria instância da classe
      */
     public function setCNPJ($cnpj)
@@ -98,11 +101,12 @@ class Intermediador implements Node
         }
         return $this->identificador;
     }
-    
+
     /**
      * Altera o valor do Identificador para o informado no parâmetro
-     * @param mixed $identificador novo valor para Identificador
-     * @param string $identificador Novo identificador para Intermediador
+     *
+     * @param string|null $identificador Novo identificador para Intermediador
+     *
      * @return self A própria instância da classe
      */
     public function setIdentificador($identificador)

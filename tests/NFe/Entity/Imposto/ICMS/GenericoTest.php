@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\ICMS;
 
 class GenericoTest extends \PHPUnit\Framework\TestCase

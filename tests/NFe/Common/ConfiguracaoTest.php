@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Common;
 
 class ConfiguracaoTest extends \PHPUnit\Framework\TestCase

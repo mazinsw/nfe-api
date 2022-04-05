@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class MunicipioTest extends \PHPUnit\Framework\TestCase

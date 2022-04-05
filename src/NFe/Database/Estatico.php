@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Database;
 
 use NFe\Common\Util;
@@ -263,7 +265,7 @@ class Estatico extends Banco
             return $this;
         }
         parent::fromArray($estatico);
-        $this->setIBPT(new IBPT(isset($estatico['ibpt']) ? $estatico['ibpt'] : []));
+        $this->setIBPT(new IBPT());
         return $this;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class TransporteTest extends \PHPUnit\Framework\TestCase
@@ -43,7 +44,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $endereco->setNumero('123');
 
         $transportador->setEndereco($endereco);
-        
+
         $transporte->setTransportador($transportador);
 
         $retencao = new \NFe\Entity\Transporte\Tributo();
@@ -124,7 +125,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $transporte->setFrete('3'); // Número não reconhecido no frete
         $transporte->setFrete($transporte->getFrete(true));
         $transporte->setFrete(\NFe\Entity\Transporte::FRETE_DESTINATARIO);
-        
+
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
 
@@ -167,7 +168,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
     {
         $transporte = $this->createTransporte();
         $transporte->setFrete(\NFe\Entity\Transporte::FRETE_TERCEIROS);
-        
+
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
 

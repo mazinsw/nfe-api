@@ -26,6 +26,7 @@
         "scrutinizer/ocular": "^1.6",
         "squizlabs/php_codesniffer": "^3.3",
         "pdepend/pdepend" : "^2.5",
+        "phpstan/phpstan": "^1.5",
         "phpmd/phpmd" : "^2.6",
         "sebastian/phpcpd": "^4.0",
         "phpdocumentor/phpdocumentor": "^2.9",
@@ -56,6 +57,9 @@
         ],
         "check-style": [
             "phpcs --colors --standard=PSR12 src/NFe/ tests/"
+        ],
+        "analysis": [
+            "phpstan analyse src/"
         ],
         "gen-class": [
             "java -jar utils/SQLtoClass.jar -p utils/config.properties -t utils/template -o storage/generated"

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use NFe\Core\SEFAZ;
@@ -37,7 +39,6 @@ use NFe\Common\Util;
  */
 class Produto extends Total
 {
-
     /**
      * Unidade do produto, Não informar a grandeza
      */
@@ -257,11 +258,12 @@ class Produto extends Total
     /**
      * Altera o preço total do produto para o informado no parâmetro
      * @param mixed $preco novo preço para o Produto
-     * @return Produto A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setPreco($preco)
     {
-        return parent::setProdutos($preco);
+        $this->setProdutos($preco);
+        return $this;
     }
 
     /**
@@ -817,7 +819,7 @@ class Produto extends Total
                 if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
                     continue;
                 }
-                $imposto = Imposto::loadImposto($_subitem, $total->getGrupo());
+                $imposto = Imposto::loadImposto($_subitem);
                 if ($imposto === false) {
                     continue;
                 }

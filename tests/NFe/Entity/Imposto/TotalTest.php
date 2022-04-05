@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto;
 
 class TotalTest extends \PHPUnit\Framework\TestCase

@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class EmitenteTest extends \PHPUnit\Framework\TestCase
@@ -9,7 +10,7 @@ class EmitenteTest extends \PHPUnit\Framework\TestCase
     {
         $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
     }
-    
+
     public static function createEmitente()
     {
         $emitente = new \NFe\Entity\Emitente();

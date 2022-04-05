@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Core;
 
+use DOMElement;
 use NFe\Common\Util;
 use NFe\Entity\Imposto;
 
@@ -35,7 +38,6 @@ use NFe\Entity\Imposto;
  */
 class NFCe extends Nota
 {
-
     /**
      * Versão do QRCode
      */
@@ -76,11 +78,11 @@ class NFCe extends Nota
         }
         return $this->qrcode_url;
     }
-    
+
     /**
      * Altera o valor da QrcodeURL para o informado no parâmetro
      * @param mixed $qrcode_url novo valor para QrcodeURL
-     * @return NFCe A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setQRCodeURL($qrcode_url)
     {
@@ -102,11 +104,11 @@ class NFCe extends Nota
         }
         return $this->consulta_url;
     }
-    
+
     /**
      * Altera o valor do ConsultaURL para o informado no parâmetro
      * @param mixed $consulta_url novo valor para ConsultaURL
-     * @return NFCe A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setConsultaURL($consulta_url)
     {
@@ -146,7 +148,7 @@ class NFCe extends Nota
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $nfce Array ou instância de NFCe, para copiar os valores
-     * @return NFCe A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($nfce = [])
     {
@@ -201,6 +203,7 @@ class NFCe extends Nota
 
     private function buildURLs($dom)
     {
+        $estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
         $info = $this->getURLs();
         if (!isset($info['qrcode'])) {
             throw new \Exception('Não existe URL de consulta de QRCode para o estado "' . $estado->getUF() . '"', 404);

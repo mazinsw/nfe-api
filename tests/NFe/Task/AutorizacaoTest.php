@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Task;
 
 use NFe\Core\Nota;
@@ -35,7 +36,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
 
         $xml_cmp = $dom_cmp->saveXML();
         $test->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
-        
+
         $xml_resp_file = dirname(dirname(__DIR__)) . '/resources/xml/task/' . $resp_name;
         $dom_resp = new \DOMDocument();
         $dom_resp->preserveWhiteSpace = false;

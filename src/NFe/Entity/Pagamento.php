@@ -173,7 +173,7 @@ class Pagamento implements Node
     /**
      * Altera o valor do Indicador para o informado no parâmetro
      * @param mixed $indicador novo valor para Indicador
-     * @return Nota A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setIndicador($indicador)
     {
@@ -245,8 +245,9 @@ class Pagamento implements Node
 
     /**
      * Altera o valor do Forma para o informado no parâmetro
-     * @param mixed $forma novo valor para Forma
-     * @param string $forma Novo forma para Pagamento
+     *
+     * @param string|null $forma Novo forma para Pagamento
+     *
      * @return self A própria instância da classe
      */
     public function setForma($forma)
@@ -311,7 +312,7 @@ class Pagamento implements Node
     /**
      * Valor do Pagamento
      * @param boolean $normalize informa se a valor deve estar no formato do XML
-     * @return float valor of Pagamento
+     * @return float|string valor of Pagamento
      */
     public function getValor($normalize = false)
     {
@@ -323,8 +324,9 @@ class Pagamento implements Node
 
     /**
      * Altera o valor da Valor para o informado no parâmetro
-     * @param mixed $valor novo valor para Valor
-     * @param float $valor Novo valor para Pagamento
+     *
+     * @param float|string|null $valor Novo valor para Pagamento
+     *
      * @return self A própria instância da classe
      */
     public function setValor($valor)
@@ -364,8 +366,9 @@ class Pagamento implements Node
 
     /**
      * Altera o valor do Integrado para o informado no parâmetro
-     * @param mixed $integrado novo valor para Integrado
+     *
      * @param string $integrado Novo integrado para Pagamento
+     *
      * @return self A própria instância da classe
      */
     public function setIntegrado($integrado)
@@ -392,8 +395,9 @@ class Pagamento implements Node
 
     /**
      * Altera o valor da Credenciadora para o informado no parâmetro
-     * @param mixed $credenciadora novo valor para Credenciadora
-     * @param string $credenciadora Novo credenciadora para Pagamento
+     *
+     * @param string|null $credenciadora Novo credenciadora para Pagamento
+     *
      * @return self A própria instância da classe
      */
     public function setCredenciadora($credenciadora)
@@ -417,8 +421,9 @@ class Pagamento implements Node
 
     /**
      * Altera o valor da Autorizacao para o informado no parâmetro
-     * @param mixed $autorizacao novo valor para Autorizacao
-     * @param string $autorizacao Novo autorizacao para Pagamento
+     *
+     * @param string|null $autorizacao Novo autorizacao para Pagamento
+     *
      * @return self A própria instância da classe
      */
     public function setAutorizacao($autorizacao)
@@ -432,7 +437,7 @@ class Pagamento implements Node
      * 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners
      * Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros
      * @param boolean $normalize informa se a bandeira deve estar no formato do XML
-     * @return string bandeira of Pagamento
+     * @return string|null bandeira of Pagamento
      */
     public function getBandeira($normalize = false)
     {
@@ -466,8 +471,9 @@ class Pagamento implements Node
 
     /**
      * Altera o valor da Bandeira para o informado no parâmetro
-     * @param mixed $bandeira novo valor para Bandeira
-     * @param string $bandeira Novo bandeira para Pagamento
+     *
+     * @param string|null $bandeira Novo bandeira para Pagamento
+     *
      * @return self A própria instância da classe
      */
     public function setBandeira($bandeira)
@@ -579,9 +585,9 @@ class Pagamento implements Node
         $dom = new \DOMDocument('1.0', 'UTF-8');
         if ($this->getValor() < 0) {
             $element = $dom->createElement(is_null($name) ? 'vTroco' : $name);
-            $this->setValor(-$this->getValor());
+            $this->setValor(-floatval($this->getValor()));
             $element->appendChild($dom->createTextNode($this->getValor(true)));
-            $this->setValor(-$this->getValor());
+            $this->setValor(-floatval($this->getValor()));
             return $element;
         }
         $element = $dom->createElement(is_null($name) ? 'detPag' : $name);

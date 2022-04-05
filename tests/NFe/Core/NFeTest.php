@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Core;
 
 class NFeTest extends \PHPUnit\Framework\TestCase

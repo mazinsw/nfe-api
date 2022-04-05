@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class EstadoTest extends \PHPUnit\Framework\TestCase

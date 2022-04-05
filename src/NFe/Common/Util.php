@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Common;
 
 /**
@@ -36,7 +38,7 @@ class Util
         'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     public const NORMAL_CHARS =
         'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
-    
+
     /**
      * Converte float para string informando a quantidade de
      * casas decimais e usando ponto como separador
@@ -96,9 +98,9 @@ class Util
 
     /**
      * Adiciona zeros à direita para completar o comprimento
-     * @param  stringt $str texto ou número a ser adicionado os zeros
-     * @param  integer $len quantidade de caracteres mínimo
-     * @param  string  $txt caractere a ser adicionado quando não atingir
+     * @param string $str texto ou número a ser adicionado os zeros
+     * @param integer $len quantidade de caracteres mínimo
+     * @param string  $txt caractere a ser adicionado quando não atingir
      * a quantidade len
      * @return string       texto com os zeros à direita
      */
@@ -142,7 +144,7 @@ class Util
     {
         return ($value + $delta) < $compare;
     }
-    
+
     /**
      * Converte um valor para a moeda Real já incluindo o símbolo
      * @param  float $value valor a ser formatado
@@ -156,10 +158,10 @@ class Util
     /**
      * Realiza uma busca binária num array ordenado usando uma função customizada
      * para comparação
-     * @param  mixed $elem   elemento a ser procurado
-     * @param  array $array  array contendo todos os elementos
-     * @param  function $cmp_fn função que irá comparar dois elementos
-     * @return mixed         retorna o valor do array referente a chave ou false caso não encontre
+     * @param mixed $elem   elemento a ser procurado
+     * @param array $array  array contendo todos os elementos
+     * @param callable $cmp_fn função que irá comparar dois elementos
+     * @return mixed retorna o valor do array referente a chave ou false caso não encontre
      */
     public static function binarySearch($elem, $array, $cmp_fn)
     {
@@ -220,7 +222,7 @@ class Util
         $len = strlen($digitos);
         for ($i = $len - 1; $i >= 0; $i--) {
             $mul++;
-            $dig = $digitos[$i];
+            $dig = intval($digitos[$i]);
             $sum += $dig * $mul;
             if ($mul == 9) {
                 $mul = 1; // reset
@@ -241,7 +243,7 @@ class Util
         $len = strlen($digitos);
         for ($i = $len - 1; $i >= 0; $i--) {
             $mul++;
-            $dig = $digitos[$i];
+            $dig = intval($digitos[$i]);
             $term = $dig * $mul;
             $sum += ($dig == 9) ? $dig : ($term % 9);
             if ($mul == 2) {

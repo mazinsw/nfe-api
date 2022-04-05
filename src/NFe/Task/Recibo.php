@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Task;
 
 use NFe\Core\Nota;
@@ -137,7 +139,7 @@ class Recibo extends Retorno
     /**
      * Altera o valor do Modelo para o informado no parâmetro
      * @param mixed $modelo novo valor para Modelo
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setModelo($modelo)
     {

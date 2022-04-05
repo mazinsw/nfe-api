@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\ICMS\Simples;
 
 class ParcialTest extends \PHPUnit\Framework\TestCase

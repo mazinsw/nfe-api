@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 use NFe\Common\Util;

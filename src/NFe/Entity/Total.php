@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
+use DOMElement;
 use NFe\Common\Util;
 use NFe\Common\Node;
 
@@ -35,7 +38,6 @@ use NFe\Common\Node;
  */
 class Total implements Node
 {
-
     /**
      * Valor Total dos produtos e serviços
      */
@@ -73,7 +75,7 @@ class Total implements Node
      * Informações complementares de interesse do Contribuinte
      */
     private $complemento;
-    
+
     /**
      * Constroi uma instância de Total vazia
      * @param  array $total Array contendo dados do Total
@@ -95,11 +97,11 @@ class Total implements Node
         }
         return Util::toCurrency($this->produtos);
     }
-    
+
     /**
      * Altera o valor do Produtos para o informado no parâmetro
      * @param mixed $produtos novo valor para Produtos
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setProdutos($produtos)
     {
@@ -122,11 +124,11 @@ class Total implements Node
         }
         return Util::toCurrency($this->desconto);
     }
-    
+
     /**
      * Altera o valor do Desconto para o informado no parâmetro
      * @param mixed $desconto novo valor para Desconto
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setDesconto($desconto)
     {
@@ -150,11 +152,11 @@ class Total implements Node
         }
         return Util::toCurrency($this->seguro);
     }
-    
+
     /**
      * Altera o valor do Seguro para o informado no parâmetro
      * @param mixed $seguro novo valor para Seguro
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setSeguro($seguro)
     {
@@ -178,11 +180,11 @@ class Total implements Node
         }
         return Util::toCurrency($this->frete);
     }
-    
+
     /**
      * Altera o valor do Frete para o informado no parâmetro
      * @param mixed $frete novo valor para Frete
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setFrete($frete)
     {
@@ -206,11 +208,11 @@ class Total implements Node
         }
         return Util::toCurrency($this->despesas);
     }
-    
+
     /**
      * Altera o valor da Despesas para o informado no parâmetro
      * @param mixed $despesas novo valor para Despesas
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setDespesas($despesas)
     {
@@ -233,11 +235,11 @@ class Total implements Node
         }
         return Util::toCurrency($this->tributos);
     }
-    
+
     /**
      * Altera o valor do Tributos para o informado no parâmetro
      * @param mixed $tributos novo valor para Tributos
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setTributos($tributos)
     {
@@ -260,11 +262,11 @@ class Total implements Node
         }
         return $this->complemento;
     }
-    
+
     /**
      * Altera o valor do Complemento para o informado no parâmetro
      * @param mixed $complemento novo valor para Complemento
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setComplemento($complemento)
     {
@@ -292,7 +294,7 @@ class Total implements Node
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $total Array ou instância de Total, para copiar os valores
-     * @return Total A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($total = [])
     {

@@ -1,10 +1,11 @@
 <?php
+
 namespace NFe\Entity\Imposto\PIS\ST;
 
 class QuantidadeTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
-    
+
     protected function setUp()
     {
         $this->resource_path = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/resources';

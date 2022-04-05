@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Task;
 
 class TarefaTest extends \PHPUnit\Framework\TestCase

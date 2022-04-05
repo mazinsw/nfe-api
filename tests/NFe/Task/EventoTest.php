@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Task;
 
 use NFe\Core\Nota;
@@ -81,7 +82,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
-        
+
         if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;
             $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml';

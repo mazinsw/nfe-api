@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use NFe\Common\Node;
@@ -35,7 +37,6 @@ use NFe\Common\Util;
  */
 abstract class Imposto implements Node
 {
-
     /**
      * Tipo de imposto
      */
@@ -199,7 +200,7 @@ abstract class Imposto implements Node
     /**
      * Altera o valor do Base para o informado no parâmetro
      * @param mixed $base novo valor para Base
-     * @return Imposto A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setBase($base)
     {

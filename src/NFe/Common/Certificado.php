@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Common;
 
 use NFe\Common\Node;
@@ -98,7 +100,7 @@ class Certificado implements Node
 
     /**
      * Conteúdo da chave pública ou certificado no formato PEM
-     * @return string
+     * @return string|null
      */
     public function getChavePublica()
     {
@@ -107,7 +109,7 @@ class Certificado implements Node
 
     /**
      * Conteúdo da chave pública ou certificado no formato PEM
-     * @param string $chave_publica
+     * @param string|null $chave_publica
      * @return self
      */
     public function setChavePublica($chave_publica)
@@ -128,7 +130,7 @@ class Certificado implements Node
 
     /**
      * Conteúdo da chave privada do certificado no formato PEM
-     * @param string $chave_privada
+     * @param string|null $chave_privada
      * @return self
      */
     public function setChavePrivada($chave_privada)
@@ -150,7 +152,7 @@ class Certificado implements Node
     /**
      * Informa o caminho do arquivo da chave pública ou certificado no formato
      * PEM
-     * @param string $arquivo_chave_publica
+     * @param string|null $arquivo_chave_publica
      * @return self
      */
     public function setArquivoChavePublica($arquivo_chave_publica)
@@ -173,7 +175,7 @@ class Certificado implements Node
 
     /**
      * Altera o caminho do arquivo da chave privada do certificado no formato PEM
-     * @param string $arquivo_chave_privada
+     * @param string|null $arquivo_chave_privada
      * @return self
      */
     public function setArquivoChavePrivada($arquivo_chave_privada)
@@ -187,7 +189,7 @@ class Certificado implements Node
 
     /**
      * Data de expiração do certificado em timestamp
-     * @return int
+     * @return int|null
      */
     public function getExpiracao()
     {
@@ -196,7 +198,7 @@ class Certificado implements Node
 
     /**
      * Informa a data de expiração do certificado em timestamp
-     * @param int $expiracao
+     * @param int|null $expiracao
      * @return self
      */
     private function setExpiracao($expiracao)

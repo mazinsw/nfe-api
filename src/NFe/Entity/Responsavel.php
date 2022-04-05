@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
+use DOMElement;
 use NFe\Common\Util;
 use NFe\Common\Node;
 
@@ -35,7 +38,6 @@ use NFe\Common\Node;
  */
 class Responsavel extends Pessoa implements Node
 {
-
     /**
      * Informar o nome da pessoa a ser contatada na empresa desenvolvedora do
      * sistema utilizado na emissão do documento fiscal eletrônico.
@@ -53,7 +55,7 @@ class Responsavel extends Pessoa implements Node
      * fornecido pelo fisco mais a Chave de Acesso da NFe.
      */
     private $hash_csrt;
-    
+
     /**
      * Constroi uma instância de Responsavel vazia
      * @param  array $responsavel Array contendo dados do Responsavel
@@ -76,11 +78,11 @@ class Responsavel extends Pessoa implements Node
         }
         return $this->contato;
     }
-    
+
     /**
      * Altera o valor do Contato para o informado no parâmetro
      * @param mixed $contato novo valor para Contato
-     * @return Responsavel A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setContato($contato)
     {
@@ -95,11 +97,11 @@ class Responsavel extends Pessoa implements Node
         }
         return $this->email;
     }
-    
+
     /**
      * Altera o valor da Email para o informado no parâmetro
      * @param mixed $email novo valor para Email
-     * @return Responsavel A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setEmail($email)
     {
@@ -119,11 +121,11 @@ class Responsavel extends Pessoa implements Node
         }
         return $this->idcsrt;
     }
-    
+
     /**
      * Altera o valor da IDCsrt para o informado no parâmetro
      * @param mixed $idcsrt novo valor para IDCsrt
-     * @return Responsavel A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setIDCsrt($idcsrt)
     {
@@ -147,11 +149,11 @@ class Responsavel extends Pessoa implements Node
         }
         return $this->hash_csrt;
     }
-    
+
     /**
      * Altera o valor da HashCsrt para o informado no parâmetro
      * @param mixed $hash_csrt novo valor para HashCsrt
-     * @return Responsavel A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setHashCsrt($hash_csrt)
     {
@@ -178,7 +180,7 @@ class Responsavel extends Pessoa implements Node
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $responsavel Array ou instância de Responsavel, para copiar os valores
-     * @return Responsavel A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($responsavel = [])
     {

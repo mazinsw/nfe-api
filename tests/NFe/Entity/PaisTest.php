@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class PaisTest extends \PHPUnit\Framework\TestCase

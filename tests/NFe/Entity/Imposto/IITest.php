@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto;
 
 class IITest extends \PHPUnit\Framework\TestCase

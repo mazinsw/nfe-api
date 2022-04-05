@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Core;
 
 class NFCeTest extends \PHPUnit\Framework\TestCase
@@ -189,7 +190,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $pagamento->fromArray($pagamento->toArray());
         $pagamento->fromArray(null);
         $nfce->addPagamento($pagamento);
-        
+
         $nfce->fromArray($nfce);
         $nfce->fromArray($nfce->toArray());
         $nfce->fromArray(null);
@@ -244,7 +245,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = new \DOMDocument();
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
-        
+
         $nfce = new \NFe\Core\NFCe();
         $nfce->load($xml_file);
         $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
@@ -466,7 +467,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $data = self::loadNFCeAutorizada();
         $dom = $data['dom'];
         $dom_cmp = $data['cmp'];
-        
+
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
             file_put_contents(

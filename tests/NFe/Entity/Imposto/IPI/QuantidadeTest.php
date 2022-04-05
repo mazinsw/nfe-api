@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\IPI;
 
 class QuantidadeTest extends \PHPUnit\Framework\TestCase

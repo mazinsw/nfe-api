@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Core;
 
 use NFe\Logger\Log;
@@ -16,7 +17,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
     {
         Log::getInstance()->setHandler(null);
     }
-    
+
     /**
      * @return \NFe\Core\SEFAZ default instance
      */

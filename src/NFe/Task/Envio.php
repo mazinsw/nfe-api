@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,11 +26,13 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Task;
 
+use DOMElement;
+use DOMDocument;
 use NFe\Core\Nota;
 use NFe\Core\SEFAZ;
-use NFe\Common\Node;
 use NFe\Common\Util;
 use NFe\Common\CurlSoap;
 
@@ -38,7 +41,6 @@ use NFe\Common\CurlSoap;
  */
 class Envio
 {
-
     /**
      * Tipo de serviço a ser executado
      */
@@ -111,7 +113,7 @@ class Envio
     /**
      * Altera o valor do Servico para o informado no parâmetro
      * @param mixed $servico novo valor para Servico
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setServico($servico)
     {
@@ -143,7 +145,7 @@ class Envio
     /**
      * Altera o valor do Ambiente para o informado no parâmetro
      * @param mixed $ambiente novo valor para Ambiente
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setAmbiente($ambiente)
     {
@@ -181,7 +183,7 @@ class Envio
     /**
      * Altera o valor do Modelo para o informado no parâmetro
      * @param mixed $modelo novo valor para Modelo
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setModelo($modelo)
     {
@@ -219,7 +221,7 @@ class Envio
     /**
      * Altera o valor do Emissao para o informado no parâmetro
      * @param mixed $emissao novo valor para Emissao
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setEmissao($emissao)
     {
@@ -247,7 +249,7 @@ class Envio
     /**
      * Altera o valor do Conteudo para o informado no parâmetro
      * @param mixed $conteudo novo valor para Conteudo
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setConteudo($conteudo)
     {
@@ -314,7 +316,7 @@ class Envio
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $envio Array ou instância de Envio, para copiar os valores
-     * @return Envio A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($envio = [])
     {
@@ -354,7 +356,7 @@ class Envio
     /**
      * Cria um nó XML do envio de acordo com o leiaute da NFe
      * @param  string $name Nome do nó que será criado
-     * @return DOMElement   Nó que contém todos os campos da classe
+     * @return DOMElement|DOMDocument   Nó que contém todos os campos da classe
      */
     public function getNode($name = null)
     {

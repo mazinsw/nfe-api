@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Common;
 
 use Curl\Curl;
@@ -52,7 +54,7 @@ XML;
      * Construct
      *
      * @access public
-     * @param  $base_url
+     * @param mixed $base_url
      * @throws \ErrorException
      */
     public function __construct($base_url = null)

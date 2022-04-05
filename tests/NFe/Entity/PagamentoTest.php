@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class PagamentoTest extends \PHPUnit\Framework\TestCase

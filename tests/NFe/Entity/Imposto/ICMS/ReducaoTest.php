@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\ICMS;
 
 class ReducaoTest extends \PHPUnit\Framework\TestCase

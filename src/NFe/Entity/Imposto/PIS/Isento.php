@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\PIS;
 
 use NFe\Common\Util;
@@ -32,7 +34,6 @@ use NFe\Entity\Imposto;
 
 class Isento extends Imposto
 {
-
     /**
      * Código de Situação Tributária do PIS.
      * 04 - Operação Tributável -
@@ -88,11 +89,11 @@ class Isento extends Imposto
         }
         return parent::getTributacao($normalize);
     }
-    
+
     /**
      * Altera o valor da Tributacao para o informado no parâmetro
      * @param mixed $tributacao novo valor para Tributacao
-     * @return Isento A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setTributacao($tributacao)
     {

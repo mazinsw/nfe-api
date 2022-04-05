@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Common;
 
 use NFe\Task\Tarefa;
@@ -124,7 +126,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_base
+     * @param string|null $pasta_xml_base
      * @return self
      */
     public function setPastaXmlBase($pasta_xml_base)
@@ -194,7 +196,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_inutilizado
+     * @param string|null $pasta_xml_inutilizado
      * @return self
      */
     public function setPastaXmlInutilizado($pasta_xml_inutilizado)
@@ -217,7 +219,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_cancelado
+     * @param string|null $pasta_xml_cancelado
      * @return self
      */
     public function setPastaXmlCancelado($pasta_xml_cancelado)
@@ -240,7 +242,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_pendente
+     * @param string|null $pasta_xml_pendente
      * @return self
      */
     public function setPastaXmlPendente($pasta_xml_pendente)
@@ -263,7 +265,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_denegado
+     * @param string|null $pasta_xml_denegado
      * @return self
      */
     public function setPastaXmlDenegado($pasta_xml_denegado)
@@ -286,7 +288,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_rejeitado
+     * @param string|null $pasta_xml_rejeitado
      * @return self
      */
     public function setPastaXmlRejeitado($pasta_xml_rejeitado)
@@ -310,7 +312,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_autorizado
+     * @param string|null $pasta_xml_autorizado
      * @return self
      */
     public function setPastaXmlAutorizado($pasta_xml_autorizado)
@@ -334,7 +336,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_processamento
+     * @param string|null $pasta_xml_processamento
      * @return self
      */
     public function setPastaXmlProcessamento($pasta_xml_processamento)
@@ -357,7 +359,7 @@ class Ajuste extends Configuracao implements Evento
     }
 
     /**
-     * @param string $pasta_xml_assinado
+     * @param string|null $pasta_xml_assinado
      * @return self
      */
     public function setPastaXmlAssinado($pasta_xml_assinado)
@@ -557,7 +559,7 @@ class Ajuste extends Configuracao implements Evento
         Util::createDirectory(dirname($filename));
         file_put_contents($filename, $xml->saveXML());
     }
-    
+
     /**
      * Chamado quando uma tarefa é executada com sucesso
      * @param \NFe\Task\Tarefa $tarefa

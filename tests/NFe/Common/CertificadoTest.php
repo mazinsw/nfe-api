@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Common;
 
 class CertificadoTest extends \PHPUnit\Framework\TestCase

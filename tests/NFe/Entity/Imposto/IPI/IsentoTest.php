@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\IPI;
 
 class IsentoTest extends \PHPUnit\Framework\TestCase

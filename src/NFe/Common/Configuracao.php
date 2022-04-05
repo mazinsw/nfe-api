@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Common;
 
 use NFe\Entity\Emitente;
@@ -81,7 +83,7 @@ class Configuracao
     private $sincrono;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $offline;
 
@@ -144,7 +146,7 @@ class Configuracao
 
     /**
      * Informa a instancia que receberá os eventos do processamento das notas
-     * @param Evento $evento
+     * @param Evento|null $evento
      * @return self
      */
     public function setEvento($evento)
@@ -284,7 +286,7 @@ class Configuracao
 
     /**
      * Informa o token do CSC, geralmente 000001
-     * @param string $token
+     * @param string|null $token
      * @return self
      */
     public function setToken($token)
@@ -304,7 +306,7 @@ class Configuracao
 
     /**
      * Informa o código do contribuinte para emissão de nota fiscal
-     * @param string $csc
+     * @param string|null $csc
      * @return self
      */
     public function setCSC($csc)

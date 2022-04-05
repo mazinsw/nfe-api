@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Common\Util;
@@ -37,7 +39,6 @@ use NFe\Entity\Imposto\Fundo\Substituido;
  */
 class Parcial extends Base
 {
-
     /**
      * Modalidade de determinação da BC do ICMS ST:
      * 0 – Preço tabelado ou

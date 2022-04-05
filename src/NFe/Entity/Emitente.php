@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use NFe\Common\Util;
@@ -34,7 +36,6 @@ use NFe\Common\Util;
  */
 class Emitente extends Pessoa
 {
-
     /**
      * Código de Regime Tributário. Este campo será obrigatoriamente preenchido
      * com: 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite

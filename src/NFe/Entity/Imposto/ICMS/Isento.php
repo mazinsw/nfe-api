@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\ICMS;
 
 use NFe\Common\Util;
@@ -38,7 +40,6 @@ use NFe\Common\Util;
  */
 class Isento extends Generico
 {
-
     /**
      * Informar o motivo da desoneração:
      * 1 – Táxi;

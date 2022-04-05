@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Task;
 
 class RetornoTest extends \PHPUnit\Framework\TestCase

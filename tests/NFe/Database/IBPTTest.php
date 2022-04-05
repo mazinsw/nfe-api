@@ -1,7 +1,8 @@
 <?php
+
 namespace NFe\Database;
 
-use \NFe\Logger\Log;
+use NFe\Logger\Log;
 
 class IBPTTest extends \PHPUnit\Framework\TestCase
 {

@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class DestinatarioTest extends \PHPUnit\Framework\TestCase

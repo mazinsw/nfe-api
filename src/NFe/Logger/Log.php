@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Logger;
 
 /**
@@ -103,7 +105,9 @@ class Log
 
     /**
      * Altera o gerenciador que escreve os logs, informe null para restaurar o padrão
-     * @param \Monolog\Handler\AbstractHandler $write_function nova função que será usada
+     *
+     * @param \Monolog\Handler\AbstractHandler|null $handler nova função que será usada
+     *
      * @return Log a própria instência de Log
      */
     public function setHandler($handler)
@@ -131,7 +135,7 @@ class Log
     /**
      * Atribui os valores do array para a instância atual
      * @param array|Log $log Array ou instância de Log, para copiar os valores
-     * @return Log A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($log = [])
     {

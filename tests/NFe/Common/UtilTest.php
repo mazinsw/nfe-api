@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Common;
 
 class UtilTest extends \PHPUnit\Framework\TestCase

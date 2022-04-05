@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,11 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Task;
 
+use DOMElement;
+use DOMDocument;
 use NFe\Core\Nota;
 use NFe\Common\Util;
 
@@ -99,11 +103,10 @@ class Protocolo extends Retorno
         }
         return $this->chave;
     }
-    
+
     /**
      * Altera o valor da Chave para o informado no parâmetro
-     * @param mixed $chave novo valor para Chave
-     * @param string $chave Novo chave para Protocolo
+     * @param mixed|null $chave novo valor para Chave
      * @return self A própria instância da classe
      */
     public function setChave($chave)
@@ -125,11 +128,12 @@ class Protocolo extends Retorno
         }
         return $this->validacao;
     }
-    
+
     /**
      * Altera o valor da Validacao para o informado no parâmetro
-     * @param mixed $validacao novo valor para Validacao
-     * @param string $validacao Novo validacao para Protocolo
+     *
+     * @param string|null $validacao Novo validacao para Protocolo
+     *
      * @return self A própria instância da classe
      */
     public function setValidacao($validacao)
@@ -152,11 +156,12 @@ class Protocolo extends Retorno
         }
         return $this->numero;
     }
-    
+
     /**
      * Altera o valor do Numero para o informado no parâmetro
-     * @param mixed $numero novo valor para Numero
-     * @param string $numero Novo numero para Protocolo
+     *
+     * @param string|null $numero Novo numero para Protocolo
+     *
      * @return self A própria instância da classe
      */
     public function setNumero($numero)
@@ -177,11 +182,12 @@ class Protocolo extends Retorno
         }
         return $this->mensagem;
     }
-    
+
     /**
      * Altera o valor da Mensagem para o informado no parâmetro
-     * @param mixed $mensagem novo valor para Mensagem
-     * @param string $mensagem Novo mensagem para Protocolo
+     *
+     * @param string|null $mensagem Novo mensagem para Protocolo
+     *
      * @return self A própria instância da classe
      */
     public function setMensagem($mensagem)
@@ -193,7 +199,7 @@ class Protocolo extends Retorno
     /**
      * Código da Mensagem.
      * @param boolean $normalize informa se o codigo deve estar no formato do XML
-     * @return string codigo of Protocolo
+     * @return string|null codigo of Protocolo
      */
     public function getCodigo($normalize = false)
     {
@@ -202,11 +208,12 @@ class Protocolo extends Retorno
         }
         return $this->codigo;
     }
-    
+
     /**
      * Altera o valor do Codigo para o informado no parâmetro
-     * @param mixed $codigo novo valor para Codigo
-     * @param string $codigo Novo codigo para Protocolo
+     *
+     * @param string|null $codigo Novo codigo para Protocolo
+     *
      * @return self A própria instância da classe
      */
     public function setCodigo($codigo)
@@ -273,7 +280,7 @@ class Protocolo extends Retorno
 
     /**
      * Carrega as informações do nó e preenche a instância da classe
-     * @param DOMElement $element Nó do xml com todos as tags dos campos
+     * @param DOMDocument|DOMElement $element Nó do xml com todos as tags dos campos
      * @param string $name Nome do nó que será carregado
      * @return DOMElement Instância do nó que foi carregado
      */

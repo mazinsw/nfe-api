@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class EnderecoTest extends \PHPUnit\Framework\TestCase

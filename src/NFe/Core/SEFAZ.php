@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,12 +26,18 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Core;
 
 use NFe\Logger\Log;
 use NFe\Task\Tarefa;
-use NFe\Task\Autorizacao;
+use NFe\Task\Recibo;
+use NFe\Task\Retorno;
 use NFe\Common\Ajuste;
+use NFe\Task\Autorizacao;
+use NFe\Task\Evento;
+use NFe\Task\Inutilizacao;
+use NFe\Task\Protocolo;
 
 /**
  * Classe que envia uma ou mais notas fiscais para os servidores da sefaz
@@ -110,7 +117,7 @@ class SEFAZ
 
     /**
      * Configuração usada atualmente
-     * @return \NFe\Common\Configuracao
+     * @return \NFe\Common\Configuracao|null
      */
     public function getConfiguracao()
     {
@@ -179,18 +186,27 @@ class SEFAZ
      * Chama os eventos da nota lançando exceção em caso de rejeição
      * @param Nota $nota nota a ser despachada
      * @param \DOMDocument $dom xml da nota
-     * @param \NFe\Task\Retorno $retorno resposta da SEFAZ
+     * @param Retorno|Recibo $retorno resposta da SEFAZ
      */
     private function despacha($nota, $dom, $retorno)
     {
         $evento = $this->getConfiguracao()->getEvento();
         if ($retorno->isRecebido()) {
-            Log::debug('SEFAZ.despacha - Recibo: ' . $retorno->getNumero() . ' da ' . $nota->getID(true));
+            if ($retorno instanceof Recibo) {
+                Log::debug('SEFAZ.despacha - Recibo: ' . $retorno->getNumero() . ' da ' . $nota->getID(true));
+            }
             $evento->onNotaProcessando($nota, $dom, $retorno);
         } elseif ($retorno->isAutorizado()) {
             $dom = $nota->addProtocolo($dom);
-            Log::debug('SEFAZ.despacha(' . $retorno->getStatus() . ') - ' . $retorno->getMotivo() .
-                ', Protocolo: ' . $retorno->getNumero() . ' - ' . $nota->getID(true));
+            if (
+                $retorno instanceof Recibo
+                || $retorno instanceof Protocolo
+                || $retorno instanceof Inutilizacao
+                || $retorno instanceof Evento
+            ) {
+                Log::debug('SEFAZ.despacha(' . $retorno->getStatus() . ') - ' . $retorno->getMotivo() .
+                    ', Protocolo: ' . $retorno->getNumero() . ' - ' . $nota->getID(true));
+            }
             $evento->onNotaAutorizada($nota, $dom, $retorno);
         } elseif ($retorno->isDenegada()) {
             $evento->onNotaDenegada($nota, $dom, $retorno);

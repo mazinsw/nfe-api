@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class PesoTest extends \PHPUnit\Framework\TestCase

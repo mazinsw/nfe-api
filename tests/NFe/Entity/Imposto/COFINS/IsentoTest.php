@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\COFINS;
 
 class IsentoTest extends \PHPUnit\Framework\TestCase

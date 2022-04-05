@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Transporte;
 
 class VeiculoTest extends \PHPUnit\Framework\TestCase

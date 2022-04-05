@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\Fundo;
 
+use DOMElement;
 use NFe\Common\Util;
 
 /**
@@ -35,8 +38,6 @@ use NFe\Common\Util;
  */
 class Retido extends Substituido
 {
-
-    
     /**
      * Constroi uma instância de Retido vazia
      * @param  array $retido Array contendo dados do Retido
@@ -59,7 +60,7 @@ class Retido extends Substituido
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $retido Array ou instância de Retido, para copiar os valores
-     * @return Retido A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($retido = [])
     {

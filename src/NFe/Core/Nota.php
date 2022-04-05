@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Core;
 
+use DOMDocument;
 use NFe\Common\Util;
 use NFe\Common\Node;
 use NFe\Task\Protocolo;
@@ -48,7 +51,6 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
  */
 abstract class Nota implements Node
 {
-
     /**
      * Versão da nota fiscal
      */
@@ -152,14 +154,14 @@ abstract class Nota implements Node
 
     /**
      * Emitente da nota fiscal
-     * 
+     *
      * @var Emitente
      */
     private $emitente;
 
     /**
      * Destinatário que receberá os produtos
-     * 
+     *
      * @var Destinatario
      */
     private $destinatario;
@@ -180,21 +182,21 @@ abstract class Nota implements Node
 
     /**
      * Produtos adicionados na nota
-     * 
+     *
      * @var Produto[]
      */
     private $produtos;
 
     /**
      * Informações de trasnporte da mercadoria
-     * 
+     *
      * @var Transporte
      */
     private $transporte;
 
     /**
      * Pagamentos realizados
-     * 
+     *
      * @var Pagamento[]
      */
     private $pagamentos;
@@ -328,7 +330,7 @@ abstract class Nota implements Node
     /**
      * Protocolo de autorização da nota, informado apenas quando a nota for
      * enviada e autorizada
-     * 
+     *
      * @var Protocolo
      */
     private $protocolo;
@@ -392,7 +394,7 @@ abstract class Nota implements Node
 
     /**
      * Emitente da nota fiscal
-     * @return Emitente emitente da Nota
+     * @return Emitente|null emitente da Nota
      */
     public function getEmitente()
     {
@@ -412,7 +414,7 @@ abstract class Nota implements Node
 
     /**
      * Destinatário que receberá os produtos
-     * @return Destinatario destinatario da Nota
+     * @return Destinatario|null destinatario da Nota
      */
     public function getDestinatario()
     {
@@ -432,7 +434,7 @@ abstract class Nota implements Node
 
     /**
      * Grupo de informações do responsável técnico pelo sistema
-     * @return Responsavel responsável da Nota
+     * @return Responsavel|null responsável da Nota
      */
     public function getResponsavel()
     {
@@ -486,17 +488,17 @@ abstract class Nota implements Node
     /**
      * Grupo de Informações do Intermediador da Transação
      *
-     * @return Intermediador
+     * @return Intermediador|null
      */
     public function getIntermediador()
     {
         return $this->intermediador;
     }
-    
+
     /**
      * Altera o valor do Intermediador para o informado no parâmetro
      *
-     * @param Intermediador $intermediador
+     * @param Intermediador|null $intermediador
      *
      * @return self
      */
@@ -790,7 +792,7 @@ abstract class Nota implements Node
         if (!$normalize) {
             return $this->codigo;
         }
-        return Util::padDigit($this->codigo % 100000000, 8);
+        return Util::padDigit(strval($this->codigo % 100000000), 8);
     }
 
     /**
@@ -1178,8 +1180,10 @@ abstract class Nota implements Node
      * Indicador de intermediador/marketplace 0=Operação sem intermediador (em
      * site ou plataforma própria) 1=Operação em site ou plataforma de
      * terceiros (intermediadores/marketplace)
+     *
      * @param boolean $normalize informa se a intermediacao deve estar no formato do XML
-     * @return string intermediacao of Nota
+     *
+     * @return string|null intermediacao of Nota
      */
     public function getIntermediacao($normalize = false)
     {
@@ -1194,11 +1198,12 @@ abstract class Nota implements Node
         }
         return $this->intermediacao;
     }
-    
+
     /**
      * Altera o valor da Intermediacao para o informado no parâmetro
-     * @param mixed $intermediacao novo valor para Intermediacao
-     * @param string $intermediacao Novo intermediacao para Nota
+     *
+     * @param string|null $intermediacao Novo intermediacao para Nota
+     *
      * @return self
      */
     public function setIntermediacao($intermediacao)
@@ -1223,7 +1228,7 @@ abstract class Nota implements Node
     {
         return $this->total;
     }
-    
+
     /**
      * Altera o valor do Total para o informado no parâmetro
      * @param mixed $total novo valor para Total
@@ -1247,7 +1252,7 @@ abstract class Nota implements Node
         }
         return $this->adicionais;
     }
-    
+
     /**
      * Altera o valor da Adicionais para o informado no parâmetro
      * @param mixed $adicionais novo valor para Adicionais
@@ -1268,7 +1273,7 @@ abstract class Nota implements Node
     {
         return $this->observacoes;
     }
-    
+
     /**
      * Altera o valor da Observacoes para o informado no parâmetro
      * @param mixed $observacoes novo valor para Observacoes
@@ -1282,7 +1287,9 @@ abstract class Nota implements Node
 
     /**
      * Adiciona um(a) Observacao para a lista de observacao
-     * @param Observacao $observacao Instância da Observacao que será adicionada
+     *
+     * @param string $observacao Instância da Observacao que será adicionada
+     *
      * @return self
      */
     public function addObservacao($campo, $observacao)
@@ -1300,7 +1307,7 @@ abstract class Nota implements Node
     {
         return $this->informacoes;
     }
-    
+
     /**
      * Altera o valor da Informacoes para o informado no parâmetro
      * @param mixed $informacoes novo valor para Informacoes
@@ -1314,7 +1321,9 @@ abstract class Nota implements Node
 
     /**
      * Adiciona um(a) Informacao para a lista de informacao
-     * @param Informacao $informacao Instância da Informacao que será adicionada
+     *
+     * @param string $informacao Instância da Informacao que será adicionada
+     *
      * @return self
      */
     public function addInformacao($campo, $informacao)
@@ -1448,7 +1457,7 @@ abstract class Nota implements Node
             $this->setProdutos($nota['produtos']);
         }
         if (isset($nota['intermediador'])) {
-            $this->setIntermediador(new Intermediador(isset($nota['intermediador'])));
+            $this->setIntermediador(new Intermediador(isset($nota['intermediador']) ? $nota['intermediador'] : []));
         } else {
             $this->setIntermediador(null);
         }
@@ -1629,15 +1638,14 @@ abstract class Nota implements Node
             foreach ($_impostos as $_imposto) {
                 switch ($_imposto->getGrupo()) {
                     case Imposto::GRUPO_ICMS:
-                        if (($_imposto instanceof \NFe\Entity\Imposto\ICMS\Cobranca) ||
-                                ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)
+                        if (
+                            ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Cobranca)
+                            || ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)
                         ) {
                             $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
                             $total['base'] += round($_imposto->getNormal()->getBase(), 2);
                         }
-                        if (($_imposto instanceof \NFe\Entity\Imposto\ICMS\Parcial) ||
-                                ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Parcial)
-                        ) {
+                        if ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Parcial) {
                             $total['icms.st'] += round($_imposto->getValor(), 2);
                             $total['base.st'] += round($_imposto->getBase(), 2);
                         } else {

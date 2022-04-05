@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity;
 
 use NFe\Common\Util;
@@ -35,7 +37,6 @@ use NFe\Common\Util;
  */
 class Destinatario extends Pessoa
 {
-    
     /**
      * Indicador da IE do destinatário:
      * 1 – Contribuinte ICMSpagamento à

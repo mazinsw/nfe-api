@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,6 +26,7 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\IPI;
 
 use NFe\Common\Util;
@@ -32,7 +34,6 @@ use NFe\Entity\Imposto;
 
 class Aliquota extends Imposto
 {
-
     /**
      * Código da Situação Tributária do IPI:
      * 00-Entrada com recuperação de
@@ -79,11 +80,11 @@ class Aliquota extends Imposto
         }
         return parent::getTributacao($normalize);
     }
-    
+
     /**
      * Altera o valor da Tributacao para o informado no parâmetro
      * @param mixed $tributacao novo valor para Tributacao
-     * @return Aliquota A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function setTributacao($tributacao)
     {

@@ -1,0 +1,24 @@
+parameters:
+    ignoreErrors:
+        -
+            message: "#^Parameter \\#1 \\$objDoc of method RobRichards\\\\XMLSecLibs\\\\XMLSecurityDSig\\:\\:locateSignature\\(\\) expects DOMDocument, DOMNode given\\.$#"
+            count: 1
+            path: src/util/XmlseclibsAdapter.php
+
+        -
+            message: "#^Call to function is_null\\(\\) with [\\w()\\\\]+ will always evaluate to false\\.$#"
+            count: 1
+            path: src/NFe/Logger/Log.php
+
+        -
+            message: "#^Call to function is_null\\(\\) with [\\w()\\\\]+ will always evaluate to false\\.$#"
+            count: 1
+            path: src/NFe/Core/SEFAZ.php
+
+    level: 5
+    paths:
+        - src
+        - tests
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false

@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\ICMS;
 
 class DiferidoTest extends \PHPUnit\Framework\TestCase

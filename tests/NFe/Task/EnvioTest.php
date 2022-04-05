@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Task;
 
 use NFe\Core\Nota;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,8 +26,10 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Entity\Imposto\Fundo;
 
+use DOMElement;
 use NFe\Common\Util;
 use NFe\Entity\Imposto;
 
@@ -42,7 +45,7 @@ class Base extends Imposto
     public const GRUPO_FCPST = 'fcpst';
     public const GRUPO_FCPSTRET = 'fcpstret';
 
-    
+
     /**
      * Constroi uma instância de Base vazia
      * @param  array $base Array contendo dados do Base
@@ -65,7 +68,7 @@ class Base extends Imposto
     /**
      * Atribui os valores do array para a instância atual
      * @param mixed $base Array ou instância de Base, para copiar os valores
-     * @return Base A própria instância da classe
+     * @return self A própria instância da classe
      */
     public function fromArray($base = [])
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MIT License
  *
@@ -25,11 +26,11 @@
  * SOFTWARE.
  *
  */
+
 namespace NFe\Task;
 
 class Tarefa
 {
-
     /**
      * Ação a ser realizada sobre o objeto ou recibo
      */
@@ -270,7 +271,7 @@ class Tarefa
         }
         return $retorno;
     }
-    
+
     private function inutiliza()
     {
         $nota = $this->getNota();
@@ -305,7 +306,7 @@ class Tarefa
         $this->setDocumento($dom);
         return $inutilizacao;
     }
-    
+
     private function consulta()
     {
         $nota = $this->getNota();

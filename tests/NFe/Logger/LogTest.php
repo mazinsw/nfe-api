@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Logger;
 
 class LogTest extends \PHPUnit\Framework\TestCase

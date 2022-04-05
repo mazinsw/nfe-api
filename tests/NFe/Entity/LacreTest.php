@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity;
 
 class LacreTest extends \PHPUnit\Framework\TestCase

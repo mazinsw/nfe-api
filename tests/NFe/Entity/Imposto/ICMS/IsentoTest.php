@@ -1,4 +1,5 @@
 <?php
+
 namespace NFe\Entity\Imposto\ICMS;
 
 class IsentoTest extends \PHPUnit\Framework\TestCase
