@@ -11,7 +11,7 @@ class BancoTest extends \PHPUnit\Framework\TestCase
 {
     private $banco;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $sefaz = \NFe\Core\SEFAZ::getInstance(true);
         $this->banco = $sefaz->getConfiguracao()->getBanco();

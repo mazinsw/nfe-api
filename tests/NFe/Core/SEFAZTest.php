@@ -8,12 +8,12 @@ use NFe\Task\Tarefa;
 
 class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Evento
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Log::getInstance()->setHandler(null);
     }

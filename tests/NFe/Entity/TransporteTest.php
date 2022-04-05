@@ -7,7 +7,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
     private $resource_path;
     private $sefaz;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
         $this->resource_path = dirname(dirname(__DIR__)) . '/resources';

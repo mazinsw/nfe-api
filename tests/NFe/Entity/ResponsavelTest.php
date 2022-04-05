@@ -8,7 +8,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
     }

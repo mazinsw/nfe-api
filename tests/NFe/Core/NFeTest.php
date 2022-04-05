@@ -6,7 +6,7 @@ class NFeTest extends \PHPUnit\Framework\TestCase
 {
     private $sefaz;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sefaz = SEFAZTest::createSEFAZ();
     }

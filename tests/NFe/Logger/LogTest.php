@@ -4,12 +4,12 @@ namespace NFe\Logger;
 
 class LogTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Log::getInstance()->setHandler(null);
     }

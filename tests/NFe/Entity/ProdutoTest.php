@@ -4,7 +4,7 @@ namespace NFe\Entity;
 
 class ProdutoTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $sefaz = \NFe\Core\SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()->getEmitente()->getEndereco()

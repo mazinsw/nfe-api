@@ -8,13 +8,13 @@ class IBPTTest extends \PHPUnit\Framework\TestCase
 {
     private $ibpt;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ibpt = new \NFe\Database\IBPT();
         Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Log::getInstance()->setHandler(null);
     }

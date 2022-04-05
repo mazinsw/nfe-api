@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit 
-        bootstrap="vendor/autoload.php"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        colors="false">
-    <testsuites>
-        <testsuite name="NFe-API Test Suite">
-            <directory>tests/NFe/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/NFe</directory>
-        </whitelist>
-    </filter>
-    <php>
-        <ini name="date.timezone" value="UTC"/>
-        <env name="APP_ENV" value="testing"/>
-        <env name="TEST_MODE" value="_override"/>
-    </php>
-    <logging>
-        <log type="coverage-text" target="php://stdout" showOnlySummary="true"/>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="junit" target="build/logs/junit.xml"/>
-    </logging>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" colors="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">src/NFe</directory>
+    </include>
+    <report>
+      <clover outputFile="build/logs/clover.xml"/>
+      <text outputFile="php://stdout" showOnlySummary="true"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="NFe-API Test Suite">
+      <directory>tests/NFe/</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <ini name="date.timezone" value="UTC"/>
+    <env name="APP_ENV" value="testing"/>
+    <env name="TEST_MODE" value="_override"/>
+  </php>
+  <logging>
+    <junit outputFile="build/logs/junit.xml"/>
+  </logging>
 </phpunit>

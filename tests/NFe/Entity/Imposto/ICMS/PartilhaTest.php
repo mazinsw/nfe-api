@@ -6,7 +6,7 @@ class PartilhaTest extends \PHPUnit\Framework\TestCase
 {
     private $resource_path;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource_path = dirname(dirname(dirname(dirname(__DIR__)))) . '/resources';
     }

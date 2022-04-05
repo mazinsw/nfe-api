@@ -57,3 +57,4 @@ site/xml/**/*.xml
 build/
 utils/IBPT/.svn/
 utils/IBPT/leia-me.txt
+.phpunit.result.cache

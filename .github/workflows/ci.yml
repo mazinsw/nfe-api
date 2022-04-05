@@ -38,3 +38,6 @@ jobs:
 
       - name: Rodando PHPUnit
         run: composer test
+
+      - name: Enviando cobertura de código
+        run: php vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml

@@ -4,7 +4,7 @@ namespace NFe\Entity;
 
 class PagamentoTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
     }
 
