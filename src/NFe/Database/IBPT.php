@@ -67,7 +67,9 @@ class IBPT
             return false;
         }
         $data = json_decode($content, true);
-        $this->tabela[$uf] = $data;
+        unset($this->tabela);
+        gc_collect_cycles();
+        $this->tabela = [$uf => $data];
         return $data;
     }
 
