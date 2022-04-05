@@ -32,6 +32,17 @@ Execute o comando abaixo na pasta do seu projeto
 composer require mazinsw/nfe-api
 ```
 
+## Manutenção
+Atualizar tabelas IBPT
+```sh
+# linux
+./utils/update_IBPT.sh
+```
+```cmd
+REM Windows
+utils\update_IBPT.bat
+```
+
 ## Documentação
 
 Acesse [aqui](../../wiki) para ver a documentação

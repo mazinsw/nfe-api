@@ -1,5 +1,6 @@
 <?php
-function csv_to_array($filename='', $delimiter=',')
+
+function csv_to_array($filename = '', $delimiter = ',')
 {
     if (!file_exists($filename) || !is_readable($filename)) {
         return false;
@@ -29,8 +30,11 @@ foreach ($it as $filename) {
     if ($filename->isDot()) {
         continue;
     }
-    $csv = csv_to_array($source_folder.'/'.$filename, ';');
-    preg_match('/TabelaIBPTax([A-Z]{2})(.*)\.csv/s', $filename, $info);
+    if (! preg_match('/TabelaIBPTax([A-Z]{2})(.*)\.csv/s', $filename, $info)) {
+        // outros arquivos na pasta
+        continue;
+    }
+    $csv = csv_to_array($source_folder . '/' . $filename, ';');
     $uf = $info[1];
     $first = current($csv);
     $vigenciainicio = date_create_from_format('d/m/Y', $first['vigenciainicio']);
@@ -53,7 +57,7 @@ foreach ($it as $filename) {
             'municipal' => floatval($row['municipal']),
             'tipo' => $row['tipo']
         ];
-        $key = $row['codigo'].'.'.sprintf('%02s', $row['ex']);
+        $key = $row['codigo'] . '.' . sprintf('%02s', $row['ex']);
         $items[$key] = $o;
     }
     $data = [
@@ -61,7 +65,7 @@ foreach ($it as $filename) {
         'estados' => [$uf => $items]
     ];
     $data = json_encode($data);
-    $outfile = $dest_folder.'/'.$uf.'.json';
-    echo 'Writing '.$outfile."\n";
+    $outfile = $dest_folder . '/' . $uf . '.json';
+    echo 'Writing ' . $outfile . "\n";
     file_put_contents($outfile, $data);
 }
