@@ -26,6 +26,10 @@ jobs:
 
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents. If you use a shallow git checkout, please checkout at least a depth of one."), see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
+          # 10 commits is an arbitrary value that is more than 1 commit
+          fetch-depth: 10
 
       - name: Composer Install
         run: composer install --no-progress -o --no-ansi --no-interaction
