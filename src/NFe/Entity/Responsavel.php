@@ -129,7 +129,7 @@ class Responsavel extends Pessoa implements Node
      */
     public function setIDCsrt($idcsrt)
     {
-        if (trim($idcsrt) != '') {
+        if (trim($idcsrt ?: '') != '') {
             $idcsrt = intval($idcsrt);
         }
         $this->idcsrt = $idcsrt;

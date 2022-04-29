@@ -82,7 +82,7 @@ class Estatico extends Banco
      */
     public function getCodigoEstado($uf)
     {
-        if (!isset($this->uf_codes['estados'][strtoupper($uf)])) {
+        if (!isset($this->uf_codes['estados'][strtoupper($uf ?: '')])) {
             throw new \Exception(
                 sprintf('Não foi encontrado o código do IBGE para o estado "%s"', $uf),
                 404
@@ -120,7 +120,7 @@ class Estatico extends Banco
      */
     public function getCodigoMunicipio($municipio, $uf)
     {
-        if (!isset($this->mun_codes['municipios'][strtoupper($uf)])) {
+        if (!isset($this->mun_codes['municipios'][strtoupper($uf ?: '')])) {
             throw new \Exception(
                 sprintf('Não exite municípios para o estado "%s"', $uf),
                 404

@@ -105,7 +105,7 @@ class Total implements Node
      */
     public function setProdutos($produtos)
     {
-        if (trim($produtos) != '') {
+        if (trim($produtos ?: '') != '') {
             $produtos = floatval($produtos);
         }
         $this->produtos = $produtos;
@@ -132,7 +132,7 @@ class Total implements Node
      */
     public function setDesconto($desconto)
     {
-        if (trim($desconto) != '') {
+        if (trim($desconto ?: '') != '') {
             $desconto = floatval($desconto);
         }
         $this->desconto = $desconto;
@@ -160,7 +160,7 @@ class Total implements Node
      */
     public function setSeguro($seguro)
     {
-        if (trim($seguro) != '') {
+        if (trim($seguro ?: '') != '') {
             $seguro = floatval($seguro);
         }
         $this->seguro = $seguro;
@@ -188,7 +188,7 @@ class Total implements Node
      */
     public function setFrete($frete)
     {
-        if (trim($frete) != '') {
+        if (trim($frete ?: '') != '') {
             $frete = floatval($frete);
         }
         $this->frete = $frete;
@@ -216,7 +216,7 @@ class Total implements Node
      */
     public function setDespesas($despesas)
     {
-        if (trim($despesas) != '') {
+        if (trim($despesas ?: '') != '') {
             $despesas = floatval($despesas);
         }
         $this->despesas = $despesas;
@@ -243,7 +243,7 @@ class Total implements Node
      */
     public function setTributos($tributos)
     {
-        if (trim($tributos) != '') {
+        if (trim($tributos ?: '') != '') {
             $tributos = floatval($tributos);
         }
         $this->tributos = $tributos;

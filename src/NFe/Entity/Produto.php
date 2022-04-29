@@ -84,7 +84,7 @@ class Produto extends Total
 
     public function setItem($item)
     {
-        if (trim($item) != '') {
+        if (trim($item ?: '') != '') {
             $item = intval($item);
         }
         $this->item = $item;
@@ -280,7 +280,7 @@ class Produto extends Total
 
     public function setQuantidade($quantidade)
     {
-        if (trim($quantidade) != '') {
+        if (trim($quantidade ?: '') != '') {
             $quantidade = floatval($quantidade);
         }
         $this->quantidade = $quantidade;
@@ -300,7 +300,7 @@ class Produto extends Total
 
     public function setTributada($tributada)
     {
-        if (trim($tributada) != '') {
+        if (trim($tributada ?: '') != '') {
             $tributada = floatval($tributada);
         }
         $this->tributada = $tributada;
@@ -345,7 +345,7 @@ class Produto extends Total
 
     public function setCFOP($cfop)
     {
-        if (trim($cfop) != '') {
+        if (trim($cfop ?: '') != '') {
             $cfop = intval($cfop);
         }
         $this->cfop = $cfop;

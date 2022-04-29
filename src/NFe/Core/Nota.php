@@ -826,7 +826,7 @@ abstract class Nota implements Node
      */
     public function setDataEmissao($data_emissao)
     {
-        if (!is_numeric($data_emissao)) {
+        if (!is_numeric($data_emissao) && ! is_null($data_emissao)) {
             $data_emissao = strtotime($data_emissao);
         }
         $this->data_emissao = $data_emissao;
