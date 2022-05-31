@@ -122,7 +122,9 @@ class Log
 
     /**
      * Converte a instância da classe para um array de campos com valores
-     * @param boolean $recursive informa se os campos devem ser convertidos para array
+     *
+     * @param bool $recursive
+     *
      * @return array Array contendo todos os campos e valores da instância
      */
     public function toArray($recursive = false)
@@ -159,11 +161,12 @@ class Log
      *
      * @param  string  $message The log message
      * @param  array   $context The log context
-     * @return Boolean Whether the record has been processed
+     *
+     * @return void
      */
     public static function error($message, $context = [])
     {
-        return self::getInstance()->logger->error($message, $context);
+        self::getInstance()->logger->error($message, $context);
     }
 
     /**
@@ -173,11 +176,12 @@ class Log
      *
      * @param  string  $message The log message
      * @param  array   $context The log context
-     * @return Boolean Whether the record has been processed
+     *
+     * @return void
      */
     public static function warning($message, $context = [])
     {
-        return self::getInstance()->logger->warning($message, $context);
+        self::getInstance()->logger->warning($message, $context);
     }
 
     /**
@@ -187,11 +191,12 @@ class Log
      *
      * @param  string  $message The log message
      * @param  array   $context The log context
-     * @return Boolean Whether the record has been processed
+     *
+     * @return void
      */
     public static function debug($message, $context = [])
     {
-        return self::getInstance()->logger->debug($message, $context);
+        self::getInstance()->logger->debug($message, $context);
     }
 
     /**
@@ -201,10 +206,11 @@ class Log
      *
      * @param  string  $message The log message
      * @param  array   $context The log context
-     * @return Boolean Whether the record has been processed
+     *
+     * @return void
      */
     public static function info($message, $context = [])
     {
-        return self::getInstance()->logger->info($message, $context);
+        self::getInstance()->logger->info($message, $context);
     }
 }
