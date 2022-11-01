@@ -9,18 +9,11 @@ help:
 	@echo "usage: make COMMAND"
 	@echo ""
 	@echo "Commands:"
-	@echo "  update       Update PHP dependencies with composer"
 	@echo "  install      Install PHP dependencies with composer"
+	@echo "  update       Update PHP dependencies with composer"
 	@echo "  autoload     Update PHP autoload files"
+	@echo "  test         Run PHPUnit Tests"
 	@echo "  cmd          Open terminal with php"
-
-update:
-	@docker run --rm \
-		-u $(CURRENT_UID) \
-		-v $(shell pwd):/app \
-		-v /etc/passwd:/etc/passwd:ro \
-		-v /etc/group:/etc/group:ro \
-		grandchef/composer:2.7.4 update --no-scripts --no-interaction
 
 install:
 	@docker run --rm \
@@ -30,14 +23,13 @@ install:
 		-v /etc/group:/etc/group:ro \
 		grandchef/composer:2.7.4 install --ignore-platform-reqs --no-scripts --no-interaction
 
-cmd:
-	@docker run --rm -it \
+update:
+	@docker run --rm \
 		-u $(CURRENT_UID) \
 		-v $(shell pwd):/app \
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
-		-w /app \
-		grandchef/php:7.4.27-fpm-dev /bin/bash
+		grandchef/composer:2.7.4 update --no-scripts --no-interaction
 
 autoload:
 	@docker run --rm \
@@ -46,3 +38,19 @@ autoload:
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
 		grandchef/composer:2.7.4 dump-autoload --no-scripts --no-interaction
+
+test:
+	@docker run --rm -it \
+		-u $(CURRENT_UID) \
+		-v $(shell pwd):/app \
+		-w /app \
+		grandchef/php:7.4.27-fpm-dev php ./vendor/bin/phpunit --configuration . --no-coverage --colors=always
+
+cmd:
+	@docker run --rm -it \
+		-u $(CURRENT_UID) \
+		-v $(shell pwd):/app \
+		-v /etc/passwd:/etc/passwd:ro \
+		-v /etc/group:/etc/group:ro \
+		-w /app \
+		grandchef/php:7.4.27-fpm-dev /bin/bash
