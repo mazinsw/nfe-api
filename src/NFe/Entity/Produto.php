@@ -605,7 +605,7 @@ class Produto extends Total
         return $this;
     }
 
-    public static function addNodeInformacoes($tributos, $element, $name = null)
+    public static function getInformacoesProduto($tributos)
     {
         $detalhes = [];
         $formatos = [
@@ -632,6 +632,13 @@ class Produto extends Total
             $ultimo = ' e ' . array_pop($detalhes);
         }
         $texto = 'Trib. aprox.: ' . implode(', ', $detalhes) . $ultimo . '. ' . $fonte;
+        
+        return $texto;
+    }
+    
+    public static function addNodeInformacoes($tributos, $element, $name = null)
+    {
+        $texto = Produto::getInformacoesProduto($tributos);
         Util::appendNode($element, is_null($name) ? 'infAdProd' : $name, $texto);
         return $texto;
     }
