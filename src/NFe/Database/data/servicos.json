@@ -705,7 +705,7 @@
 						"versao": "1.00"
 					},
 					"qrcode": "https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
-					"consulta": "http://hnfce.fazenda.mg.gov.br/portalnfce"
+					"consulta": "https://hportalsped.fazenda.mg.gov.br/portalnfce"
 				}
 			}
 		},
