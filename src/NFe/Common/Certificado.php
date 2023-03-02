@@ -84,7 +84,10 @@ class Certificado implements Node
         }
         $cert_store = file_get_contents($arquivo_pfx);
         if (!openssl_pkcs12_read($cert_store, $cert_info, $senha)) {
-            throw new \Exception(sprintf('Não foi possível ler o certificado "%s": ' . openssl_error_string(), $arquivo_pfx), 404);
+            throw new \Exception(sprintf(
+                'Não foi possível ler o certificado "%s": ' . openssl_error_string(),
+                $arquivo_pfx
+            ), 404);
         }
         $certinfo = openssl_x509_parse($cert_info['cert']);
         $this->setChavePrivada($cert_info['pkey']);
