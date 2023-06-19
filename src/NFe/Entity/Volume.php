@@ -244,8 +244,8 @@ class Volume implements Node
         $this->setEspecie(Util::loadNode($element, 'esp'));
         $this->setMarca(Util::loadNode($element, 'marca'));
         $numeracoes = [];
-        $volumes = Util::loadNode($element, 'nVol') ?? '';
-        if (trim($volumes) != '') {
+        $volumes = Util::loadNode($element, 'nVol');
+        if (trim($volumes  ?? '') != '') {
             $numeracoes = explode(', ', $volumes);
         }
         $this->setNumeracoes($numeracoes);
