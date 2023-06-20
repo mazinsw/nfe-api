@@ -45,6 +45,7 @@ use NFe\Entity\Intermediador;
 use NFe\Exception\ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
+use NFe\Entity\Cobranca;
 
 /**
  * Classe base para a formação da nota fiscal
@@ -200,6 +201,13 @@ abstract class Nota implements Node
      * @var Pagamento[]
      */
     private $pagamentos;
+
+    /**
+     * Cobrancas realizadas
+     *
+     * @var Cobranca[]
+     */
+    private $cobrancas;
 
     /**
      * Data e Hora da saída ou de entrada da mercadoria / produto
@@ -556,6 +564,37 @@ abstract class Nota implements Node
     public function addPagamento($pagamento)
     {
         $this->pagamentos[] = $pagamento;
+        return $this;
+    }
+
+    /**
+     * Cobranças realizadas
+     * @return mixed cobranças da Nota
+     */
+    public function getCobrancas()
+    {
+        return $this->cobrancas;
+    }
+
+    /**
+     * Altera o valor da Cobrança para o informado no parâmetro
+     * @param mixed $cobrancas novo valor para Cobranças
+     * @return self
+     */
+    public function setCobrancas($cobrancas)
+    {
+        $this->cobrancas = $cobrancas;
+        return $this;
+    }
+
+    /**
+     * Adiciona um(a) Cobrança para a lista de cobranças
+     * @param Cobranca $cobranca Instância da Cobrança que será adicionada
+     * @return self
+     */
+    public function addCobranca($cobranca)
+    {
+        $this->cobrancas[] = $cobranca;
         return $this;
     }
 
@@ -1397,6 +1436,16 @@ abstract class Nota implements Node
         } else {
             $nota['pagamentos'] = $this->getPagamentos();
         }
+        if ($recursive) {
+            $cobrancas = [];
+            $_cobrancas = $this->getCobrancas();
+            foreach ($_cobrancas as $_cobranca) {
+                $cobrancas[] = $_cobranca->toArray($recursive);
+            }
+            $nota['cobrancas'] = $cobrancas;
+        } else {
+            $nota['cobrancas'] = $this->getCobrancas();
+        }
         $nota['data_movimentacao'] = $this->getDataMovimentacao($recursive);
         $nota['data_contingencia'] = $this->getDataContingencia($recursive);
         $nota['justificativa'] = $this->getJustificativa();
@@ -1811,7 +1860,15 @@ abstract class Nota implements Node
         $transporte = $this->getTransporte()->getNode();
         $transporte = $dom->importNode($transporte, true);
         $info->appendChild($transporte);
-        // TODO: adicionar cobrança
+        $cobr = $dom->createElement('cobr');
+        $_cobrancas = $this->getCobrancas();
+        foreach ($_cobrancas as $_cobranca) {
+            $cobranca = $_cobranca->getNode();
+            $cobranca = $dom->importNode($cobranca, true);
+            $cobr->appendChild($cobranca);
+        }
+        $info->appendChild($cobr);
+
         $pag = $dom->createElement('pag');
         $_pagamentos = $this->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
@@ -2075,6 +2132,26 @@ abstract class Nota implements Node
             }
         }
         $this->setPagamentos($pagamentos);
+
+        $cobrancas = [];
+        $_items = $info->getElementsByTagName('cobr');
+        foreach ($_items as $_item) {
+            $_det_items = $_item->getElementsByTagName('fat');
+            foreach ($_det_items as $_det_item) {
+                $cobranca = new Cobranca();
+                $cobranca->loadNode($_det_item, 'fat');
+                $cobrancas[] = $cobranca;
+            }
+            $_det_items = $_item->getElementsByTagName('dup');
+            foreach ($_det_items as $_det_item) {
+                $cobranca = new Cobranca();
+                $cobranca->loadNode($_det_item, 'dup');
+                $cobrancas[] = $cobranca;
+            }
+        }
+        $this->setCobrancas($cobrancas);
+
+
         $_fields = $info->getElementsByTagName('total');
         if ($_fields->length > 0) {
             $total = new Total();

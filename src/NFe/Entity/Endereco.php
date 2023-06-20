@@ -161,7 +161,8 @@ class Endereco implements Node
     {
         $pattern = '/(.*), (.*) - (.*)/';
         if (!preg_match($pattern, $descricao, $matches)) {
-            throw new \Exception('Não foi possível desmembrar a linha de endereço', 500);
+            $this->setLogradouro($descricao);
+            return $this;    
         }
         $this->setLogradouro($matches[1]);
         $this->setNumero($matches[2]);
@@ -282,8 +283,7 @@ class Endereco implements Node
         $this->setBairro(
             Util::loadNode(
                 $element,
-                'xBairro',
-                'Tag "xBairro" do campo "Bairro" não encontrada'
+                'xBairro'
             )
         );
         $this->getMunicipio()->setCodigo(
