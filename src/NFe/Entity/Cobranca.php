@@ -266,7 +266,7 @@ class Cobranca implements Node
         $this->valor_duplicata = $valor_duplicata;
         return $this;
     }
-       
+
     /**
      * Constroi uma instância de cobranca vazia
      * @param array $cobranca Array contendo dados do cobranca
@@ -333,7 +333,7 @@ class Cobranca implements Node
         }
         return $this;
     }
-    
+
     public function getNode($name = null)
     {
         // TODO: implementar a inserção da cobranca no xml
@@ -344,7 +344,7 @@ class Cobranca implements Node
     public function loadNode($element, $name = null)
     {
         $name = is_null($name) ? 'dup' : $name;
-        
+
         if ($element->nodeName != $name) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {

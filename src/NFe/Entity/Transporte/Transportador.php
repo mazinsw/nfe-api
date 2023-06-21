@@ -133,7 +133,7 @@ class Transportador extends Destinatario
         $endereco->getMunicipio()->setNome(
             Util::loadNode(
                 $element,
-                'xMun' 
+                'xMun'
             )
         );
         $endereco->getMunicipio()->getEstado()->setUF(

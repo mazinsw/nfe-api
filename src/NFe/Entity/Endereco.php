@@ -162,7 +162,7 @@ class Endereco implements Node
         $pattern = '/(.*), (.*) - (.*)/';
         if (!preg_match($pattern, $descricao, $matches)) {
             $this->setLogradouro($descricao);
-            return $this;    
+            return $this;
         }
         $this->setLogradouro($matches[1]);
         $this->setNumero($matches[2]);
