@@ -34,12 +34,51 @@ use NFe\Common\Util;
 
 class Cobranca implements Node
 {
+    /**
+     * Numero da fatura do documento
+     *
+     * @var string
+     */
     private $num_fatura;
+
+    /**
+     * Valor total da fatura
+     *
+     * @var float
+     */
     private $valor_fatura;
+
+    /**
+     * valor do desconto da fatura
+     *
+     * @var float
+     */
     private $desconto;
+
+    /**
+     * Valor liquido da fatura
+     *
+     * @var float
+     */
     private $valor_liquido;
+
+    /**
+     * Numero da duplicata do documento
+     *
+     * @var string
+     */
     private $num_duplicata;
+
+    /**
+     * Data de vencimento da duplicata
+     */
     private $vencimento;
+
+    /**
+     * Valor da duplicata
+     *
+     * @var float
+     */
     private $valor_duplicata;
 
     /**
@@ -257,31 +296,26 @@ class Cobranca implements Node
         } elseif (!is_array($cobranca)) {
             return $this;
         }
-
         if (isset($cobranca['num_fatura'])) {
             $this->setNumFatura($cobranca['num_fatura']);
         } else {
             $this->setNumFatura(null);
         }
-
         if (isset($cobranca['valor_fatura'])) {
             $this->setValorFatura($cobranca['valor_fatura']);
         } else {
             $this->setValorFatura(null);
         }
-
         if (isset($cobranca['desconto'])) {
             $this->setDesconto($cobranca['desconto']);
         } else {
             $this->setDesconto(null);
         }
-
         if (isset($cobranca['valor_liquido'])) {
             $this->setValorLiquido($cobranca['valor_liquido']);
         } else {
             $this->setValorLiquido(null);
         }
-
         if (isset($cobranca['num_duplicata'])) {
             $this->setNumDuplicata($cobranca['num_duplicata']);
         } else {
@@ -299,42 +333,14 @@ class Cobranca implements Node
         }
         return $this;
     }
-
     
     public function getNode($name = null)
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        /*if ($this->getValor() < 0) {
-            $element = $dom->createElement(is_null($name) ? 'vTroco' : $name);
-            $this->setValor(-floatval($this->getValor()));
-            $element->appendChild($dom->createTextNode($this->getValor(true)));
-            $this->setValor(-floatval($this->getValor()));
-            return $element;
-        }
-        $element = $dom->createElement(is_null($name) ? 'detPag' : $name);
-        if (!is_null($this->getIndicador())) {
-            Util::appendNode($element, 'indPag', $this->getIndicador(true));
-        }
-        Util::appendNode($element, 'tPag', $this->getForma(true));
-        Util::appendNode($element, 'vPag', $this->getValor(true));
-        if (!$this->isCartao()) {
-            return $element;
-        }
-        $cartao = $dom->createElement('card');
-        Util::appendNode($cartao, 'tpIntegra', $this->getIntegrado(true));
-        if ($this->isIntegrado()) {
-            Util::appendNode($cartao, 'CNPJ', $this->getCredenciadora(true));
-        }
-        if (!is_null($this->getBandeira())) {
-            Util::appendNode($cartao, 'tBand', $this->getBandeira(true));
-        }
-        if ($this->isIntegrado()) {
-            Util::appendNode($cartao, 'cAut', $this->getAutorizacao(true));
-        }
-        $element->appendChild($cartao);
-        return $element;*/
+        // TODO: implementar a inserção da cobranca no xml
+        throw new \Exception('NÃO IMPLEMENTADO', 404);
         return null;
     }
+
     public function loadNode($element, $name = null)
     {
         $name = is_null($name) ? 'dup' : $name;
