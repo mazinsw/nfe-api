@@ -632,10 +632,10 @@ class Produto extends Total
             $ultimo = ' e ' . array_pop($detalhes);
         }
         $texto = 'Trib. aprox.: ' . implode(', ', $detalhes) . $ultimo . '. ' . $fonte;
-        
+
         return $texto;
     }
-    
+
     public static function addNodeInformacoes($tributos, $element, $name = null)
     {
         $texto = Produto::getInformacoesProduto($tributos);

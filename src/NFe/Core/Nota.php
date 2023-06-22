@@ -1837,9 +1837,9 @@ abstract class Nota implements Node
                 'PROCON-RJ: tel. 151, end. Av. Rio Branco, 25 - 5º andar, Centro/RJ.',
                 'CODECON: tel. 0800 282 7060, end. R. da Ajuda, 5, 2º andar, sala 201, Centro/RJ',
             );
-            $_complemento = implode(' ', $informações_complementares);                
+            $_complemento = implode(' ', $informações_complementares);
         }
-        Util::appendNode($info_adic, 'infCpl', $_complemento);         
+        Util::appendNode($info_adic, 'infCpl', $_complemento);
         $this->getTotal()->setComplemento($_complemento);
         if (!is_null($this->getObservacoes())) {
             $_observacoes = $this->getObservacoes();
