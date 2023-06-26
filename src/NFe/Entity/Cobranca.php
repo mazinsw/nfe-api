@@ -147,7 +147,7 @@ class Cobranca implements Node
     /**
      * Altera o valor do desconto da Fatura para o informado no parâmetro
      *
-     * @param float|string|null $valor Novo valor de desconto para cobranca
+     * @param float|string|null $desconto Novo valor de desconto para cobranca
      *
      * @return self A própria instância da classe
      */
@@ -174,7 +174,7 @@ class Cobranca implements Node
     /**
      * Altera o valor do liquido da Fatura para o informado no parâmetro
      *
-     * @param float|string|null $valor Novo valor liquido para cobranca
+     * @param float|string|null $valor_liquido Novo valor liquido para cobranca
      *
      * @return self A própria instância da classe
      */
@@ -201,7 +201,7 @@ class Cobranca implements Node
     /**
      * Altera a data de vencimento da duplicata para o informado no parâmetro
      *
-     * @param float|string|null $valor Novo vencimento da duplicata para cobranca
+     * @param float|string|null $vencimento Novo vencimento da duplicata para cobranca
      *
      * @return self A própria instância da classe
      */
