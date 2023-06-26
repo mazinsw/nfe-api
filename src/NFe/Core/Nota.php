@@ -1887,7 +1887,16 @@ abstract class Nota implements Node
             Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
         }
         // TODO: adicionar informações adicionais somente na NFC-e?
-        $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
+        $_complemento = Produto::getInformacoesProduto($tributos);
+        if ($this->getEmitente()->getEndereco()->getMunicipio()->getEstado()->getCodigo() == 33) {
+            $informações_complementares = array(
+                $_complemento,
+                'PROCON-RJ: tel. 151, end. Av. Rio Branco, 25 - 5º andar, Centro/RJ.',
+                'CODECON: tel. 0800 282 7060, end. R. da Ajuda, 5, 2º andar, sala 201, Centro/RJ',
+            );
+            $_complemento = implode(' ', $informações_complementares);
+        }
+        Util::appendNode($info_adic, 'infCpl', $_complemento);
         $this->getTotal()->setComplemento($_complemento);
         if (!is_null($this->getObservacoes())) {
             $_observacoes = $this->getObservacoes();

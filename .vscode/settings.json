@@ -1,3 +1,6 @@
 {
-    "phpcs.standard": "PSR12"
+    "phpcs.standard": "PSR12",
+    "[xml]": {
+        "editor.formatOnSave": false
+    }
 }
