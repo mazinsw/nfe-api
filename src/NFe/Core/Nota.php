@@ -1860,15 +1860,16 @@ abstract class Nota implements Node
         $transporte = $this->getTransporte()->getNode();
         $transporte = $dom->importNode($transporte, true);
         $info->appendChild($transporte);
-        $cobr = $dom->createElement('cobr');
         $_cobrancas = $this->getCobrancas();
-        foreach ($_cobrancas as $_cobranca) {
-            $cobranca = $_cobranca->getNode();
-            $cobranca = $dom->importNode($cobranca, true);
-            $cobr->appendChild($cobranca);
+        if (!is_null($_cobrancas)) {
+            $cobr = $dom->createElement('cobr');
+            foreach ($_cobrancas as $_cobranca) {
+                $cobranca = $_cobranca->getNode();
+                $cobranca = $dom->importNode($cobranca, true);
+                $cobr->appendChild($cobranca);
+            }
+            $info->appendChild($cobr);
         }
-        $info->appendChild($cobr);
-
         $pag = $dom->createElement('pag');
         $_pagamentos = $this->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {

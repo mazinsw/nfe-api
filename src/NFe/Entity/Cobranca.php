@@ -35,102 +35,99 @@ use NFe\Common\Util;
 class Cobranca implements Node
 {
     /**
-     * Numero da fatura do documento
+     * Tipos de cobrança 0 - fatura; 1 - duplicata
+     */
+    public const TIPO_FATURA  = 'fatura';
+    public const TIPO_DUPLICATA = 'duplicata';
+    
+    /**
+     * Numero da cobrança
      *
      * @var string
      */
-    private $num_fatura;
+    private $numero;
 
     /**
-     * Valor total da fatura
+     * Valor total da cobrança
      *
      * @var float
      */
-    private $valor_fatura;
+    private $valor;
 
     /**
-     * valor do desconto da fatura
+     * valor do desconto da cobrança
      *
      * @var float
      */
     private $desconto;
 
     /**
-     * Valor liquido da fatura
+     * Valor liquido da cobrança
      *
      * @var float
      */
     private $valor_liquido;
 
     /**
-     * Numero da duplicata do documento
-     *
-     * @var string
-     */
-    private $num_duplicata;
-
-    /**
-     * Data de vencimento da duplicata
+     * Data de vencimento da cobrança
      */
     private $vencimento;
 
     /**
-     * Valor da duplicata
-     *
-     * @var float
+     * Tipo da cobrança
      */
-    private $valor_duplicata;
+    private $tipo;
 
     /**
-     * Numero da Fatura
+     * Numero da cobrança
      * @param boolean $normalize informa se a valor deve estar no formato do XML
      * @return string|string valor of cobranca
      */
-    public function getNumFatura($normalize = false)
+    public function getNumero($normalize = false)
     {
         if (!$normalize) {
-            return $this->num_fatura;
+            return $this->numero;
         }
-        return $this->num_duplicata;
+        return $this->numero;
     }
 
     /**
-     * Altera o numero da fatura para o informado no parâmetro
+     * Altera o numero da cobrança para o informado no parâmetro
      *
-     * @param string|string|null $num_fatura Novo Numero de Fatura para cobranca
+     * @param string|string|null $numero Novo Numero de Fatura para cobranca
      *
      * @return self A própria instância da classe
      */
-    public function setNumFatura($num_fatura)
+    public function setNumero($numero)
     {
-        $this->num_fatura = $num_fatura;
+        $this->numero = $numero;
         return $this;
     }
 
     /**
-     * Valor do cobranca
+     * Valor da cobranca
      * @param boolean $normalize informa se a valor deve estar no formato do XML
      * @return float|string valor of cobranca
      */
-    public function getValorFatura($normalize = false)
+    public function getValor($normalize = false)
     {
         if (!$normalize) {
-            return $this->valor_fatura;
+            return $this->valor;
         }
-        return Util::toCurrency($this->valor_fatura);
+        return Util::toCurrency($this->valor);
     }
 
     /**
-     * Altera o valor da Fatura para o informado no parâmetro
+     * Altera o valor da Cobrança para o informado no parâmetro
      *
      * @param float|string|null $valor Novo valor de Fatura para cobranca
      *
      * @return self A própria instância da classe
      */
-    public function setValorFatura($valor_fatura)
+    public function setValor($valor)
     {
-        $valor_fatura = floatval($valor_fatura);
-        $this->valor_fatura = $valor_fatura;
+        $valor = floatval($valor);
+        $this->valor = $valor;
         return $this;
     }
 
@@ -189,32 +186,6 @@ class Cobranca implements Node
     }
 
     /**
-     * Numero da Duplicata
-     * @param boolean $normalize informa se a valor deve estar no formato do XML
-     * @return string|string valor of cobranca
-     */
-    public function getNumDuplicata($normalize = false)
-    {
-        if (!$normalize) {
-            return $this->num_duplicata;
-        }
-        return $this->num_duplicata;
-    }
-
-    /**
-     * Altera o numero da duplicata para o informado no parâmetro
-     *
-     * @param string|string|null $num_duplicata Novo Numero de Duplicata para cobranca
-     *
-     * @return self A própria instância da classe
-     */
-    public function setNumDuplicata($num_duplicata)
-    {
-        $this->num_duplicata = $num_duplicata;
-        return $this;
-    }
-
-    /**
      * Vencimento do cobranca
      * @param boolean $normalize informa se a valor deve estar no formato do XML
      * @return float|string valor of cobranca
@@ -241,29 +212,41 @@ class Cobranca implements Node
     }
 
     /**
-     * Valor de duplicata para cobranca
-     * @param boolean $normalize informa se a valor deve estar no formato do XML
-     * @return float|string valor of cobranca
+     * Tipo da cobrança 0 – fatura; 1 – duplicata
+     *
+     * @param boolean $normalize informa se o indicador deve estar no formato do XML
+     * @return mixed tipo da cobrança
      */
-    public function getValorDuplicata($normalize = false)
+    public function getTipo($normalize = false)
     {
         if (!$normalize) {
-            return $this->valor_duplicata;
+            return $this->tipo;
         }
-        return Util::toCurrency($this->valor_duplicata);
+        switch ($this->tipo) {
+            case self::TIPO_FATURA:
+                return '0';
+            case self::TIPO_DUPLICATA:
+                return '1';
+        }
+        return $this->tipo;
     }
 
     /**
-     * Altera o valor da duplicata para o informado no parâmetro
-     *
-     * @param float|string|null $valor Novo valor de duplicata para cobranca
-     *
+     * Altera o valor do tipo para o informado no parâmetro
+     * @param mixed $tipo novo valor para tipo
      * @return self A própria instância da classe
      */
-    public function setValorDuplicata($valor_duplicata)
+    public function setTipo($tipo)
     {
-        $valor_duplicata = floatval($valor_duplicata);
-        $this->valor_duplicata = $valor_duplicata;
+        switch ($tipo) {
+            case '0':
+                $tipo = self::TIPO_FATURA;
+                break;
+            case '1':
+                $tipo = self::TIPO_DUPLICATA;
+                break;
+        }
+        $this->tipo = $tipo;
         return $this;
     }
 
@@ -279,13 +262,12 @@ class Cobranca implements Node
     public function toArray($recursive = false)
     {
         $cobranca = [];
-        $cobranca['num_fatura'] = $this->getNumFatura();
-        $cobranca['valor_fatura'] = $this->getValorFatura();
+        $cobranca['tipo'] = $this->getTipo();
+        $cobranca['numero'] = $this->getNumero();
+        $cobranca['valor'] = $this->getValor();
         $cobranca['desconto'] = $this->getDesconto();
         $cobranca['valor_liquido'] = $this->getValorLiquido();
-        $cobranca['num_duplicata'] = $this->getNumDuplicata();
         $cobranca['vencimento'] = $this->getVencimento();
-        $cobranca['valor_duplicata'] = $this->getValorDuplicata();
         return $cobranca;
     }
 
@@ -296,15 +278,20 @@ class Cobranca implements Node
         } elseif (!is_array($cobranca)) {
             return $this;
         }
-        if (isset($cobranca['num_fatura'])) {
-            $this->setNumFatura($cobranca['num_fatura']);
+        if (isset($cobranca['tipo'])) {
+            $this->setTipo($cobranca['tipo']);
         } else {
-            $this->setNumFatura(null);
+            $this->setTipo(null);
         }
-        if (isset($cobranca['valor_fatura'])) {
-            $this->setValorFatura($cobranca['valor_fatura']);
+        if (isset($cobranca['numero'])) {
+            $this->setNumero($cobranca['numero']);
         } else {
-            $this->setValorFatura(null);
+            $this->setNumero(null);
+        }
+        if (isset($cobranca['valor'])) {
+            $this->setValor($cobranca['valor']);
+        } else {
+            $this->setValor(null);
         }
         if (isset($cobranca['desconto'])) {
             $this->setDesconto($cobranca['desconto']);
@@ -316,20 +303,10 @@ class Cobranca implements Node
         } else {
             $this->setValorLiquido(null);
         }
-        if (isset($cobranca['num_duplicata'])) {
-            $this->setNumDuplicata($cobranca['num_duplicata']);
-        } else {
-            $this->setNumDuplicata(null);
-        }
         if (isset($cobranca['vencimento'])) {
             $this->setVencimento($cobranca['vencimento']);
         } else {
             $this->setVencimento(null);
-        }
-        if (isset($cobranca['valor_duplicata'])) {
-            $this->setValorDuplicata($cobranca['valor_duplicata']);
-        } else {
-            $this->setValorDuplicata(null);
         }
         return $this;
     }
@@ -352,18 +329,36 @@ class Cobranca implements Node
             }
             $element = $_fields->item(0);
         }
-        $this->setNumFatura(
-            Util::loadNode(
-                $element,
-                'nFat'
-            )
+        $this->setTipo(
+            $name == 'fat' ? 0 : 1
         );
-        $this->setValorFatura(
-            Util::loadNode(
-                $element,
-                'vOrig'
-            )
-        );
+        if ($this->getTipo() == self::TIPO_FATURA) {
+            $this->setNumero(
+                Util::loadNode(
+                    $element,
+                    'nFat'
+                )
+            );
+            $this->setValor(
+                Util::loadNode(
+                    $element,
+                    'vOrig'
+                )
+            );
+        } else {
+            $this->setNumero(
+                Util::loadNode(
+                    $element,
+                    'nDup'
+                )
+            );
+            $this->setValor(
+                Util::loadNode(
+                    $element,
+                    'vDup'
+                )
+            );
+        }
         $this->setDesconto(
             Util::loadNode(
                 $element,
@@ -376,22 +371,10 @@ class Cobranca implements Node
                 'vLiq'
             )
         );
-        $this->setNumDuplicata(
-            Util::loadNode(
-                $element,
-                'nDup'
-            )
-        );
         $this->setVencimento(
             Util::loadNode(
                 $element,
                 'dVenc'
-            )
-        );
-        $this->setValorDuplicata(
-            Util::loadNode(
-                $element,
-                'vDup'
             )
         );
         return $element;
