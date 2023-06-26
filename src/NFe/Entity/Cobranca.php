@@ -39,7 +39,7 @@ class Cobranca implements Node
      */
     public const TIPO_FATURA  = 'fatura';
     public const TIPO_DUPLICATA = 'duplicata';
-    
+
     /**
      * Numero da cobrança
      *
