@@ -273,7 +273,7 @@ class Cobranca implements Node
 
     public function fromArray($cobranca = [])
     {
-        if ($cobranca instanceof cobranca) {
+        if ($cobranca instanceof Cobranca) {
             $cobranca = $cobranca->toArray();
         } elseif (!is_array($cobranca)) {
             return $this;
@@ -315,7 +315,6 @@ class Cobranca implements Node
     {
         // TODO: implementar a inserção da cobranca no xml
         throw new \Exception('NÃO IMPLEMENTADO', 404);
-        return null;
     }
 
     public function loadNode($element, $name = null)

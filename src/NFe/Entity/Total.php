@@ -289,7 +289,7 @@ class Total implements Node
         if (!$normalize) {
             return $this->valor;
         }
-        return $this->valor;
+        return Util::toCurrency($this->valor);
     }
 
     /**
