@@ -77,6 +77,11 @@ class Total implements Node
     private $complemento;
 
     /**
+     * valor total da nota
+     */
+    private $valor;
+
+    /**
      * Constroi uma instância de Total vazia
      * @param  array $total Array contendo dados do Total
      */
@@ -275,6 +280,30 @@ class Total implements Node
     }
 
     /**
+     * Valor total da nota
+     * @param boolean $normalize informa se o complemento deve estar no formato do XML
+     * @return mixed Valor total
+     */
+    public function getValor($normalize = false)
+    {
+        if (!$normalize) {
+            return $this->valor;
+        }
+        return Util::toCurrency($this->valor);
+    }
+
+    /**
+     * Altera o valor do total da nota
+     * @param mixed $valor novo valor para Total da Nota
+     * @return self A própria instância da classe
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+        return $this;
+    }
+
+    /**
      * Converte a instância da classe para um array de campos com valores
      * @return array Array contendo todos os campos e valores da instância
      */
@@ -287,6 +316,7 @@ class Total implements Node
         $total['frete'] = $this->getFrete();
         $total['despesas'] = $this->getDespesas();
         $total['tributos'] = $this->getTributos();
+        $total['total'] = $this->getValor();
         $total['complemento'] = $this->getComplemento();
         return $total;
     }
@@ -333,6 +363,11 @@ class Total implements Node
         } else {
             $this->setTributos($total['tributos']);
         }
+        if (!array_key_exists('total', $total)) {
+            $this->setValor(null);
+        } else {
+            $this->setValor($total['total']);
+        }
         if (!array_key_exists('complemento', $total)) {
             $this->setComplemento(null);
         } else {
@@ -365,6 +400,9 @@ class Total implements Node
         }
         if (!is_null($this->getTributos())) {
             Util::appendNode($element, 'vTotTrib', $this->getTributos(true));
+        }
+        if (!is_null($this->getValor())) {
+            Util::appendNode($element, 'vNF', $this->getValor(true));
         }
         if (! empty($this->getComplemento())) {
             Util::appendNode($element, 'infCpl', $this->getComplemento(true));
@@ -400,6 +438,7 @@ class Total implements Node
         $this->setFrete(Util::loadNode($element, 'vFrete'));
         $this->setDespesas(Util::loadNode($element, 'vOutro'));
         $this->setTributos(Util::loadNode($element, 'vTotTrib'));
+        $this->setValor(Util::loadNode($element, 'vNF'));
         $this->setComplemento(Util::loadNode($element, 'infCpl'));
         return $element;
     }

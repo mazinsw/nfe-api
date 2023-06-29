@@ -97,9 +97,6 @@ class Transportador extends Destinatario
         }
         $cnpj = Util::loadNode($element, 'CNPJ');
         $cpf = Util::loadNode($element, 'CPF');
-        if (is_null($cnpj) && is_null($cpf)) {
-            throw new \Exception('Tag "CNPJ" ou "CPF" não encontrada no Transportador', 404);
-        }
         $this->setCNPJ($cnpj);
         $this->setCPF($cpf);
         if (! empty($this->getCNPJ())) {
@@ -122,8 +119,7 @@ class Transportador extends Destinatario
         $this->setIE(
             Util::loadNode(
                 $element,
-                'IE',
-                'Tag "IE" do campo "IE" não encontrada'
+                'IE'
             )
         );
         $this->setIM(null);
@@ -137,15 +133,13 @@ class Transportador extends Destinatario
         $endereco->getMunicipio()->setNome(
             Util::loadNode(
                 $element,
-                'xMun',
-                'Tag "xMun" do nome do município não encontrada'
+                'xMun'
             )
         );
         $endereco->getMunicipio()->getEstado()->setUF(
             Util::loadNode(
                 $element,
-                'UF',
-                'Tag "UF" da UF do estado não encontrada'
+                'UF'
             )
         );
         $this->setEndereco($endereco);
