@@ -1861,7 +1861,7 @@ abstract class Nota implements Node
         $transporte = $dom->importNode($transporte, true);
         $info->appendChild($transporte);
         $_cobrancas = $this->getCobrancas();
-        if(count($_cobrancas ?: []) > 0) {
+        if (count($_cobrancas ?: []) > 0) {
             $cobr = $dom->createElement('cobr');
             foreach ($_cobrancas as $_cobranca) {
                 $cobranca = $_cobranca->getNode();
