@@ -1516,6 +1516,11 @@ abstract class Nota implements Node
         } else {
             $this->setPagamentos($nota['pagamentos']);
         }
+        if (!isset($nota['cobrancas'])) {
+            $this->setCobrancas([]);
+        } else {
+            $this->setCobrancas($nota['cobrancas']);
+        }
         if (isset($nota['data_movimentacao'])) {
             $this->setDataMovimentacao($nota['data_movimentacao']);
         } else {
