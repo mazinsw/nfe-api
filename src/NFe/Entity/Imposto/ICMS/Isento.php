@@ -104,7 +104,7 @@ class Isento extends Generico
 
     public function setDesoneracao($desoneracao)
     {
-        if (trim($desoneracao) != '') {
+        if (trim($desoneracao ?? '') != '') {
             $desoneracao = floatval($desoneracao);
         }
         $this->desoneracao = $desoneracao;

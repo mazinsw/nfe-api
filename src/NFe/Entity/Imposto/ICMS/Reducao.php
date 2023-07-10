@@ -55,7 +55,7 @@ class Reducao extends Normal
 
     public function setReducao($reducao)
     {
-        if (trim($reducao) != '') {
+        if (trim($reducao ?? '' ) != '') {
             $reducao = floatval($reducao);
         }
         $this->reducao = $reducao;
