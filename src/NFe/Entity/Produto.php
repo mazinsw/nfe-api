@@ -239,7 +239,7 @@ class Produto extends Total
 
     public function setMultiplicador($multiplicador)
     {
-        if (trim($multiplicador) != '') {
+        if (trim($multiplicador ?? '') != '') {
             $multiplicador = intval($multiplicador);
         }
         $this->multiplicador = $multiplicador;
