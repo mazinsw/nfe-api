@@ -654,11 +654,12 @@ class Pagamento implements Node
                 'Tag "vPag" do campo "Valor" não encontrada'
             )
         );
+        $card = Util::loadNode($element, 'card');
         $integrado = Util::loadNode($element, 'tpIntegra');
-        if (is_null($integrado) && $this->isCartao()) {
+        if (!is_null($card) && is_null($integrado) && $this->isCartao()) {
             throw new \Exception('Tag "tpIntegra" do campo "Integrado" não encontrada', 404);
         }
-        $this->setIntegrado($integrado);
+        $this->setIntegrado($integrado ?? 0);
         $this->setCredenciadora(Util::loadNode($element, 'CNPJ'));
         $autorizacao = Util::loadNode($element, 'cAut');
         if (is_null($autorizacao) && $this->isCartao() && is_numeric($this->getCredenciadora())) {
