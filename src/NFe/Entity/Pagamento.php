@@ -661,7 +661,7 @@ class Pagamento implements Node
                 throw new \Exception('Tag "tpIntegra" do campo "Integrado" não encontrada', 404);
             }
             $this->setIntegrado($integrado);
-        }        
+        }
         $this->setCredenciadora(Util::loadNode($element, 'CNPJ'));
         $autorizacao = Util::loadNode($element, 'cAut');
         if (is_null($autorizacao) && $this->isCartao() && is_numeric($this->getCredenciadora())) {
