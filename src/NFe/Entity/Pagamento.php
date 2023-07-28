@@ -656,11 +656,13 @@ class Pagamento implements Node
         );
         $card = $element->getElementsByTagName('card');
         if ($card->length > 0) {
-            $integrado = Util::loadNode($element, 'tpIntegra');
+            $integrado = Util::loadNode($card->item(0), 'tpIntegra');
             if (is_null($integrado) && $this->isCartao()) {
                 throw new \Exception('Tag "tpIntegra" do campo "Integrado" não encontrada', 404);
             }
             $this->setIntegrado($integrado);
+        } else {
+            $this->setIntegrado(0);
         }
         $this->setCredenciadora(Util::loadNode($element, 'CNPJ'));
         $autorizacao = Util::loadNode($element, 'cAut');
