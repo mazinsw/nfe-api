@@ -21,7 +21,7 @@ install:
 		-v $(shell pwd):/app \
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
-		grandchef/composer:2.7.4 install --ignore-platform-reqs --no-scripts --no-interaction
+		grandchef/composer:2.8.2 install --ignore-platform-reqs --no-scripts --no-interaction
 
 update:
 	@docker run --rm \
@@ -29,7 +29,7 @@ update:
 		-v $(shell pwd):/app \
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
-		grandchef/composer:2.7.4 update --no-scripts --no-interaction
+		grandchef/composer:2.8.2 update --no-scripts --no-interaction
 
 autoload:
 	@docker run --rm \
@@ -37,14 +37,14 @@ autoload:
 		-v $(shell pwd):/app \
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
-		grandchef/composer:2.7.4 dump-autoload --no-scripts --no-interaction
+		grandchef/composer:2.8.2 dump-autoload --no-scripts --no-interaction
 
 test:
 	@docker run --rm -it \
 		-u $(CURRENT_UID) \
 		-v $(shell pwd):/app \
 		-w /app \
-		grandchef/php:7.4.27-fpm-dev php ./vendor/bin/phpunit --configuration . --no-coverage --colors=always
+		grandchef/php:8.2.2-fpm-dev php ./vendor/bin/phpunit --configuration . --no-coverage --colors=always
 
 cmd:
 	@docker run --rm -it \
@@ -53,4 +53,4 @@ cmd:
 		-v /etc/passwd:/etc/passwd:ro \
 		-v /etc/group:/etc/group:ro \
 		-w /app \
-		grandchef/php:7.4.27-fpm-dev /bin/bash
+		grandchef/php:8.2.2-fpm-dev /bin/bash

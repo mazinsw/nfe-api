@@ -25,7 +25,14 @@ class UtilTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(Util::isLess(0.01, 0.01));
     }
 
-    public function testCreateDirectory(Type $var = null)
+    public function testRemoveAccents()
+    {
+        $this->assertEquals('Sao Paulo', Util::removeAccent('São Paulo'));
+        $this->assertEquals('Acailandia', Util::removeAccent('Açailândia'));
+        $this->assertEquals('Paranavai', Util::removeAccent('Paranavaí'));
+    }
+
+    public function testCreateDirectory()
     {
         $root = dirname(dirname(dirname(__DIR__)));
         $path = $root . '/storage/test123';

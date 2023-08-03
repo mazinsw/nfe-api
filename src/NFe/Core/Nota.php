@@ -1683,10 +1683,10 @@ abstract class Nota implements Node
             }
             $imposto_info = $_produto->getImpostoInfo();
             $total['produtos'] += round($_produto->getPreco(), 2);
-            $total['desconto'] += round($_produto->getDesconto(), 2);
-            $total['frete'] += round($_produto->getFrete(), 2);
-            $total['seguro'] += round($_produto->getSeguro(), 2);
-            $total['despesas'] += round($_produto->getDespesas(), 2);
+            $total['desconto'] += round($_produto->getDesconto() ?? 0, 2);
+            $total['frete'] += round($_produto->getFrete() ?? 0, 2);
+            $total['seguro'] += round($_produto->getSeguro() ?? 0, 2);
+            $total['despesas'] += round($_produto->getDespesas() ?? 0, 2);
             $total['tributos'] += round($imposto_info['total'], 2);
             $_impostos = $_produto->getImpostos();
             foreach ($_impostos as $_imposto) {
@@ -1697,10 +1697,10 @@ abstract class Nota implements Node
                             || ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)
                         ) {
                             $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
-                            $total['base'] += round($_imposto->getNormal()->getBase(), 2);
+                            $total['base'] += round($_imposto->getNormal()->getBase() ?? 0, 2);
                         }
                         if ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Parcial) {
-                            $total['icms.st'] += round($_imposto->getValor(), 2);
+                            $total['icms.st'] += round($_imposto->getValor() ?? 0, 2);
                             $total['base.st'] += round($_imposto->getBase(), 2);
                         } else {
                             $total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);

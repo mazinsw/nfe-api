@@ -149,7 +149,7 @@ class Evento extends Retorno
 
     public function setData($data)
     {
-        if (!is_numeric($data)) {
+        if (is_string($data)) {
             $data = strtotime($data);
         }
         $this->data = $data;
@@ -320,7 +320,7 @@ class Evento extends Retorno
      */
     public function isCNPJ()
     {
-        return strlen($this->getIdentificador()) == 14;
+        return strlen($this->getIdentificador() ?? '') == 14;
     }
 
     /**
