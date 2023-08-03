@@ -662,7 +662,7 @@ class Pagamento implements Node
             }
             $this->setIntegrado($integrado);
         } else {
-            $this->setIntegrado(0);
+            $this->setIntegrado('0');
         }
         $this->setCredenciadora(Util::loadNode($element, 'CNPJ'));
         $autorizacao = Util::loadNode($element, 'cAut');
