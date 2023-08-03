@@ -25,7 +25,7 @@ jobs:
           extensions: mbstring, intl, curl, zlib, dom, openssl, soap, json, simplexml, libxml
 
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # Fetch 10 commits or Scrutinizer will throw ("Failed to retrieve commit parents. If you use a shallow git checkout, please checkout at least a depth of one."), see: RepositoryIntrospector at scrutinizer-ci/ocular GitHub repository
           # 10 commits is an arbitrary value that is more than 1 commit
