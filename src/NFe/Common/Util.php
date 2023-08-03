@@ -42,7 +42,7 @@ class Util
     /**
      * Converte float para string informando a quantidade de
      * casas decimais e usando ponto como separador
-     * @param  float   $value  valor para ser convertido
+     * @param  float|null   $value  valor para ser convertido
      * @param  integer $places quantidade de casas decimais, padrão 2 casas
      * @return string          valor formatado
      */
@@ -54,7 +54,7 @@ class Util
     /**
      * Converte float para string informando a quantidade de
      * casas decimais e usando ponto como separador
-     * @param  float   $value  valor para ser convertido
+     * @param  float|null   $value  valor para ser convertido
      * @param  integer $places quantidade de casas decimais, padrão 4 casas
      * @return string          valor formatado
      */
