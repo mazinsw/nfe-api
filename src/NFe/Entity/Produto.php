@@ -639,7 +639,9 @@ class Produto extends Total
     public static function addNodeInformacoes($tributos, $element, $name = null)
     {
         $texto = Produto::getInformacoesProduto($tributos);
-        Util::appendNode($element, is_null($name) ? 'infAdProd' : $name, $texto);
+        if (! is_null($texto)) {
+            Util::appendNode($element, is_null($name) ? 'infAdProd' : $name, $texto);
+        }
         return $texto;
     }
 
