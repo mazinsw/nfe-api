@@ -317,8 +317,7 @@ class Endereco implements Node
         $this->getPais()->setCodigo(
             Util::loadNode(
                 $element,
-                'cPais',
-                'Tag "cPais" do objeto "Pais" não encontrada'
+                'cPais'
             )
         );
         $this->getPais()->setNome(
