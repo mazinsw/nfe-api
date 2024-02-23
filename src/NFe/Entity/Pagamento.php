@@ -621,8 +621,7 @@ class Pagamento implements Node
             $this->setValor(
                 '-' . Util::loadNode(
                     $element,
-                    'vTroco',
-                    'Tag "vTroco" do campo "Valor" não encontrada'
+                    'vTroco'
                 )
             );
             return $element;

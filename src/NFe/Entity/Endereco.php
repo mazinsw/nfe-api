@@ -279,7 +279,12 @@ class Endereco implements Node
                 'Tag "nro" do campo "Numero" não encontrada'
             )
         );
-        $this->setComplemento(Util::loadNode($element, 'xCpl'));
+        $this->setComplemento(
+            Util::loadNode(
+                $element,
+                'xCpl'
+            )
+        );
         $this->setBairro(
             Util::loadNode(
                 $element,
@@ -323,8 +328,7 @@ class Endereco implements Node
         $this->getPais()->setNome(
             Util::loadNode(
                 $element,
-                'xPais',
-                'Tag "xPais" do objeto "Pais" não encontrada'
+                'xPais'
             )
         );
         return $element;
