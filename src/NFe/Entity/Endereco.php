@@ -37,6 +37,9 @@ use NFe\Common\Util;
  */
 class Endereco implements Node
 {
+    public const NOME_PAIS_DEFAULT = 'BRASIL';
+    public const CODIGO_PAIS_DEFAULT = 1058;
+
     private $pais;
     private $cep;
     private $municipio;
@@ -323,13 +326,13 @@ class Endereco implements Node
             Util::loadNode(
                 $element,
                 'cPais'
-            )
+            ) ?? $this::CODIGO_PAIS_DEFAULT
         );
         $this->getPais()->setNome(
             Util::loadNode(
                 $element,
                 'xPais'
-            )
+            ) ?? $this::NOME_PAIS_DEFAULT
         );
         return $element;
     }
