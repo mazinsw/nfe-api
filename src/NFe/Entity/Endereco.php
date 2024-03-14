@@ -326,13 +326,13 @@ class Endereco implements Node
             Util::loadNode(
                 $element,
                 'cPais'
-            ) ?? $this::CODIGO_PAIS_DEFAULT
+            ) ?? self::CODIGO_PAIS_DEFAULT
         );
         $this->getPais()->setNome(
             Util::loadNode(
                 $element,
                 'xPais'
-            ) ?? $this::NOME_PAIS_DEFAULT
+            ) ?? self::NOME_PAIS_DEFAULT
         );
         return $element;
     }
