@@ -619,11 +619,10 @@ class Pagamento implements Node
         $name = is_null($name) ? 'detPag' : $name;
         if ($name == 'vTroco') {
             $this->setValor(
-                '-' . Util::loadNode(
+                '-' . (Util::loadNode(
                     $element,
-                    'vTroco',
-                    'Tag "vTroco" do campo "Valor" não encontrada'
-                )
+                    'vTroco'
+                ) ?? 0)
             );
             return $element;
         }

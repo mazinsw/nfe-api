@@ -37,6 +37,9 @@ use NFe\Common\Util;
  */
 class Endereco implements Node
 {
+    public const NOME_PAIS_DEFAULT = 'BRASIL';
+    public const CODIGO_PAIS_DEFAULT = 1058;
+
     private $pais;
     private $cep;
     private $municipio;
@@ -279,7 +282,12 @@ class Endereco implements Node
                 'Tag "nro" do campo "Numero" não encontrada'
             )
         );
-        $this->setComplemento(Util::loadNode($element, 'xCpl'));
+        $this->setComplemento(
+            Util::loadNode(
+                $element,
+                'xCpl'
+            )
+        );
         $this->setBairro(
             Util::loadNode(
                 $element,
@@ -318,14 +326,13 @@ class Endereco implements Node
             Util::loadNode(
                 $element,
                 'cPais'
-            )
+            ) ?? self::CODIGO_PAIS_DEFAULT
         );
         $this->getPais()->setNome(
             Util::loadNode(
                 $element,
-                'xPais',
-                'Tag "xPais" do objeto "Pais" não encontrada'
-            )
+                'xPais'
+            ) ?? self::NOME_PAIS_DEFAULT
         );
         return $element;
     }
