@@ -622,7 +622,7 @@ class Pagamento implements Node
                 '-' . (Util::loadNode(
                     $element,
                     'vTroco'
-                ) ?? 0)
+                ) ?? '0')
             );
             return $element;
         }
