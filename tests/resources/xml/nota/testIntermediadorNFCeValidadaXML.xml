@@ -108,7 +108,7 @@
           </COFINSAliq>
         </COFINS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 0,72 Federal e R$ 1,00 Estadual. Fonte: IBPT/empresometro.com.br 75B7F2</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 0,72 Federal e R$ 1,00 Estadual. Fonte: IBPT/empresometro.com.br D8CAC2</infAdProd>
     </det>
     <det nItem="2">
       <prod>
@@ -158,7 +158,7 @@
           </COFINSAliq>
         </COFINS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 0,99 Federal e R$ 1,36 Estadual. Fonte: IBPT/empresometro.com.br 75B7F2</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 0,99 Federal e R$ 1,36 Estadual. Fonte: IBPT/empresometro.com.br D8CAC2</infAdProd>
     </det>
     <total>
       <ICMSTot>
@@ -206,7 +206,7 @@
       <idCadIntTran>iFood</idCadIntTran>
     </infIntermed>
     <infAdic>
-      <infCpl>Trib. aprox.: R$ 1,71 Federal e R$ 2,36 Estadual. Fonte: IBPT/empresometro.com.br 75B7F2</infCpl>
+      <infCpl>Trib. aprox.: R$ 1,71 Federal e R$ 2,36 Estadual. Fonte: IBPT/empresometro.com.br D8CAC2</infCpl>
       <obsCont xCampo="Vendedor">
         <xTexto>Fulano de Tal</xTexto>
       </obsCont>
@@ -240,10 +240,10 @@
           <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-        <DigestValue>PauzJ4a7YgsV4rdd6nBWEqTAEjs=</DigestValue>
+        <DigestValue>WnJhDkBvhErUqqX6KmNC/DA+v+Q=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>NsPv672MMGg17qnjRaRFTYXKCYP7bnKg8hT30ZcXhmnwDe3TUb6xVv6dSvCw2pP4JfGLIAoXSMxygJmH0NmDN0m0W41xpcGjGu0UGiOD9wP5NUQtGkrq7aRzyvGdV0r6R81EZzYheCmQ1TrlDlUp0xxZckVUSyx90Wea/BLERos=</SignatureValue>
+    <SignatureValue>C4OEAycmUAU7gC6lqal102wVWmMtmycVgfS1DDcuL2AoVmlZ60v2jR0Ax9+/RAwWlRq2YI03OHpYqGE4aSzT9N5iahDyZy+P+3Yb3mAR4ELhrrlTbSyJZn4Smig4sBw4Uqe+C/htRlCWeSrw0KxxQxlwxdH4LISqza+SHnG0zpI=</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIEqzCCA5OgAwIBAgIDMTg4MA0GCSqGSIb3DQEBBQUAMIGSMQswCQYDVQQGEwJCUjELMAkGA1UECBMCUlMxFTATBgNVBAcTDFBvcnRvIEFsZWdyZTEdMBsGA1UEChMUVGVzdGUgUHJvamV0byBORmUgUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMSEwHwYDVQQDExhORmUgLSBBQyBJbnRlcm1lZGlhcmlhIDEwHhcNMDkwNTIyMTcwNzAzWhcNMTAxMDAyMTcwNzAzWjCBnjELMAkGA1UECBMCUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMR0wGwYDVQQKExRUZXN0ZSBQcm9qZXRvIE5GZSBSUzEVMBMGA1UEBxMMUE9SVE8gQUxFR1JFMQswCQYDVQQGEwJCUjEtMCsGA1UEAxMkTkZlIC0gQXNzb2NpYWNhbyBORi1lOjk5OTk5MDkwOTEwMjcwMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx1O/e1Q+xh+wCoxa4pr/5aEFt2dEX9iBJyYu/2a78emtorZKbWeyK435SRTbHxHSjqe1sWtIhXBaFa2dHiukT1WJyoAcXwB1GtxjT2VVESQGtRiujMa+opus6dufJJl7RslAjqN/ZPxcBXaezt0nHvnUB/uB1K8WT9G7ES0V17wIDAQABo4IBfjCCAXowIgYDVR0jAQEABBgwFoAUPT5TqhNWAm+ZpcVsvB7malDBjEQwDwYDVR0TAQH/BAUwAwEBADAPBgNVHQ8BAf8EBQMDAOAAMAwGA1UdIAEBAAQCMAAwgawGA1UdEQEBAASBoTCBnqA4BgVgTAEDBKAvBC0yMjA4MTk3Nzk5OTk5OTk5OTk5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDCgEgYFYEwBAwKgCQQHREZULU5GZaAZBgVgTAEDA6AQBA45OTk5OTA5MDkxMDI3MKAXBgVgTAEDB6AOBAwwMDAwMDAwMDAwMDCBGmRmdC1uZmVAcHJvY2VyZ3MucnMuZ292LmJyMCAGA1UdJQEB/wQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDBTBgNVHR8BAQAESTBHMEWgQ6BBhj9odHRwOi8vbmZlY2VydGlmaWNhZG8uc2VmYXoucnMuZ292LmJyL0xDUi9BQ0ludGVybWVkaWFyaWEzOC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAJFytXuiS02eJO0iMQr/Hi+Ox7/vYiPewiDL7s5EwO8A9jKx9G2Baz0KEjcdaeZk9a2NzDEgX9zboPxhw0RkWahVCP2xvRFWswDIa2WRUT/LHTEuTeKCJ0iF/um/kYM8PmWxPsDWzvsCCRp146lc0lz9LGm5ruPVYPZ/7DAoimUk3bdCMW/rzkVYg7iitxHrhklxH7YWQHUwbcqPt7Jv0RJxclc1MhQlV2eM2MO1iIlk8Eti86dRrJVoicR1bwc6/YDqDp4PFONTi1ddewRu6elGS74AzCcNYRSVTINYiZLpBZO0uivrnTEnsFguVnNtWb9MAHGt3tkR0gAVs6S0fm8=</X509Certificate>
