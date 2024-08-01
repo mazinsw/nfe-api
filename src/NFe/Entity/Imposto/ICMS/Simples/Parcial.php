@@ -111,15 +111,13 @@ class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
         $this->setMargem(
             Util::loadNode(
                 $element,
-                'pMVAST',
-                'Tag "pMVAST" do campo "Margem" não encontrada'
+                'pMVAST'
             )
         );
         $this->setReducao(
             Util::loadNode(
                 $element,
-                'pRedBCST',
-                'Tag "pRedBCST" do campo "Reducao" não encontrada'
+                'pRedBCST'
             )
         );
         $this->setBase(

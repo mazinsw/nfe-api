@@ -225,15 +225,13 @@ class Parcial extends Base
         $this->setMargem(
             Util::loadNode(
                 $element,
-                'pMVAST',
-                'Tag "pMVAST" do campo "Margem" não encontrada no ICMS Parcial'
+                'pMVAST'
             )
         );
         $this->setReducao(
             Util::loadNode(
                 $element,
-                'pRedBCST',
-                'Tag "pRedBCST" do campo "Reducao" não encontrada no ICMS Parcial'
+                'pRedBCST'
             )
         );
         $this->setBase(
