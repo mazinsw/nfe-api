@@ -2,13 +2,10 @@
 
 BASEDIR=`pwd`/$(dirname $0)
 
-if [ -d "$BASEDIR/ACBr" ]; then
-    cwd=`pwd`
-    cd "$BASEDIR/ACBr" && git pull
-    cd $cwd
-else
-    git clone https://github.com/frones/ACBr "$BASEDIR/ACBr"
-    ln -sf "$BASEDIR/ACBr/Exemplos/ACBrTCP/ACBrIBPTax/tabela" "$BASEDIR/IBPT"
-fi
-
-php -f "$BASEDIR/update_IBPT.php" "$BASEDIR/IBPT" "$BASEDIR/../src/NFe/Database/data/IBPT"
+cd $BASEDIR
+curl -o "ACBr.zip" https://codeload.github.com/ProjetoACBr/ACBr/zip/refs/heads/master
+rm -rf "IBPT"
+unzip "ACBr.zip" "ACBr-master/Exemplos/ACBrTCP/ACBrIBPTax/tabela/*"
+mv "ACBr-master/Exemplos/ACBrTCP/ACBrIBPTax/tabela" "IBPT"
+rm -rf "ACBr-master"
+php -f "update_IBPT.php" "IBPT" "../src/NFe/Database/data/IBPT"

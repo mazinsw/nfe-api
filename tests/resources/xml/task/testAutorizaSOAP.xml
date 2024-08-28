@@ -3,7 +3,7 @@
   <soap12:Body>
     <nfeDadosMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeAutorizacao4">
       <enviNFe xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
-        <idLote>171571451535424</idLote>
+        <idLote>172485567046040</idLote>
         <indSinc>1</indSinc>
         <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
           <infNFe Id="NFe41160908380787000176650010000000811778821925" versao="4.00">
@@ -113,7 +113,7 @@
                   </COFINSAliq>
                 </COFINS>
               </imposto>
-              <infAdProd>Trib. aprox.: R$ 0,72 Federal e R$ 1,00 Estadual. Fonte: IBPT/empresometro.com.br D8CAC2</infAdProd>
+              <infAdProd>Trib. aprox.: R$ 0,72 Federal e R$ 1,00 Estadual. Fonte: IBPT/empresometro.com.br B047CD</infAdProd>
             </det>
             <det nItem="2">
               <prod>
@@ -163,7 +163,7 @@
                   </COFINSAliq>
                 </COFINS>
               </imposto>
-              <infAdProd>Trib. aprox.: R$ 0,99 Federal e R$ 1,36 Estadual. Fonte: IBPT/empresometro.com.br D8CAC2</infAdProd>
+              <infAdProd>Trib. aprox.: R$ 0,99 Federal e R$ 1,36 Estadual. Fonte: IBPT/empresometro.com.br B047CD</infAdProd>
             </det>
             <total>
               <ICMSTot>
@@ -207,7 +207,7 @@
               </detPag>
             </pag>
             <infAdic>
-              <infCpl>Trib. aprox.: R$ 1,71 Federal e R$ 2,36 Estadual. Fonte: IBPT/empresometro.com.br D8CAC2</infCpl>
+              <infCpl>Trib. aprox.: R$ 1,71 Federal e R$ 2,36 Estadual. Fonte: IBPT/empresometro.com.br B047CD</infCpl>
               <obsCont xCampo="Vendedor">
                 <xTexto>Fulano de Tal</xTexto>
               </obsCont>
@@ -241,10 +241,10 @@
                   <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
                 </Transforms>
                 <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-                <DigestValue>ttl1kH9Ep7OBZVt1iPYwJ1Si2iY=</DigestValue>
+                <DigestValue>+mAK9/CRbxwbFDgwiidsaprMDvo=</DigestValue>
               </Reference>
             </SignedInfo>
-            <SignatureValue>isP/puD4KS7x+WB6lTik8RXYtUvEK2C/NFSJFmwYmzKiykznfh9HfxDjZNb/akltBSMhKTXAYLkBkDiQxJp3QozuKvh79sshz5qwDrN/v2vqSIlJpcH1tD3TnKCmQ+8Slc6LTN8vtooCCeni8OwG8kEcdUg7pVMNse33y73kJMM=</SignatureValue>
+            <SignatureValue>pWRdZ3i5QPcMjIsMr0O8Gmg5dHd0qEja/8S4OAj2jQY+nBVUDviBknPmDXCu0kC+0VxVuKiR14ZyvIOGyAbG3bL05feuDmG/9YQfZIF6qfI/q8RCgyROATbB9sHFT8ayHABmNYEnPPSzP8hEqhB89JAOjqFhX3pYEhXB6H8XBPc=</SignatureValue>
             <KeyInfo>
               <X509Data>
                 <X509Certificate>MIIEqzCCA5OgAwIBAgIDMTg4MA0GCSqGSIb3DQEBBQUAMIGSMQswCQYDVQQGEwJCUjELMAkGA1UECBMCUlMxFTATBgNVBAcTDFBvcnRvIEFsZWdyZTEdMBsGA1UEChMUVGVzdGUgUHJvamV0byBORmUgUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMSEwHwYDVQQDExhORmUgLSBBQyBJbnRlcm1lZGlhcmlhIDEwHhcNMDkwNTIyMTcwNzAzWhcNMTAxMDAyMTcwNzAzWjCBnjELMAkGA1UECBMCUlMxHTAbBgNVBAsTFFRlc3RlIFByb2pldG8gTkZlIFJTMR0wGwYDVQQKExRUZXN0ZSBQcm9qZXRvIE5GZSBSUzEVMBMGA1UEBxMMUE9SVE8gQUxFR1JFMQswCQYDVQQGEwJCUjEtMCsGA1UEAxMkTkZlIC0gQXNzb2NpYWNhbyBORi1lOjk5OTk5MDkwOTEwMjcwMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx1O/e1Q+xh+wCoxa4pr/5aEFt2dEX9iBJyYu/2a78emtorZKbWeyK435SRTbHxHSjqe1sWtIhXBaFa2dHiukT1WJyoAcXwB1GtxjT2VVESQGtRiujMa+opus6dufJJl7RslAjqN/ZPxcBXaezt0nHvnUB/uB1K8WT9G7ES0V17wIDAQABo4IBfjCCAXowIgYDVR0jAQEABBgwFoAUPT5TqhNWAm+ZpcVsvB7malDBjEQwDwYDVR0TAQH/BAUwAwEBADAPBgNVHQ8BAf8EBQMDAOAAMAwGA1UdIAEBAAQCMAAwgawGA1UdEQEBAASBoTCBnqA4BgVgTAEDBKAvBC0yMjA4MTk3Nzk5OTk5OTk5OTk5MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDCgEgYFYEwBAwKgCQQHREZULU5GZaAZBgVgTAEDA6AQBA45OTk5OTA5MDkxMDI3MKAXBgVgTAEDB6AOBAwwMDAwMDAwMDAwMDCBGmRmdC1uZmVAcHJvY2VyZ3MucnMuZ292LmJyMCAGA1UdJQEB/wQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDBTBgNVHR8BAQAESTBHMEWgQ6BBhj9odHRwOi8vbmZlY2VydGlmaWNhZG8uc2VmYXoucnMuZ292LmJyL0xDUi9BQ0ludGVybWVkaWFyaWEzOC5jcmwwDQYJKoZIhvcNAQEFBQADggEBAJFytXuiS02eJO0iMQr/Hi+Ox7/vYiPewiDL7s5EwO8A9jKx9G2Baz0KEjcdaeZk9a2NzDEgX9zboPxhw0RkWahVCP2xvRFWswDIa2WRUT/LHTEuTeKCJ0iF/um/kYM8PmWxPsDWzvsCCRp146lc0lz9LGm5ruPVYPZ/7DAoimUk3bdCMW/rzkVYg7iitxHrhklxH7YWQHUwbcqPt7Jv0RJxclc1MhQlV2eM2MO1iIlk8Eti86dRrJVoicR1bwc6/YDqDp4PFONTi1ddewRu6elGS74AzCcNYRSVTINYiZLpBZO0uivrnTEnsFguVnNtWb9MAHGt3tkR0gAVs6S0fm8=</X509Certificate>
